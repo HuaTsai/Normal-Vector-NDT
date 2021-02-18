@@ -1,0 +1,11 @@
+bool phasGaussian_
+bool nhasGaussian_
+float64 center_x
+float64 center_y
+float64 pmean_x
+float64 pmean_y
+float64[] pcov
+float64 nmean_x
+float64 nmean_y
+float64[] ncov
+int64 N

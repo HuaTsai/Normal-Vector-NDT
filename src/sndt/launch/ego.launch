@@ -1,0 +1,15 @@
+<launch>
+    <param name="use_sim_time" value="true" />
+    <node pkg="sndt" type="ego" name="ego" />
+    <node pkg="sndt" type="savepc" name="savepc" output="screen" />
+    <!--node pkg="rosbag" type="play" name="playbag" args="-clock -r0.5
+      /home/ee904/Desktop/Dataset/nuScenes/log62_1542193241547892_scene-0997.bag
+      /home/ee904/Desktop/Dataset/nuScenes/log62_1542193261546825_scene-0998.bag
+      /home/ee904/Desktop/Dataset/nuScenes/log62_1542193281648047_scene-0999.bag
+      /home/ee904/Desktop/Dataset/nuScenes/log62_1542193301547950_scene-1000.bag" -->
+    <node pkg="rosbag" type="play" name="playbag" output="screen" args="--clock -r0.5
+      /home/ee904/Desktop/Dataset/nuScenes/log24_1535729278446231_scene-0299.bag
+      /home/ee904/Desktop/Dataset/nuScenes/log24_1535729298446271_scene-0300.bag
+      /home/ee904/Desktop/Dataset/nuScenes/log24_1535729318549677_scene-0301.bag" />
+    <node pkg="rviz" type="rviz" name="rviz" args="-d /home/ee904/.rviz/ego.rviz" />
+</launch>

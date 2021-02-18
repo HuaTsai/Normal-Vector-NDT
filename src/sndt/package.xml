@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>sndt</name>
+  <version>0.0.0</version>
+  <description>The sndt package</description>
+  <maintainer email="huatsai.eed07g@nctu.edu.tw">HuaTsai</maintainer>
+  <license>BSD</license>
+  <author email="huatsai.eed07g@nctu.edu.tw">HuaTsai</author>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <build_depend>message_generation</build_depend>  
+  <exec_depend>message_runtime</exec_depend>
+  <depend>common</depend>
+  <depend>conti_radar</depend>
+  <depend>normal2d</depend>
+</package>
