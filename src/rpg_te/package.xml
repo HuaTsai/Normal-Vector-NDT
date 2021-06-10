@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>rpg_te</name>
+  <version>0.0.0</version>
+  <description>rpg_te</description>
+
+  <maintainer email="zzhang@ifi.uzh.ch">Zichao Zhang</maintainer>
+  <author>Zichao Zhang</author>
+  <author>Jonathan Huber</author>
+  <author>Jeffrey Delmerico</author>
+  <author>Christian Forster</author>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+</package>
