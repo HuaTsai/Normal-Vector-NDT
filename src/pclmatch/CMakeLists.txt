@@ -2,20 +2,21 @@ cmake_minimum_required(VERSION 3.0.2)
 project(pclmatch)
 
 set(CMAKE_CXX_FLAGS "-Wall")
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Debug)
 
-# find_package(PCL 1.8.1 EXACT REQUIRED
+find_package(OpenMP REQUIRED)
 find_package(PCL 1.11.1 EXACT REQUIRED
  COMPONENTS
   registration
   io
 )
-
+ 
 find_package(catkin REQUIRED
- COMPONENTS
+  COMPONENTS
   roscpp
   common
+  trimesh2
 )
 
 catkin_package()
@@ -24,31 +25,13 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
-  "/home/ee904/Desktop/HuaTsai/NormalNDT/trimesh2/include"
 )
 
-link_directories(
-  "/home/ee904/Desktop/HuaTsai/NormalNDT/trimesh2/lib.Linux64"
-)
+set(ALLLIBS ${catkin_LIBRARIES} ${PCL_LIBRARIES} OpenMP::OpenMP_CXX config++)
 
-set(ALLLIBS ${catkin_LIBRARIES} ${PCL_LIBRARIES} trimesh config++ omp)
-
-add_executable(pcl_version src/pcl_version.cc)
-
-target_link_libraries(pcl_version ${ALLLIBS})
-
-add_executable(main src/main.cc)
-
-target_link_libraries(main ${ALLLIBS})
-
-add_executable(test0207 src/test0207.cc)
-
-target_link_libraries(test0207 ${ALLLIBS})
-
-add_executable(test0209 src/test0209.cc)
-
-target_link_libraries(test0209 ${ALLLIBS})
-
-add_executable(test0218 src/test0218.cc)
-
-target_link_libraries(test0218 ${ALLLIBS})
+file(GLOB_RECURSE ALL_SRCS "*.cc")
+foreach(FILE_PATH ${ALL_SRCS})
+  get_filename_component(FILENAME ${FILE_PATH} NAME_WE)
+  add_executable(${FILENAME} ${FILE_PATH})
+  target_link_libraries(${FILENAME} ${ALLLIBS})
+endforeach(FILE_PATH)

@@ -2,6 +2,7 @@
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <std_msgs/Empty.h>
+#include "sndt/EgoPointClouds.h"
 #include "common/common.h"
 
 using namespace std;

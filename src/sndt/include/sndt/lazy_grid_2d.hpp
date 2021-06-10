@@ -1,361 +1,229 @@
 #pragma once
 
 #include <bits/stdc++.h>
-#include "common/common.h"
+#include <Eigen/Dense>
+#include <gsl/gsl>
 #include "sndt/ndt_cell_2d.hpp"
 
 using namespace std;
+using namespace Eigen;
 
 class LazyGrid2D {
  public:
-  typedef vector<NDTCell *> CellPtrVector;
-  typedef typename CellPtrVector::iterator CellVectorItr;
-  typedef typename CellPtrVector::const_iterator CellVectorConstItr;
-
-  LazyGrid2D(double cellSize) {
-    centerIsSet = sizeIsSet = initialized = false;
-    cellSizeX = cellSizeY = cellSize;
+  explicit LazyGrid2D(double cell_size) {
+    has_grid_center_ = has_cellptrs_size_ = is_initialized_ = false;
+    cell_size_ << cell_size, cell_size;
+    grid_center_.setZero();
+    grid_size_.setZero();
+    grid_center_index_.setZero();
+    cellptrs_size_.setZero();
   }
 
   ~LazyGrid2D() {
-    if (initialized) {
-      for (size_t i = 0; i < activeCells.size(); ++i) {
-        if (activeCells[i]) {
-          delete activeCells[i];
-        }
-      }
-      for (int i = 0; i < sizeX; ++i) {
-        delete[] dataArray[i];
-      }
-      delete[] dataArray;
+    if (is_initialized_) {
+      for (auto &cell : active_cells_)
+        if (cell)
+          delete cell;
+      for (int i = 0; i < cellptrs_size_(0); ++i)
+        delete[] cellptrs_[i];
+      delete[] cellptrs_;
     }
   }
 
-  CellVectorItr begin() { return activeCells.begin(); }
-
-  CellVectorConstItr begin() const { return activeCells.begin(); }
-
-  CellVectorItr end() { return activeCells.end(); }
-
-  CellVectorConstItr end() const { return activeCells.end(); }
-
-  int size() { return activeCells.size(); }
-
-  NDTCell *getCellForPoint(const pcl::PointXY &point) {
-    int indX, indY;
-    this->getIndexForPoint(point, indX, indY);
-    if (indX >= sizeX || indY >= sizeY || indX < 0 || indY < 0) return NULL;
-    if (!initialized) return NULL;
-    if (dataArray == NULL) return NULL;
-    if (dataArray[indX] == NULL) return NULL;
-    return dataArray[indX][indY];
+  void SetGridCenter(const Vector2d &grid_center) {
+    grid_center_ = grid_center;
+    has_grid_center_ = true;
+    if (has_cellptrs_size_)
+      Initialize();
   }
 
-  NDTCell *addPoint(const pcl::PointXY &point) {
-    NDTCell *cell;
-    this->getCellAtAllocate(point, cell);
-    if (cell != NULL) cell->addPoint(point);
+  void SetGridSize(const Vector2d &grid_size) {
+    grid_size_ = grid_size;
+    cellptrs_size_(0) = int(ceil(grid_size_(0) / cell_size_(0)));
+    cellptrs_size_(1) = int(ceil(grid_size_(1) / cell_size_(1)));
+    grid_center_index_(0) = cellptrs_size_(0) / 2;
+    grid_center_index_(1) = cellptrs_size_(1) / 2;
+    has_cellptrs_size_ = true;
+    if (has_grid_center_)
+      Initialize();
+  }
+
+  NDTCell *GetCellForPoint(const Vector2d &point) {
+    Expects(is_initialized_);
+    auto idx = GetIndexForPoint(point);
+    if (!IsValidIndex(idx)) { return nullptr; }
+    return cellptrs_[idx(0)][idx(1)];
+  }
+
+  NDTCell *AddPoint(const Vector2d &point) {
+    Expects(is_initialized_);
+    NDTCell *cell = GetCellAndAllocate(point);
+    if (cell)
+      cell->AddPoint(point);
     return cell;
   }
 
-  void getNeighbors(const pcl::PointXY &point, double radius, vector<NDTCell *> &cells) {
-    int indX, indY;
-    this->getIndexForPoint(point, indX, indY);
-    if (indX >= sizeX || indY >= sizeY) {
-      cells.clear();
-      return;
+  NDTCell *AddPointAndNormal(const Vector2d &point, const Vector2d &normal) {
+    Expects(is_initialized_);
+    NDTCell *cell = GetCellAndAllocate(point);
+    if (cell) {
+      cell->AddPoint(point);
+      cell->AddNormal(normal);
     }
-    for (int x = indX - radius / cellSizeX; x <= indX + radius / cellSizeX; x++) {
-      if (x < 0 || x >= sizeX) continue;
-      for (int y = indY - radius / cellSizeY; y <= indY + radius / cellSizeY; y++) {
-        if (y < 0 || y >= sizeY) continue;
-        if (dataArray[x][y] == NULL) continue;
-        cells.push_back(dataArray[x][y]);
-      }
-    }
+    return cell;
   }
 
-  void setCenter(const double &cx, const double &cy) {
-    centerX = cx;
-    centerY = cy;
-    centerIsSet = true;
-    if (sizeIsSet) {
-      initialize();
+  bool InsertCell(const NDTCell &cell) {
+    if (!is_initialized_) { return false; }
+    auto idx = GetIndexForPoint(cell.GetCenter());
+    if (!IsValidIndex(idx)) { return false; }
+    if (!cellptrs_[idx(0)][idx(1)]) {
+      cellptrs_[idx(0)][idx(1)] = new NDTCell();
+      active_cells_.push_back(cellptrs_[idx(0)][idx(1)]);
     }
-  }
-
-  void setSize(const double &sx, const double &sy) {
-    sizeXmeters = sx;
-    sizeYmeters = sy;
-    sizeX = abs(ceil(sizeXmeters / cellSizeX));
-    sizeY = abs(ceil(sizeYmeters / cellSizeY));
-    sizeIsSet = true;
-    if (centerIsSet) {
-      initialize();
-    }
-  }
-
-  bool insertCell(NDTCell cell) {
-    int indX, indY;
-    this->getIndexForPoint(cell.getCenter(), indX, indY);
-    if (indX < 0 || indX >= sizeX) return false;
-    if (indY < 0 || indY >= sizeY) return false;
-    if (!initialized) return false;
-    if (dataArray == NULL) return false;
-    if (dataArray[indX] == NULL) return false;
-    if (dataArray[indX][indY] == NULL) {
-      dataArray[indX][indY] = new NDTCell();
-      activeCells.push_back(dataArray[indX][indY]);
-    }
-    NDTCell *ret = dataArray[indX][indY];
-    double xs, ys;
-    cell.getDimensions(xs, ys);
-    ret->setDimensions(xs, ys);
-    ret->setCenter(cell.getCenter());
-    ret->setPointMean(cell.getPointMean());
-    ret->setPointCov(cell.getPointCov());
-    ret->setNormalMean(cell.getNormalMean());
-    ret->setNormalCov(cell.getNormalCov());
-    ret->setN(cell.getN());
-    ret->phasGaussian_ = cell.phasGaussian_;
-    ret->nhasGaussian_ = cell.nhasGaussian_;
+    NDTCell *ret = cellptrs_[idx(0)][idx(1)];
+    ret->SetN(cell.GetN());
+    ret->SetPHasGaussian(cell.GetPHasGaussian());
+    ret->SetNHasGaussian(cell.GetNHasGaussian());
+    ret->SetCenter(cell.GetCenter());
+    ret->SetSize(cell.GetSize());
+    ret->SetPointMean(cell.GetPointMean());
+    ret->SetPointCov(cell.GetPointCov());
+    ret->SetPointEvals(cell.GetPointEvals());
+    ret->SetPointEvecs(cell.GetPointEvecs());
+    ret->SetNormalMean(cell.GetNormalMean());
+    ret->SetNormalCov(cell.GetNormalCov());
+    ret->SetNormalEvals(cell.GetNormalEvals());
+    ret->SetNormalEvecs(cell.GetNormalEvecs());
     return true;
   }
 
-  NDTCell *getClosestNDTCell(const pcl::PointXY &point,
-                             int max_neighbors,
-                             bool checkForGaussian) {
-    int indXn, indYn, indX, indY;
-    this->getIndexForPoint(point, indX, indY);
-    NDTCell *ret = NULL;
-    vector<NDTCell *> cells;
-
-    if (!checkForGaussian) {
-      if (checkCellforNDT(indX, indY, checkForGaussian)) {
-        ret = (dataArray[indX][indY]);
-      }
-      return ret;
-    }
-
-    for (int x = 1; x < 2 * max_neighbors + 2; x++) {
-      indXn = (x % 2 == 0) ? indX + x / 2 : indX - x / 2;
-      for (int y = 1; y < 2 * max_neighbors + 2; y++) {
-        indYn = (y % 2 == 0) ? indY + y / 2 : indY - y / 2;
-        if (checkCellforNDT(indXn, indYn, true)) {
-          ret = dataArray[indXn][indYn];
-          cells.push_back(ret);
-        }
-      }
-    }
-
-    double minDist = INT_MAX;
-    Eigen::Vector2d tmean;
-    pcl::PointXY pt = point;
-    for (size_t i = 0; i < cells.size(); i++) {
-      tmean = cells[i]->getPointMean() - Eigen::Vector2d(pt.x, pt.y);
-      double d = tmean.norm();
-      if (d < minDist) {
-        minDist = d;
-        ret = cells[i];
-      }
-    }
-    cells.clear();
-    return ret;
+  NDTCell *GetClosestCellForPointByRadius(const Vector2d &point,
+                                          double radius,
+                                          bool include_locate = true) {
+    int maxdist = (int)ceil(radius / cell_size_(0));
+    return GetClosestCellForPoint(point, maxdist, include_locate);
   }
 
-  vector<NDTCell *> getClosestNDTCells(const pcl::PointXY &pt,
-                                            int n_neigh,
-                                            bool checkForGaussian) {
-    int indXn, indYn, indX, indY;
-    this->getIndexForPoint(pt, indX, indY);
+  NDTCell *GetClosestCellForPoint(const Vector2d &point,
+                                  int maxdist_of_cells,
+                                  bool include_locate = true) {
+    auto cells = GetClosestCellsForPoint(point, maxdist_of_cells, include_locate);
+    if (!cells.size()) { return nullptr; }
+    return *min_element(cells.begin(), cells.end(), [&](auto p, auto q) {
+      return (p->GetPointMean() - point).norm() < (q->GetPointMean() - point).norm();
+    });
+  }
+
+  vector<NDTCell *> GetClosestCellsForPointByRadius(
+      const Vector2d &point, double radius, bool include_locate = false) {
+    int maxdist = (int)ceil(radius / cell_size_(0));
+    return GetClosestCellsForPoint(point, maxdist, include_locate);
+  }
+
+  vector<NDTCell *> GetClosestCellsForPoint(const Vector2d &point,
+                                            int maxdist_of_cells,
+                                            bool include_locate = false) {
+    auto idx = GetIndexForPoint(point);
     vector<NDTCell *> cells;
-    int i = n_neigh;
-    for (int x = 1; x < 2 * i + 2; x++) {
-      indXn = (x % 2 == 0) ? indX + x / 2 : indX - x / 2;
-      for (int y = 1; y < 2 * i + 2; y++) {
-        indYn = (y % 2 == 0) ? indY + y / 2 : indY - y / 2;
-        if (checkCellforNDT(indXn, indYn, checkForGaussian)) {
-          cells.push_back(dataArray[indXn][indYn]);
+    if (include_locate && IsValidIndex(idx) && cellptrs_[idx(0)][idx(1)] &&
+        cellptrs_[idx(0)][idx(1)]->BothHasGaussian()) {
+      cells.push_back(cellptrs_[idx(0)][idx(1)]);
+    }
+    Vector2i xy;
+    for (int x = 1; x < 2 * maxdist_of_cells + 2; ++x) {
+      xy(0) = (x % 2) ? idx(0) - x / 2 : idx(0) + x / 2;
+      for (int y = 1; y < 2 * maxdist_of_cells + 2; ++y) {
+        xy(1) = (y % 2) ? idx(1) - y / 2 : idx(1) + y / 2;
+        if (IsValidIndex(xy) && cellptrs_[xy(0)][xy(1)] &&
+            cellptrs_[xy(0)][xy(1)]->BothHasGaussian()) {
+          cells.push_back(cellptrs_[xy(0)][xy(1)]);
         }
       }
     }
     return cells;
   }
 
-  vector<NDTCell *> getClosestCells(const pcl::PointXY &pt) {
-    return getClosestNDTCells(pt, 2, true);
-  }
-
-  inline void getCellAt(int indX, int indY, NDTCell *&cell) {
-    if (indX < sizeX && indY < sizeY && indX >= 0 && indY >= 0) {
-      cell = dataArray[indX][indY];
-    } else {
-      cell = NULL;
+  NDTCell *GetCellAndAllocate(const Vector2d &point) {
+    Expects(is_initialized_);
+    if (isnan(point(0)) || isnan(point(1))) { return nullptr; }
+    auto idx = GetIndexForPoint(point);
+    if (!IsValidIndex(idx)) { return nullptr; }
+    if (!cellptrs_[idx(0)][idx(1)]) {
+      cellptrs_[idx(0)][idx(1)] = new NDTCell();
+      Vector2d center;
+      center(0) = grid_center_(0) + (idx(0) - grid_center_index_(0)) * cell_size_(0);
+      center(1) = grid_center_(1) + (idx(1) - grid_center_index_(1)) * cell_size_(1);
+      cellptrs_[idx(0)][idx(1)]->SetCenter(center);
+      cellptrs_[idx(0)][idx(1)]->SetSize(cell_size_);
+      active_cells_.push_back(cellptrs_[idx(0)][idx(1)]);
     }
+    return cellptrs_[idx(0)][idx(1)];
   }
 
-  inline void getCellAt(const pcl::PointXY &pt, NDTCell *&cell) {
-    int indX, indY;
-    this->getIndexForPoint(pt, indX, indY);
-    this->getCellAt(indX, indY, cell);
+  Vector2i GetIndexForPoint(const Vector2d &point) {
+    Vector2i ret;
+    ret(0) = floor((point(0) - grid_center_(0)) / cell_size_(0) + 0.5) + grid_center_index_(0);
+    ret(1) = floor((point(1) - grid_center_(1)) / cell_size_(1) + 0.5) + grid_center_index_(1);
+    return ret;
   }
 
-  void getCellAtAllocate(const pcl::PointXY &pt, NDTCell *&cell) {
-    cell = NULL;
-    pcl::PointXY point = pt;
-    if (isnan(point.x) || isnan(point.y)) {
-      return;
+  string ToString() {
+    if (!is_initialized_) { return "LazyGrid uninitialized"; }
+    stringstream ss;
+    ss.setf(ios::fixed | ios::boolalpha);
+    ss.precision(2);
+    ss << "cell size: (" << cell_size_(0) << ", " << cell_size_(1) << ")" << endl
+       << "grid center: (" << grid_center_(0) << ", " << grid_center_(1) << ")" << endl
+       << "grid size: (" << grid_size_(0) << ", " << grid_size_(1) << ")" << endl
+       << "cellptrs size: (" << cellptrs_size_(0) << ", " << cellptrs_size_(1) << ")" << endl
+       << "center index: (" << grid_center_index_(0) << ", " << grid_center_index_(1) << ")" << endl
+       << "active cells: " << active_cells_.size() << endl;
+    for (size_t i = 0; i < active_cells_.size(); ++i) {
+      auto idx = GetIndexForPoint(active_cells_.at(i)->GetCenter());
+      ss << "[#" << i << ", (" << idx(0) << ", " << idx(1) << ")] "
+         << active_cells_.at(i)->ToString();
     }
-    int indX, indY;
-    this->getIndexForPoint(point, indX, indY);
-
-    if (indX >= sizeX || indY >= sizeY || indX < 0 || indY < 0) {
-      return;
-    }
-
-    if (!initialized) return;
-    if (dataArray == NULL) return;
-    if (dataArray[indX] == NULL) return;
-    if (dataArray[indX][indY] == NULL) {
-      dataArray[indX][indY] = new NDTCell();
-      int idcX, idcY;
-      pcl::PointXY center, centerCell;
-      center.x = centerX;
-      center.y = centerY;
-      this->getIndexForPoint(center, idcX, idcY);
-      centerCell.x = centerX + (indX - idcX) * cellSizeX;
-      centerCell.y = centerY + (indY - idcY) * cellSizeY;
-      dataArray[indX][indY]->setCenter(centerCell);
-      dataArray[indX][indY]->setDimensions(cellSizeX, cellSizeY);
-      activeCells.push_back(dataArray[indX][indY]);
-    }
-    cell = dataArray[indX][indY];
+    return ss.str();
   }
 
-  double getCellSize() {
-    return cellSizeX;
-  }
+  // Size and Iterators
+  int size() { return active_cells_.size(); }
+  vector<NDTCell *>::iterator begin() { return active_cells_.begin(); }
+  vector<NDTCell *>::const_iterator begin() const { return active_cells_.begin(); }
+  vector<NDTCell *>::iterator end() { return active_cells_.end(); }
+  vector<NDTCell *>::const_iterator end() const { return active_cells_.end(); }
 
-  void getCellSize(double &cx, double &cy) {
-    cx = cellSizeX;
-    cy = cellSizeY;
-  }
-
-  void getCenter(double &cx, double &cy) {
-    cx = centerX;
-    cy = centerY;
-  }
-
-  void getGridSize(int &cx, int &cy) {
-    cx = sizeX;
-    cy = sizeY;
-  }
-
-  void getGridSizeInMeters(double &cx, double &cy) {
-    cx = sizeXmeters;
-    cy = sizeYmeters;
-  }
-
-  void getIndexForPoint(const pcl::PointXY &pt, int &idx, int &idy) {
-    idx = floor((pt.x - centerX) / cellSizeX + 0.5) + sizeX / 2.0;
-    idy = floor((pt.y - centerY) / cellSizeY + 0.5) + sizeY / 2.0;
-  }
-
-  void initialize() {
-    if (initialized) return;
-    dataArray = new NDTCell **[sizeX];
-    for (int i = 0; i < sizeX; i++) {
-      dataArray[i] = new NDTCell *[sizeY];
-      memset(dataArray[i], 0, sizeY * sizeof(NDTCell *));
-    }
-    initialized = true;
-  }
-
-  void initializeAll() {
-    if (!initialized) {
-      this->initialize();
-    }
-
-    int idcX, idcY;
-    pcl::PointXY center;
-    center.x = centerX;
-    center.y = centerY;
-    this->getIndexForPoint(center, idcX, idcY);
-
-    pcl::PointXY centerCell;
-    for (int i = 0; i < sizeX; i++) {
-      for (int j = 0; j < sizeY; j++) {
-        dataArray[i][j] = new NDTCell();
-        dataArray[i][j]->setDimensions(cellSizeX, cellSizeY);
-
-        centerCell.x = centerX + (i - idcX) * cellSizeX;
-        centerCell.y = centerY + (j - idcY) * cellSizeY;
-
-        dataArray[i][j]->setCenter(centerCell);
-        activeCells.push_back(dataArray[i][j]);
-      }
-    }
-  };
-
-  NDTCell ***getDataArrayPtr() { return dataArray; }
-
-  bool isInside(const pcl::PointXY &pt) {
-    int indX, indY;
-    this->getIndexForPoint(pt, indX, indY);
-    return (indX < sizeX && indY < sizeY && indX >= 0 && indY >= 0);
-  }
-
-  void addNDTCell(NDTCell *cell) {
-    activeCells.push_back(cell);
-  }
-
-  void ToString() {
-    dprintf("sizeIsSet: %s\n", (sizeIsSet ? "true" : "false"));
-    dprintf("centerIsSet: %s\n", (centerIsSet ? "true" : "false"));
-    dprintf("initialized: %s\n", (initialized ? "true" : "false"));
-    dprintf("sizeXYmeters: (%.2f, %.2f)\n", sizeXmeters, sizeYmeters);
-    dprintf("cellSizeXY: (%.2f, %.2f)\n", cellSizeX, cellSizeY);
-    dprintf("centerXY: (%.2f, %.2f)\n", centerX, centerY);
-    dprintf("sizeXY: (%.2f, %.2f)\n", sizeX, sizeY);
-    for (size_t i = 0; i < activeCells.size(); ++i) {
-      dprintf("# [%ld] ", i);
-      activeCells.at(i)->ToString();
-    }
-  }
+  // Get and Set methods
+  double GetCellSize() const { return cell_size_(0); }
+  NDTCell ***cellptrs() const { return cellptrs_; }
+  Vector2d cell_size() const { return cell_size_; }
+  Vector2d grid_size() const { return grid_size_; }
+  Vector2d grid_center() const { return grid_center_; }
+  Vector2i cellptrs_size() const { return cellptrs_size_; }
 
  private:
-  bool initialized, sizeIsSet, centerIsSet;
-  NDTCell ***dataArray;
-  vector<NDTCell *> activeCells;
+  bool is_initialized_, has_cellptrs_size_, has_grid_center_;
+  NDTCell ***cellptrs_;
+  vector<NDTCell *> active_cells_;
+  Vector2d cell_size_;
+  Vector2d grid_size_;
+  Vector2d grid_center_;
+  Vector2i grid_center_index_;
+  Vector2i cellptrs_size_;
 
-  double sizeXmeters, sizeYmeters;
-  double cellSizeX, cellSizeY;
-  double centerX, centerY;
-  int sizeX, sizeY;
-
-  bool checkCellforNDT(int indX, int indY, bool checkForGaussian) {
-    if (indX < sizeX && indY < sizeY && indX >= 0 && indY >= 0) {
-      if (dataArray[indX][indY] != NULL) {
-        if ((dataArray[indX][indY]->phasGaussian_ &&
-             dataArray[indX][indY]->nhasGaussian_) || (!checkForGaussian)) {
-          return true;
-        }
-      }
+  void Initialize() {
+    Expects(!is_initialized_);
+    cellptrs_ = new NDTCell **[cellptrs_size_(0)];
+    for (int i = 0; i < cellptrs_size_(0); ++i) {
+      cellptrs_[i] = new NDTCell *[cellptrs_size_(1)];
+      memset(cellptrs_[i], 0, cellptrs_size_(1) * sizeof(NDTCell *));
     }
-    return false;
+    is_initialized_ = true;
   }
 
-  LazyGrid2D() { InitializeDefaultValues(); }
-
-  void InitializeDefaultValues() {
-    activeCells.clear();
-    centerIsSet = sizeIsSet = initialized = false;
-    sizeXmeters = sizeYmeters = 0;
-    cellSizeX = cellSizeY  = 0;
-    centerX = centerY = 0;
-    sizeX = sizeY = 0;
+  bool IsValidIndex(const Vector2i &index) {
+    return index(0) >= 0 && index(1) < cellptrs_size_(0) &&
+           index(1) >= 0 && index(1) < cellptrs_size_(1);
   }
-
- public:
-  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

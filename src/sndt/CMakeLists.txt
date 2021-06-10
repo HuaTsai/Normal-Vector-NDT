@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(sndt)
 
 set(CMAKE_CXX_FLAGS "-Wall")
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Debug)
 
 find_package(Ceres REQUIRED)
@@ -18,17 +18,21 @@ find_package(catkin REQUIRED
     conti_radar
     tf2_sensor_msgs
     normal2d
+    tf2_ros
 )
 
 add_message_files(
   FILES
     NDTCellMsg.msg
     NDTMapMsg.msg  
+    PointCloudSensor.msg
+    EgoPointClouds.msg
 )
 
 generate_messages(
   DEPENDENCIES
     geometry_msgs
+    sensor_msgs
     std_msgs
 )
 
@@ -49,7 +53,7 @@ include_directories(
 
 # Library
 
-add_library(${PROJECT_NAME} src/dummy.cc)
+add_library(${PROJECT_NAME} src/dummy.cpp)
 
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_generate_messages_cpp)
 
@@ -57,28 +61,11 @@ target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 
 # Executables
 
-set(ALLLIBS ${catkin_LIBRARIES} ${CERES_LIBRARIES} ${PROJECT_NAME})
+set(ALLLIBS ${catkin_LIBRARIES} ${CERES_LIBRARIES} ${PROJECT_NAME} config++)
 
-add_executable(main src/main.cc)
-target_link_libraries(main ${ALLLIBS})
-
-add_executable(ceres_test src/ceres_test.cc)
-target_link_libraries(ceres_test ${ALLLIBS} )
-
-add_executable(ego src/ego.cc)
-target_link_libraries(ego ${ALLLIBS})
-
-add_executable(savepc src/savepc.cc)
-target_link_libraries(savepc ${ALLLIBS})
-
-add_executable(pairmatch src/pairmatch.cc)
-target_link_libraries(pairmatch ${ALLLIBS})
-
-add_executable(pcl_version src/pcl_version.cc)
-target_link_libraries(pcl_version ${ALLLIBS})
-
-add_executable(test0128 src/test0128.cc)
-target_link_libraries(test0128 ${ALLLIBS})
-
-add_executable(test0129 src/test0129.cc)
-target_link_libraries(test0129 ${ALLLIBS})
+file(GLOB_RECURSE ALL_SRCS "*.cc")
+foreach(FILE_PATH ${ALL_SRCS})
+  get_filename_component(FILENAME ${FILE_PATH} NAME_WE)
+  add_executable(${FILENAME} ${FILE_PATH})
+  target_link_libraries(${FILENAME} ${ALLLIBS})
+endforeach(FILE_PATH)

@@ -17,10 +17,6 @@
 
 #define APATH(name) "/home/ee904/Desktop/HuaTsai/NormalNDT/Analysis/"#name
 
-#define Mark(name)    \
-  printf(#name "\n"); \
-  fflush(stdout);
-
 void dprintf(const char *format, ...) {
   va_list ap;
   va_start(ap, format);
@@ -72,23 +68,23 @@ std::vector<std::string> GetDataPath(std::string data) {
   return ret;
 }
 
-void WriteToFile(std::string filepath, const std::vector<double> &data) {
-  std::ofstream ofs(filepath, std::ios::out);
-  for (const auto &elem : data) {
-    ofs << elem << " ";
-  }
-  ofs << std::endl;
-  ofs.close();
-}
+// void WriteToFile(std::string filepath, const std::vector<double> &data) {
+//   std::ofstream ofs(filepath, std::ios::out);
+//   for (const auto &elem : data) {
+//     ofs << elem << " ";
+//   }
+//   ofs << std::endl;
+//   ofs.close();
+// }
 
-std::vector<double> ReadFromFile(std::string filepath) {
-  std::ifstream ifs(filepath, std::ios::in);
-  std::vector<double> ret;
-  double num;
-  while (ifs >> num) {
-    ret.push_back(num);
-  }
-  ifs.close();
-  return ret;
-}
+// std::vector<double> ReadFromFile(std::string filepath) {
+//   std::ifstream ifs(filepath, std::ios::in);
+//   std::vector<double> ret;
+//   double num;
+//   while (ifs >> num) {
+//     ret.push_back(num);
+//   }
+//   ifs.close();
+//   return ret;
+// }
 }  // namespace common

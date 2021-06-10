@@ -11,12 +11,17 @@ adaptive outlier rejection, and symmetric point-to-plane minimization.
 #include "KDtree.h"
 #include "timestamp.h"
 #include "lineqn.h"
+#include "common/match_utils.hpp"
+#include <angles/angles.h>
+#include "common/common.h"
+
+
 using namespace std;
 
 
 #define MAX_ITERS 150
 #define TERMINATION_ITER_THRESH 25
-#define FINAL_ITERS 2
+#define FINAL_ITERS 0
 #define MIN_PAIRS 10
 #define DESIRED_PAIRS 200
 #define DESIRED_PAIRS_FINAL 5000
@@ -33,9 +38,36 @@ using namespace std;
 #define ANGLE_THRESH_MAX 1.0f
 #define dprintf TriMesh::dprintf
 
+common::MatchInternal mit;
+int iters;
 
 namespace trimesh {
 
+std::vector<double> XYTDegreeFromXForm(const xform &xf) {
+	/* Just to mension, when the return type is std::vector<double>,
+	 * and declare something like "std::vector<double> ret" then use it,
+	 * it may cause runtime error and give you a link to explain it.
+	 * This seems to be an alignment issue, but I still did not
+	 * figure out why THIS STUPID BUG happens.
+	 */
+	Eigen::Matrix4d mtx;
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			mtx(i, j) = xf(i, j);
+		}
+	}
+	Eigen::Affine3d aff(mtx);
+	double roll = angles::normalize_angle(aff.rotation().eulerAngles(2, 1, 0)(2));
+	double pitch = angles::normalize_angle(aff.rotation().eulerAngles(2, 1, 0)(1));
+	double yaw = angles::normalize_angle(aff.rotation().eulerAngles(2, 1, 0)(0));
+	if (fabs(pitch) > M_PI / 2) {
+		roll = angles::normalize_angle(roll + M_PI);
+		pitch = angles::normalize_angle(-pitch + M_PI);
+		yaw = angles::normalize_angle(yaw + M_PI);
+	}
+	// Use initialization list instead of declare return type in the function
+	return {aff.translation()(0), aff.translation()(1), yaw * 180. / M_PI};
+}
 
 // A pair of points, with associated normals
 struct PtPair {
@@ -106,8 +138,44 @@ void compute_overlaps(TriMesh *mesh1, TriMesh *mesh2,
 	}
 }
 
+static void selectall_and_match(TriMesh *tgt, TriMesh *src,
+                             		const xform &srcxf, const KDtree *tgtkd,
+                             		float maxdist, float angle_thresh,
+                             		vector<PtPair> &pairs)
+{
+	xform nsrcxf = norm_xf(srcxf);
+	bool is_pc1 = (src->faces.empty() && src->tstrips.empty() && src->grid.empty());
+	bool is_pc2 = (tgt->faces.empty() && tgt->tstrips.empty() && tgt->grid.empty());
+	bool is_pc = (is_pc1 || is_pc2);
+	float maxdist2 = sqr(maxdist);
+	float normdot_thresh = cos(angle_thresh);
+	for (size_t i = 0; i < src->vertices.size(); ++i) {
+		point p = srcxf * src->vertices[i];
+		const float *match;
+		if (USE_NORMCOMPAT && !is_pc) {
+			vec n = nsrcxf * src->normals[i];
+			NormCompat nc(n, tgt, normdot_thresh);
+			match = tgtkd->closest_to_pt(p, maxdist2, &nc, APPROX_EPS);
+		} else {
+			match = tgtkd->closest_to_pt(p, maxdist2, APPROX_EPS);
+		}
+		if (!match)
+			continue;
+		int match_ind = (const point *) match - &(tgt->vertices[0]);
+		if (REJECT_BDY && !is_pc && tgt->is_bdy(match_ind))
+			continue;
+		point p1 = tgt->vertices[match_ind];
+		vec n1 = tgt->normals[match_ind];
+		point p2 = srcxf * src->vertices[i];
+		vec n2 = nsrcxf * src->normals[i];
+		if ((n1 DOT n2) < 0.0f)
+			n2 = -n2;
+		pairs.push_back(PtPair(p1, n1, p2, n2));
+	}
+}
 
 // Select a number of points and find correspondences
+/*
 static void select_and_match(TriMesh *mesh1, TriMesh *mesh2,
                              const xform &xf1, const xform &xf2,
                              const KDtree *kd2,
@@ -194,7 +262,7 @@ static void select_and_match(TriMesh *mesh1, TriMesh *mesh2,
 			pairs.push_back(PtPair(p1, n1, p2, n2));
 	}
 }
-
+*/
 
 // Do symmetric point-to-plane alignment, returning alignxf
 // as well as eigenvectors and inverse eigenvalues
@@ -203,6 +271,7 @@ static void align_symm(const vector<PtPair> &pairs, float scale,
                        float median_dist, xform &alignxf)
 {
 	float huber_thresh = HUBER_THRESH_MULT * scale * median_dist;
+	dprintf("Huber threshold: 2 x %g x %g = %g\n", scale, median_dist, huber_thresh);
 	size_t npairs = pairs.size();
 	float A[6][6] = { { 0 } }, b[6] = { 0 };
 	for (size_t i = 0; i < npairs; i++) {
@@ -377,10 +446,30 @@ static float ICP_iter(TriMesh *mesh1, TriMesh *mesh2,
 
 	vector<PtPair> pairs;
 	pairs.reserve(desired_pairs);
-	select_and_match(mesh1, mesh2, xf1, xf2, kd2, sampcdf1, cdfincr,
-		maxdist, angle_thresh, false, pairs);
-	select_and_match(mesh2, mesh1, xf2, xf1, kd1, sampcdf2, cdfincr,
-		maxdist, angle_thresh, true, pairs);
+	// select_and_match(mesh1, mesh2, xf1, xf2, kd2, sampcdf1, cdfincr,
+	// 	maxdist, angle_thresh, false, pairs);
+	// select_and_match(mesh2, mesh1, xf2, xf1, kd1, sampcdf2, cdfincr,
+	// 	maxdist, angle_thresh, true, pairs);
+
+	// mesh1: target, mesh2: source
+	selectall_and_match(mesh1, mesh2, xf2, kd1, maxdist, angle_thresh, pairs);
+
+	common::Correspondences cp;
+	for (const auto &pair : pairs) {
+		Eigen::Vector3d p(pair.p2.x, pair.p2.y, pair.p2.z);
+		Eigen::Vector3d np(pair.n2.x, pair.n2.y, pair.n2.z);
+		Eigen::Vector3d q(pair.p1.x, pair.p1.y, pair.p1.z);
+		Eigen::Vector3d nq(pair.n1.x, pair.n1.y, pair.n1.z);
+		cp.PushBack(p, q, (p - q).dot(np + nq));
+		double val = (p - q).dot(np + nq);
+		if (val > 21.41 && val < 21.43) {
+			cerr << "p" << p.transpose() << endl;
+			cerr << "q" << q.transpose() << endl;
+			cerr << "np" << np.transpose() << endl;
+			cerr << "nq" << nq.transpose() << endl;
+		}
+	}
+	mit.PushBack(cp, XYTDegreeFromXForm(xf2));
 
 	timestamp t2 = now();
 	size_t npairs = pairs.size();
@@ -450,7 +539,9 @@ static float ICP_iter(TriMesh *mesh1, TriMesh *mesh2,
 		scale += dist2(pairs[i].p2, centroid2);
 	}
 	scale = sqrt(scale / (2 * npairs));
+	dprintf("Dist RMS: %g\n", scale);
 	scale = 1.0f / scale;
+	dprintf("Scale: 1 / RMS = %g\n", scale);
 
 	// Do the minimization
 	xform alignxf;
@@ -619,6 +710,23 @@ float ICP(TriMesh *mesh1, TriMesh *mesh2,
           float maxdist /* = 0.0f */, int verbose /* = 0 */,
           ICP_xform_type xform_type /* = ICP_RIGID */ )
 {
+	mit.ClearResults();
+	mit.set_has_data(true);
+	Eigen::MatrixXd source(3, mesh2->vertices.size());
+	Eigen::MatrixXd target(3, mesh1->vertices.size());
+	for (size_t i = 0; i < mesh2->vertices.size(); ++i) {
+		source(0, i) = mesh2->vertices.at(i).x;
+		source(1, i) = mesh2->vertices.at(i).y;
+		source(2, i) = mesh2->vertices.at(i).z;
+	}
+	for (size_t i = 0; i < mesh1->vertices.size(); ++i) {
+		target(0, i) = mesh1->vertices.at(i).x;
+		target(1, i) = mesh1->vertices.at(i).y;
+		target(2, i) = mesh1->vertices.at(i).z;
+	}
+	mit.set_source(source);
+	mit.set_target(target);
+
 	timestamp t_start = now();
 
 	// Precompute normals and connectivity (used to determine boundaries)
@@ -731,6 +839,7 @@ float ICP(TriMesh *mesh1, TriMesh *mesh2,
 		dprintf("Time for %d iterations: %.3f msec.\n\n",
 			iter, (now() - t_iters) * 1000.0f);
 	}
+	iters = iter;
 
 	for (iter = 0; iter < FINAL_ITERS; iter++) {
 		if (iter == 0) {

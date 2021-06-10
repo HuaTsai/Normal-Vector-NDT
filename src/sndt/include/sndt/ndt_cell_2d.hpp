@@ -1,246 +1,214 @@
 #pragma once
 
 #include <bits/stdc++.h>
-
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
 #include <Eigen/Eigen>
-#include "common/common.h"
+#include <gsl/gsl>
 
 using namespace std;
+using namespace Eigen;
+
+Vector2d ComputeMean(const vector<Vector2d> &points) {
+  Vector2d ret = Vector2d::Zero();
+  for (const auto &vec : points)
+    ret += vec;
+  ret /= points.size();
+  return ret;
+}
+
+Matrix2d ComputeMean(const vector<Matrix2d> &points) {
+  Matrix2d ret = Matrix2d::Zero();
+  for (const auto &mtx : points)
+    ret += mtx;
+  ret /= points.size();
+  return ret;
+}
+
+Matrix2d ComputeCov(const vector<Vector2d> &points, const Vector2d &mean,
+                    const Matrix2d &intrinsic) {
+  Matrix2d ret;
+  int n = points.size();
+  if (n == 1) { return intrinsic; }
+  MatrixXd mp(2, n);
+  for (int i = 0; i < n; ++i)
+    mp.block<2, 1>(0, i) = points.at(i) - mean;
+  ret = mp * mp.transpose() / (n - 1) + intrinsic;
+  return ret;
+}
+
+Matrix2d ComputeCov(const vector<Vector2d> &points, const Vector2d &mean) {
+  Matrix2d intrinsic;
+  intrinsic.setZero();
+  return ComputeCov(points, mean, intrinsic);
+}
+
+Matrix2d ComputeCov(const vector<Vector2d> &points, const Vector2d &mean,
+                    const vector<Matrix2d> &intrinsics) {
+  Expects(points.size() == intrinsics.size());
+  Matrix2d ret;
+  int n = points.size();
+  if (n == 1) { return intrinsics.at(0); }
+  MatrixXd mp(2, n);
+  for (int i = 0; i < n; ++i)
+    mp.block<2, 1>(0, i) = points.at(i) - mean;
+  ret = mp * mp.transpose() / (n - 1) + ComputeMean(intrinsics);
+  return ret;
+}
+
+vector<Vector2d> ExcludeNaN(const vector<Vector2d> &points) {
+  vector<Vector2d> ret;
+  copy_if(points.begin(), points.end(), back_inserter(ret),
+          [](const Vector2d &v) { return !isnan(v(0)) && !isnan(v(1)); });
+  return ret;
+}
 
 class NDTCell {
  public:
-  enum mode { PROVIDE_NORMAL, COMPUTE_NORMAL };
-  bool phasGaussian_;
-  bool nhasGaussian_;
-  vector<pcl::PointXY, Eigen::aligned_allocator<pcl::PointXY>> points_;
-  vector<pcl::PointXY, Eigen::aligned_allocator<pcl::PointXY>> normals_;
-
-  void InitializeVariables() {
-    phasGaussian_ = nhasGaussian_ = false;
-    N_ = 0;
-    center_.x = center_.y = 0;
-    xsize_ = ysize_ = 0;
-    pcov_ = Eigen::Matrix2d::Zero();
-    picov_ = Eigen::Matrix2d::Zero();
-    pevecs_ = Eigen::Matrix2d::Zero();
-    pmean_ = Eigen::Vector2d::Zero();
-    pevals_ = Eigen::Vector2d::Zero();
-    ncov_ = Eigen::Matrix2d::Zero();
-    nicov_ = Eigen::Matrix2d::Zero();
-    nevecs_ = Eigen::Matrix2d::Zero();
-    nmean_ = Eigen::Vector2d::Zero();
-    nevals_ = Eigen::Vector2d::Zero();
-  }
-
   NDTCell() { InitializeVariables(); }
 
-  NDTCell(pcl::PointXY &center, double &xsize, double &ysize) {
-    InitializeVariables();
-    center_ = center;
-    xsize_ = xsize;
-    ysize_ = ysize;
+  void InitializeVariables() {
+    phasgaussian_ = nhasgaussian_ = false;
+    N_ = 0;
+    center_.setZero(), size_.setZero();
+    pcov_.setZero(), picov_.setZero(), pevecs_.setZero();
+    pmean_.setZero(), pevals_.setZero();
+    ncov_.setZero(), nicov_.setZero(), nevecs_.setZero();
+    nmean_.setZero(), nevals_.setZero();
   }
 
-  // Get and Set Center
-  inline pcl::PointXY getCenter() const { return center_; }
-  inline void getCenter(double &cx, double &cy) const {
-    cx = center_.x;
-    cy = center_.y;
-  }
-  inline void setCenter(const pcl::PointXY &cn) { center_ = cn; }
-  inline void setCenter(double cx, double cy) {
-    center_.x = cx;
-    center_.y = cy;
+  // Check if the given point is in the cell
+  bool IsInside(const Vector2d &point) {
+    return point(0) >= center_(0) - size_(0) / 2 &&
+           point(0) <= center_(0) + size_(0) / 2 &&
+           point(1) >= center_(1) - size_(1) / 2 &&
+           point(1) <= center_(1) + size_(1) / 2;
   }
 
-  // Get and Set Dimensions
-  inline void getDimensions(double &xs, double &ys) const {
-    xs = xsize_;
-    ys = ysize_;
-  }
-  inline void setDimensions(double xs, double ys) {
-    xsize_ = xs;
-    ysize_ = ys;
-  }
-
-  inline bool isInside(const pcl::PointXY pt) const {
-    if (pt.x < center_.x - xsize_ / 2 || pt.x > center_.x + xsize_ / 2) {
-      return false;
-    }
-    if (pt.y < center_.y - ysize_ / 2 || pt.y > center_.y + ysize_ / 2) {
-      return false;
-    }
-    return true;
-  }
-
-  inline Eigen::Vector2d computeMean(
-      const vector<pcl::PointXY, Eigen::aligned_allocator<pcl::PointXY>>
-          &points) {
-    Eigen::Vector2d ret = Eigen::Vector2d::Zero();
-    for (size_t i = 0; i < points.size(); ++i) {
-      ret += Eigen::Vector2d(points.at(i).x, points.at(i).y);
-    }
-    ret /= points.size();
-    return ret;
-  }
-
-  inline Eigen::Matrix2d computeCov(
-      const vector<pcl::PointXY, Eigen::aligned_allocator<pcl::PointXY>>
-          &points) {
-    // TODO: intrinsic covariance
-    Eigen::Matrix2d ret;
-
-    int n = points.size();
-    if (n == 1) {
-      ret << 0.1, 0, 0, 0.1;
-      return ret;
-    }
-
-    Eigen::Vector2d mean = computeMean(points);
-    Eigen::MatrixXd mp(2, n);
-    Eigen::Matrix2d covp;
-    covp << 0.1, 0, 0, 0.1;
-    for (int i = 0; i < n; ++i) {
-      mp.block<2, 1>(0, i) = Eigen::Vector2d(points.at(i).x, points.at(i).y) - mean;
-    }
-
-    // ret = mp * mp.transpose() / (n - 1);
-    ret = mp * mp.transpose() / (n - 1) + covp;
-    return ret;
-  }
-
-  inline vector<pcl::PointXY, Eigen::aligned_allocator<pcl::PointXY>>
-  excludeNaN(const vector<pcl::PointXY, Eigen::aligned_allocator<pcl::PointXY>>
-                 &points) {
-    vector<pcl::PointXY, Eigen::aligned_allocator<pcl::PointXY>> ret;
-    for (auto &pt : points) {
-      if (!isnan(pt.x) && !isnan(pt.y)) {
-        ret.push_back(pt);
-      }
-    }
-    return ret;
-  }
-
-  void computePGaussian() {
-    if (!phasGaussian_) {
-      auto new_points = excludeNaN(points_);
-      if (points_.size() != new_points.size()) {
-        dprintf("cell @ (%.2f, %.2f): points_ exclude %ld NaNs\n", center_.x,
-                center_.y, points_.size() - new_points.size());
-      }
-      if (new_points.size() == 0) {
-        dprintf("cell @ (%.2f, %.2f): no points!\n", center_.x, center_.y);
-        pmean_.setZero();
-        pcov_.setZero();
-        return;
-      }
-      pmean_ = computeMean(new_points);
-      pcov_ = computeCov(new_points);
-      bool invertable = false;
-      pcov_.computeInverseWithCheck(picov_, invertable);
-      if (!invertable) {
-        dprintf("cell @ (%.2f, %.2f): pcov_ not invertable\n", center_.x,
-                center_.y);
-        picov_.setZero();
-      }
-      phasGaussian_ = true;
-    }
-  }
-
-  void computeNGaussian() {
-    if (!nhasGaussian_) {
-      auto new_normals = excludeNaN(normals_);
-      if (normals_.size() != new_normals.size()) {
-        dprintf("cell @ (%.2f, %.2f): normals_ exclude %ld NaNs\n", center_.x,
-                center_.y, normals_.size() - new_normals.size());
-      }
-      if (new_normals.size() == 0) {
-        dprintf("cell @ (%.2f, %.2f): no normals!\n", center_.x, center_.y);
-        nmean_.setZero();
-        ncov_.setZero();
-        return;
-      }
-      nmean_ = computeMean(new_normals);
-      ncov_ = computeCov(new_normals);
-      bool invertable = false;
-      ncov_.computeInverseWithCheck(nicov_, invertable);
-      if (!invertable) {
-        dprintf("cell @ (%.2f, %.2f): ncov_ not invertable\n", center_.x,
-                center_.y);
-        nicov_.setZero();
-      }
-      nhasGaussian_ = true;
-    }
-  }
-
-  void computeGaussian() {
-    assert(points_.size() == normals_.size());
+  // Compute gaussians
+  void ComputeGaussian() {
+    Expects(points_.size() == normals_.size());
     N_ = points_.size();
-    computePGaussian();
-    computeNGaussian();
+    ComputePGaussian();
+    ComputeNGaussian();
   }
 
-  // Get and Set Points
-  inline Eigen::Matrix2d getPointCov() const { return pcov_; }
-  inline Eigen::Matrix2d getPointInverseCov() const { return picov_; }
-  inline Eigen::Vector2d getPointMean() const { return pmean_; }
-  inline Eigen::Matrix2d getPointEvecs() const { return pevecs_; }
-  inline Eigen::Vector2d getPointEvals() const { return pevals_; }
-  inline void setPointMean(const Eigen::Vector2d &mean) { pmean_ = mean; }
-  inline void setPointCov(const Eigen::Matrix2d &cov) { pcov_ = cov; }
-  inline void setPointEvals(const Eigen::Vector2d &ev) { pevals_ = ev; }
-  inline void setPointEvecs(const Eigen::Matrix2d &ev) { pevecs_ = ev; }
-
-  // Get and Set Normals
-  inline Eigen::Matrix2d getNormalCov() const { return ncov_; }
-  inline Eigen::Matrix2d getNormalInverseCov() const { return nicov_; }
-  inline Eigen::Vector2d getNormalMean() const { return nmean_; }
-  inline Eigen::Matrix2d getNormalEvecs() const { return nevecs_; }
-  inline Eigen::Vector2d getNormalEvals() const { return nevals_; }
-  inline void setNormalMean(const Eigen::Vector2d &mean) { nmean_ = mean; }
-  inline void setNormalCov(const Eigen::Matrix2d &cov) { ncov_ = cov; }
-  inline void setNormalEvals(const Eigen::Vector2d &ev) { nevals_ = ev; }
-  inline void setNormalEvecs(const Eigen::Matrix2d &ev) { nevecs_ = ev; }
-
-  void addPoint(const pcl::PointXY &pt) { points_.push_back(pt); }
-  void addPoints(pcl::PointCloud<pcl::PointXY> &pt) {
-    points_.insert(points_.begin(), pt.points.begin(), pt.points.end());
+  void ComputePGaussian() {
+    if (!phasgaussian_) {
+      auto valid_points = ExcludeNaN(points_);
+      if (valid_points.size() == 0) {
+        pmean_.setZero(), pcov_.setZero();
+        return;
+      }
+      pmean_ = ComputeMean(valid_points);
+      pcov_ = ComputeCov(valid_points, pmean_);
+      bool invertible = false;
+      pcov_.computeInverseWithCheck(picov_, invertible);
+      if (!invertible)
+        picov_.setZero();
+      phasgaussian_ = true;
+    }
   }
 
-  void addNormal(const pcl::PointXY &normal) { normals_.push_back(normal); }
-  void addNormals(pcl::PointCloud<pcl::PointXY> &normals) {
-    normals_.insert(normals_.begin(), normals.points.begin(), normals.points.end());
+  void ComputeNGaussian() {
+    if (!nhasgaussian_) {
+      auto valid_normals = ExcludeNaN(normals_);
+      if (!valid_normals.size()) {
+        nmean_.setZero(), ncov_.setZero();
+        return;
+      }
+      nmean_ = ComputeMean(valid_normals);
+      ncov_ = ComputeCov(valid_normals, nmean_);
+      bool invertible = false;
+      ncov_.computeInverseWithCheck(nicov_, invertible);
+      if (!invertible)
+        nicov_.setZero();
+      nhasgaussian_ = true;
+    }
   }
 
-  void setN(int N) { N_ = N; }
-  int getN() { return N_; }
-
-  void ToString() {
-    dprintf("cell @ (%.2f, %.2f):\n", center_.x, center_.y);
-    dprintf("  N: %ld\n", N_);
-    dprintf("  phas: %s\n", (phasGaussian_ ? "true" : "false"));
-    dprintf("  nhas: %s\n", (nhasGaussian_ ? "true" : "false"));
-    dprintf("  dimen: (%.2f, %.2f)\n", xsize_, ysize_);
-    dprintf("  pmean: (%.2f, %.2f)\n", pmean_(0), pmean_(1));
-    dprintf("  pcova: (%.2f, %.2f, %.2f, %.2f)\n", pcov_(0, 0), pcov_(0, 1), pcov_(1, 0), pcov_(1, 1));
-    dprintf("  nmean: (%.2f, %.2f)\n", nmean_(0), nmean_(1));
-    dprintf("  ncova: (%.2f, %.2f, %.2f, %.2f)\n", ncov_(0, 0), ncov_(0, 1), ncov_(1, 0), ncov_(1, 1));
+  // AddPoint(s) and AddNormal(s)
+  void AddPoint(const Vector2d &point) {
+    points_.push_back(point);
   }
+
+  void AddPoints(const vector<Vector2d> &points) {
+    points_.insert(points_.end(), points.begin(), points.end());
+  }
+
+  void AddNormal(const Vector2d &normal) {
+    normals_.push_back(normal);
+  }
+
+  void AddNormals(const vector<Vector2d> &normals) {
+    normals_.insert(normals_.end(), normals.begin(), normals.end());
+  }
+
+  // Debug string messages
+  string ToString() {
+    stringstream ss;
+    ss.setf(ios::fixed | ios::boolalpha);
+    ss.precision(2);
+    ss << "cell @ (" << center_(0) << ", " << center_(1) << "):" << endl
+       << "  N: " << N_ << endl
+       << "  𝓝p: " << phasgaussian_ << ", 𝓝n: " << nhasgaussian_ << endl
+       << "  sz: (" << size_(0) << ", " << size_(1) << ")" << endl
+       << "  μp: (" << pmean_(0) << ", " << pmean_(1) << ")" << endl
+       << "  Σp: (" << pcov_(0, 0) << ", " << pcov_(0, 1) << ", "
+                    << pcov_(1, 0) << ", " << pcov_(1, 1) << ")" << endl
+       << "  μn: (" << nmean_(0) << ", " << nmean_(1) << ")" << endl
+       << "  Σn: (" << ncov_(0, 0) << ", " << ncov_(0, 1) << ", "
+                    << ncov_(1, 0) << ", " << ncov_(1, 1) << ")" << endl;
+    return ss.str();
+  }
+
+  // Get and Set methods of variables
+  int GetN() const { return N_; }
+  bool GetPHasGaussian() const { return phasgaussian_; }
+  bool GetNHasGaussian() const { return nhasgaussian_; }
+  bool BothHasGaussian() const { return phasgaussian_ && nhasgaussian_; }
+  Vector2d GetCenter() const { return center_; }
+  Vector2d GetSize() const { return size_; }
+  Vector2d GetPointMean() const { return pmean_; }
+  Matrix2d GetPointCov() const { return pcov_; }
+  Matrix2d GetPointInverseCov() const { return picov_; }
+  Vector2d GetPointEvals() const { return pevals_; }
+  Matrix2d GetPointEvecs() const { return pevecs_; }
+  Vector2d GetNormalMean() const { return nmean_; }
+  Matrix2d GetNormalCov() const { return ncov_; }
+  Matrix2d GetNormalInverseCov() const { return nicov_; }
+  Vector2d GetNormalEvals() const { return nevals_; }
+  Matrix2d GetNormalEvecs() const { return nevecs_; }
+
+  void SetN(int N) { N_ = N; }
+  void SetPHasGaussian(bool phasgaussian) { phasgaussian_ = phasgaussian; }
+  void SetNHasGaussian(bool nhasgaussian) { nhasgaussian_ = nhasgaussian; }
+  void SetCenter(const Vector2d &center) { center_ = center; }
+  void SetSize(const Vector2d &size) { size_ = size; }
+  void SetPointMean(const Vector2d &mean) { pmean_ = mean; }
+  void SetPointCov(const Matrix2d &cov) {
+    pcov_ = cov;
+    bool invertible = false;
+    pcov_.computeInverseWithCheck(picov_, invertible);
+    if (!invertible) { picov_.setZero(); }
+  }
+  void SetPointEvals(const Vector2d &evals) { pevals_ = evals; }
+  void SetPointEvecs(const Matrix2d &evecs) { pevecs_ = evecs; }
+  void SetNormalMean(const Vector2d &mean) { nmean_ = mean; }
+  void SetNormalCov(const Matrix2d &cov) {
+    ncov_ = cov;
+    bool invertible = false;
+    ncov_.computeInverseWithCheck(nicov_, invertible);
+    if (!invertible) { nicov_.setZero(); }
+  }
+  void SetNormalEvals(const Vector2d &evals) { nevals_ = evals; }
+  void SetNormalEvecs(const Matrix2d &evecs) { nevecs_ = evecs; }
 
  private:
-  pcl::PointXY center_;
-  double xsize_, ysize_;
-  Eigen::Matrix2d pcov_;
-  Eigen::Matrix2d picov_;
-  Eigen::Matrix2d pevecs_;
-  Eigen::Vector2d pmean_;
-  Eigen::Vector2d pevals_;
-  Eigen::Matrix2d ncov_;
-  Eigen::Matrix2d nicov_;
-  Eigen::Matrix2d nevecs_;
-  Eigen::Vector2d nmean_;
-  Eigen::Vector2d nevals_;
-  unsigned int N_;
+  int N_;
+  bool phasgaussian_, nhasgaussian_; 
+  Vector2d center_, size_;
+  Matrix2d pcov_, picov_, pevecs_;
+  Vector2d pmean_, pevals_;
+  Matrix2d ncov_, nicov_, nevecs_;
+  Vector2d nmean_, nevals_;
+  vector<Vector2d> points_, normals_;
 };

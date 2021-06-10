@@ -113,4 +113,21 @@ visualization_msgs::Marker MakeCovarianceMarker(int idx,
   ret.pose.orientation.z = q.z();
   return ret;
 }
+
+visualization_msgs::Marker MakeTextMarker(int idx, const std::string &frame_id,
+                                          const std::string &text,
+                                          const geometry_msgs::Pose &pose,
+                                          const Color &color) {
+  visualization_msgs::Marker ret;
+  ret.header.frame_id = frame_id;
+  ret.header.stamp = ros::Time::now();
+  ret.id = idx;
+  ret.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+  ret.action = visualization_msgs::Marker::ADD;
+  ret.text = text;
+  ret.pose = pose;
+  ret.scale.z = 0.7;
+  ret.color = MakeColorRGBA(color);
+  return ret;
+}
 }  // namespace common

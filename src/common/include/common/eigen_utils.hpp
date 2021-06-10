@@ -24,6 +24,13 @@ Eigen::Affine3d Affine3dFromXYZRPY(const std::vector<double> &xyzrpy) {
   return ret;
 }
 
+Eigen::Affine3d Affine3dFromMatrix3d(const Eigen::Matrix3d &mtx) {
+  Eigen::Matrix4d mtx4d = Eigen::Matrix4d::Identity();
+  mtx4d.block<2, 2>(0, 0) = mtx.block<2, 2>(0, 0);
+  mtx4d.block<2, 1>(0, 3) = mtx.block<2, 1>(0, 2);
+  return Eigen::Affine3d(mtx4d);
+}
+
 std::vector<double> XYZRPYFromAffine3d(const Eigen::Affine3d &mtx) {
   std::vector<double> ret;
   ret.push_back(mtx.translation()(0));
@@ -47,6 +54,21 @@ std::vector<double> XYZRPYFromMatrix4f(const Eigen::Matrix4f &mtx) {
   return XYZRPYFromAffine3d(Affine3dFromMatrix4f(mtx));
 }
 
+Eigen::Vector3d XYTRadianFromMatrix3d(const Eigen::Matrix3d &mtx) {
+  Eigen::Vector3d ret;
+  Eigen::Affine2d aff(mtx);
+  ret(0) = aff.translation()(0);
+  ret(1) = aff.translation()(1);
+  ret(2) = Eigen::Rotation2Dd(aff.rotation()).angle();
+  return ret;
+}
+
+Eigen::Vector3d XYTDegreeFromMatrix3d(const Eigen::Matrix3d &mtx) {
+  Eigen::Vector3d ret = XYTRadianFromMatrix3d(mtx);
+  ret(2) = ret(2) * 180. / M_PI;
+  return ret;
+}
+
 Eigen::Matrix3d Matrix3dFromXYTRadian(const std::vector<double> &xyt) {
   Expects(xyt.size() == 3);
   Eigen::Affine2d aff = Eigen::Translation2d(xyt.at(0), xyt.at(1)) *
@@ -68,6 +90,10 @@ Eigen::Matrix4f Matrix4fFromMatrix3d(const Eigen::Matrix3d &mtx) {
   ret.block<2, 2>(0, 0) = mtx.block<2, 2>(0, 0).cast<float>();
   ret.block<2, 1>(0, 3) = mtx.block<2, 1>(0, 2).cast<float>();
   return ret;
+}
+
+Eigen::Matrix4f Matrix4fFromXYTRadian(const std::vector<double> &xyt) {
+  return common::Matrix4fFromMatrix3d(common::Matrix3dFromXYTRadian(xyt));
 }
 
 geometry_msgs::TransformStamped TstFromAffine3d(
@@ -137,6 +163,14 @@ Eigen::MatrixXd EigenMatrixFromStdMsg(
       ret(i, j) = msg.data.at(dim1.stride * i + j);
     }
   }
+  return ret;
+}
+
+Eigen::Vector2d TransNormRotDegAbsFromMatrix3d(const Eigen::Matrix3d &mtx) {
+  Eigen::Vector2d ret;
+  auto xyt = common::XYTDegreeFromMatrix3d(mtx);
+  ret(0) = xyt.block<2, 1>(0, 0).norm();
+  ret(1) = abs(xyt(2));
   return ret;
 }
 }  // namespace common

@@ -122,9 +122,9 @@ class PCA2D {
     } else {
       pcl::PointXYZ p;
       for (size_t i = 0; i < in_cloud->size(); ++i) {
-        if (!pcl_isfinite(in_cloud->points[i].x) ||
-            !pcl_isfinite(in_cloud->points[i].y) ||
-            !pcl_isfinite(in_cloud->points[i].z))
+        if (!std::isfinite(in_cloud->points[i].x) ||
+            !std::isfinite(in_cloud->points[i].y) ||
+            !std::isfinite(in_cloud->points[i].z))
           continue;
         project(in_cloud->points[i], p);
         out_cloud->points.push_back(p);

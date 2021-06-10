@@ -1,395 +1,184 @@
 #pragma once
 
 #include <bits/stdc++.h>
-
+#include <Eigen/Dense>
+#include <gsl/gsl>
+#include <pcl/point_types.h>
+#include <pcl/search/kdtree.h>
 #include "sndt/lazy_grid_2d.hpp"
+#include "normal2d/Normal2dEstimation.h"
 
 using namespace std;
+using namespace Eigen;
+using pcl::search::KdTree;
+using pcl::PointXYZ;
+using pcl::PointXY;
+typedef pcl::PointCloud<pcl::PointXYZ> PCXYZ;
+typedef pcl::PointCloud<pcl::PointXYZ>::Ptr PCXYZPtr;
+typedef pcl::PointCloud<pcl::PointXY> PCXY;
+typedef pcl::PointCloud<pcl::PointXY>::Ptr PCXYPtr;
 
-pcl::PointCloud<pcl::PointXY> ToPCLXY(const pcl::PointCloud<pcl::PointXYZ> &pc) {
-  pcl::PointCloud<pcl::PointXY> ret;
-  for (const auto &ptxyz : pc.points) {
-    pcl::PointXY pt;
-    pt.x = ptxyz.x;
-    pt.y = ptxyz.y;
-    ret.points.push_back(pt);
-  }
+PCXY ToPCLXY(const PCXYZ &pc) {
+  PCXY ret;
+  std::transform(pc.begin(), pc.end(), back_inserter(ret), [](auto p) {
+    PointXY pt;
+    pt.x = p.x;
+    pt.y = p.y;
+    return pt;
+  });
+  return ret;
+}
+
+PCXYZPtr ComputeNormals(PCXYZPtr pc, double radius) {
+  PCXYZPtr ret(new PCXYZ);
+  KdTree<PointXYZ>::Ptr tree(new KdTree<PointXYZ>);
+  Normal2dEstimation ne;
+  ne.setInputCloud(pc);
+  ne.setSearchMethod(tree);
+  ne.setRadiusSearch(radius);
+  ne.compute(ret);
   return ret;
 }
 
 class NDTMap {
  public:
-  NDTMap(LazyGrid2D *idx = NULL) {
-    index_ = idx;
-    map_sizex = map_sizey = -1.0;
-    centerx = centery = 0.0;
-    guess_size_ = true;
-    isFirstLoad_ = true;
-  }
-
-  /** This function is usually not to be called. */
-  void initialize(double cenx, double ceny, double sizex, double sizey) {
-    index_->setCenter(cenx, ceny);
-    index_->setSize(sizex, sizey);
-    map_sizex = sizex;
-    map_sizey = sizey;
-    centerx = cenx;
-    centery = ceny;
-    index_->initialize();
-    guess_size_ = false;
-    isFirstLoad_ = false;
+  explicit NDTMap(double cell_size) {
+    index_ = new LazyGrid2D(cell_size);
+    cell_size_ << cell_size, cell_size;
+    map_center_.setZero();
+    map_size_.setZero();
+    guess_map_size_ = true;
+    is_initialized_ = false;
   }
 
   ~NDTMap() {
-    if (index_ != NULL && !isFirstLoad_) {
-      delete index_;
-      index_ = NULL;
-    }
+    delete index_;
   }
 
-  void setMapSize(double sx, double sy) {
-    map_sizex = sx;
-    map_sizey = sy;
-  }
-
-  void setNormalRadiusSearch(int radius) {
-    radius_ = radius;
-  }
-
+  // Three main functions
   // TODO: NOT IMPLEMENT YET!!!
-  void addPointCloud(const pcl::PointCloud<pcl::PointXYZ> &pc, double maxz) {
-    ;
+  void AddPointCloud(const PCXYZ &pc) { ; }
+
+  void LoadPointCloud(const PCXYZ &pc, const PCXYZ &normals,
+                      double range_limit = -1) {
+    LoadPointCloud(ToPCLXY(pc), ToPCLXY(normals), range_limit);
   }
 
-  void loadPointCloud(const pcl::PointCloud<pcl::PointXYZ> &pc,
-                      const pcl::PointCloud<pcl::PointXYZ> &normals,
+  void LoadPointCloud(const PCXY &pc, const PCXY &normals,
                       double range_limit = -1) {
-    loadPointCloud(ToPCLXY(pc), ToPCLXY(normals), range_limit);
-  }
-
-  /**
-   * 1. with guess: ctor -> loadPointCloud
-   * 2. without guess: ctor -> setGuessSize -> loadPointCloud
-   */
-  void loadPointCloud(const pcl::PointCloud<pcl::PointXY> &pc,
-                      const pcl::PointCloud<pcl::PointXY> &normals,
-                      double range_limit = -1) {
-    Expects(normals.points.size() == pc.points.size());
-
-    if (index_ == NULL) {
-      return;
-    }
-
-    if (!isFirstLoad_) {
-      LazyGrid2D *si = new LazyGrid2D(index_->getCellSize());
-      if (si == NULL) {
-        return;
-      }
+    Expects(pc.size() == normals.size());
+    if (is_initialized_) {
+      LazyGrid2D *idx = new LazyGrid2D(cell_size_(0));
       delete index_;
-      index_ = si;
-      isFirstLoad_ = false;
+      index_ = idx;
     }
-
-    if (guess_size_) {
-      Eigen::Vector2d center;
-      double mapsize;
-      guessMapSize(pc, range_limit, center, mapsize);
-      centerx = center(0);
-      centery = center(1);
-      index_->setCenter(centerx, centery);
-      index_->setSize(mapsize, mapsize);
-    } else {
-      dprintf("Set Map Size: center(%.2f, %.2f) & mapsize (%.2f x %.2f)\n",
-              centerx, centery, map_sizex, map_sizey);
-      index_->setCenter(centerx, centery);
-      if (map_sizex > 0 && map_sizey > 0) {
-        index_->setSize(map_sizex, map_sizey);
-      } else {
-        dprintf("mapsize should always >= 0\n");
-        exit(1);
-      }
+    if (guess_map_size_) {
+      GuessMapSize(pc, range_limit);
     }
+    index_->SetGridCenter(map_center_);
+    index_->SetGridSize(map_size_);
 
-    for (size_t i = 0; i < pc.points.size(); ++i) {
-      pcl::PointXY pt = pc.points.at(i);
-      if (isnan(pt.x) || isnan(pt.y)) {
-        dprintf("exist NaN!!\n");
-        exit(1);
-      }
-      if (range_limit > 0) {
-        Eigen::Vector2d d(pt.x, pt.y);
-        if (d.norm() > range_limit) {
-          continue;
-        }
-      }
-      NDTCell *cell = index_->addPoint(pt);
-      cell->addNormal(normals.points.at(i));
-      // TODO: add covariance
-      // index_->getCellForPoint(pt)->addPCov(pcovs.at(i));
-      NDTCell *ptCell;
-      index_->getCellAt(pt, ptCell);
-      if (ptCell != NULL) {
-        update_set.insert(ptCell);
-      }
+    vector<NDTCell *> update_cells;
+    for (size_t i = 1; i < pc.size(); ++i) {
+      Vector2d point(pc.at(i).x, pc.at(i).y);
+      Vector2d normal(normals.at(i).x, normals.at(i).y);
+      if (range_limit > 0 && point.norm() > range_limit)
+        continue;
+      NDTCell *cell = index_->AddPointAndNormal(point, normal);
+      if (cell)
+        update_cells.push_back(cell);
     }
-    isFirstLoad_ = false;
+    for (auto cell : update_cells)
+      cell->ComputeGaussian();
+    update_cells.clear();
+    is_initialized_ = true;
   }
 
-  void computeNDTCells() {
-    for (const auto &cell : update_set) {
-      if (cell != NULL) {
-        cell->computeGaussian();
-      }
-    }
-    update_set.clear();
-  }
-
-  inline LazyGrid2D *getMyIndex() const { return index_; }
-
-  // double getLikelihoodForPoint(pcl::PointXY pt);
-
-  bool getCellAtPoint(const pcl::PointXY &refPoint, NDTCell *&cell) {
-    index_->getCellAt(refPoint, cell);
-    return (cell != NULL);
-  }
-
-  bool getCellAtPoint(const pcl::PointXY &refPoint, NDTCell *&cell) const {
-    index_->getCellAt(refPoint, cell);
-    return (cell != NULL);
-  }
-
-  bool getCellAtAllocate(const pcl::PointXY &refPoint, NDTCell *&cell) {
-    index_->getCellAtAllocate(refPoint, cell);
-    return (cell != NULL);
-  }
-
-  bool getCellAtAllocate(const pcl::PointXY &refPoint, NDTCell *&cell) const {
-    index_->getCellAtAllocate(refPoint, cell);
-    return (cell != NULL);
-  }
-
-  bool getCellForPoint(const pcl::PointXY &pt, NDTCell *&cell,
-                       int max_neighbors, bool checkForGaussian) const {
-    cell = index_->getClosestNDTCell(pt, max_neighbors, checkForGaussian);
-    return (cell != NULL);
-  }
-
-  vector<NDTCell *> getCellsForPoint(const pcl::PointXY pt, int n_neighbors,
-                                     bool checkForGaussian) const {
-    return index_->getClosestNDTCells(pt, n_neighbors, checkForGaussian);
-  }
-
-  vector<NDTCell *> getInitializedCellsForPoint(const pcl::PointXY pt) const {
-    return index_->getClosestCells(pt);
-  }
-
-  NDTMap *pseudoTransformNDTMap(const Eigen::Matrix3d &T) {
-    NDTMap *map = new NDTMap(new LazyGrid2D(index_->getCellSize()));
-    typename LazyGrid2D::CellVectorConstItr it = index_->begin();
-    auto idx = map->getMyIndex();
-    while (it != index_->end()) {
-      if (*it != NULL) {
-        if (((*it)->phasGaussian_) && ((*it)->nhasGaussian_)) {
-          NDTCell *nd = new NDTCell();
-          Eigen::Matrix2d R = T.block<2, 2>(0, 0);
-          Eigen::Vector2d t = T.block<2, 1>(0, 2);
-          Eigen::Vector2d mean = (*it)->getPointMean();
-          Eigen::Matrix2d cov = (*it)->getPointCov();
-          mean = R * mean + t;
-          cov = R * cov * R.transpose();
-          double xs, ys;
-          (*it)->getDimensions(xs, ys);
-          nd->setDimensions(xs, ys);
-          nd->setCenter((*it)->getCenter());
-          nd->setN((*it)->getN());
-          nd->phasGaussian_ = true;
-          nd->setPointMean(mean);
-          nd->setPointCov(cov);
-
-          mean = (*it)->getNormalMean();
-          cov = (*it)->getNormalCov();
-          mean = R * mean;
-          cov = R * cov * R.transpose();
-          nd->nhasGaussian_ = true;
-          nd->setNormalMean(mean);
-          nd->setNormalCov(cov);
-          idx->addNDTCell(nd);
-          nd->ToString();
-        }
-      }
-      ++it;
-    }
-    return map;
-  }
-
-  vector<NDTCell *> pseudoTransformNDT(const Eigen::Matrix3d &T) const {
-    vector<NDTCell *> ret;
-    typename LazyGrid2D::CellVectorConstItr it = index_->begin();
-    while (it != index_->end()) {
-      if (*it != NULL) {
-        if ((*it)->phasGaussian_ && (*it)->nhasGaussian_) {
-          NDTCell *nd = new NDTCell();
-          Eigen::Matrix2d R = T.block<2, 2>(0, 0);
-          Eigen::Vector2d t = T.block<2, 1>(0, 2);
-          Eigen::Vector2d mean = (*it)->getPointMean();
-          Eigen::Matrix2d cov = (*it)->getPointCov();
-          mean = R * mean + t;
-          cov = R * cov * R.transpose();
-          double xs, ys;
-          (*it)->getDimensions(xs, ys);
-          nd->setDimensions(xs, ys);
-          nd->setCenter((*it)->getCenter());
-          nd->setN((*it)->getN());
-          nd->phasGaussian_ = true;
-          nd->setPointMean(mean);
-          nd->setPointCov(cov);
-          
-          mean = (*it)->getNormalMean();
-          cov = (*it)->getNormalCov();
-          mean = R * mean;
-          cov = R * cov * R.transpose();
-          nd->nhasGaussian_ = true;
-          nd->setNormalMean(mean);
-          nd->setNormalCov(cov);
-          ret.push_back(nd);
-        }
-      }
-      ++it;
-    }
-    return ret;
-  }
-
-  vector<boost::shared_ptr<NDTCell>> getAllCells() const {
-    vector<boost::shared_ptr<NDTCell>> ret;
-    for (auto cell = index_->begin(); cell != index_->end(); ++cell) {
-      if ((*cell)->phasGaussian_) {
-        boost::shared_ptr<NDTCell> sp(*cell);
-        ret.push_back(sp);
+  vector<std::shared_ptr<NDTCell>> PseudoTransformCells(const Matrix3d &T) {
+    vector<std::shared_ptr<NDTCell>> ret;
+    Matrix2d R = T.block<2, 2>(0, 0);
+    Vector2d t = T.block<2, 1>(0, 2);
+    for (auto it = begin(); it != end(); ++it) {
+      if ((*it)->BothHasGaussian()) {
+        auto cell = std::make_shared<NDTCell>();
+        cell->SetN((*it)->GetN());
+        cell->SetPHasGaussian(true);
+        cell->SetNHasGaussian(true);
+        cell->SetSize((*it)->GetSize());
+        cell->SetCenter((*it)->GetCenter());
+        cell->SetN((*it)->GetN());
+        cell->SetPointMean(R * (*it)->GetPointMean() + t);
+        cell->SetPointCov(R * (*it)->GetPointCov() * R.transpose());
+        cell->SetNormalMean(R * (*it)->GetNormalMean() + t);
+        cell->SetNormalCov(R * (*it)->GetNormalCov() * R.transpose());
+        ret.push_back(cell);
       }
     }
     return ret;
   }
 
-  int numberOfActiveCells() {
-    int ret = 0;
-    if (index_ == NULL) return ret;
-    for (auto it = index_->begin(); it != index_->end(); ++it) {
-      if ((*it)->phasGaussian_) {
-        ++ret;
-      }
-    }
-    return ret;
+  // Inherited methods
+  NDTCell *GetCellForPoint(const Vector2d &point) {
+    return index_->GetCellForPoint(point);
   }
 
-  int numberOfActiveCells() const {
-    int ret = 0;
-    if (index_ == NULL) return ret;
-    for (auto it = index_->begin(); it != index_->end(); ++it) {
-      if ((*it)->phasGaussian_) {
-        ++ret;
-      }
-    }
-    return ret;
+  NDTCell *GetClosestCellForPoint(const Vector2d &point, int maxdist_of_cells, bool include_locate = true) {
+    return index_->GetClosestCellForPoint(point, maxdist_of_cells, include_locate);
   }
 
-  bool getCentroid(double &cx, double &cy) {
-    if (index_ == NULL) return false;
-    index_->getCenter(cx, cy);
-    return true;
+  vector<NDTCell *> GetClosestCellsForPoint(const Vector2d &point, int maxdist_of_cells, bool include_locate = false) {
+    return index_->GetClosestCellsForPoint(point, maxdist_of_cells, include_locate);
   }
 
-  bool getGridSize(int &cx, int &cy) {
-    if (index_ == NULL) return false;
-    index_->getGridSize(cx, cy);
-    return true;
+  string ToString() {
+    return index_->ToString();
   }
 
-  bool getGridSizeInMeters(double &cx, double &cy) {
-    if (index_ == NULL) return false;
-    index_->getGridSizeInMeters(cx, cy);
-    return true;
-  }
+  // Size and Iterators
+  int size() { return index_->size(); }
+  vector<NDTCell *>::iterator begin() { return index_->begin(); }
+  vector<NDTCell *>::const_iterator begin() const { return index_->begin(); }
+  vector<NDTCell *>::iterator end() { return index_->end(); }
+  vector<NDTCell *>::const_iterator end() const { return index_->end(); } 
 
-  bool getGridSizeInMeters(double &cx, double &cy) const {
-    if (index_ == NULL) return false;
-    index_->getGridSizeInMeters(cx, cy);
-    return true;
+  // Variables
+  void SetGuessMapSize(const Vector2d &map_center, const Vector2d &map_size) {
+    guess_map_size_ = false;
+    map_center_ = map_center;
+    map_size_ = map_size;
   }
-
-  bool getCellSizeInMeters(double &cx, double &cy) {
-    if (index_ == NULL) return false;
-    index_->getCellSize(cx, cy);
-    return true;
-  }
-
-  bool getCellSizeInMeters(double &cx, double &cy) const {
-    if (index_ == NULL) return false;
-    index_->getCellSize(cx, cy);
-    return true;
-  }
-
-  double getSmallestCellSizeInMeters() const {
-    double cx, cy;
-    if (index_ == NULL) return false;
-    index_->getCellSize(cx, cy);
-    return min(cx, cy);
-  }
-
-  void setGuessSize(double cenx, double ceny, double sizex, double sizey) {
-    guess_size_ = false;
-    centerx = cenx;
-    centery = ceny;
-    map_sizex = sizex;
-    map_sizey = sizey;
-  }
-
-  NDTCell *getCellAtID(int x, int y) const {
-    NDTCell *cell = NULL;
-    index_->getCellAt(x, y, cell);
-    return cell;
-  }
-
-  void ToString() {
-    index_->ToString();
-  }
+  LazyGrid2D *index() const { return index_; }
+  Vector2d map_size() const { return map_size_; }
+  Vector2d map_center() const { return map_center_; }
+  Vector2d cell_size() const { return cell_size_; }
 
  private:
   LazyGrid2D *index_;
-  bool isFirstLoad_;
-  double map_sizex;
-  double map_sizey;
-  double centerx, centery;
-  bool guess_size_;
-  set<NDTCell *> update_set;
-  int radius_;
+  bool is_initialized_;
+  bool guess_map_size_;
+  Vector2d map_size_;
+  Vector2d map_center_;
+  Vector2d cell_size_;
 
-  void guessMapSize(const pcl::PointCloud<pcl::PointXY> &pc, double range_limit,
-                    Eigen::Vector2d &center, double &mapsize) {
-    int npts = 0;
-    center = Eigen::Vector2d::Zero();
-    for (const auto &pt : pc.points) {
+  void GuessMapSize(const PCXY &pc, double range_limit = -1) {
+    int n = 0;
+    map_center_.setZero();
+    for (const auto &pt : pc) {
       if (isnan(pt.x) || isnan(pt.y)) continue;
-      Eigen::Vector2d d(pt.x, pt.y);
+      Vector2d d(pt.x, pt.y);
       if (range_limit > 0 && d.norm() > range_limit) continue;
-      center += d;
-      ++npts;
+      map_center_ += d;
+      ++n;
     }
-    center /= npts;
+    map_center_ /= n;
 
-    double maxDist = 0;
-    for (const auto &pt : pc.points) {
+    double maxdist = 0;
+    for (const auto &pt : pc) {
       if (isnan(pt.x) || isnan(pt.y)) continue;
-      Eigen::Vector2d d(pt.x, pt.y);
+      Vector2d d(pt.x, pt.y);
       if (range_limit > 0 && d.norm() > range_limit) continue;
-      double dist = (d - center).norm();
-      maxDist = (dist > maxDist) ? dist : maxDist;
+      maxdist = max(maxdist, (d - map_center_).norm());
     }
-    mapsize = maxDist * 4;
-
-    dprintf("Guess Map Size: center(%.2f, %.2f) & mapsize (%.2f x %.2f)\n",
-            center(0), center(1), mapsize, mapsize);
+    map_size_ << maxdist * 4, maxdist * 4;
   }
-
- public:
-  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

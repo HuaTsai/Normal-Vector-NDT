@@ -12,4 +12,5 @@
   <exec_depend>roscpp</exec_depend>
   <depend>rosbag</depend>
   <depend>pcl_ros</depend>
+  <depend>common</depend>
 </package>

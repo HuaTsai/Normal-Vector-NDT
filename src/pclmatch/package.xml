@@ -11,4 +11,5 @@
   <build_export_depend>roscpp</build_export_depend>
   <exec_depend>roscpp</exec_depend>
   <depend>common</depend>
+  <depend>trimesh2</depend>
 </package>

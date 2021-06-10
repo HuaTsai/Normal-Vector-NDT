@@ -37,10 +37,17 @@ by Frank Kung 2019 Dec
 #include <pcl_ros/transforms.h>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <tf2_eigen/tf2_eigen.h>
+#include <boost/program_options.hpp>
 #include "sndt/conti_tool.hpp"
+#include "sndt/EgoPointClouds.h"
+#include "common/EgoPointClouds.h"
+#include "common/common.h"
+#include "dbg/dbg.h"
 
 using namespace std;
 using namespace std::literals::chrono_literals;
+namespace po = boost::program_options;
 
 ros::Publisher pub, pub_pc;
 ros::Publisher f_outlier_pub;
@@ -67,6 +74,9 @@ ros::Publisher fl_vel_c_pub;
 ros::Publisher br_vel_c_pub;
 ros::Publisher bl_vel_c_pub;
 
+vector<common::EgoPointClouds> vepcs;
+string outfolder;
+
 //-- debug --//
 int total_size = 0;
 
@@ -77,6 +87,19 @@ typedef message_filters::sync_policies::ApproximateTime<
     NoCloudSyncPolicy;
 
 bool comp(int a, int b) { return (a < b); }
+
+vector<geometry_msgs::Point> PointCloudAdapter(
+    const sensor_msgs::PointCloud2 &msg) {
+  vector<geometry_msgs::Point> ret;
+  pcl::PointCloud<pcl::PointXYZ> pc;
+  pcl::fromROSMsg(msg, pc);
+  for (auto &p : pc.points) {
+    geometry_msgs::Point pt;
+    pt.x = p.x; pt.y = p.y; pt.z = p.z;
+    ret.push_back(pt);
+  }
+  return ret;
+}
 
 Eigen::Matrix4f getTransform(double x, double y, double theta) {
   Eigen::Matrix4f transform = Eigen::Matrix4f::Identity();
@@ -102,7 +125,7 @@ std::vector<int> calcRansacMat(Eigen::MatrixXd VD_mat, Eigen::MatrixXd R_mat,
   cloud->height = 1;
   cloud->is_dense = true;
 
-  for (size_t i = 0; i < R_mat.rows(); ++i) {
+  for (int i = 0; i < R_mat.rows(); ++i) {
 		pcl::PointXYZ pt;
 		pt.x = R_mat(i, 0);
 		pt.y = R_mat(i, 1);
@@ -133,7 +156,6 @@ std::vector<int> calcRansacMat(Eigen::MatrixXd VD_mat, Eigen::MatrixXd R_mat,
 
 Eigen::MatrixXd deleteCols(Eigen::MatrixXd mat, std::vector<int> cols) {
   Eigen::MatrixXd rm_mat(cols.size(), mat.cols());
-  int current_row = 0, current_vec = 0;
   for (int i = 0; i < rm_mat.rows(); i++) rm_mat.row(i) = mat.row(cols[i]);
   return rm_mat;
 }
@@ -298,6 +320,43 @@ Eigen::MatrixXd getCovMat(Eigen::MatrixXd RANSAC_R, Eigen::MatrixXd RANSAC_VD,
   return cov_mat;
 }
 
+nav_msgs::Odometry MakeOdom(double min_t, const Eigen::MatrixXd& ego_mat,
+                            const Eigen::MatrixXd& cov_mat) {
+  nav_msgs::Odometry odom;
+  odom.header.frame_id = "/car";
+  odom.header.stamp = ros::Time(min_t);
+  odom.twist.twist.linear.x = ego_mat(1, 0);
+  odom.twist.twist.linear.y = ego_mat(2, 0);
+  odom.twist.twist.angular.z = ego_mat(0, 0);
+  odom.twist.covariance[0] = cov_mat(0, 0);
+  odom.twist.covariance[1] = cov_mat(0, 1);
+  odom.twist.covariance[5] = cov_mat(0, 2);
+  odom.twist.covariance[6] = cov_mat(1, 0);
+  odom.twist.covariance[7] = cov_mat(1, 1);
+  odom.twist.covariance[11] = cov_mat(1, 2);
+  odom.twist.covariance[30] = cov_mat(2, 0);
+  odom.twist.covariance[31] = cov_mat(2, 1);
+  odom.twist.covariance[35] = cov_mat(2, 2);
+  odom.twist.covariance[14] = 99999;
+  odom.twist.covariance[21] = 99999;
+  odom.twist.covariance[28] = 99999;
+  return odom;
+}
+
+common::PointCloudSensor MakePointCloudSensor(string frame_id,
+                                              const Eigen::Matrix4f& origin,
+                                              const sensor_msgs::PointCloud2& pc,
+                                              sensor_msgs::PointCloud2& augpc) {
+  sensor_msgs::PointCloud2 temp;
+  pcl_ros::transformPointCloud(origin, pc, temp);
+  pcl::concatenatePointCloud(augpc, temp, augpc);
+  common::PointCloudSensor ret;
+  ret.id = frame_id;
+  ret.origin = tf2::toMsg(common::Affine3dFromMatrix4f(origin));
+  ret.points = PointCloudAdapter(pc);
+  return ret;
+}
+
 void Callback(const conti_radar::MeasurementConstPtr& f_input,
               const conti_radar::MeasurementConstPtr& fl_input,
               const conti_radar::MeasurementConstPtr& fr_input,
@@ -309,28 +368,7 @@ void Callback(const conti_radar::MeasurementConstPtr& f_input,
   double bl_t = bl_input->header.stamp.toSec();
   double br_t = br_input->header.stamp.toSec();
   double list[] = {f_t, fl_t, fr_t, bl_t, br_t};
-
-  std::cout << std::fixed;
-  std::cout.precision(5);
-
-  cout << "------------------------- \n";
-  cout << "front time: " << f_t << endl;
-  cout << "fr time: " << fr_t << endl;
-  cout << "fl time: " << fl_t << endl;
-  cout << "br time: " << br_t << endl;
-  cout << "bl time: " << bl_t << endl;
-
   double min_t = *std::min_element(list, list + 5);
-
-  cout << "biggest time difference: "
-       << (*std::max_element(list, list + 5) -
-           *std::min_element(list, list + 5))
-       << endl;
-  cout << endl;
-
-  std::cout << std::fixed;
-  std::cout.precision(0);
-
 
   float f_x = 3.41199994087;  // 3.6
   float f_y = 0.0;
@@ -367,8 +405,6 @@ void Callback(const conti_radar::MeasurementConstPtr& f_input,
   Eigen::MatrixXd M_mat_bl, R_mat_bl, VD_mat_bl;
   radar_sensor(bl_input, beta_bl, bl_x, bl_y, M_mat_bl, R_mat_bl, VD_mat_bl);
 
-  cout << endl;
-
   int f_size = R_mat_f.rows();
   int fr_size = R_mat_fr.rows();
   int fl_size = R_mat_fl.rows();
@@ -380,45 +416,16 @@ void Callback(const conti_radar::MeasurementConstPtr& f_input,
   Eigen::MatrixXd VD(f_size + fr_size + fl_size + br_size + bl_size, VD_mat_f.cols());
   VD << VD_mat_f, VD_mat_fr, VD_mat_fl, VD_mat_br, VD_mat_bl;
 
-  //-- RANSAC --//
   std::vector<int> inliers;
   inliers = calcRansacMat(VD, R, 0.27);  // 0.27
   Eigen::MatrixXd RANSAC_R = deleteCols(R, inliers);
   Eigen::MatrixXd RANSAC_VD = deleteCols(VD, inliers);
-  cout << "R.rows(): " << R.rows() << endl;
-  cout << "RANSAC_R.rows(): " << RANSAC_R.rows() << endl;
-  //-- End RANSAC --//
-
-  //-- LSQ --//
   Eigen::MatrixXd ego_mat =
       RANSAC_R.bdcSvd(Eigen::ComputeThinU | Eigen::ComputeThinV)
           .solve(RANSAC_VD);
-  //-- LSQ End --//
-
   Eigen::MatrixXd cov_mat = getCovMat(RANSAC_R, RANSAC_VD, ego_mat);
 
-  nav_msgs::Odometry odom;
-  odom.header.frame_id = "/car";
-  odom.header.stamp = ros::Time(min_t);
-  odom.twist.twist.linear.x = ego_mat(1, 0);
-  odom.twist.twist.linear.y = ego_mat(2, 0);
-  odom.twist.twist.angular.z = ego_mat(0, 0);
-
-  /// assign covariance value ///
-  odom.twist.covariance[0] = cov_mat(0, 0);
-  odom.twist.covariance[1] = cov_mat(0, 1);
-  odom.twist.covariance[5] = cov_mat(0, 2);
-  odom.twist.covariance[6] = cov_mat(1, 0);
-  odom.twist.covariance[7] = cov_mat(1, 1);
-  odom.twist.covariance[11] = cov_mat(1, 2);
-  odom.twist.covariance[30] = cov_mat(2, 0);
-  odom.twist.covariance[31] = cov_mat(2, 1);
-  odom.twist.covariance[35] = cov_mat(2, 2);
-  odom.twist.covariance[14] = 99999;
-  odom.twist.covariance[21] = 99999;
-  odom.twist.covariance[28] = 99999;
-
-  //-- Vel Msg End --//
+  nav_msgs::Odometry odom = MakeOdom(min_t, ego_mat, cov_mat);
 
   //-- Outliers Msg (comp) --//
   std::vector<int> f_outliers, fr_outliers, fl_outliers, br_outliers, bl_outliers;
@@ -465,12 +472,6 @@ void Callback(const conti_radar::MeasurementConstPtr& f_input,
   br_in = contiMsgInlierFilter(br_input, br_inliers);
   bl_in = contiMsgInlierFilter(bl_input, bl_inliers);
 
-  cout << "f_in size: " << f_in.points.size() << " ";
-  cout << "fr_in size: " << fr_in.points.size() << " ";
-  cout << "fl_in size: " << fl_in.points.size() << " ";
-  cout << "br_in size: " << br_in.points.size() << " ";
-  cout << "bl_in size: " << bl_in.points.size() << endl;
-
   int out_size = f_outliers.size() + fr_outliers.size() + fl_outliers.size() +
                  br_outliers.size() + bl_outliers.size();
   int in_size = f_inliers.size() + fr_inliers.size() + fl_inliers.size() +
@@ -498,31 +499,41 @@ void Callback(const conti_radar::MeasurementConstPtr& f_input,
     ROS_ERROR("!!!!!! bl error !!!!!!\n");
   }
 
-  sensor_msgs::PointCloud2 output, temp;
   Eigen::Matrix4f tf_td;
 
-	tf_td = getTdTransform(f_t - min_t, ego_mat(1, 0), ego_mat(2, 0), ego_mat(0, 0));
-  pcl_ros::transformPointCloud(tf_td * tf_f, conti_to_rospc(f_in, 0), temp);
-  pcl::concatenatePointCloud(output, temp, output);
+  common::EgoPointClouds epcs;
+  sensor_msgs::PointCloud2 augpc;
 
-	tf_td = getTdTransform(fr_t - min_t, ego_mat(1, 0), ego_mat(2, 0), ego_mat(0, 0));
-  pcl_ros::transformPointCloud(tf_td * tf_fr, conti_to_rospc(fr_in, 1), temp);
-  pcl::concatenatePointCloud(output, temp, output);
+  epcs.stamp = ros::Time(min_t);
+  epcs.ego_vx = ego_mat(1, 0);
+  epcs.ego_vy = ego_mat(2, 0);
+  epcs.ego_vth = ego_mat(0, 0);
 
-	tf_td = getTdTransform(fl_t - min_t, ego_mat(1, 0), ego_mat(2, 0), ego_mat(0, 0));
-  pcl_ros::transformPointCloud(tf_td * tf_fl, conti_to_rospc(fl_in, 2), temp);
-  pcl::concatenatePointCloud(output, temp, output);
+  tf_td = getTdTransform(f_t - min_t, ego_mat(1, 0), ego_mat(2, 0), ego_mat(0, 0));
+  auto pcsr_f = MakePointCloudSensor("front", tf_td * tf_f, conti_to_rospc(f_in, 0), augpc);
+  epcs.pcs.push_back(pcsr_f);
 
-	tf_td = getTdTransform(br_t - min_t, ego_mat(1, 0), ego_mat(2, 0), ego_mat(0, 0));
-  pcl_ros::transformPointCloud(tf_td * tf_br, conti_to_rospc(br_in, 3), temp);
-  pcl::concatenatePointCloud(output, temp, output);
+  tf_td = getTdTransform(fr_t - min_t, ego_mat(1, 0), ego_mat(2, 0), ego_mat(0, 0));
+  auto pcsr_fr = MakePointCloudSensor("front right", tf_td * tf_fr, conti_to_rospc(fr_in, 1), augpc);
+  epcs.pcs.push_back(pcsr_fr);
 
-	tf_td = getTdTransform(bl_t - min_t, ego_mat(1, 0), ego_mat(2, 0), ego_mat(0, 0));
-  pcl_ros::transformPointCloud(tf_td * tf_bl, conti_to_rospc(bl_in, 4), temp);
-  pcl::concatenatePointCloud(output, temp, output);
+  tf_td = getTdTransform(fl_t - min_t, ego_mat(1, 0), ego_mat(2, 0), ego_mat(0, 0));
+  auto pcsr_fl = MakePointCloudSensor("front left", tf_td * tf_fl, conti_to_rospc(fl_in, 2), augpc);
+  epcs.pcs.push_back(pcsr_fl);
 
-  output.header.frame_id = "/car";
-  output.header.stamp = ros::Time(min_t);
+  tf_td = getTdTransform(br_t - min_t, ego_mat(1, 0), ego_mat(2, 0), ego_mat(0, 0));
+  auto pcsr_br = MakePointCloudSensor("back right", tf_td * tf_br, conti_to_rospc(br_in, 3), augpc);
+  epcs.pcs.push_back(pcsr_br);
+
+  tf_td = getTdTransform(bl_t - min_t, ego_mat(1, 0), ego_mat(2, 0), ego_mat(0, 0));
+  auto pcsr_bl = MakePointCloudSensor("back left", tf_td * tf_bl, conti_to_rospc(bl_in, 4), augpc);
+  epcs.pcs.push_back(pcsr_bl);
+
+  epcs.augpc = PointCloudAdapter(augpc);
+  vepcs.push_back(epcs);
+
+  augpc.header.stamp = ros::Time(min_t);
+  augpc.header.frame_id = "/car";
 
   f_outlier_pub.publish(f_out);
   fr_outlier_pub.publish(fr_out);
@@ -537,10 +548,29 @@ void Callback(const conti_radar::MeasurementConstPtr& f_input,
   bl_inlier_pub.publish(bl_in);
 
   pub.publish(odom);
-  pub_pc.publish(output);
+  pub_pc.publish(augpc);
+}
+
+void savecb(const std_msgs::Empty::ConstPtr &msg) {
+  // rostopic pub /savepc std_msgs/Empty -1
+  common::SerializationOutput(outfolder + "/vepcs.ser", vepcs);
+  ROS_INFO("Saving... Done");
+  vepcs.clear();
 }
 
 int main(int argc, char** argv) {
+  po::options_description desc("Allowed options");
+  desc.add_options()
+      ("help,h", "Produce help message")
+      ("outfolder", po::value<string>(&outfolder)->required(), "EgoPointClouds folder path");
+  po::variables_map vm;
+  po::store(po::parse_command_line(argc, argv, desc), vm);
+  po::notify(vm);
+  if (vm.count("help")) {
+    cout << desc << endl;
+    return 1;
+  }
+
   ros::init(argc, argv, "radar_ego_motion");
   ros::NodeHandle nh;
 
@@ -555,6 +585,7 @@ int main(int argc, char** argv) {
   no_cloud_sync_ = new message_filters::Synchronizer<NoCloudSyncPolicy>(
       NoCloudSyncPolicy(3), sub_f, sub_fl, sub_fr, sub_bl, sub_br);
   no_cloud_sync_->registerCallback(boost::bind(&Callback, _1, _2, _3, _4, _5));
+  ros::Subscriber sub_save = nh.subscribe<std_msgs::Empty>("savepc", 0, savecb);
 
   pub = nh.advertise<nav_msgs::Odometry>("vel", 1);
   pub_pc = nh.advertise<sensor_msgs::PointCloud2>("merge_pc", 1);

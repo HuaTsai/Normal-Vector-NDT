@@ -1,0 +1,68 @@
+void DoICP(MatchPackage &mp, const vector<double> &params) {
+  pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> matcher;
+
+  matcher.setMaximumIterations(static_cast<int>(params.at(0)));
+  matcher.setMaxCorrespondenceDistance(params.at(1));
+  matcher.setUseReciprocalCorrespondences((params.at(2) != 0) ? true : false);
+  matcher.setEuclideanFitnessEpsilon(params.at(3));
+  matcher.setTransformationEpsilon(params.at(4));
+
+  matcher.setInputSource(mp.source);
+  matcher.setInputTarget(mp.target);
+  matcher.align(*mp.output, common::Matrix4fFromMatrix3d(mp.guess));
+
+  mp.state = FromPCLState(matcher.convergence_criteria_->getConvergenceState());
+  mp.iters = matcher.nr_iterations_;
+  mp.result = common::Matrix3dFromMatrix4f(matcher.getFinalTransformation());
+}
+
+void DoICPNL(MatchPackage &mp, const vector<double> &params) {
+  pcl::IterativeClosestPointNonLinear<pcl::PointXYZ, pcl::PointXYZ> matcher;
+
+  matcher.setMaximumIterations(static_cast<int>(params.at(0)));
+  matcher.setMaxCorrespondenceDistance(params.at(1));
+  matcher.setUseReciprocalCorrespondences((params.at(2) != 0) ? true : false);
+  matcher.setEuclideanFitnessEpsilon(params.at(3));
+  matcher.setTransformationEpsilon(params.at(4));
+
+  matcher.setInputSource(mp.source);
+  matcher.setInputTarget(mp.target);
+  matcher.align(*mp.output, common::Matrix4fFromMatrix3d(mp.guess));
+
+  mp.state = FromPCLState(matcher.convergence_criteria_->getConvergenceState());
+  mp.iters = matcher.nr_iterations_;
+  mp.result = common::Matrix3dFromMatrix4f(matcher.getFinalTransformation());
+}
+
+void DoGICP(MatchPackage &mp, const vector<double> &params) {
+  pcl::GeneralizedIterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> matcher;
+
+  matcher.setMaximumIterations(static_cast<int>(params.at(0)));
+  matcher.setMaxCorrespondenceDistance(params.at(1));
+  matcher.setUseReciprocalCorrespondences((params.at(2) != 0) ? true : false);
+  matcher.setEuclideanFitnessEpsilon(params.at(3));
+  matcher.setTransformationEpsilon(params.at(4));
+
+  matcher.setInputSource(mp.source);
+  matcher.setInputTarget(mp.target);
+  matcher.align(*mp.output, common::Matrix4fFromMatrix3d(mp.guess));
+
+  mp.state = FromPCLState(matcher.convergence_criteria_->getConvergenceState());
+  mp.iters = matcher.nr_iterations_;
+  mp.result = common::Matrix3dFromMatrix4f(matcher.getFinalTransformation());
+
+}
+
+void DoICPPt2Pl(MatchPackage &mp, const vector<double> &params) {
+  pcl::IterativeClosestPointWithNormals<pcl::PointXYZ, pcl::PointXYZ> matcher;
+  matcher.setInputSource(mp.source);
+  matcher.setInputTarget(mp.target);
+  matcher.align(*mp.output);
+}
+
+void DoNDTP2D(MatchPackage &mp, const vector<double> &params) {
+  pcl::NormalDistributionsTransform2D<pcl::PointXYZ, pcl::PointXYZ> matcher;
+  matcher.setInputSource(mp.source);
+  matcher.setInputTarget(mp.target);
+  matcher.align(*mp.output);
+}
