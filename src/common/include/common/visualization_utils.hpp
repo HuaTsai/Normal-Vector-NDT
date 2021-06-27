@@ -18,9 +18,9 @@ enum class Color {
   kFuchsia
 };
 
-std_msgs::ColorRGBA MakeColorRGBA(const Color &color) {
+std_msgs::ColorRGBA MakeColorRGBA(const Color &color, double alpha = 1.) {
   std_msgs::ColorRGBA ret;
-  ret.a = 1.;
+  ret.a = alpha;
   ret.r = ret.g = ret.b = 0.;
   if (color == Color::kRed) {
     ret.r = 1.;
@@ -95,15 +95,12 @@ visualization_msgs::Marker MakeCovarianceMarker(int idx,
   ret.pose.position.y = pt(1);
   ret.color = MakeColorRGBA(color);
   // COMPTUE ORIENTATION & EVALS
-  Eigen::Matrix3d cov_ = Eigen::Matrix3d::Zero();
+  Eigen::Matrix3d cov_ = Eigen::Matrix3d::Identity();
   cov_.block<2, 2>(0, 0) = cov;
-  Eigen::Matrix3d m_eigVec = Eigen::Matrix3d::Zero(3, 3);
-  Eigen::Matrix3d m_eigVal = Eigen::Matrix3d::Zero(3, 3);
   Eigen::EigenSolver<Eigen::Matrix3d> es(cov_);
-  m_eigVal = es.pseudoEigenvalueMatrix();
-  m_eigVec = es.pseudoEigenvectors();
-  m_eigVal = m_eigVal.cwiseSqrt();
-  Eigen::Quaternion<double> q(m_eigVec);
+  Eigen::Matrix3d m_eigVal = es.pseudoEigenvalueMatrix().cwiseSqrt();
+  Eigen::Matrix3d m_eigVec = es.pseudoEigenvectors();
+  Eigen::Quaterniond q(m_eigVec);
   ret.scale.x = 3 * m_eigVal(0, 0);
   ret.scale.y = 3 * m_eigVal(1, 1);
   ret.scale.z = 0.1;

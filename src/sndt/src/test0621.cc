@@ -7,10 +7,10 @@
 
 using namespace std;
 using namespace Eigen;
-typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
+typedef pcl::PointCloud<pcl::PointXYZ> PCXYZ;
 
-PointCloud PointCloudFromPoints(const vector<geometry_msgs::Point> &pts) {
-  PointCloud ret;
+PCXYZ PointCloudFromPoints(const vector<geometry_msgs::Point> &pts) {
+  PCXYZ ret;
   for (auto &pt : pts) {
     pcl::PointXYZ p;
     p.x = pt.x;
@@ -24,11 +24,11 @@ PointCloud PointCloudFromPoints(const vector<geometry_msgs::Point> &pts) {
 // PC0  PC1  PC2  ... PCn-2    PCn-1
 //  t0   t1   t2  ...  tn-2     tn-1
 //    v0   v1     ...      vn-2
-PointCloud AugmentPointCloud(const vector<PointCloud> &pcs,
+PCXYZ AugmentPointCloud(const vector<PCXYZ> &pcs,
                              const vector<vector<double>> &vxyts,
                              const vector<ros::Time> &times,
                              Matrix4f &Tn0) {
-  PointCloud ret = pcs.back();
+  PCXYZ ret = pcs.back();
   int n = pcs.size();
   Tn0 = Matrix4f::Identity();
   double dx = 0, dy = 0, dth = 0;
@@ -39,7 +39,7 @@ PointCloud AugmentPointCloud(const vector<PointCloud> &pcs,
     dth += -vxyts[i][2] * dt;
     dbg(dx, dy, dth);
     Tn0 = common::Matrix4fFromXYTRadian({dx, dy, dth});
-    PointCloud tmp;
+    PCXYZ tmp;
     pcl::transformPointCloud(pcs[i], tmp, Tn0);
     ret += tmp;
   }
@@ -60,12 +60,12 @@ int main(int argc, char **argv) {
   common::SerializationInput(argv[1], vepcs);
   int n = vepcs.size(), frames = 5;
   n = n / frames * frames;
-  vector<PointCloud> pcs;
-  PointCloud prepc, curpc;
+  vector<PCXYZ> pcs;
+  PCXYZ prepc, curpc;
   Matrix4f Tr = Matrix4f::Identity();
   vector<geometry_msgs::PoseStamped> vp;
   for (int i = 0; i < n; i += frames) {
-    vector<PointCloud> pcs;
+    vector<PCXYZ> pcs;
     vector<vector<double>> vxyts;
     vector<ros::Time> times;
     // i-f, ..., i-1 | i, i+1, ..., i+f-1 | i+f -> actual id
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
     // -- frames  -- |
     for (int j = 0; j < frames; ++j) {
       auto vepc = vepcs[i + j];
-      PointCloud pc = PointCloudFromPoints(vepc.augpc);
+      PCXYZ pc = PointCloudFromPoints(vepc.augpc);
       pcs.push_back(pc);
       vxyts.push_back(vepc.vxyt);
       times.push_back(vepc.stamp);

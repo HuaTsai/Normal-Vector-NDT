@@ -44,9 +44,7 @@ int main(int argc, char **argv) {
   vector<common::EgoPointClouds> v2(v1.size());
   for (size_t i = 0; i < v1.size(); ++i) {
     v2[i].stamp = v1[i].stamp;
-    v2[i].ego_vx = v1[i].ego_vx;
-    v2[i].ego_vy = v1[i].ego_vy;
-    v2[i].ego_vth = v1[i].ego_vth;
+    v2[i].vxyt = v1[i].vxyt;
     v2[i].augpc = PointCloudAdapter(v1[i].augpc);
     for (auto &p : v1[i].pcs) {
       common::PointCloudSensor pcs;

@@ -219,7 +219,7 @@ class NDTMatcherD2D2D {
                  (Vector2d::Map(xyt, 2).norm() < threshold_) ||
                  (iteration_ > max_iterations_);
 
-      cur_tf = common::Matrix3dFromXYTRadian(vector<double>(xyt, xyt + 3)) * cur_tf;
+      cur_tf = common::Matrix3dFromXYTRadian(Vector3d::Map(xyt, 3)) * cur_tf;
       ++iteration_;
     }
     return cur_tf;

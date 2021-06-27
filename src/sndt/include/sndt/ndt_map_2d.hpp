@@ -59,6 +59,11 @@ class NDTMap {
   // TODO: NOT IMPLEMENT YET!!!
   void AddPointCloud(const PCXYZ &pc) { ; }
 
+  void LoadPointCloud(PCXYZPtr pc, double radius, double range_limit = -1) {
+    auto normals = ComputeNormals(pc, radius);
+    LoadPointCloud(*pc, *normals, range_limit);
+  }
+
   void LoadPointCloud(const PCXYZ &pc, const PCXYZ &normals,
                       double range_limit = -1) {
     LoadPointCloud(ToPCLXY(pc), ToPCLXY(normals), range_limit);

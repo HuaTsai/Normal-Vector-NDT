@@ -118,7 +118,7 @@ void subcb(const std_msgs::Int64::ConstPtr &msg) {
 
       std::ostringstream oss;
       oss << std::fixed << std::setprecision(2) << corr(6, i);
-      auto p = tf2::toMsg(common::Affine3dFromXYZRPY({start(0), start(1), start(2), 0, 0, 0}));
+      auto p = tf2::toMsg(common::Affine3dFromXYZRPY(start, Eigen::Vector3d::Zero()));
       auto ms = common::MakeTextMarker(i, "map", oss.str(), p, common::Color::kBlack);
       ma2.markers.push_back(ms);
     }

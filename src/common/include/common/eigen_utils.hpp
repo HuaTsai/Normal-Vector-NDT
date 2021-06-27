@@ -9,33 +9,36 @@
 #include <gsl/gsl>
 
 namespace common {
+
+// Affine3d
+Eigen::Affine3d Affine3dFromXYZRPY(const Eigen::Vector3d &xyz,
+                                   const Eigen::Vector3d &rpy) {
+  Eigen::Affine3d ret =
+      Eigen::Translation3d(xyz(0), xyz(1), xyz(2)) *
+      Eigen::AngleAxisd(rpy(2), Eigen::Vector3d::UnitZ()) *
+      Eigen::AngleAxisd(rpy(1), Eigen::Vector3d::UnitY()) *
+      Eigen::AngleAxisd(rpy(0), Eigen::Vector3d::UnitX());
+  return ret;
+}
+
+Eigen::Affine3d Affine3dFromAffine2d(const Eigen::Affine2d &aff) {
+  return Eigen::Translation3d(aff.translation().x(), aff.translation().y(), 0) *
+         Eigen::AngleAxisd(Eigen::Rotation2Dd(aff.rotation()).angle(), Eigen::Vector3d::UnitZ());
+}
+
+Eigen::Affine3d Affine3dFromMatrix3d(const Eigen::Matrix3d &mtx) {
+  return Affine3dFromAffine2d(Eigen::Affine2d(mtx));
+}
+
 Eigen::Affine3d Affine3dFromMatrix4f(const Eigen::Matrix4f &mtx) {
   Eigen::Affine3d ret(mtx.cast<double>());
   return ret;
 }
 
-Eigen::Affine3d Affine3dFromXYZRPY(const std::vector<double> &xyzrpy) {
-  Expects(xyzrpy.size() == 6);
-  Eigen::Affine3d ret =
-      Eigen::Translation3d(xyzrpy.at(0), xyzrpy.at(1), xyzrpy.at(2)) *
-      Eigen::AngleAxisd(xyzrpy.at(5), Eigen::Vector3d::UnitZ()) *
-      Eigen::AngleAxisd(xyzrpy.at(4), Eigen::Vector3d::UnitY()) *
-      Eigen::AngleAxisd(xyzrpy.at(3), Eigen::Vector3d::UnitX());
-  return ret;
-}
-
-Eigen::Affine3d Affine3dFromMatrix3d(const Eigen::Matrix3d &mtx) {
-  Eigen::Matrix4d mtx4d = Eigen::Matrix4d::Identity();
-  mtx4d.block<2, 2>(0, 0) = mtx.block<2, 2>(0, 0);
-  mtx4d.block<2, 1>(0, 3) = mtx.block<2, 1>(0, 2);
-  return Eigen::Affine3d(mtx4d);
-}
-
-std::vector<double> XYZRPYFromAffine3d(const Eigen::Affine3d &mtx) {
-  std::vector<double> ret;
-  ret.push_back(mtx.translation()(0));
-  ret.push_back(mtx.translation()(1));
-  ret.push_back(mtx.translation()(2));
+// XYZRPY, XYTRadian, XYTDegree
+Eigen::Matrix<double, 6, 1> XYZRPYFromAffine3d(const Eigen::Affine3d &mtx) {
+  Eigen::Matrix<double, 6, 1> ret;
+  ret.block<3, 1>(0, 0) = mtx.translation();
   double roll = angles::normalize_angle(mtx.rotation().eulerAngles(2, 1, 0)(2));
   double pitch = angles::normalize_angle(mtx.rotation().eulerAngles(2, 1, 0)(1));
   double yaw = angles::normalize_angle(mtx.rotation().eulerAngles(2, 1, 0)(0));
@@ -44,13 +47,11 @@ std::vector<double> XYZRPYFromAffine3d(const Eigen::Affine3d &mtx) {
     pitch = angles::normalize_angle(-pitch + M_PI);
     yaw = angles::normalize_angle(yaw + M_PI);
   }
-  ret.push_back(roll);
-  ret.push_back(pitch);
-  ret.push_back(yaw);
+  ret.block<3, 1>(0, 3) = Eigen::Vector3d(roll, pitch, yaw);
   return ret;
 }
 
-std::vector<double> XYZRPYFromMatrix4f(const Eigen::Matrix4f &mtx) {
+Eigen::Matrix<double, 6, 1> XYZRPYFromMatrix4f(const Eigen::Matrix4f &mtx) {
   return XYZRPYFromAffine3d(Affine3dFromMatrix4f(mtx));
 }
 
@@ -69,20 +70,20 @@ Eigen::Vector3d XYTDegreeFromMatrix3d(const Eigen::Matrix3d &mtx) {
   return ret;
 }
 
-Eigen::Matrix3d Matrix3dFromXYTRadian(const std::vector<double> &xyt) {
-  Expects(xyt.size() == 3);
-  Eigen::Affine2d aff = Eigen::Translation2d(xyt.at(0), xyt.at(1)) *
-                        Eigen::Rotation2Dd(xyt.at(2));
+// Matrix3d, Matrix4f
+Eigen::Matrix3d Matrix3dFromXYTRadian(const Eigen::Vector3d &xyt) {
+  Eigen::Affine2d aff = Eigen::Translation2d(xyt(0), xyt(1)) *
+                        Eigen::Rotation2Dd(xyt(2));
   return aff.matrix();
 }
 
-Eigen::Matrix3d Matrix3dFromXYTDegree(const std::vector<double> &xyt) {
-  return Matrix3dFromXYTRadian({xyt.at(0), xyt.at(1), xyt.at(2) * M_PI / 180.});
+Eigen::Matrix3d Matrix3dFromXYTDegree(const Eigen::Vector3d &xyt) {
+  return Matrix3dFromXYTRadian(Eigen::Vector3d(xyt(0), xyt(1), xyt(2) * M_PI / 180.));
 }
 
 Eigen::Matrix3d Matrix3dFromMatrix4f(const Eigen::Matrix4f &mtx) {
   auto xyzrpy = XYZRPYFromMatrix4f(mtx);
-  return Matrix3dFromXYTRadian({xyzrpy.at(0), xyzrpy.at(1), xyzrpy.at(5)});
+  return Matrix3dFromXYTRadian(Eigen::Vector3d(xyzrpy(0), xyzrpy(1), xyzrpy(5)));
 }
 
 Eigen::Matrix4f Matrix4fFromMatrix3d(const Eigen::Matrix3d &mtx) {
@@ -92,7 +93,7 @@ Eigen::Matrix4f Matrix4fFromMatrix3d(const Eigen::Matrix3d &mtx) {
   return ret;
 }
 
-Eigen::Matrix4f Matrix4fFromXYTRadian(const std::vector<double> &xyt) {
+Eigen::Matrix4f Matrix4fFromXYTRadian(const Eigen::Vector3d &xyt) {
   return common::Matrix4fFromMatrix3d(common::Matrix3dFromXYTRadian(xyt));
 }
 
@@ -115,55 +116,10 @@ geometry_msgs::TransformStamped TstFromMatrix4f(
 
 Eigen::Affine3d Conserve2DFromAffine3d(const Eigen::Affine3d &T) {
   auto xyzrpy = XYZRPYFromAffine3d(T);
-  return Affine3dFromXYZRPY(
-      {xyzrpy.at(0), xyzrpy.at(1), 0, 0, 0, xyzrpy.at(5)});
-}
-
-tf2::Transform ToTf2Transform(const geometry_msgs::Pose &p) {
-  tf2::Transform ret;
-  tf2::fromMsg(p, ret);
-  return ret;
-}
-
-tf2::Transform ToTf2Transform(const Eigen::Matrix4f &mtx) {
-  tf2::Transform ret;
-  tf2::fromMsg(tf2::toMsg(Affine3dFromMatrix4f(mtx)), ret);
-  return ret;
-}
-
-std_msgs::Float64MultiArray StdMsgFromEigenMatrix(
-    const Eigen::MatrixXd &mtx) {
-  std_msgs::Float64MultiArray ret;
-  std_msgs::MultiArrayDimension dim0;
-  dim0.label = "row";
-  dim0.size = mtx.rows();
-  dim0.stride = mtx.size();
-  ret.layout.dim.push_back(dim0);
-  std_msgs::MultiArrayDimension dim1;
-  dim1.label = "column";
-  dim1.size = mtx.cols();
-  dim1.stride = mtx.cols();
-  ret.layout.dim.push_back(dim1);
-  ret.layout.data_offset = 0;
-  for (int i = 0; i < mtx.rows(); ++i) {
-    for (int j = 0; j < mtx.cols(); ++j) {
-      ret.data.push_back(mtx(i, j));
-    }
-  }
-  return ret;
-}
-
-Eigen::MatrixXd EigenMatrixFromStdMsg(
-    const std_msgs::Float64MultiArray &msg) {
-  auto dim0 = msg.layout.dim.at(0);
-  auto dim1 = msg.layout.dim.at(1);
-  Eigen::MatrixXd ret(dim0.size, dim1.size);
-  for (size_t i = 0; i < dim0.size; ++i) {
-    for (size_t j = 0; j < dim1.size; ++j) {
-      ret(i, j) = msg.data.at(dim1.stride * i + j);
-    }
-  }
-  return ret;
+  auto xyz = xyzrpy.block<3, 1>(0, 0);
+  auto rpy = xyzrpy.block<3, 1>(0, 3);
+  xyz(2) = rpy(0) = rpy(1) = 0;
+  return Affine3dFromXYZRPY(xyz, rpy);
 }
 
 Eigen::Vector2d TransNormRotDegAbsFromMatrix3d(const Eigen::Matrix3d &mtx) {

@@ -1,6 +1,4 @@
 time stamp
-float64 ego_vx
-float64 ego_vy
-float64 ego_vth
+float64[] vxyt
 PointCloudSensor[] pcs
 geometry_msgs/Point[] augpc

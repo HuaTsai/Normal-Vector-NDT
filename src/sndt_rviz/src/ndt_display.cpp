@@ -65,15 +65,11 @@ void NDTDisplay::processMessage(const sndt::NDTMapMsg::ConstPtr& msg) {
   }
   int i = 0;
   for (int itr = 0; itr < msg->cells.size(); itr++) {
-    if (msg->cells[itr].phasGaussian_ == true) {
+    if (msg->cells[itr].phasgaussian == true) {
       ++i;
       boost::shared_ptr<NDTVisual> visual;
       visual.reset(new NDTVisual(context_->getSceneManager(), scene_node_));
-      if (!(msg->x_cell_size == msg->y_cell_size)) {
-        ROS_ERROR("SOMETHING HAS GONE VERY WRONG YOUR VOXELL IS NOT A CUBE");
-        // return false;
-      }
-      visual->setCell(msg->cells[itr], msg->x_cell_size);
+      visual->setCell(msg->cells[itr], msg->cell_size[0]);
       visual->setFramePosition(position);
       visual->setFrameOrientation(orientation);
       float alpha = alpha_property_->getFloat();

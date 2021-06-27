@@ -10,6 +10,7 @@
 #include "dbg/dbg.h"
 
 using namespace std;
+using namespace Eigen;
 namespace po = boost::program_options;
 typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
 vector<common::MatchInternal> mits;
@@ -18,18 +19,18 @@ vector<common::MatchInternal> mits;
 //  t0   t1   t2  ...  tn-2     tn-1
 //    v0   v1     ...      vn-2
 PointCloud AugmentPointCloud(const vector<PointCloud> &pcs,
-                             const vector<array<double, 3>> &vxyth,
+                             const vector<vector<double>> &vxyts,
                              const vector<ros::Time> &times,
-                             Eigen::Matrix4f &Tn0) {
+                             Matrix4f &Tn0) {
   PointCloud ret = pcs.back();
   int n = pcs.size();
-  Tn0 = Eigen::Matrix4f::Identity();
+  Tn0 = Matrix4f::Identity();
   double dx = 0, dy = 0, dth = 0;
   for (int i = n - 2; i >= 0; --i) {
     double dt = (times[i + 1] - times[i]).toSec();
-    dx += -vxyth[i][0] * dt;
-    dy += -vxyth[i][1] * dt;
-    dth += -vxyth[i][2] * dt;
+    dx += -vxyts[i][0] * dt;
+    dy += -vxyts[i][1] * dt;
+    dth += -vxyts[i][2] * dt;
     Tn0 = common::Matrix4fFromXYTRadian({dx, dy, dth});
     PointCloud tmp;
     pcl::transformPointCloud(pcs[i], tmp, Tn0);
@@ -39,7 +40,7 @@ PointCloud AugmentPointCloud(const vector<PointCloud> &pcs,
 }
 
 geometry_msgs::PoseStamped MakePST(const ros::Time &time,
-                                   const Eigen::Matrix4f &mtx) {
+                                   const Matrix4f &mtx) {
   geometry_msgs::PoseStamped ret;
   ret.header.frame_id = "map";
   ret.header.stamp = time;
@@ -76,12 +77,12 @@ int main(int argc, char **argv) {
 
   vector<PointCloud> pcs;
   PointCloud prepc, curpc;
-  Eigen::Matrix4f curTr = Eigen::Matrix4f::Identity();
+  Matrix4f curTr = Matrix4f::Identity();
   vector<geometry_msgs::PoseStamped> vp;
 
   for (int i = 0; i < n; i += frames) {
     vector<PointCloud> pcs;
-    vector<array<double, 3>> vxyth;
+    vector<vector<double>> vxyts;
     vector<ros::Time> times;
     ros::Time pretime, curtime;
 
@@ -93,13 +94,13 @@ int main(int argc, char **argv) {
       PointCloud pc;
       pcl::fromROSMsg(vepc.augpc, pc);
       pcs.push_back(pc);
-      vxyth.push_back({vepc.ego_vx, vepc.ego_vy, vepc.ego_vth});
+      vxyts.push_back(vepc.vxyt);
       times.push_back(vepc.stamp);
     }
     curtime = times.back();
-    vxyth.pop_back();
-    Eigen::Matrix4f Tni;
-    curpc = AugmentPointCloud(pcs, vxyth, times, Tni);
+    vxyts.pop_back();
+    Matrix4f Tni;
+    curpc = AugmentPointCloud(pcs, vxyts, times, Tni);
 
     if (i == 0) { prepc = curpc; vp.push_back(MakePST(curtime, curTr)); continue; }
 
@@ -107,7 +108,7 @@ int main(int argc, char **argv) {
     int m = i - 1;
     pretime = vepcs[m].stamp;
     double dt = (vepcs[i].stamp - pretime).toSec();
-    vector<double> xyt = {dt * vepcs[m].ego_vx, dt * vepcs[m].ego_vy, vepcs[m].ego_vth};
+    Vector3d xyt(dt * Vector3d::Map(vepcs[m].vxyt.data(), 3));
     auto Tmi = common::Matrix4fFromXYTRadian(xyt);
     auto Tmn = Tmi * Tni.inverse();
 
@@ -119,7 +120,7 @@ int main(int argc, char **argv) {
     mp.target = MatrixXdFromPCL(prepc);
     if (matchid == 62) {
       dbg("idx62");
-      Eigen::MatrixXd res;
+      MatrixXd res;
       for (int ii = 0; ii < mp.target.cols(); ++ii) {
         double x = mp.target(0, ii), y = mp.target(1, ii);
         if (x > -120 && x < -100 && y > -10 && y < 40) {
@@ -140,7 +141,7 @@ int main(int argc, char **argv) {
     ++matchid;
 
     /****** Update ******/
-    Eigen::Matrix4f preTr = curTr;
+    Matrix4f preTr = curTr;
     curTr = curTr * common::Matrix4fFromMatrix3d(mp.result);
     vp.push_back(MakePST(curtime, curTr));
 
