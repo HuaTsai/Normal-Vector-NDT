@@ -26,11 +26,9 @@ void NDTVisual::setCell(sndt::NDTCellMsg cell, double resolution) {
   for (int i = 0; i < 2; i++)
     for (int j = 0; j < 2; j++)
       cov(i, j) = cell.pcov[i * 2 + j];
-  Eigen::Matrix3d m_eigVec = Eigen::Matrix3d::Zero(3, 3);
-  Eigen::Matrix3d m_eigVal = Eigen::Matrix3d::Zero(3, 3);
   Eigen::EigenSolver<Eigen::Matrix3d> es(cov);
-  m_eigVal = es.pseudoEigenvalueMatrix();
-  m_eigVec = es.pseudoEigenvectors();
+  Eigen::Matrix3d m_eigVal = es.pseudoEigenvalueMatrix();
+  Eigen::Matrix3d m_eigVec = es.pseudoEigenvectors();
   m_eigVal = m_eigVal.cwiseSqrt();
   Eigen::Quaterniond q(m_eigVec);
   // Ogre::Vector3 scale(3*m_eigVal(0,0),3*m_eigVal(1,1),3*m_eigVal(2,2));

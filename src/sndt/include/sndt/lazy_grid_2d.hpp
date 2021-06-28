@@ -73,6 +73,18 @@ class LazyGrid2D {
     return cell;
   }
 
+  NDTCell *AddPointAndNormalWithCovariance(const Vector2d &point,
+                                           const Matrix2d &point_cov,
+                                           const Vector2d &normal) {
+    Expects(is_initialized_);
+    NDTCell *cell = GetCellAndAllocate(point);
+    if (cell) {
+      cell->AddPointWithCovariance(point, point_cov);
+      cell->AddNormal(normal);
+    }
+    return cell;
+  }
+
   bool InsertCell(const NDTCell &cell) {
     if (!is_initialized_) { return false; }
     auto idx = GetIndexForPoint(cell.GetCenter());

@@ -129,19 +129,19 @@ vector<Vector2d> FindTangentPoints(visualization_msgs::Marker eclipse, Vector2d 
   return sols;
 }
 
-visualization_msgs::MarkerArray MarkerArrayFromNDTCell(const NDTCell *cell) {
+visualization_msgs::MarkerArray MarkerArrayFromNDTCell(const NDTCell *cell, int id = -1) {
   visualization_msgs::MarkerArray ret;
   auto now = ros::Time::now();
   visualization_msgs::Marker m;
   m.header.frame_id = "map";
   m.header.stamp = now;
-  m.id = -1;
+  m.id = id;
 
   // 1. Grid Boundary
-  // ++m.id;
-  // UpdateMarkerByCellCenterAndCellSize(m, cell->GetCenter(), cell->GetSize());
-  // m.color = common::MakeColorRGBA(common::Color::kBlack);
-  // ret.markers.push_back(m);
+  ++m.id;
+  UpdateMarkerByCellCenterAndCellSize(m, cell->GetCenter(), cell->GetSize());
+  m.color = common::MakeColorRGBA(common::Color::kBlack);
+  ret.markers.push_back(m);
 
   // 2. Point Covariance
   if (cell->GetPHasGaussian()) {
