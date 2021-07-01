@@ -3,18 +3,6 @@
 #include <bits/stdc++.h>
 #include <ros/ros.h>
 
-#define TIMESET(t) \
-  std::chrono::steady_clock::time_point t = std::chrono::steady_clock::now();
-
-#define TIMEDURATIONMS(t1, t2) \
-  std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count()
-
-#define PRINTTIME(t1, t2, str)                                                \
-  std::cout << str << ": "                                                    \
-            << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1) \
-                   .count()                                                   \
-            << " ms" << std::endl;
-
 #define APATH(name) "/home/ee904/Desktop/HuaTsai/NormalNDT/Analysis/"#name
 
 void dprintf(const char *format, ...) {

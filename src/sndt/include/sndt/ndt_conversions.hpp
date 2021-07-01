@@ -39,65 +39,7 @@ sndt::NDTMapMsg ToMessage(const NDTMap &map, string frame_name) {
   return msg;
 }
 
-// This function updates type, action, pose and scale
-void UpdateMarkerByMeanAndCov(visualization_msgs::Marker &marker,
-                              const Vector2d &mean,
-                              const Matrix2d &covariance) {
-  marker.type = visualization_msgs::Marker::SPHERE;
-  marker.action = visualization_msgs::Marker::ADD;
-  EigenSolver<Matrix2d> es(covariance);
-  /** Note: "pseudo" computes complex eigen value if no real solution
-   * However, covariance is always a real symmetric matrix, which means
-   *   1) it is Hermitia, all its eigenvalues are real
-   *   2) the decomposed matrix is an orthogonal matrix, i.e., rotaion matrix
-   */
-  Matrix2d eval = es.pseudoEigenvalueMatrix().cwiseSqrt();
-  Matrix2d evec = es.pseudoEigenvectors();
-  Matrix3d R = Matrix3d::Identity();
-  R.block<2, 2>(0, 0) = evec;
-  Quaterniond q(R);
-  marker.scale.x = 3 * eval(0, 0);
-  marker.scale.y = 3 * eval(1, 1);
-  marker.scale.z = 0.1;
-  marker.pose.position.x = mean(0);
-  marker.pose.position.y = mean(1);
-  marker.pose.position.z = 0;
-  marker.pose.orientation = tf2::toMsg(q);
-}
-
-// This function updates type, action, pose and scale
-void UpdateMarkerByCellCenterAndCellSize(visualization_msgs::Marker &marker,
-                                         const Vector2d &cell_center,
-                                         const Vector2d &cell_size) {
-  marker.type = visualization_msgs::Marker::LINE_STRIP;
-  marker.action = visualization_msgs::Marker::ADD;
-  double halfsize = cell_size(0) / 2;
-  vector<double> dxy = {halfsize, halfsize, -halfsize, -halfsize};
-  for (int i = 0; i < 5; ++i) {
-    geometry_msgs::Point pt;
-    pt.x = cell_center(0) + dxy[i % 4];
-    pt.y = cell_center(1) + dxy[(i + 1) % 4];
-    pt.z = 0;
-    marker.points.push_back(pt);
-  }
-  marker.scale.x = 0.1;
-  marker.pose = tf2::toMsg(Affine3d::Identity());
-}
-
-// This function updates type, action, pose and scale
-void UpdateMarkerByEndPoints(visualization_msgs::Marker &marker, vector<Vector2d> points) {
-  marker.type = visualization_msgs::Marker::LINE_STRIP;
-  marker.action = visualization_msgs::Marker::ADD;
-  for (auto point : points) {
-    geometry_msgs::Point pt;
-    pt.x = point(0), pt.y = point(1), pt.z = 0;
-    marker.points.push_back(pt);
-  }
-  marker.scale.x = 0.1;
-  marker.pose = tf2::toMsg(Affine3d::Identity());
-}
-
-vector<Vector2d> FindTangentPoints(visualization_msgs::Marker eclipse, Vector2d point) {
+vector<Vector2d> FindTangentPoints(const visualization_msgs::Marker &eclipse, const Vector2d &point) {
   Affine3d aff3;
   tf2::fromMsg(eclipse.pose, aff3);
   Matrix3d mtx = Matrix3d::Identity();
@@ -129,47 +71,204 @@ vector<Vector2d> FindTangentPoints(visualization_msgs::Marker eclipse, Vector2d 
   return sols;
 }
 
-visualization_msgs::MarkerArray MarkerArrayFromNDTCell(const NDTCell *cell, int id = -1) {
+void UpdateMarkerArray(visualization_msgs::MarkerArray &markerarray,
+                       visualization_msgs::Marker marker) {
+  if (!markerarray.markers.size()) {
+    markerarray.markers.push_back(marker);
+    return;
+  }
+  marker.header.frame_id = "map";
+  marker.header.stamp = markerarray.markers.back().header.stamp;
+  marker.id = markerarray.markers.back().id + 1;
+  markerarray.markers.push_back(marker);
+}
+
+visualization_msgs::MarkerArray JoinMarkers(
+    const vector<visualization_msgs::Marker> &ms) {
   visualization_msgs::MarkerArray ret;
+  int id = 0;
   auto now = ros::Time::now();
-  visualization_msgs::Marker m;
-  m.header.frame_id = "map";
-  m.header.stamp = now;
-  m.id = id;
-
-  // 1. Grid Boundary
-  ++m.id;
-  UpdateMarkerByCellCenterAndCellSize(m, cell->GetCenter(), cell->GetSize());
-  m.color = common::MakeColorRGBA(common::Color::kBlack);
-  ret.markers.push_back(m);
-
-  // 2. Point Covariance
-  if (cell->GetPHasGaussian()) {
-    ++m.id;
-    UpdateMarkerByMeanAndCov(m, cell->GetPointMean(), cell->GetPointCov());
-    m.color = common::MakeColorRGBA(common::Color::kLime, 0.7);
+  for (const auto &m : ms) {
     ret.markers.push_back(m);
+    ret.markers.back().header.stamp = now;
+    ret.markers.back().id = id++;
   }
-
-  // 3. Normal Covariance + 4. Lines from PointMean to NormalCov
-  if (cell->GetNHasGaussian()) {
-    ++m.id;
-    UpdateMarkerByMeanAndCov(m, cell->GetPointMean() + cell->GetNormalMean(), cell->GetNormalCov());
-    m.color = common::MakeColorRGBA(common::Color::kGray, 0.7);
-    ret.markers.push_back(m);
-
-    auto points = FindTangentPoints(m, cell->GetPointMean());
-    for (int i = 0; i < 2; ++i) {
-      ++m.id;
-      UpdateMarkerByEndPoints(m, {cell->GetPointMean(), points[i]});
-      m.color = common::MakeColorRGBA(common::Color::kGray, 0.7);
-      ret.markers.push_back(m);
-    }
-  }
-
   return ret;
 }
 
+visualization_msgs::MarkerArray JoinMarkerArraysAndMarkers(
+    const vector<visualization_msgs::MarkerArray> &mas,
+    const vector<visualization_msgs::Marker> &ms = {}) {
+  visualization_msgs::MarkerArray ret;
+  int id = 0;
+  auto now = ros::Time::now();
+  for (const auto &ma : mas) {
+    for (const auto &m : ma.markers) {
+      ret.markers.push_back(m);
+      ret.markers.back().header.stamp = now;
+      ret.markers.back().id = id++;
+    }
+  }
+  for (const auto &m : ms) {
+    ret.markers.push_back(m);
+    ret.markers.back().header.stamp = now;
+    ret.markers.back().id = id++;
+  }
+  return ret;
+}
+
+visualization_msgs::Marker MarkerOfBoundary(
+    const Vector2d &center, double size, const common::Color &color = common::Color::kBlack) {
+  visualization_msgs::Marker ret;
+  ret.header.frame_id = "map";
+  ret.header.stamp = ros::Time::now();
+  ret.id = 0;
+  ret.type = visualization_msgs::Marker::LINE_LIST;
+  ret.action = visualization_msgs::Marker::ADD;
+  ret.pose = tf2::toMsg(Affine3d::Identity());
+  ret.scale.x = 0.02;
+  ret.color = common::MakeColorRGBA(color);
+  double halfsize = size / 2;
+  vector<double> dxy = {halfsize, halfsize, -halfsize, -halfsize};
+  for (int i = 0; i < 4; ++i) {
+    geometry_msgs::Point pt;
+    pt.x = center(0) + dxy[i % 4];
+    pt.y = center(1) + dxy[(i + 1) % 4];
+    pt.z = 0;
+    ret.points.push_back(pt);
+    pt.x = center(0) + dxy[(i + 1) % 4];
+    pt.y = center(1) + dxy[(i + 2) % 4];
+    ret.points.push_back(pt);
+  }
+  return ret;
+}
+
+visualization_msgs::Marker MarkerOfEclipse(
+    const Vector2d &mean, const Matrix2d &covariance,
+    const common::Color &color = common::Color::kLime, double alpha = 0.6) {
+  visualization_msgs::Marker ret;
+  ret.header.frame_id = "map";
+  ret.header.stamp = ros::Time::now();
+  ret.id = 0;
+  ret.type = visualization_msgs::Marker::SPHERE;
+  ret.action = visualization_msgs::Marker::ADD;
+  ret.color = common::MakeColorRGBA(color, alpha);
+  EigenSolver<Matrix2d> es(covariance);
+  /** Note: "pseudo" computes complex eigen value if no real solution
+   * However, covariance is always a real symmetric matrix, which means
+   *   1) it is Hermitia, all its eigenvalues are real
+   *   2) the decomposed matrix is an orthogonal matrix, i.e., rotaion matrix
+   */
+  Matrix2d eval = es.pseudoEigenvalueMatrix().cwiseSqrt();
+  Matrix2d evec = es.pseudoEigenvectors();
+  Matrix3d R = Matrix3d::Identity();
+  R.block<2, 2>(0, 0) = evec;
+  Quaterniond q(R);
+  ret.scale.x = 3 * eval(0, 0);
+  ret.scale.y = 3 * eval(1, 1);
+  ret.scale.z = 0.1;
+  ret.pose.position.x = mean(0);
+  ret.pose.position.y = mean(1);
+  ret.pose.position.z = 0;
+  ret.pose.orientation = tf2::toMsg(q);
+  return ret;
+}
+
+visualization_msgs::Marker MarkerOfLines(
+    const vector<Vector2d> &points,
+    const common::Color &color = common::Color::kGray, double alpha = 0.6) {
+  visualization_msgs::Marker ret;
+  ret.header.frame_id = "map";
+  ret.header.stamp = ros::Time::now();
+  ret.id = 0;
+  ret.type = visualization_msgs::Marker::LINE_LIST;
+  ret.action = visualization_msgs::Marker::ADD;
+  ret.scale.x = 0.05;
+  ret.pose = tf2::toMsg(Affine3d::Identity());
+  ret.color = common::MakeColorRGBA(color, alpha);
+  ret.points.resize(2);
+  for (size_t i = 0; i < points.size() - 1; ++i) {
+    geometry_msgs::Point pt;
+    pt.x = points[i](0), pt.y = points[i](1), pt.z = 0;
+    ret.points.push_back(pt);
+    pt.x = points[i + 1](0), pt.y = points[i + 1](1);
+    ret.points.push_back(pt);
+  }
+  return ret;
+}
+
+visualization_msgs::Marker MarkerOfPoints(
+    const MatrixXd &points, const common::Color &color = common::Color::kLime,
+    double alpha = 1.0) {
+  auto now = ros::Time::now();
+  visualization_msgs::Marker ret;
+  ret.header.frame_id = "map";
+  ret.header.stamp = now;
+  ret.id = 0;
+  ret.type = visualization_msgs::Marker::SPHERE_LIST;
+  ret.action = visualization_msgs::Marker::ADD;
+  ret.scale.x = ret.scale.y = ret.scale.z = 0.1;
+  ret.pose = tf2::toMsg(Affine3d::Identity());
+  ret.color = common::MakeColorRGBA(common::Color::kLime);
+  for (int i = 0; i < points.cols(); ++i) {
+    geometry_msgs::Point pt;
+    pt.x = points(0, i), pt.y = points(1, i), pt.z = 0;
+    ret.points.push_back(pt);
+  }
+  return ret;
+}
+
+visualization_msgs::MarkerArray MarkerArrayOfArrow(
+    const MatrixXd &start, const MatrixXd &end,
+    const common::Color &color = common::Color::kRed, double alpha = 1.0) {
+  Expects(start.cols() == end.cols() &&
+          start.rows() == end.rows() &&
+          start.rows() == 2);
+  visualization_msgs::MarkerArray ret;
+  auto now = ros::Time::now();
+  visualization_msgs::Marker arrow;
+  arrow.header.frame_id = "map";
+  arrow.header.stamp = now;
+  arrow.id = -1;
+  arrow.type = visualization_msgs::Marker::ARROW;
+  arrow.action = visualization_msgs::Marker::ADD;
+  arrow.scale.x = 0.05;
+  arrow.scale.y = 0.2;
+  arrow.pose = tf2::toMsg(Affine3d::Identity());
+  arrow.color = common::MakeColorRGBA(color, alpha);
+  arrow.points.resize(2);
+  for (int i = 0; i < start.cols(); ++i) {
+    if (!start.col(i).allFinite() || !end.col(i).allFinite())
+      continue;
+    ++arrow.id;
+    geometry_msgs::Point pt;
+    pt.x = start(0, i), pt.y = start(1, i), pt.z = 0;
+    arrow.points[0] = pt;
+    pt.x = end(0, i), pt.y = end(1, i);
+    arrow.points[1] = pt;
+    ret.markers.push_back(arrow);
+  }
+  return ret;
+}
+
+visualization_msgs::MarkerArray MarkerArrayFromNDTCell(const NDTCell *cell, int id = -1) {
+  visualization_msgs::MarkerArray ret;
+  auto boundary = MarkerOfBoundary(cell->GetCenter(), cell->GetSize()(0));
+  auto p_eclipse = MarkerOfEclipse(cell->GetPointMean(), cell->GetPointCov());
+  if (cell->GetNHasGaussian()) {
+    auto n_eclipse =
+        MarkerOfEclipse(cell->GetPointMean() + cell->GetNormalMean(),
+                        cell->GetNormalCov(), common::Color::kGray, 0.6);
+    auto points = FindTangentPoints(n_eclipse, cell->GetPointMean());
+    auto lines = MarkerOfLines({points[0], cell->GetPointMean(), points[1]});
+    ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse, n_eclipse, lines});
+  } else {
+    ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse});
+  }
+  return ret;
+}
+
+// TODO: followings are unused yet match_vis.cc
 /** A -> B -> C -> D -> A
  * y D-----A
  *   |.....|

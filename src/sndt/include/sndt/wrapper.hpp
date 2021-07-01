@@ -98,7 +98,7 @@ NDTMap MakeMap(const vector<pair<MatrixXd, Affine2d>> &data,
       Matrix2d J = Rotation2Dd(theta).matrix();
       Matrix2d S = Vector2d(intrinsic(0), r2 * intrinsic(1)).asDiagonal();
       points.col(j) = T * pt;
-      point_covs.block<2, 2>(0, 2 * j) = J * S * J.transpose();
+      point_covs.block<2, 2>(0, 2 * j) = T.rotation() * J * S * J.transpose() * T.rotation().transpose();
       ++j;
     }
   }

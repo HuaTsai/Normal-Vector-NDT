@@ -44,6 +44,8 @@ std_msgs::ColorRGBA MakeColorRGBA(const Color &color, double alpha = 1.) {
   return ret;
 }
 
+// TODO: Move lots of functions to here from ndt_conversins.hpp
+
 visualization_msgs::Marker MakeArrowMarkerByEnds(int idx,
                                                  const std::string &frame_id,
                                                  const Eigen::Vector3d &start,

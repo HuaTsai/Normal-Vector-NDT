@@ -224,6 +224,18 @@ class NDTCell {
   Matrix2d GetNormalCov() const { return ncov_; }
   Vector2d GetNormalEvals() const { return nevals_; }
   Matrix2d GetNormalEvecs() const { return nevecs_; }
+  MatrixXd GetPoints() const {
+    MatrixXd ret(2, points_.size());
+    for (int i = 0; i < ret.cols(); ++i)
+      ret.col(i) = points_[i];
+    return ret;
+  }
+  MatrixXd GetNormals() const {
+    MatrixXd ret(2, normals_.size());
+    for (int i = 0; i < ret.cols(); ++i)
+      ret.col(i) = normals_[i];
+    return ret;
+  }
 
   void SetN(int N) { N_ = N; }
   void SetPHasGaussian(bool phasgaussian) { phasgaussian_ = phasgaussian; }
