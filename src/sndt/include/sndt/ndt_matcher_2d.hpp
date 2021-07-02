@@ -108,18 +108,11 @@ struct SymmCostFunction {
   }
 };
 
-
 pcl::KdTreeFLANN<pcl::PointXYZ> MakeKDTree(const NDTMap &map) {
   pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
-  for (auto cell : map) {
-    if (cell->BothHasGaussian()) {
-      pcl::PointXYZ pt;
-      pt.x = cell->GetPointMean()(0);
-      pt.y = cell->GetPointMean()(1);
-      pt.z = 0;
-      pc->push_back(pt);
-    }
-  }
+  for (auto cell : map)
+    if (cell->BothHasGaussian())
+      pc->push_back(pcl::PointXYZ(cell->GetPointMean()(0), cell->GetPointMean()(1), 0));
   pcl::KdTreeFLANN<pcl::PointXYZ> ret;
   ret.setInputCloud(pc);
   return ret;
@@ -138,7 +131,7 @@ class NDTMatcherD2D2D {
     inlier_ratio_ = 1 / 2.;
   }
 
-  Matrix3d CeresMatch(NDTMap &target_map, NDTMap &source_map, const Matrix3d &guess_tf) {
+  Matrix3d CeresMatch(NDTMap &target_map, NDTMap &source_map, const Matrix3d &guess_tf = Matrix3d::Identity()) {
     mit_.ClearResults();
     auto kd = MakeKDTree(target_map);
     bool converge = false;

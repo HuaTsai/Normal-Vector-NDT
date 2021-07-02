@@ -177,6 +177,7 @@ visualization_msgs::Marker MarkerOfEclipse(
 visualization_msgs::Marker MarkerOfLines(
     const vector<Vector2d> &points,
     const common::Color &color = common::Color::kGray, double alpha = 0.6) {
+  Expects(points.size() % 2 == 0);
   visualization_msgs::Marker ret;
   ret.header.frame_id = "map";
   ret.header.stamp = ros::Time::now();
@@ -186,12 +187,9 @@ visualization_msgs::Marker MarkerOfLines(
   ret.scale.x = 0.05;
   ret.pose = tf2::toMsg(Affine3d::Identity());
   ret.color = common::MakeColorRGBA(color, alpha);
-  ret.points.resize(2);
-  for (size_t i = 0; i < points.size() - 1; ++i) {
+  for (const auto &p : points) {
     geometry_msgs::Point pt;
-    pt.x = points[i](0), pt.y = points[i](1), pt.z = 0;
-    ret.points.push_back(pt);
-    pt.x = points[i + 1](0), pt.y = points[i + 1](1);
+    pt.x = p(0), pt.y = p(1), pt.z = 0;
     ret.points.push_back(pt);
   }
   return ret;
@@ -251,7 +249,7 @@ visualization_msgs::MarkerArray MarkerArrayOfArrow(
   return ret;
 }
 
-visualization_msgs::MarkerArray MarkerArrayFromNDTCell(const NDTCell *cell, int id = -1) {
+visualization_msgs::MarkerArray MarkerArrayOfNDTCell(const NDTCell *cell) {
   visualization_msgs::MarkerArray ret;
   auto boundary = MarkerOfBoundary(cell->GetCenter(), cell->GetSize()(0));
   auto p_eclipse = MarkerOfEclipse(cell->GetPointMean(), cell->GetPointCov());
@@ -260,12 +258,26 @@ visualization_msgs::MarkerArray MarkerArrayFromNDTCell(const NDTCell *cell, int 
         MarkerOfEclipse(cell->GetPointMean() + cell->GetNormalMean(),
                         cell->GetNormalCov(), common::Color::kGray, 0.6);
     auto points = FindTangentPoints(n_eclipse, cell->GetPointMean());
-    auto lines = MarkerOfLines({points[0], cell->GetPointMean(), points[1]});
+    auto lines = MarkerOfLines({points[0], cell->GetPointMean(), cell->GetPointMean(), points[1]});
     ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse, n_eclipse, lines});
   } else {
     ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse});
   }
   return ret;
+}
+
+visualization_msgs::MarkerArray MarkerArrayOfNDTMap(const NDTMap &map) {
+  vector<visualization_msgs::MarkerArray> vma;
+  for (auto cell : map)
+    vma.push_back(MarkerArrayOfNDTCell(cell));
+  return JoinMarkerArraysAndMarkers(vma);
+}
+
+visualization_msgs::MarkerArray MarkerArrayOfNDTMap(const vector<shared_ptr<NDTCell>> &map) {
+  vector<visualization_msgs::MarkerArray> vma;
+  for (auto cell : map)
+    vma.push_back(MarkerArrayOfNDTCell(cell.get()));
+  return JoinMarkerArraysAndMarkers(vma);
 }
 
 // TODO: followings are unused yet match_vis.cc

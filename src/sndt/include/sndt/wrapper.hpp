@@ -71,7 +71,6 @@ void DoSNDT(common::MatchPackage &mp, common::MatchInternal &mit, const vector<d
   mit.set_has_data(true);
 }
 
-// TODO
 /**
  * @param data MatrixXd 2xN & Affine2d
  * @param point_intrinsic variance (r_sig^2, theta_sig^2)

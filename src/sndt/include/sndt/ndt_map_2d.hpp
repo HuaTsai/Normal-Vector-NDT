@@ -24,8 +24,7 @@ PCXY ToPCLXY(const PCXYZ &pc) {
   PCXY ret;
   std::transform(pc.begin(), pc.end(), back_inserter(ret), [](auto p) {
     PointXY pt;
-    pt.x = p.x;
-    pt.y = p.y;
+    pt.x = p.x, pt.y = p.y;
     return pt;
   });
   return ret;
@@ -170,6 +169,11 @@ class NDTMap {
     is_initialized_ = true;
   }
 
+  vector<std::shared_ptr<NDTCell>> PseudoTransformCells(const Affine2d &T) {
+    return PseudoTransformCells(T.matrix());
+  }
+
+  // TODO: Complete the cell construction
   vector<std::shared_ptr<NDTCell>> PseudoTransformCells(const Matrix3d &T) {
     vector<std::shared_ptr<NDTCell>> ret;
     Matrix2d R = T.block<2, 2>(0, 0);

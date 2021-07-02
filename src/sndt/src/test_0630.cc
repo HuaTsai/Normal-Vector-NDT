@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
   ros::NodeHandle nh;
   ros::Publisher pub = nh.advertise<visualization_msgs::MarkerArray>("marker", 0, true);
   ros::Publisher pub2 = nh.advertise<visualization_msgs::MarkerArray>("marker2", 0, true);
-  pub.publish(MarkerArrayFromNDTCell(&cell));
+  pub.publish(MarkerArrayOfNDTCell(&cell));
   pub2.publish(MakePointsNormalMarker(pts, nms));
   cout << cell.ToString() << endl;
   ros::spin();

@@ -32,6 +32,33 @@ pair<MatrixXd, Affine2d> ToPair(const common::PointCloudSensor &pcs) {
   return make_pair(fi, Affine2d(mtx));
 }
 
+vector<pair<MatrixXd, Affine2d>> Augment(
+    const vector<common::EgoPointClouds> &vepcs, int start, int end,
+    Affine2d &T) {
+  vector<pair<MatrixXd, Affine2d>> ret;
+  T = Affine2d::Identity();
+  double dx = 0, dy = 0, dth = 0;
+  for (int i = start; i <= end; ++i) {
+    double dt = (vepcs[i + 1].stamp - vepcs[i].stamp).toSec();
+    dx += vepcs[i].vxyt[0] * dt;
+    dy += vepcs[i].vxyt[1] * dt;
+    dth += vepcs[i].vxyt[2] * dt;
+    Affine2d T0i = Rotation2Dd(dth) * Translation2d(dx, dy);
+    for (const auto &pc : vepcs[i].pcs) {
+      MatrixXd fi(2, pc.points.size());
+      for (int i = 0; i < fi.cols(); ++i)
+        fi.col(i) = Vector2d(pc.points[i].x, pc.points[i].y);
+      Affine3d aff;
+      tf2::fromMsg(pc.origin, aff);
+      Matrix3d mtx = Matrix3d::Identity();
+      mtx.block<2, 2>(0, 0) = aff.matrix().block<2, 2>(0, 0);
+      mtx.block<2, 1>(0, 2) = aff.matrix().block<2, 1>(0, 3);
+      ret.push_back(make_pair(fi, T0i * Affine2d(mtx)));
+    }
+  }
+  return ret;
+}
+
 int main(int argc, char **argv) {
   string path;
   double cellsize, radius;
@@ -55,10 +82,8 @@ int main(int argc, char **argv) {
   vector<common::EgoPointClouds> vepcs;  
   common::SerializationInput(path, vepcs);
   cout << vepcs.size() << endl;
-  vector<pair<MatrixXd, Affine2d>> data;
-  for (int i = 6; i <= 10; ++i)
-    for (int j = 0; j < 5; ++j)
-      data.push_back(ToPair(vepcs[i].pcs[j]));
+  Affine2d T;
+  auto data = Augment(vepcs, 6, 10, T);
   auto map = MakeMap(data, intrinsic, {cellsize, radius});
   cout << map.ToString() << endl;
   ros::init(argc, argv, "test_covmap");
@@ -88,7 +113,8 @@ int main(int argc, char **argv) {
       auto neclipse = MarkerOfEclipse(cell->GetPointMean() + cell->GetNormalMean(), cell->GetNormalCov(), common::Color::kGray);
       UpdateMarkerArray(ma5_nmc, neclipse);
       auto points = FindTangentPoints(neclipse, cell->GetPointMean());
-      UpdateMarkerArray(ma6_tg, MarkerOfLines({points[0], cell->GetPointMean(), points[1]})); 
+      UpdateMarkerArray(ma6_tg, MarkerOfLines({points[0], cell->GetPointMean(),
+                                               cell->GetPointMean(), points[1]}));
     }
     UpdateMarkerArray(ma7_bd, MarkerOfBoundary(cell->GetCenter(), cell->GetSize()(0)));
   }
