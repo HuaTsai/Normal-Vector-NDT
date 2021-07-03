@@ -118,7 +118,8 @@ visualization_msgs::MarkerArray JoinMarkerArraysAndMarkers(
 }
 
 visualization_msgs::Marker MarkerOfBoundary(
-    const Vector2d &center, double size, const common::Color &color = common::Color::kBlack) {
+    const Vector2d &center, double size, double skew_rad = 0,
+    const common::Color &color = common::Color::kBlack) {
   visualization_msgs::Marker ret;
   ret.header.frame_id = "map";
   ret.header.stamp = ros::Time::now();
@@ -128,16 +129,18 @@ visualization_msgs::Marker MarkerOfBoundary(
   ret.pose = tf2::toMsg(Affine3d::Identity());
   ret.scale.x = 0.02;
   ret.color = common::MakeColorRGBA(color);
-  double halfsize = size / 2;
-  vector<double> dxy = {halfsize, halfsize, -halfsize, -halfsize};
+  double r = size / 2, t = skew_rad;
+  auto R = Rotation2Dd(t);
+  vector<Vector2d> dxy{Vector2d(r, r), Vector2d(r, -r), Vector2d(-r, -r), Vector2d(-r, r), Vector2d(r, r)};
+  transform(dxy.begin(), dxy.end(), dxy.begin(), [&R](auto a) { return R * a; });
   for (int i = 0; i < 4; ++i) {
     geometry_msgs::Point pt;
-    pt.x = center(0) + dxy[i % 4];
-    pt.y = center(1) + dxy[(i + 1) % 4];
+    pt.x = center(0) + dxy[i](0);
+    pt.y = center(1) + dxy[i](1);
     pt.z = 0;
     ret.points.push_back(pt);
-    pt.x = center(0) + dxy[(i + 1) % 4];
-    pt.y = center(1) + dxy[(i + 2) % 4];
+    pt.x = center(0) + dxy[i + 1](0);
+    pt.y = center(1) + dxy[i + 1](1);
     ret.points.push_back(pt);
   }
   return ret;
@@ -223,10 +226,9 @@ visualization_msgs::MarkerArray MarkerArrayOfArrow(
           start.rows() == end.rows() &&
           start.rows() == 2);
   visualization_msgs::MarkerArray ret;
-  auto now = ros::Time::now();
   visualization_msgs::Marker arrow;
   arrow.header.frame_id = "map";
-  arrow.header.stamp = now;
+  arrow.header.stamp = ros::Time::now();
   arrow.id = -1;
   arrow.type = visualization_msgs::Marker::ARROW;
   arrow.action = visualization_msgs::Marker::ADD;
@@ -251,7 +253,7 @@ visualization_msgs::MarkerArray MarkerArrayOfArrow(
 
 visualization_msgs::MarkerArray MarkerArrayOfNDTCell(const NDTCell *cell) {
   visualization_msgs::MarkerArray ret;
-  auto boundary = MarkerOfBoundary(cell->GetCenter(), cell->GetSize()(0));
+  auto boundary = MarkerOfBoundary(cell->GetCenter(), cell->GetSize()(0), cell->GetSkewRad());
   auto p_eclipse = MarkerOfEclipse(cell->GetPointMean(), cell->GetPointCov());
   if (cell->GetNHasGaussian()) {
     auto n_eclipse =
@@ -278,6 +280,27 @@ visualization_msgs::MarkerArray MarkerArrayOfNDTMap(const vector<shared_ptr<NDTC
   for (auto cell : map)
     vma.push_back(MarkerArrayOfNDTCell(cell.get()));
   return JoinMarkerArraysAndMarkers(vma);
+}
+
+visualization_msgs::MarkerArray MarkerArrayOfSensor(const vector<Affine2d> &affs) {
+  visualization_msgs::MarkerArray ret;
+  auto now = ros::Time::now();
+  int i = 0;
+  for (const auto &aff : affs) {
+    visualization_msgs::Marker m;
+    m.header.frame_id = "map";
+    m.header.stamp = ros::Time::now();
+    m.id = i++;
+    m.type = visualization_msgs::Marker::CUBE;
+    m.action = visualization_msgs::Marker::ADD;
+    m.pose = tf2::toMsg(common::Affine3dFromAffine2d(aff));
+    m.color = common::MakeColorRGBA(common::Color::kGray);
+    m.scale.x = 0.3;
+    m.scale.y = 1.0;
+    m.scale.z = 0.5;
+    ret.markers.push_back(m);
+  }
+  return ret;
 }
 
 // TODO: followings are unused yet match_vis.cc

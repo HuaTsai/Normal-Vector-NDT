@@ -68,6 +68,7 @@ class NDTCell {
   void InitializeVariables() {
     phasgaussian_ = nhasgaussian_ = false;
     N_ = 0;
+    skew_rad_ = 0;
     center_.setZero(), size_.setZero();
     pcov_.setZero(), pevecs_.setZero();
     pmean_.setZero(), pevals_.setZero();
@@ -206,6 +207,8 @@ class NDTCell {
       ss << "  p[" << i << "]: (" << points_[i](0) << ", " << points_[i](1) << ")" << endl
          << "  n[" << i << "]: (" << normals_[i](0) << ", " << normals_[i](1) << ")" << endl;
     }
+    if (skew_rad_ != 0)
+      ss << "  skewed cell with " << skew_rad_ << " rad" << endl;
     return ss.str();
   }
 
@@ -214,6 +217,7 @@ class NDTCell {
   bool GetPHasGaussian() const { return phasgaussian_; }
   bool GetNHasGaussian() const { return nhasgaussian_; }
   bool BothHasGaussian() const { return phasgaussian_ && nhasgaussian_; }
+  double GetSkewRad() const { return skew_rad_; }
   Vector2d GetCenter() const { return center_; }
   Vector2d GetSize() const { return size_; }
   Vector2d GetPointMean() const { return pmean_; }
@@ -224,13 +228,15 @@ class NDTCell {
   Matrix2d GetNormalCov() const { return ncov_; }
   Vector2d GetNormalEvals() const { return nevals_; }
   Matrix2d GetNormalEvecs() const { return nevecs_; }
-  MatrixXd GetPoints() const {
+  vector<Vector2d> GetPoints() const { return points_; }
+  vector<Vector2d> GetNormals() const { return normals_; }
+  MatrixXd GetPointsMatrix() const {
     MatrixXd ret(2, points_.size());
     for (int i = 0; i < ret.cols(); ++i)
       ret.col(i) = points_[i];
     return ret;
   }
-  MatrixXd GetNormals() const {
+  MatrixXd GetNormalsMatrix() const {
     MatrixXd ret(2, normals_.size());
     for (int i = 0; i < ret.cols(); ++i)
       ret.col(i) = normals_[i];
@@ -240,6 +246,7 @@ class NDTCell {
   void SetN(int N) { N_ = N; }
   void SetPHasGaussian(bool phasgaussian) { phasgaussian_ = phasgaussian; }
   void SetNHasGaussian(bool nhasgaussian) { nhasgaussian_ = nhasgaussian; }
+  void SetSkewRad(double skew_rad) { skew_rad_ = skew_rad; }
   void SetCenter(const Vector2d &center) { center_ = center; }
   void SetSize(const Vector2d &size) { size_ = size; }
   void SetPointMean(const Vector2d &mean) { pmean_ = mean; }
@@ -254,6 +261,7 @@ class NDTCell {
  private:
   int N_;
   bool phasgaussian_, nhasgaussian_; 
+  double skew_rad_;
   Vector2d center_, size_;
   Matrix2d pcov_, pevecs_;
   Vector2d pmean_, pevals_;

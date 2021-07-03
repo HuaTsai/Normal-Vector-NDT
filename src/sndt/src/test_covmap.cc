@@ -99,15 +99,14 @@ int main(int argc, char **argv) {
   ros::Publisher pub8_ss = nh.advertise<visualization_msgs::MarkerArray>("marker8", 0, true);
 
   visualization_msgs::MarkerArray ma1_pt, ma2_ptic, ma3_ptc, ma4_nm, ma5_nmc, ma6_tg, ma7_bd;
-  int n = 0;
   for (auto cell : map) {
-    UpdateMarkerArray(ma1_pt, MarkerOfPoints(cell->GetPoints()));
+    UpdateMarkerArray(ma1_pt, MarkerOfPoints(cell->GetPointsMatrix()));
     // TODO: ptic
     // if (n++ != 292) { continue; }
     if (cell->GetPHasGaussian()) {
       UpdateMarkerArray(ma3_ptc, MarkerOfEclipse(cell->GetPointMean(), cell->GetPointCov()));
     }
-    auto ma4_nm_ = MarkerArrayOfArrow(cell->GetPoints(), cell->GetPoints() + cell->GetNormals());
+    auto ma4_nm_ = MarkerArrayOfArrow(cell->GetPointsMatrix(), cell->GetPointsMatrix() + cell->GetNormalsMatrix());
     ma4_nm = JoinMarkerArraysAndMarkers({ma4_nm, ma4_nm_});
     if (cell->GetNHasGaussian()) {
       auto neclipse = MarkerOfEclipse(cell->GetPointMean() + cell->GetNormalMean(), cell->GetNormalCov(), common::Color::kGray);
@@ -116,7 +115,7 @@ int main(int argc, char **argv) {
       UpdateMarkerArray(ma6_tg, MarkerOfLines({points[0], cell->GetPointMean(),
                                                cell->GetPointMean(), points[1]}));
     }
-    UpdateMarkerArray(ma7_bd, MarkerOfBoundary(cell->GetCenter(), cell->GetSize()(0)));
+    UpdateMarkerArray(ma7_bd, MarkerOfBoundary(cell->GetCenter(), cell->GetSize()(0), cell->GetSkewRad()));
   }
 
   visualization_msgs::MarkerArray ma8_ss;

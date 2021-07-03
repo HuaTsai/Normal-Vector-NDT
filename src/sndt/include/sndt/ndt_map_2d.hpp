@@ -22,7 +22,7 @@ typedef pcl::PointCloud<pcl::PointXY>::Ptr PCXYPtr;
 
 PCXY ToPCLXY(const PCXYZ &pc) {
   PCXY ret;
-  std::transform(pc.begin(), pc.end(), back_inserter(ret), [](auto p) {
+  transform(pc.begin(), pc.end(), back_inserter(ret), [](auto p) {
     PointXY pt;
     pt.x = p.x, pt.y = p.y;
     return pt;
@@ -32,7 +32,7 @@ PCXY ToPCLXY(const PCXYZ &pc) {
 
 PCXYZ ToPCLXYZ(const PCXY &pc) {
   PCXYZ ret;
-  std::transform(pc.begin(), pc.end(), back_inserter(ret), [](auto p) {
+  transform(pc.begin(), pc.end(), back_inserter(ret), [](auto p) {
     PointXYZ pt;
     pt.x = p.x;
     pt.y = p.y;
@@ -169,30 +169,43 @@ class NDTMap {
     is_initialized_ = true;
   }
 
-  vector<std::shared_ptr<NDTCell>> PseudoTransformCells(const Affine2d &T) {
-    return PseudoTransformCells(T.matrix());
+  vector<shared_ptr<NDTCell>> PseudoTransformCells(const Affine2d &T, bool include_data = false) {
+    return PseudoTransformCells(T.matrix(), include_data);
   }
 
   // TODO: Complete the cell construction
-  vector<std::shared_ptr<NDTCell>> PseudoTransformCells(const Matrix3d &T) {
-    vector<std::shared_ptr<NDTCell>> ret;
+  vector<shared_ptr<NDTCell>> PseudoTransformCells(const Matrix3d &T, bool include_data = false) {
+    vector<shared_ptr<NDTCell>> ret;
     Matrix2d R = T.block<2, 2>(0, 0);
     Vector2d t = T.block<2, 1>(0, 2);
+    double skew_rad = Rotation2Dd(R).angle();
     for (auto it = begin(); it != end(); ++it) {
-      if ((*it)->BothHasGaussian()) {
-        auto cell = std::make_shared<NDTCell>();
-        cell->SetN((*it)->GetN());
-        cell->SetPHasGaussian(true);
-        cell->SetNHasGaussian(true);
-        cell->SetSize((*it)->GetSize());
-        cell->SetCenter((*it)->GetCenter());
-        cell->SetN((*it)->GetN());
-        cell->SetPointMean(R * (*it)->GetPointMean() + t);
+      auto cell = make_shared<NDTCell>();
+      cell->SetN((*it)->GetN());
+      cell->SetPHasGaussian((*it)->GetPHasGaussian());
+      cell->SetNHasGaussian((*it)->GetNHasGaussian());
+      cell->SetSkewRad(skew_rad);
+      cell->SetCenter(R * (*it)->GetCenter());
+      cell->SetSize((*it)->GetSize());
+      cell->SetPointMean(R * (*it)->GetPointMean() + t);
+      if ((*it)->GetPHasGaussian())
         cell->SetPointCov(R * (*it)->GetPointCov() * R.transpose());
-        cell->SetNormalMean(R * (*it)->GetNormalMean() + t);
+      cell->SetNormalMean(R * (*it)->GetNormalMean());
+      if ((*it)->GetNHasGaussian())
         cell->SetNormalCov(R * (*it)->GetNormalCov() * R.transpose());
-        ret.push_back(cell);
+      if (include_data) {
+        for (auto pt : cell->GetPoints()) {
+          if (pt.allFinite())
+            pt = R * pt + t;
+          cell->AddPoint(pt);
+        }
+        for (auto nm : cell->GetNormals()) {
+          if (nm.allFinite())
+            nm = R * nm;
+          cell->AddNormal((nm(1) > 0) ? nm : -nm);
+        }
       }
+      ret.push_back(cell);
     }
     return ret;
   }
