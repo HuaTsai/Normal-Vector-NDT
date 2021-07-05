@@ -66,6 +66,23 @@ struct CostFunction {
     double den = m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace();
     return num / den;
   }
+
+  static vector<double> MeanAndCov(NDTCell *p, NDTCell *q) {
+    Vector2d up = p->GetPointMean();
+    Vector2d uq = q->GetPointMean();
+    Vector2d unp = p->GetNormalMean();
+    Vector2d unq = q->GetNormalMean();
+    Matrix2d cp = p->GetPointCov();
+    Matrix2d cq = q->GetPointCov();
+    Matrix2d cnp = p->GetNormalCov();
+    Matrix2d cnq = q->GetNormalCov();
+    Vector2d m1 = up - uq;
+    Vector2d m2 = unp + unq;
+    Matrix2d c1 = cp + cq;
+    Matrix2d c2 = cnp + cnq;
+    return {m1.dot(m2) * m1.dot(m2),
+            m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace()};
+  }
 };
 
 // FIXME: check correctness

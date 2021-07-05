@@ -13,9 +13,16 @@
 #include <boost/program_options.hpp>
 #include <common/EgoPointClouds.h>
 #include <sndt/ndt_conversions.hpp>
+#include <std_msgs/Int32.h>
+#include <geometry_msgs/Vector3.h>
 
 using namespace std;
+using namespace visualization_msgs;
 namespace po = boost::program_options;
+
+vector<vector<double>> meancovs;
+vector<MarkerArray> corres;
+ros::Publisher pub7, pubmc;
 
 struct Info {
   double v1_mintime;
@@ -159,6 +166,18 @@ void InfoOfNDTMap(const NDTMap &map, double radius, Info &info) {
   info.v10_totalinvalidcells = accumulate(v7_cellpts.begin(), v7_cellpts.end(), 0) - info.v10_totalvalidcells;
 }
 
+void cb(const std_msgs::Int32 &num) {
+  int n = num.data;
+  if (n < 0 || n >= corres.size())
+    return;
+  pub7.publish(corres[n]);
+  cout << "Mean: " << meancovs[n][0] << ", Cov: " << meancovs[n][1] << endl;
+  geometry_msgs::Vector3 mc;
+  mc.x = meancovs[n][0];
+  mc.y = meancovs[n][1];
+  pubmc.publish(mc);
+}
+
 int main(int argc, char **argv) {
   string path;
   int start_frame, frames;
@@ -190,22 +209,21 @@ int main(int argc, char **argv) {
   Info infos, infot;
   auto datat = Augment(vepcs, start_frame, start_frame + frames - 1, T611, infot);
   auto mapt = MakeMap(datat, {0.0625, 0.0001}, {cell_size, radius});
-  cout << mapt.ToString() << endl;
   InfoOfNDTMap(mapt, radius, infot);
 
   auto datas = Augment(vepcs, start_frame + frames, start_frame + 2 * frames - 1, T1116, infos);
   auto maps = MakeMap(datas, {0.0625, 0.0001}, {cell_size, radius});
-  cout << maps.ToString() << endl;
   InfoOfNDTMap(maps, radius, infos);
 
   cout << infos.ToString() << endl;
   cout << infot.ToString() << endl;
 
+  auto maps2 = maps.PseudoTransformCells(T611, true);
+
   auto kd = MakeKDTree(mapt);
   int i = 0;
-  vector<visualization_msgs::MarkerArray> vps, vqs;
+  vector<MarkerArray> vps, vqs;
   vector<Vector2d> lines;
-  auto maps2 = maps.PseudoTransformCells(T611);
   for (auto cellp : maps2) {
     if (!cellp->BothHasGaussian()) { continue; }
     vector<int> idx(1);
@@ -217,27 +235,42 @@ int main(int argc, char **argv) {
     auto cellq = mapt.GetCellForPoint(npt);
     if (!cellq || !cellq->BothHasGaussian()) { continue; }
     vps.push_back(MarkerArrayOfNDTCell(cellp.get()));
-    vqs.push_back(MarkerArrayOfNDTCell(cellq));
+    vqs.push_back(MarkerArrayOfNDTCell2(cellq));
     lines.push_back(cellp->GetPointMean());
     lines.push_back(cellq->GetPointMean());
+    auto linemarker = MarkerOfLines({cellp->GetPointMean(), cellq->GetPointMean()}, common::Color::kBlack, 1.0);
+    corres.push_back(JoinMarkerArraysAndMarkers({vps.back(), vqs.back()}, {linemarker}));
+    meancovs.push_back(CostFunction::MeanAndCov(cellp.get(), cellq));
   }
 
-  ros::Publisher pub = nh.advertise<visualization_msgs::MarkerArray>("marker", 0, true);
-  ros::Publisher pub2 = nh.advertise<visualization_msgs::MarkerArray>("marker2", 0, true);
-  ros::Publisher pub3 = nh.advertise<visualization_msgs::MarkerArray>("marker3", 0, true);
-  ros::Publisher pub4 = nh.advertise<visualization_msgs::MarkerArray>("marker4", 0, true);
-  ros::Publisher pub5 = nh.advertise<visualization_msgs::Marker>("marker5", 0, true);
-  ros::Publisher pub6 = nh.advertise<visualization_msgs::MarkerArray>("marker6", 0, true);
-  ros::Publisher pub7 = nh.advertise<visualization_msgs::MarkerArray>("marker7", 0, true);
-  pub.publish(MarkerArrayOfNDTMap(maps2));
-  pub2.publish(MarkerArrayOfNDTMap(mapt));
+  cout << "Correspondences: " << corres.size() << endl;
+  ros::Subscriber sub = nh.subscribe("idx", 0, cb);
+
+  pubmc = nh.advertise<geometry_msgs::Vector3>("meancov", 0, true);
+  ros::Publisher pub1 = nh.advertise<MarkerArray>("markers1", 0, true);  // source map after T
+  ros::Publisher pub2 = nh.advertise<MarkerArray>("markers2", 0, true);  // target map
+  ros::Publisher pub3 = nh.advertise<MarkerArray>("markers3", 0, true);  // source map after T (only corr)
+  ros::Publisher pub4 = nh.advertise<MarkerArray>("markers4", 0, true);  // target map (only corr)
+  ros::Publisher pub5 = nh.advertise<MarkerArray>("markers5", 0, true);  // target sensor
+  ros::Publisher pub6 = nh.advertise<MarkerArray>("markers6", 0, true);  // source sensor
+  pub7 = nh.advertise<MarkerArray>("markers7", 0, true);  // correspondences
+
+  ros::Publisher pb1 = nh.advertise<Marker>("marker1", 0, true);  // correspondences
+  ros::Publisher pb2 = nh.advertise<Marker>("marker2", 0, true);  // source points after T
+  ros::Publisher pb3 = nh.advertise<Marker>("marker3", 0, true);  // target points
+
+  pub1.publish(MarkerArrayOfNDTMap(maps2));
+  pub2.publish(MarkerArrayOfNDTMap(mapt, true));
   pub3.publish(JoinMarkerArraysAndMarkers(vps));
   pub4.publish(JoinMarkerArraysAndMarkers(vqs));
-  pub5.publish(MarkerOfLines(lines, common::Color::kRed, 1.0));
   vector<Affine2d> afft, affs;
   transform(datat.begin(), datat.end(), back_inserter(afft), [](auto a) { return a.second; });
   transform(datas.begin(), datas.end(), back_inserter(affs), [](auto a) { return a.second; });
-  pub6.publish(MarkerArrayOfSensor(afft));
-  pub7.publish(MarkerArrayOfSensor(affs));
+  pub5.publish(MarkerArrayOfSensor(afft));
+  pub6.publish(MarkerArrayOfSensor(affs));
+
+  pb1.publish(MarkerOfLines(lines, common::Color::kBlack, 1.0));
+  pb2.publish(MarkerOfPoints(PointMatrixXdOfNDTMap(maps2), 0.1));
+  pb3.publish(MarkerOfPoints(PointMatrixXdOfNDTMap(mapt), 0.1, common::Color::kRed));
   ros::spin();
 }

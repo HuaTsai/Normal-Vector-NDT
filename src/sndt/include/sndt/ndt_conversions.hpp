@@ -9,6 +9,7 @@
 #include "sndt/NDTCellMsg.h"
 #include "sndt/NDTMapMsg.h"
 #include "sndt/ndt_map_2d.hpp"
+#include <pcl_ros/point_cloud.h>
 
 using namespace std;
 using namespace Eigen;
@@ -198,9 +199,33 @@ visualization_msgs::Marker MarkerOfLines(
   return ret;
 }
 
+MatrixXd PointMatrixXdOfNDTMap(const NDTMap &map) {
+  vector<Vector2d> pts;
+  for (auto cell : map)
+    for (auto pt : cell->GetPoints())
+      if (pt.allFinite())
+        pts.push_back(pt);
+  MatrixXd ret(2, pts.size());
+  for (int i = 0; i < ret.cols(); ++i)
+    ret.col(i) = pts[i];
+  return ret;
+}
+
+MatrixXd PointMatrixXdOfNDTMap(const vector<shared_ptr<NDTCell>> &map) {
+  vector<Vector2d> pts;
+  for (auto cell : map)
+    for (auto pt : cell->GetPoints())
+      if (pt.allFinite())
+        pts.push_back(pt);
+  MatrixXd ret(2, pts.size());
+  for (int i = 0; i < ret.cols(); ++i)
+    ret.col(i) = pts[i];
+  return ret;
+}
+
 visualization_msgs::Marker MarkerOfPoints(
-    const MatrixXd &points, const common::Color &color = common::Color::kLime,
-    double alpha = 1.0) {
+    const MatrixXd &points, double size = 0.1,
+    const common::Color &color = common::Color::kLime, double alpha = 1.0) {
   auto now = ros::Time::now();
   visualization_msgs::Marker ret;
   ret.header.frame_id = "map";
@@ -208,9 +233,9 @@ visualization_msgs::Marker MarkerOfPoints(
   ret.id = 0;
   ret.type = visualization_msgs::Marker::SPHERE_LIST;
   ret.action = visualization_msgs::Marker::ADD;
-  ret.scale.x = ret.scale.y = ret.scale.z = 0.1;
+  ret.scale.x = ret.scale.y = ret.scale.z = size;
   ret.pose = tf2::toMsg(Affine3d::Identity());
-  ret.color = common::MakeColorRGBA(common::Color::kLime);
+  ret.color = common::MakeColorRGBA(color);
   for (int i = 0; i < points.cols(); ++i) {
     geometry_msgs::Point pt;
     pt.x = points(0, i), pt.y = points(1, i), pt.z = 0;
@@ -251,6 +276,7 @@ visualization_msgs::MarkerArray MarkerArrayOfArrow(
   return ret;
 }
 
+// Color set for general usage
 visualization_msgs::MarkerArray MarkerArrayOfNDTCell(const NDTCell *cell) {
   visualization_msgs::MarkerArray ret;
   auto boundary = MarkerOfBoundary(cell->GetCenter(), cell->GetSize()(0), cell->GetSkewRad());
@@ -268,17 +294,43 @@ visualization_msgs::MarkerArray MarkerArrayOfNDTCell(const NDTCell *cell) {
   return ret;
 }
 
-visualization_msgs::MarkerArray MarkerArrayOfNDTMap(const NDTMap &map) {
+// Color set for target point cloud
+visualization_msgs::MarkerArray MarkerArrayOfNDTCell2(const NDTCell *cell) {
+  visualization_msgs::MarkerArray ret;
+  auto boundary = MarkerOfBoundary(cell->GetCenter(), cell->GetSize()(0), cell->GetSkewRad(), common::Color::kRed);
+  auto p_eclipse = MarkerOfEclipse(cell->GetPointMean(), cell->GetPointCov(), common::Color::kRed);
+  if (cell->GetNHasGaussian()) {
+    auto n_eclipse =
+        MarkerOfEclipse(cell->GetPointMean() + cell->GetNormalMean(),
+                        cell->GetNormalCov(), common::Color::kGray);
+    auto points = FindTangentPoints(n_eclipse, cell->GetPointMean());
+    auto lines = MarkerOfLines({points[0], cell->GetPointMean(), cell->GetPointMean(), points[1]}, common::Color::kGray);
+    ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse, n_eclipse, lines});
+  } else {
+    ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse});
+  }
+  return ret;
+}
+
+visualization_msgs::MarkerArray MarkerArrayOfNDTMap(const NDTMap &map, bool is_target_color = false) {
   vector<visualization_msgs::MarkerArray> vma;
-  for (auto cell : map)
-    vma.push_back(MarkerArrayOfNDTCell(cell));
+  for (auto cell : map) {
+    if (is_target_color)
+      vma.push_back(MarkerArrayOfNDTCell2(cell));
+    else
+      vma.push_back(MarkerArrayOfNDTCell(cell));
+  }
   return JoinMarkerArraysAndMarkers(vma);
 }
 
-visualization_msgs::MarkerArray MarkerArrayOfNDTMap(const vector<shared_ptr<NDTCell>> &map) {
+visualization_msgs::MarkerArray MarkerArrayOfNDTMap(const vector<shared_ptr<NDTCell>> &map, bool is_target_color = false) {
   vector<visualization_msgs::MarkerArray> vma;
-  for (auto cell : map)
-    vma.push_back(MarkerArrayOfNDTCell(cell.get()));
+  for (auto cell : map) {
+    if (is_target_color)
+      vma.push_back(MarkerArrayOfNDTCell2(cell.get()));
+    else
+      vma.push_back(MarkerArrayOfNDTCell(cell.get()));
+  }
   return JoinMarkerArraysAndMarkers(vma);
 }
 

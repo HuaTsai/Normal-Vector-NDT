@@ -194,12 +194,12 @@ class NDTMap {
       if ((*it)->GetNHasGaussian())
         cell->SetNormalCov(R * (*it)->GetNormalCov() * R.transpose());
       if (include_data) {
-        for (auto pt : cell->GetPoints()) {
+        for (auto pt : (*it)->GetPoints()) {
           if (pt.allFinite())
             pt = R * pt + t;
           cell->AddPoint(pt);
         }
-        for (auto nm : cell->GetNormals()) {
+        for (auto nm : (*it)->GetNormals()) {
           if (nm.allFinite())
             nm = R * nm;
           cell->AddNormal((nm(1) > 0) ? nm : -nm);
