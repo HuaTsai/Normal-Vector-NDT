@@ -1,51 +1,69 @@
 #!/usr/bin/env python2
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.widgets import Button
 import math
 import rospy
 from std_msgs.msg import Int32
 from geometry_msgs.msg import Vector3
 
 
-id = 0
-plt.ion()
-fig, ax = plt.subplots()
-# fig = plt.figure()
-ax = fig.add_subplot(111, title='Error Distribution #?', xlabel='Error [m]', ylabel='Prob')
-dis, = ax.plot([0], [0])
-ax.legend()
-plt.tight_layout()
-
 def pdf(x, mu, sig):
     return 1 / (sig * math.sqrt(2 * math.pi)) * math.exp(-0.5 * ((x-mu) / sig) ** 2)
 
 
+fig, ax = plt.subplots()
+plt.subplots_adjust(bottom=0.2, top=0.8)
+x = np.linspace(-4, 4, 1000)
+y = np.array([pdf(j, 0, 1) for j in x])
+# dis, = plt.plot(x, y, lw=2)
+idx = 0
+ax = plt.gca()
+
+
 def cb(msg):
-    global id
-    global fig
-    global dis
+    ax.clear()
     mu = math.sqrt(msg.x)
     sig = math.sqrt(msg.y)
+    dis = msg.z
     x = np.linspace(mu - 4 * sig, mu + 4 * sig, 1000)
     y = np.array([pdf(j, mu, sig) for j in x])
-    dis.set_xdata(x)
-    dis.set_ydata(y)
-    fig.canvas.draw()
-    fig.canvas.flush_events()
-    # time.sleep(0.1)
+    ax.plot(x, y)
+    ax.set_title('Correspondences #{}\n'
+                 'Cell Distance: {:.4f}\n'
+                 'Standardized Euclidean Distance: {:.4f}\n'.format(idx, dis, mu / sig))
+    ax.set_xlim(min(-0.2, mu - 4 * sig), mu + 4 * sig)
+    ax.set_ylim(-0.02, max(y) + 0.02)
+    y0 = pdf(0, mu, sig)
+    ax.text(0.2, y0, 'Prob: {:.4f}'.format(y0))
+    ax.vlines(0, -0.02, y0, linestyles='dashed')
+    ax.hlines(y0, min(-0.2, mu - 4 * sig), 0, linestyles='dashed')
+    plt.draw()
 
 
-def cb2(msg):
-    global id
-    id = msg.data
+rospy.init_node('distribution')
+rospy.Subscriber('meancov', Vector3, cb)
+pub = rospy.Publisher('idx', Int32, queue_size=0)
 
 
-def main():
-    rospy.init_node('distribution')
-    rospy.Subscriber('meancov', Vector3, cb)
-    rospy.Subscriber('idx', Int32, cb2)
-    rospy.spin()
+def nextcb(event):
+    global idx
+    idx = idx + 1
+    pub.publish(Int32(idx))
 
 
-if __name__ == '__main__':
-    main()
+def prevcb(event):
+    global idx
+    idx = idx - 1
+    pub.publish(Int32(idx))
+
+
+axnext = plt.axes([0.81, 0.03, 0.1, 0.075])
+bnext = Button(axnext, 'Next')
+bnext.on_clicked(nextcb)
+
+axprev = plt.axes([0.7, 0.03, 0.1, 0.075])
+bprev = Button(axprev, 'Previous')
+bprev.on_clicked(prevcb)
+
+plt.show()

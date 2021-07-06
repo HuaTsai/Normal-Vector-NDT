@@ -175,6 +175,7 @@ void cb(const std_msgs::Int32 &num) {
   geometry_msgs::Vector3 mc;
   mc.x = meancovs[n][0];
   mc.y = meancovs[n][1];
+  mc.z = meancovs[n][2];
   pubmc.publish(mc);
 }
 
@@ -241,6 +242,7 @@ int main(int argc, char **argv) {
     auto linemarker = MarkerOfLines({cellp->GetPointMean(), cellq->GetPointMean()}, common::Color::kBlack, 1.0);
     corres.push_back(JoinMarkerArraysAndMarkers({vps.back(), vqs.back()}, {linemarker}));
     meancovs.push_back(CostFunction::MeanAndCov(cellp.get(), cellq));
+    meancovs.back().push_back((cellp->GetPointMean() - cellq->GetPointMean()).norm());
   }
 
   cout << "Correspondences: " << corres.size() << endl;
