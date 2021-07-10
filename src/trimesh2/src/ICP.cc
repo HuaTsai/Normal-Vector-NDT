@@ -455,6 +455,9 @@ static float ICP_iter(TriMesh *mesh1, TriMesh *mesh2,
 	selectall_and_match(mesh1, mesh2, xf2, kd1, maxdist, angle_thresh, pairs);
 
 	common::Correspondences cp;
+	cerr << "Correspondences: " << pairs.size() << endl;
+	int i = 0;
+	vector<int> cnt(18);
 	for (const auto &pair : pairs) {
 		Eigen::Vector3d p(pair.p2.x, pair.p2.y, pair.p2.z);
 		Eigen::Vector3d np(pair.n2.x, pair.n2.y, pair.n2.z);
@@ -462,14 +465,14 @@ static float ICP_iter(TriMesh *mesh1, TriMesh *mesh2,
 		Eigen::Vector3d nq(pair.n1.x, pair.n1.y, pair.n1.z);
 		cp.PushBack(p, q, (p - q).dot(np + nq));
 		double val = (p - q).dot(np + nq);
-		if (val > 21.41 && val < 21.43) {
-			cerr << "p" << p.transpose() << endl;
-			cerr << "q" << q.transpose() << endl;
-			cerr << "np" << np.transpose() << endl;
-			cerr << "nq" << nq.transpose() << endl;
-		}
+		Eigen::Vector2d pq((p - q)(0), (p - q)(1));
+		Eigen::Vector2d npq((np + nq)(0), (np + nq)(1));
+		double ang = abs(atan2(pq(0) * npq(1) - pq(1) * npq(0), pq.dot(npq)) * 180 / M_PI);
+		++cnt[ang / 10];
+		cout << "  #" << i++ << ": " << ang << endl;
 	}
-	mit.PushBack(cp, XYTDegreeFromXForm(xf2));
+	copy(cnt.begin(), cnt.end(), ostream_iterator<int>(cout, ", "));
+	// mit.PushBack(cp, XYTDegreeFromXForm(xf2));
 
 	timestamp t2 = now();
 	size_t npairs = pairs.size();

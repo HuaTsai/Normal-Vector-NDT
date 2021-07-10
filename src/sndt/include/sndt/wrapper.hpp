@@ -74,6 +74,7 @@ void DoSNDT(common::MatchPackage &mp, common::MatchInternal &mit, const vector<d
 /**
  * @param data MatrixXd 2xN & Affine2d
  * @param point_intrinsic variance (r_sig^2, theta_sig^2)
+ * @param params (cell_size, radius)
  */
 NDTMap MakeMap(const vector<pair<MatrixXd, Affine2d>> &data,
                const Vector2d &intrinsic,

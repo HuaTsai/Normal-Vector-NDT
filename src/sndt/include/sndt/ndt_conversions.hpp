@@ -199,32 +199,40 @@ visualization_msgs::Marker MarkerOfLines(
   return ret;
 }
 
-MatrixXd PointMatrixXdOfNDTMap(const NDTMap &map) {
+visualization_msgs::Marker MarkerOfLinesByEndPoints(
+    const vector<Vector2d> &points,
+    const common::Color &color = common::Color::kGray, double alpha = 0.6) {
+  Expects(points.size() >= 2);
   vector<Vector2d> pts;
+  pts.push_back(points.front());
+  for (size_t i = 1; i < points.size() - 1; ++i) {
+    pts.push_back(points[i]);
+    pts.push_back(points[i]);
+  }
+  pts.push_back(points.back());
+  return MarkerOfLines(pts, color, alpha);
+}
+
+vector<Vector2d> PointsOfNDTMap(const NDTMap &map) {
+  vector<Vector2d> ret;
   for (auto cell : map)
     for (auto pt : cell->GetPoints())
       if (pt.allFinite())
-        pts.push_back(pt);
-  MatrixXd ret(2, pts.size());
-  for (int i = 0; i < ret.cols(); ++i)
-    ret.col(i) = pts[i];
+        ret.push_back(pt);
   return ret;
 }
 
-MatrixXd PointMatrixXdOfNDTMap(const vector<shared_ptr<NDTCell>> &map) {
-  vector<Vector2d> pts;
+vector<Vector2d> PointsOfNDTMap(const vector<shared_ptr<NDTCell>> &map) {
+  vector<Vector2d> ret;
   for (auto cell : map)
     for (auto pt : cell->GetPoints())
       if (pt.allFinite())
-        pts.push_back(pt);
-  MatrixXd ret(2, pts.size());
-  for (int i = 0; i < ret.cols(); ++i)
-    ret.col(i) = pts[i];
+        ret.push_back(pt);
   return ret;
 }
 
 visualization_msgs::Marker MarkerOfPoints(
-    const MatrixXd &points, double size = 0.1,
+    const vector<Vector2d> &points, double size = 0.1,
     const common::Color &color = common::Color::kLime, double alpha = 1.0) {
   auto now = ros::Time::now();
   visualization_msgs::Marker ret;
@@ -236,12 +244,21 @@ visualization_msgs::Marker MarkerOfPoints(
   ret.scale.x = ret.scale.y = ret.scale.z = size;
   ret.pose = tf2::toMsg(Affine3d::Identity());
   ret.color = common::MakeColorRGBA(color);
-  for (int i = 0; i < points.cols(); ++i) {
+  for (const auto &point : points) {
     geometry_msgs::Point pt;
-    pt.x = points(0, i), pt.y = points(1, i), pt.z = 0;
+    pt.x = point(0), pt.y = point(1), pt.z = 0;
     ret.points.push_back(pt);
   }
   return ret;
+}
+
+visualization_msgs::Marker MarkerOfPoints(
+    const MatrixXd &points, double size = 0.1,
+    const common::Color &color = common::Color::kLime, double alpha = 1.0) {
+  vector<Vector2d> pts(points.cols());
+  for (int i = 0; i < points.cols(); ++i)
+    pts[i] = points.col(i);
+  return MarkerOfPoints(pts, size, color, alpha);
 }
 
 visualization_msgs::MarkerArray MarkerArrayOfArrow(
@@ -284,7 +301,7 @@ visualization_msgs::MarkerArray MarkerArrayOfNDTCell(const NDTCell *cell) {
   if (cell->GetNHasGaussian()) {
     auto n_eclipse =
         MarkerOfEclipse(cell->GetPointMean() + cell->GetNormalMean(),
-                        cell->GetNormalCov(), common::Color::kGray, 0.6);
+                        cell->GetNormalCov(), common::Color::kGray);
     auto points = FindTangentPoints(n_eclipse, cell->GetPointMean());
     auto lines = MarkerOfLines({points[0], cell->GetPointMean(), cell->GetPointMean(), points[1]});
     ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse, n_eclipse, lines});
@@ -341,7 +358,7 @@ visualization_msgs::MarkerArray MarkerArrayOfSensor(const vector<Affine2d> &affs
   for (const auto &aff : affs) {
     visualization_msgs::Marker m;
     m.header.frame_id = "map";
-    m.header.stamp = ros::Time::now();
+    m.header.stamp = now;
     m.id = i++;
     m.type = visualization_msgs::Marker::CUBE;
     m.action = visualization_msgs::Marker::ADD;

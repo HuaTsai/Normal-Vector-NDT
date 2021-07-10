@@ -185,7 +185,7 @@ class NDTMap {
       cell->SetPHasGaussian((*it)->GetPHasGaussian());
       cell->SetNHasGaussian((*it)->GetNHasGaussian());
       cell->SetSkewRad(skew_rad);
-      cell->SetCenter(R * (*it)->GetCenter());
+      cell->SetCenter(R * (*it)->GetCenter() + t);
       cell->SetSize((*it)->GetSize());
       cell->SetPointMean(R * (*it)->GetPointMean() + t);
       if ((*it)->GetPHasGaussian())

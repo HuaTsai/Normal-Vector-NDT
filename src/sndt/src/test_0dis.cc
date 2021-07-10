@@ -90,16 +90,12 @@ pair<MatrixXd, Affine2d> ToPair(const common::PointCloudSensor &pcs) {
 // <<------- T -------->>
 vector<pair<MatrixXd, Affine2d>> Augment(
     const vector<common::EgoPointClouds> &vepcs, int start, int end,
-    Affine2d &T, Info &info) {
+    Affine2d &T, vector<Affine2d> &allT, Info &info) {
   vector<pair<MatrixXd, Affine2d>> ret;
-  T = Affine2d::Identity();
   double dx = 0, dy = 0, dth = 0;
   for (int i = start; i <= end; ++i) {
-    double dt = (vepcs[i + 1].stamp - vepcs[i].stamp).toSec();
-    dx += vepcs[i].vxyt[0] * dt;
-    dy += vepcs[i].vxyt[1] * dt;
-    dth += vepcs[i].vxyt[2] * dt;
     Affine2d T0i = Rotation2Dd(dth) * Translation2d(dx, dy);
+    allT.push_back(T0i);
     for (const auto &pc : vepcs[i].pcs) {
       MatrixXd fi(2, pc.points.size());
       for (int i = 0; i < fi.cols(); ++i)
@@ -111,7 +107,12 @@ vector<pair<MatrixXd, Affine2d>> Augment(
       mtx.block<2, 1>(0, 2) = aff.matrix().block<2, 1>(0, 3);
       ret.push_back(make_pair(fi, T0i * Affine2d(mtx)));
     }
+    double dt = (vepcs[i + 1].stamp - vepcs[i].stamp).toSec();
+    dx += vepcs[i].vxyt[0] * dt;
+    dy += vepcs[i].vxyt[1] * dt;
+    dth += vepcs[i].vxyt[2] * dt;
   }
+  T = Rotation2Dd(dth) * Translation2d(dx, dy);
   /***** INFO ASSIGNS v1, v2, v4, v5 *****/
   info.v1_mintime = vepcs[start].stamp.toSec();
   info.v2_stamps = end - start + 1;
@@ -168,7 +169,7 @@ void InfoOfNDTMap(const NDTMap &map, double radius, Info &info) {
 
 void cb(const std_msgs::Int32 &num) {
   int n = num.data;
-  if (n < 0 || n >= corres.size())
+  if (n < 0 || n >= (int)corres.size())
     return;
   pub7.publish(corres[n]);
   cout << "Mean: " << meancovs[n][0] << ", Cov: " << meancovs[n][1] << endl;
@@ -177,6 +178,46 @@ void cb(const std_msgs::Int32 &num) {
   mc.y = meancovs[n][1];
   mc.z = meancovs[n][2];
   pubmc.publish(mc);
+}
+
+string CorrespondenceMsg(NDTCell *p, NDTCell *q) {
+  char c[1000];
+  auto pcen = p->GetCenter();
+  auto pmean = p->GetPointMean();
+  auto pcov = p->GetPointCov();
+  auto npmean = p->GetNormalMean();
+  auto npcov = p->GetNormalCov();
+  auto qcen = q->GetCenter();
+  auto qmean = q->GetPointMean();
+  auto qcov = q->GetPointCov();
+  auto nqmean = q->GetNormalMean();
+  auto nqcov = q->GetNormalCov();
+  sprintf(c, " p.mean = (%.2f, %.2f)\n"
+             " p.cov  = (%.2f, %.2f, %.2f, %.2f)\n"
+             "np.mean = (%.2f, %.2f)\n"
+             "np.cov  = (%.2f, %.2f, %.2f, %.2f\n"
+             " q.mean = (%.2f, %.2f)\n"
+             " q.cov  = (%.2f, %.2f, %.2f, %.2f)\n"
+             "nq.mean = (%.2f, %.2f)\n"
+             "nq.cov  = (%.2f, %.2f, %.2f, %.2f\n"
+             "short = "
+             "--p %.2f,%.2f,%.2f,%.2f,%.2f "
+             "--np %.2f,%.2f,%.2f,%.2f,%.2f "
+             "--cp %.2f,%.2f "
+             "--q %.2f,%.2f,%.2f,%.2f,%.2f "
+             "--nq %.2f,%.2f,%.2f,%.2f,%.2f "
+             "--cq %.2f,%.2f",
+             pmean(0), pmean(1), pcov(0, 0), pcov(0, 1), pcov(1, 0), pcov(1, 1),
+             npmean(0), npmean(1), npcov(0, 0), npcov(0, 1), npcov(1, 0), npcov(1, 1),
+             qmean(0), qmean(1), qcov(0, 0), qcov(0, 1), qcov(1, 0), qcov(1, 1),
+             nqmean(0), nqmean(1), nqcov(0, 0), nqcov(0, 1), nqcov(1, 0), nqcov(1, 1),
+             pmean(0), pmean(1), pcov(0, 0), pcov(0, 1), pcov(1, 1),
+             npmean(0), npmean(1), npcov(0, 0), npcov(0, 1), npcov(1, 1),
+             pcen(0), pcen(1),
+             qmean(0), qmean(1), qcov(0, 0), qcov(0, 1), qcov(1, 1),
+             nqmean(0), nqmean(1), nqcov(0, 0), nqcov(0, 1), nqcov(1, 1),
+             qcen(0), qcen(1));
+  return string(c);
 }
 
 int main(int argc, char **argv) {
@@ -206,13 +247,14 @@ int main(int argc, char **argv) {
   common::SerializationInput(path, vepcs);
   cout << vepcs.size() << endl;
 
+  vector<Affine2d> T611s, T1116s;
   Affine2d T611, T1116;
   Info infos, infot;
-  auto datat = Augment(vepcs, start_frame, start_frame + frames - 1, T611, infot);
+  auto datat = Augment(vepcs, start_frame, start_frame + frames - 1, T611, T611s, infot);
   auto mapt = MakeMap(datat, {0.0625, 0.0001}, {cell_size, radius});
   InfoOfNDTMap(mapt, radius, infot);
 
-  auto datas = Augment(vepcs, start_frame + frames, start_frame + 2 * frames - 1, T1116, infos);
+  auto datas = Augment(vepcs, start_frame + frames, start_frame + 2 * frames - 1, T1116, T1116s, infos);
   auto maps = MakeMap(datas, {0.0625, 0.0001}, {cell_size, radius});
   InfoOfNDTMap(maps, radius, infos);
 
@@ -221,10 +263,11 @@ int main(int argc, char **argv) {
 
   auto maps2 = maps.PseudoTransformCells(T611, true);
 
+  // BUG: Visualization is wrong somewhere...
   auto kd = MakeKDTree(mapt);
-  int i = 0;
   vector<MarkerArray> vps, vqs;
   vector<Vector2d> lines;
+  int i = 0;
   for (auto cellp : maps2) {
     if (!cellp->BothHasGaussian()) { continue; }
     vector<int> idx(1);
@@ -243,6 +286,7 @@ int main(int argc, char **argv) {
     corres.push_back(JoinMarkerArraysAndMarkers({vps.back(), vqs.back()}, {linemarker}));
     meancovs.push_back(CostFunction::MeanAndCov(cellp.get(), cellq));
     meancovs.back().push_back((cellp->GetPointMean() - cellq->GetPointMean()).norm());
+    cout << "Corres [" << i++ << "]:\n" << CorrespondenceMsg(cellp.get(), cellq) << endl;
   }
 
   cout << "Correspondences: " << corres.size() << endl;
@@ -253,9 +297,11 @@ int main(int argc, char **argv) {
   ros::Publisher pub2 = nh.advertise<MarkerArray>("markers2", 0, true);  // target map
   ros::Publisher pub3 = nh.advertise<MarkerArray>("markers3", 0, true);  // source map after T (only corr)
   ros::Publisher pub4 = nh.advertise<MarkerArray>("markers4", 0, true);  // target map (only corr)
-  ros::Publisher pub5 = nh.advertise<MarkerArray>("markers5", 0, true);  // target sensor
-  ros::Publisher pub6 = nh.advertise<MarkerArray>("markers6", 0, true);  // source sensor
+  ros::Publisher pub5 = nh.advertise<MarkerArray>("markers5", 0, true);  // source sensor
+  ros::Publisher pub6 = nh.advertise<MarkerArray>("markers6", 0, true);  // target sensor
   pub7 = nh.advertise<MarkerArray>("markers7", 0, true);  // correspondences
+  ros::Publisher pub8 = nh.advertise<MarkerArray>("markers8", 0, true);  // source ego car
+  ros::Publisher pub9 = nh.advertise<MarkerArray>("markers9", 0, true);  // target ego car
 
   ros::Publisher pb1 = nh.advertise<Marker>("marker1", 0, true);  // correspondences
   ros::Publisher pb2 = nh.advertise<Marker>("marker2", 0, true);  // source points after T
@@ -265,14 +311,23 @@ int main(int argc, char **argv) {
   pub2.publish(MarkerArrayOfNDTMap(mapt, true));
   pub3.publish(JoinMarkerArraysAndMarkers(vps));
   pub4.publish(JoinMarkerArraysAndMarkers(vqs));
-  vector<Affine2d> afft, affs;
+  vector<Affine2d> affs, afft;
+  transform(datas.begin(), datas.end(), back_inserter(affs), [&T611](auto a) { return T611 * a.second; });
   transform(datat.begin(), datat.end(), back_inserter(afft), [](auto a) { return a.second; });
-  transform(datas.begin(), datas.end(), back_inserter(affs), [](auto a) { return a.second; });
-  pub5.publish(MarkerArrayOfSensor(afft));
-  pub6.publish(MarkerArrayOfSensor(affs));
+  pub5.publish(MarkerArrayOfSensor(affs));
+  pub6.publish(MarkerArrayOfSensor(afft));
 
   pb1.publish(MarkerOfLines(lines, common::Color::kBlack, 1.0));
-  pb2.publish(MarkerOfPoints(PointMatrixXdOfNDTMap(maps2), 0.1));
-  pb3.publish(MarkerOfPoints(PointMatrixXdOfNDTMap(mapt), 0.1, common::Color::kRed));
+  pb2.publish(MarkerOfPoints(PointsOfNDTMap(maps2), 0.1));
+  pb3.publish(MarkerOfPoints(PointsOfNDTMap(mapt), 0.1, common::Color::kRed));
+  vector<Vector2d> cars, cart;
+  transform(T1116s.begin(), T1116s.end(), back_inserter(cars), [&T611](auto a) { return T611 * a.translation(); });
+  transform(T611s.begin(), T611s.end(), back_inserter(cart), [](auto a) { return a.translation(); });
+  auto mcarsp = MarkerOfPoints(cars, 0.1, common::Color::kBlack);
+  auto mcartp = MarkerOfPoints(cart, 0.1, common::Color::kBlack);
+  auto mcars = MarkerOfLinesByEndPoints(cars, common::Color::kRed, 1.0);
+  auto mcart = MarkerOfLinesByEndPoints(cart, common::Color::kLime, 1.0);
+  pub8.publish(JoinMarkers({mcars, mcarsp}));
+  pub9.publish(JoinMarkers({mcart, mcartp}));
   ros::spin();
 }

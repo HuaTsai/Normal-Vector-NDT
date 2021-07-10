@@ -18,6 +18,7 @@
 
 using namespace std;
 using namespace trimesh;
+using namespace Eigen;
 
 typedef pcl::registration::DefaultConvergenceCriteria<float>::ConvergenceState State;
 
@@ -106,11 +107,13 @@ void RemoveNaN(pcl::PointCloud<pcl::PointNormal>::Ptr pc) {
   }
 }
 
-void TrimeshFromPCL(TriMesh *mesh, pcl::PointCloud<pcl::PointNormal>::Ptr pc) {
-  for (const auto &pt : pc->points) {
-    mesh->vertices.push_back(point(pt.x, pt.y, pt.z));
-    mesh->normals.push_back(point(pt.normal_x, pt.normal_y, pt.normal_z));
-  }
+void RemoveNaNAndInf(pcl::PointCloud<pcl::PointNormal>::Ptr pc) {
+  auto pts = pc->points;
+  pc->clear();
+  for (const auto &pt : pts)
+    if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z) &&
+        isfinite(pt.normal_x) && isfinite(pt.normal_y) && isfinite(pt.normal_z))
+      pc->push_back(pt);
 }
 
 Eigen::Matrix3d Matrix3dFromXForm(const xform &xf) {
@@ -137,8 +140,16 @@ void DoSICP(common::MatchPackage &mp, const vector<double> &params) {
 
   TriMesh *mesh1 = new TriMesh();
   TriMesh *mesh2 = new TriMesh();
-  TrimeshFromPCL(mesh1, target);
-  TrimeshFromPCL(mesh2, source);
+
+  for (const auto &pt : *target) {
+    mesh1->vertices.push_back(point(pt.x, pt.y, pt.z));
+    mesh1->normals.push_back(point(pt.normal_x, pt.normal_y, pt.normal_z));
+  }
+  for (const auto &pt : *source) {
+    mesh2->vertices.push_back(point(pt.x, pt.y, pt.z));
+    mesh2->normals.push_back(point(pt.normal_x, pt.normal_y, pt.normal_z));
+  }
+
   KDtree *kd1 = new KDtree(mesh1->vertices);
 	KDtree *kd2 = new KDtree(mesh2->vertices);
 
@@ -189,4 +200,26 @@ void DoPCLSICP(common::MatchPackage &mp, const vector<double> &params) {
   // mp.state = FromPCLState(matcher.convergence_criteria_->getConvergenceState());
   mp.iters = matcher.nr_iterations_;
   mp.result = common::Matrix3dFromMatrix4f(matcher.getFinalTransformation());
+}
+
+/**
+ * @param data 
+ * @param params (radius)
+ */
+TriMesh *MakeMesh(const MatrixXd &data,
+                  const vector<double> &params) {
+  double radius = params[0];
+  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
+  for (int i = 0; i < data.cols(); ++i)
+    if (data.col(i).allFinite())
+      pc->push_back(pcl::PointXYZ(data.col(i)(0), data.col(i)(1), 0));
+  pcl::PointCloud<pcl::PointNormal>::Ptr pcn(new pcl::PointCloud<pcl::PointNormal>);
+  ComputeNormalsAndJoin(pc, radius, pcn);
+  RemoveNaNAndInf(pcn);
+  TriMesh *ret = new TriMesh();
+  for (const auto &pt : *pcn) {
+    ret->vertices.push_back(point(pt.x, pt.y, pt.z));
+    ret->normals.push_back(point(pt.normal_x, pt.normal_y, pt.normal_z));
+  }
+  return ret;
 }
