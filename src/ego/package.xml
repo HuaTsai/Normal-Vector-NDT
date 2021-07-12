@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>sndt</name>
+  <name>ego</name>
   <version>0.0.0</version>
-  <description>The sndt package</description>
+  <description>The ego package</description>
   <maintainer email="huatsai.eed07g@nctu.edu.tw">HuaTsai</maintainer>
   <license>BSD</license>
   <author email="huatsai.eed07g@nctu.edu.tw">HuaTsai</author>
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>
   <depend>common</depend>
-  <depend>normal2d</depend>
+  <depend>conti_radar</depend>
 </package>

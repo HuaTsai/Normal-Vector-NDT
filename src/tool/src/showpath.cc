@@ -4,7 +4,6 @@
 #include <tf2_eigen/tf2_eigen.h>
 #include <boost/program_options.hpp>
 #include "common/common.h"
-#include "dbg/dbg.h"
 
 namespace po = boost::program_options;
 using namespace std;
@@ -18,9 +17,7 @@ void MakeLocalGt(nav_msgs::Path &path) {
     Eigen::Affine3d T;
     tf2::fromMsg(path.poses[i].pose, T);
     Eigen::Affine3d newT = preT * T;
-    dbg(newT.matrix());
     newT = common::Conserve2DFromAffine3d(newT);
-    dbg(newT.matrix());
     path.poses[i].pose = tf2::toMsg(newT);
   }
 }

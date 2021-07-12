@@ -13,33 +13,17 @@ find_package(catkin REQUIRED
     pcl_ros
     sensor_msgs
     common
-    message_generation
     visualization_msgs
-    conti_radar
     tf2_sensor_msgs
     normal2d
     tf2_ros
 )
 
-add_message_files(
-  FILES
-    NDTCellMsg.msg
-    NDTMapMsg.msg  
-    PointCloudSensor.msg
-    EgoPointClouds.msg
-)
-
-generate_messages(
-  DEPENDENCIES
-    geometry_msgs
-    sensor_msgs
-    std_msgs
-)
-
 catkin_package(
   CATKIN_DEPENDS
-    message_runtime
     roscpp
+    common
+    normal2d
   INCLUDE_DIRS
     include
   LIBRARIES
@@ -53,19 +37,16 @@ include_directories(
 
 # Library
 
-add_library(${PROJECT_NAME} src/dummy.cpp)
+set (${PROJECT_NAME}_LIB_SRCS
+  src/ndt_cell.cc
+  src/ndt_grid.cc
+  src/ndt_map.cc
+  src/ndt_matcher.cc
+  src/ndt_visualizations.cc
+)
 
-add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_generate_messages_cpp)
+set(ALLLIBS ${catkin_LIBRARIES} ${CERES_LIBRARIES})
 
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+add_library(${PROJECT_NAME} ${${PROJECT_NAME}_LIB_SRCS})
 
-# Executables
-
-set(ALLLIBS ${catkin_LIBRARIES} ${CERES_LIBRARIES} ${PROJECT_NAME} config++)
-
-file(GLOB_RECURSE ALL_SRCS "*.cc")
-foreach(FILE_PATH ${ALL_SRCS})
-  get_filename_component(FILENAME ${FILE_PATH} NAME_WE)
-  add_executable(${FILENAME} ${FILE_PATH})
-  target_link_libraries(${FILENAME} ${ALLLIBS})
-endforeach(FILE_PATH)
+target_link_libraries(${PROJECT_NAME} ${ALLLIBS})

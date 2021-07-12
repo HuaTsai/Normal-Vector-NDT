@@ -3,7 +3,6 @@
 #include "common/common.h"
 #include "common/EgoPointClouds.h"
 #include "pclmatch/wrapper.hpp"
-#include "dbg/dbg.h"
 
 using namespace std;
 using namespace Eigen;
@@ -37,7 +36,6 @@ PointCloud AugmentPointCloud(const vector<PointCloud> &pcs,
     dx += -vxyts[i][0] * dt;
     dy += -vxyts[i][1] * dt;
     dth += -vxyts[i][2] * dt;
-    dbg(dx, dy, dth);
     Tn0 = common::Matrix4fFromXYTRadian({dx, dy, dth});
     PointCloud tmp;
     pcl::transformPointCloud(pcs[i], tmp, Tn0);
@@ -90,7 +88,6 @@ int main(int argc, char **argv) {
     Vector3d xyt = dt * Vector3d::Map(vepcs[m].vxyt.data(), 3);
     auto Tmi = common::Matrix4fFromXYTRadian(xyt);
     auto Tmn = Tmi * Tni.inverse();
-    // dbg(i, xyt, Tmi, Tmn, Tni);
 
     /****** Match ******/
     common::MatchPackage mp;
@@ -101,8 +98,7 @@ int main(int argc, char **argv) {
     // auto guess = common::XYTDegreeFromMatrix3d(mp.guess);
     DoSICP(mp, {0});
     // auto res = common::XYTDegreeFromMatrix3d(mp.result);
-    auto err = common::TransNormRotDegAbsFromMatrix3d(mp.result.inverse() * mp.guess);
-    dbg(i, err);
+    // auto err = common::TransNormRotDegAbsFromMatrix3d(mp.result.inverse() * mp.guess);
     // mp.result = mp.guess;
 
     /****** Update ******/
