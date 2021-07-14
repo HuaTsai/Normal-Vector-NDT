@@ -1,16 +1,44 @@
 #include "sndt/ndt_visualizations.h"
 
 #include <bits/stdc++.h>
-#include <common/common.h>
 #include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
+#include <tf2_eigen/tf2_eigen.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
 #include <Eigen/Eigen>
+#include <gsl/gsl>
 
 using namespace std;
 using namespace Eigen;
 using visualization_msgs::Marker;
 using visualization_msgs::MarkerArray;
+
+std_msgs::ColorRGBA MakeColorRGBA(const Color &color, double alpha) {
+  std_msgs::ColorRGBA ret;
+  ret.a = alpha;
+  ret.r = ret.g = ret.b = 0.;
+  if (color == Color::kRed) {
+    ret.r = 1.;
+  } else if (color == Color::kLime) {
+    ret.g = 1.;
+  } else if (color == Color::kBlue) {
+    ret.b = 1.;
+  } else if (color == Color::kWhite) {
+    ret.a = 0.;
+  } else if (color == Color::kBlack) {
+    // nop
+  } else if (color == Color::kGray) {
+    ret.r = ret.g = ret.b = 0.5;
+  } else if (color == Color::kYellow) {
+    ret.r = ret.g = 1.;
+  } else if (color == Color::kAqua) {
+    ret.g = ret.b = 1.;
+  } else if (color == Color::kFuchsia) {
+    ret.r = ret.b = 1.;
+  }
+  return ret;
+}
 
 vector<Vector2d> FindTangentPoints(const Marker &eclipse,
                                    const Vector2d &point) {
@@ -94,7 +122,7 @@ MarkerArray JoinMarkerArraysAndMarkers(const vector<MarkerArray> &mas,
 
 Marker MarkerOfBoundary(const Vector2d &center, double size,
                         double skew_rad,
-                        const common::Color &color) {
+                        const Color &color) {
   Marker ret;
   ret.header.frame_id = "map";
   ret.header.stamp = ros::Time::now();
@@ -103,7 +131,7 @@ Marker MarkerOfBoundary(const Vector2d &center, double size,
   ret.action = Marker::ADD;
   ret.pose = tf2::toMsg(Affine3d::Identity());
   ret.scale.x = 0.02;
-  ret.color = common::MakeColorRGBA(color);
+  ret.color = MakeColorRGBA(color);
   double r = size / 2, t = skew_rad;
   auto R = Rotation2Dd(t);
   vector<Vector2d> dxy{Vector2d(r, r), Vector2d(r, -r), Vector2d(-r, -r),
@@ -124,7 +152,7 @@ Marker MarkerOfBoundary(const Vector2d &center, double size,
 }
 
 Marker MarkerOfEclipse(const Vector2d &mean, const Matrix2d &covariance,
-                       const common::Color &color,
+                       const Color &color,
                        double alpha) {
   Marker ret;
   ret.header.frame_id = "map";
@@ -132,7 +160,7 @@ Marker MarkerOfEclipse(const Vector2d &mean, const Matrix2d &covariance,
   ret.id = 0;
   ret.type = Marker::SPHERE;
   ret.action = Marker::ADD;
-  ret.color = common::MakeColorRGBA(color, alpha);
+  ret.color = MakeColorRGBA(color, alpha);
   EigenSolver<Matrix2d> es(covariance);
   /** Note: "pseudo" computes complex eigen value if no real solution
    * However, covariance is always a real symmetric matrix, which means
@@ -151,11 +179,37 @@ Marker MarkerOfEclipse(const Vector2d &mean, const Matrix2d &covariance,
   ret.pose.position.y = mean(1);
   ret.pose.position.z = 0;
   ret.pose.orientation = tf2::toMsg(q);
+  if (ret.scale.x == 0 || ret.scale.y == 0) {
+    cout << "cov: " << covariance << endl
+         << "evec: " << evec << endl
+         << "eval: " << eval << endl
+         << "eval w/o sqrt: " << es.pseudoEigenvalueMatrix() << endl;
+  }
+  return ret;
+}
+
+Marker MarkerOfCircle(const Vector2d &mean, double radius,
+                      const Color &color,
+                      double alpha) {
+  Marker ret;
+  ret.header.frame_id = "map";
+  ret.header.stamp = ros::Time::now();
+  ret.id = 0;
+  ret.type = Marker::SPHERE;
+  ret.action = Marker::ADD;
+  ret.color = MakeColorRGBA(color, alpha);
+  ret.scale.x = 2 * radius;
+  ret.scale.y = 2 * radius;
+  ret.scale.z = 0.1;
+  ret.pose.position.x = mean(0);
+  ret.pose.position.y = mean(1);
+  ret.pose.position.z = 0;
+  ret.pose.orientation.w = 1;
   return ret;
 }
 
 Marker MarkerOfLines(const vector<Vector2d> &points,
-                     const common::Color &color,
+                     const Color &color,
                      double alpha) {
   Expects(points.size() % 2 == 0);
   Marker ret;
@@ -166,7 +220,7 @@ Marker MarkerOfLines(const vector<Vector2d> &points,
   ret.action = Marker::ADD;
   ret.scale.x = 0.05;
   ret.pose = tf2::toMsg(Affine3d::Identity());
-  ret.color = common::MakeColorRGBA(color, alpha);
+  ret.color = MakeColorRGBA(color, alpha);
   for (const auto &p : points) {
     geometry_msgs::Point pt;
     pt.x = p(0), pt.y = p(1), pt.z = 0;
@@ -177,7 +231,7 @@ Marker MarkerOfLines(const vector<Vector2d> &points,
 
 Marker MarkerOfLinesByEndPoints(
     const vector<Vector2d> &points,
-    const common::Color &color, double alpha) {
+    const Color &color, double alpha) {
   Expects(points.size() >= 2);
   vector<Vector2d> pts;
   pts.push_back(points.front());
@@ -206,7 +260,7 @@ vector<Vector2d> PointsOfNDTMap(const vector<shared_ptr<NDTCell>> &map) {
 }
 
 Marker MarkerOfPoints(const vector<Vector2d> &points, double size,
-                      const common::Color &color,
+                      const Color &color,
                       double alpha) {
   auto now = ros::Time::now();
   Marker ret;
@@ -217,7 +271,7 @@ Marker MarkerOfPoints(const vector<Vector2d> &points, double size,
   ret.action = Marker::ADD;
   ret.scale.x = ret.scale.y = ret.scale.z = size;
   ret.pose = tf2::toMsg(Affine3d::Identity());
-  ret.color = common::MakeColorRGBA(color);
+  ret.color = MakeColorRGBA(color);
   for (const auto &point : points) {
     geometry_msgs::Point pt;
     pt.x = point(0), pt.y = point(1), pt.z = 0;
@@ -227,7 +281,7 @@ Marker MarkerOfPoints(const vector<Vector2d> &points, double size,
 }
 
 Marker MarkerOfPoints(const MatrixXd &points, double size,
-                      const common::Color &color,
+                      const Color &color,
                       double alpha) {
   vector<Vector2d> pts(points.cols());
   for (int i = 0; i < points.cols(); ++i) pts[i] = points.col(i);
@@ -235,7 +289,7 @@ Marker MarkerOfPoints(const MatrixXd &points, double size,
 }
 
 Marker MarkerOfArrow(const Vector2d &start, const Vector2d &end,
-                     const common::Color &color,
+                     const Color &color,
                      double alpha) {
   Marker ret;
   ret.header.frame_id = "map";
@@ -246,7 +300,7 @@ Marker MarkerOfArrow(const Vector2d &start, const Vector2d &end,
   ret.scale.x = 0.05;
   ret.scale.y = 0.2;
   ret.pose = tf2::toMsg(Affine3d::Identity());
-  ret.color = common::MakeColorRGBA(color, alpha);
+  ret.color = MakeColorRGBA(color, alpha);
   geometry_msgs::Point pt;
   pt.x = start(0), pt.y = start(1), pt.z = 0;
   ret.points.push_back(pt);
@@ -256,7 +310,7 @@ Marker MarkerOfArrow(const Vector2d &start, const Vector2d &end,
 }
 
 MarkerArray MarkerArrayOfArrow(const MatrixXd &start, const MatrixXd &end,
-                               const common::Color &color,
+                               const Color &color,
                                double alpha) {
   Expects(start.cols() == end.cols() && start.rows() == end.rows() &&
           start.rows() == 2);
@@ -270,7 +324,7 @@ MarkerArray MarkerArrayOfArrow(const MatrixXd &start, const MatrixXd &end,
   arrow.scale.x = 0.05;
   arrow.scale.y = 0.2;
   arrow.pose = tf2::toMsg(Affine3d::Identity());
-  arrow.color = common::MakeColorRGBA(color, alpha);
+  arrow.color = MakeColorRGBA(color, alpha);
   arrow.points.resize(2);
   for (int i = 0; i < start.cols(); ++i) {
     if (!start.col(i).allFinite() || !end.col(i).allFinite()) continue;
@@ -285,6 +339,35 @@ MarkerArray MarkerArrayOfArrow(const MatrixXd &start, const MatrixXd &end,
   return ret;
 }
 
+MarkerArray MarkerArrayOfArrow(const vector<Vector2d> &starts, const vector<Vector2d> &ends,
+                               const Color &color,
+                               double alpha) {
+  Expects(starts.size() == ends.size());
+  MarkerArray ret;
+  Marker arrow;
+  arrow.header.frame_id = "map";
+  arrow.header.stamp = ros::Time::now();
+  arrow.id = -1;
+  arrow.type = Marker::ARROW;
+  arrow.action = Marker::ADD;
+  arrow.scale.x = 0.05;
+  arrow.scale.y = 0.2;
+  arrow.pose = tf2::toMsg(Affine3d::Identity());
+  arrow.color = MakeColorRGBA(color, alpha);
+  arrow.points.resize(2);
+  for (size_t i = 0; i < starts.size(); ++i) {
+    if (!starts[i].allFinite() || !ends[i].allFinite()) continue;
+    ++arrow.id;
+    geometry_msgs::Point pt;
+    pt.x = starts[i](0), pt.y = starts[i](1), pt.z = 0;
+    arrow.points[0] = pt;
+    pt.x = ends[i](0), pt.y = ends[i](1);
+    arrow.points[1] = pt;
+    ret.markers.push_back(arrow);
+  }
+  return ret;
+}
+
 // Color set for general usage
 MarkerArray MarkerArrayOfNDTCell(const NDTCell *cell) {
   MarkerArray ret;
@@ -292,23 +375,24 @@ MarkerArray MarkerArrayOfNDTCell(const NDTCell *cell) {
       MarkerOfBoundary(cell->GetCenter(), cell->GetSize(), cell->GetSkewRad());
   auto p_eclipse = MarkerOfEclipse(cell->GetPointMean(), cell->GetPointCov());
   // Old
-  // if (cell->GetNHasGaussian()) {
-  //   auto n_eclipse =
-  //       MarkerOfEclipse(cell->GetPointMean() + cell->GetNormalMean(),
-  //                       cell->GetNormalCov(), common::Color::kGray);
-  //   auto points = FindTangentPoints(n_eclipse, cell->GetPointMean());
-  //   auto lines = MarkerOfLines({points[0], cell->GetPointMean(),
-  //   cell->GetPointMean(), points[1]}); ret = JoinMarkerArraysAndMarkers({},
-  //   {boundary, p_eclipse, n_eclipse, lines});
-  // } else {
-  //   ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse});
-  // }
+  if (cell->GetNHasGaussian()) {
+    auto n_eclipse =
+        MarkerOfEclipse(cell->GetPointMean() + cell->GetNormalMean(),
+                        cell->GetNormalCov(), Color::kGray);
+    auto points = FindTangentPoints(n_eclipse, cell->GetPointMean());
+    auto lines = MarkerOfLines({points[0], cell->GetPointMean(), cell->GetPointMean(), points[1]});
+    ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse, n_eclipse, lines});
+  } else {
+    ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse});
+  }
 
   // New
-  auto normal =
-      MarkerOfArrow(cell->GetPointMean(),
-                    cell->GetPointMean() + cell->GetPointEvecs().col(1));
-  ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse, normal});
+  // auto nm = (cell->GetPointEvals()(0) > cell->GetPointEvals()(1))
+  //               ? cell->GetPointEvecs().col(0)
+  //               : cell->GetPointEvecs().col(1);
+  // auto normal =
+  //     MarkerOfArrow(cell->GetPointMean(), cell->GetPointMean() + nm);
+  // ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse, normal});
   return ret;
 }
 
@@ -316,27 +400,26 @@ MarkerArray MarkerArrayOfNDTCell(const NDTCell *cell) {
 MarkerArray MarkerArrayOfNDTCell2(const NDTCell *cell) {
   MarkerArray ret;
   auto boundary = MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
-                                   cell->GetSkewRad(), common::Color::kRed);
+                                   cell->GetSkewRad(), Color::kRed);
   auto p_eclipse = MarkerOfEclipse(cell->GetPointMean(), cell->GetPointCov(),
-                                   common::Color::kRed);
+                                   Color::kRed);
   // Old
-  // if (cell->GetNHasGaussian()) {
-  //   auto n_eclipse =
-  //       MarkerOfEclipse(cell->GetPointMean() + cell->GetNormalMean(),
-  //                       cell->GetNormalCov(), common::Color::kGray);
-  //   auto points = FindTangentPoints(n_eclipse, cell->GetPointMean());
-  //   auto lines = MarkerOfLines({points[0], cell->GetPointMean(),
-  //   cell->GetPointMean(), points[1]}, common::Color::kGray); ret =
-  //   JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse, n_eclipse, lines});
-  // } else {
-  //   ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse});
-  // }
+  if (cell->GetNHasGaussian()) {
+    auto n_eclipse =
+        MarkerOfEclipse(cell->GetPointMean() + cell->GetNormalMean(),
+                        cell->GetNormalCov(), Color::kGray);
+    auto points = FindTangentPoints(n_eclipse, cell->GetPointMean());
+    auto lines = MarkerOfLines({points[0], cell->GetPointMean(), cell->GetPointMean(), points[1]}, Color::kGray);
+    ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse, n_eclipse, lines});
+  } else {
+    ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse});
+  }
 
   // New
-  auto normal =
-      MarkerOfArrow(cell->GetPointMean(),
-                    cell->GetPointMean() + cell->GetPointEvecs().col(1));
-  ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse, normal});
+  // auto normal =
+  //     MarkerOfArrow(cell->GetPointMean(),
+  //                   cell->GetPointMean() + cell->GetPointEvecs().col(1));
+  // ret = JoinMarkerArraysAndMarkers({}, {boundary, p_eclipse, normal});
   return ret;
 }
 
@@ -344,6 +427,8 @@ MarkerArray MarkerArrayOfNDTMap(const NDTMap &map,
                                 bool is_target_color) {
   vector<MarkerArray> vma;
   for (auto cell : map) {
+    // FIXME: omit when no gaussian
+    if (!cell->BothHasGaussian()) { continue; }
     if (is_target_color)
       vma.push_back(MarkerArrayOfNDTCell2(cell));
     else
@@ -356,12 +441,24 @@ MarkerArray MarkerArrayOfNDTMap(const vector<shared_ptr<NDTCell>> &map,
                                 bool is_target_color) {
   vector<MarkerArray> vma;
   for (auto cell : map) {
+    // FIXME: omit when no gaussian
+    if (!cell->BothHasGaussian()) continue;
     if (is_target_color)
       vma.push_back(MarkerArrayOfNDTCell2(cell.get()));
     else
       vma.push_back(MarkerArrayOfNDTCell(cell.get()));
   }
   return JoinMarkerArraysAndMarkers(vma);
+}
+
+// TODO: add text with cost value at the middle point
+MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell, const NDTCell *target_cell) {
+  auto mas = MarkerArrayOfNDTCell(source_cell);
+  auto mat = MarkerArrayOfNDTCell2(target_cell);
+  auto line =
+      MarkerOfLines({source_cell->GetPointMean(), target_cell->GetPointMean()},
+                    Color::kBlack, 1);
+  return JoinMarkerArraysAndMarkers({mas, mat}, {line});
 }
 
 MarkerArray MarkerArrayOfSensor(const vector<Affine2d> &affs) {
@@ -375,8 +472,10 @@ MarkerArray MarkerArrayOfSensor(const vector<Affine2d> &affs) {
     m.id = i++;
     m.type = Marker::CUBE;
     m.action = Marker::ADD;
-    m.pose = tf2::toMsg(common::Affine3dFromAffine2d(aff));
-    m.color = common::MakeColorRGBA(common::Color::kGray);
+    Affine3d aff3 = Translation3d(aff.translation().x(), aff.translation().y(), 0) *
+                    AngleAxisd(Rotation2Dd(aff.rotation()).angle(), Vector3d::UnitZ());
+    m.pose = tf2::toMsg(aff3);
+    m.color = MakeColorRGBA(Color::kGray);
     m.scale.x = 0.3;
     m.scale.y = 1.0;
     m.scale.z = 0.5;

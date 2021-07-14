@@ -191,7 +191,7 @@ void InfoOfNDTMap(const NDTMap &map, double radius, Info &info) {
     if (cell->BothHasGaussian())
       ++v9_cellgaus[cell->GetN() - 1];
   }
-  info.v3_cellsize = map.cell_size()(0);
+  info.v3_cellsize = map.cell_size();
   info.v6_radius = radius; 
   info.v6_validnm = v6_validnm;
   info.v6_invalidnm = v6_invalidnm;
@@ -325,7 +325,7 @@ int main(int argc, char **argv) {
     vqs.push_back(MarkerArrayOfNDTCell2(cellq));
     lines.push_back(cellp->GetPointMean());
     lines.push_back(cellq->GetPointMean());
-    auto linemarker = MarkerOfLines({cellp->GetPointMean(), cellq->GetPointMean()}, common::Color::kBlack, 1.0);
+    auto linemarker = MarkerOfLines({cellp->GetPointMean(), cellq->GetPointMean()}, Color::kBlack, 1.0);
     corres.push_back(JoinMarkerArraysAndMarkers({vps.back(), vqs.back()}, {linemarker}));
     // meancovs.push_back(CostFunctions::OldMeanAndCov(cellp.get(), cellq));
     meancovs.push_back(CostFunctions::NewMeanAndCov(cellp.get(), cellq));
@@ -367,16 +367,16 @@ int main(int argc, char **argv) {
   pub5.publish(MarkerArrayOfSensor(affs));
   pub6.publish(MarkerArrayOfSensor(afft));
 
-  pb1.publish(MarkerOfLines(lines, common::Color::kBlack, 1.0));
+  pb1.publish(MarkerOfLines(lines, Color::kBlack, 1.0));
   pb2.publish(MarkerOfPoints(PointsOfNDTMap(maps2), 0.1));
-  pb3.publish(MarkerOfPoints(PointsOfNDTMap(mapt), 0.1, common::Color::kRed));
+  pb3.publish(MarkerOfPoints(PointsOfNDTMap(mapt), 0.1, Color::kRed));
   vector<Vector2d> cars, cart;
   transform(T1116s.begin(), T1116s.end(), back_inserter(cars), [&T611](auto a) { return T611 * a.translation(); });
   transform(T611s.begin(), T611s.end(), back_inserter(cart), [](auto a) { return a.translation(); });
-  auto mcarsp = MarkerOfPoints(cars, 0.1, common::Color::kBlack);
-  auto mcartp = MarkerOfPoints(cart, 0.1, common::Color::kBlack);
-  auto mcars = MarkerOfLinesByEndPoints(cars, common::Color::kRed, 1.0);
-  auto mcart = MarkerOfLinesByEndPoints(cart, common::Color::kLime, 1.0);
+  auto mcarsp = MarkerOfPoints(cars, 0.1, Color::kBlack);
+  auto mcartp = MarkerOfPoints(cart, 0.1, Color::kBlack);
+  auto mcars = MarkerOfLinesByEndPoints(cars, Color::kRed, 1.0);
+  auto mcart = MarkerOfLinesByEndPoints(cart, Color::kLime, 1.0);
   pub8.publish(JoinMarkers({mcars, mcarsp}));
   pub9.publish(JoinMarkers({mcart, mcartp}));
   ros::spin();

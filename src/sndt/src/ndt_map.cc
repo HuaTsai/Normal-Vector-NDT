@@ -70,7 +70,7 @@ MatrixXd ComputeNormals2(const MatrixXd &pc, double radius) {
 
 NDTMap::NDTMap(double cell_size) {
   index_ = new NDTGrid(cell_size);
-  cell_size_ << cell_size, cell_size;
+  cell_size_ = cell_size;
   map_center_.setZero();
   map_size_.setZero();
   guess_map_size_ = true;
@@ -97,7 +97,7 @@ void NDTMap::LoadPointCloud(const PCXY &pc, const PCXY &normals,
   Expects(pc.size() == normals.size());
   if (is_initialized_) {
     delete index_;
-    index_ = new NDTGrid(cell_size_(0));
+    index_ = new NDTGrid(cell_size_);
   }
   if (guess_map_size_) GuessMapSize(pc, range_limit);
   index_->SetGridCenter(map_center_);
@@ -130,7 +130,7 @@ void NDTMap::LoadPointCloudWithCovariances(const MatrixXd &points,
 
   if (is_initialized_) {
     delete index_;
-    index_ = new NDTGrid(cell_size_(0));
+    index_ = new NDTGrid(cell_size_);
   }
   if (guess_map_size_) GuessMapSize(points, range_limit);
   index_->SetGridCenter(map_center_);

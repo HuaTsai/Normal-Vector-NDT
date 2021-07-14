@@ -13,6 +13,9 @@
 #include <boost/program_options.hpp>
 #include <sndt/ndt_cell.h>
 #include <sndt/ndt_visualizations.h>
+#include <tf2_eigen/tf2_eigen.h>
+#include <ros/ros.h>
+#include <gsl/gsl>
 
 using namespace std;
 using namespace Eigen;
@@ -32,7 +35,7 @@ visualization_msgs::MarkerArray MakePointsNormalMarker(const MatrixXd &pts, cons
   points.scale.y = 0.1;
   points.scale.z = 0.1;
   points.pose = tf2::toMsg(Affine3d::Identity());
-  points.color = common::MakeColorRGBA(common::Color::kLime);
+  points.color = MakeColorRGBA(Color::kLime);
   for (int i = 0; i < n; ++i) {
     geometry_msgs::Point pt;
     pt.x = pts(0, i), pt.y = pts(1, i), pt.z = 0;
@@ -49,7 +52,7 @@ visualization_msgs::MarkerArray MakePointsNormalMarker(const MatrixXd &pts, cons
   normal.scale.x = 0.05;
   normal.scale.y = 0.2;
   normal.pose = tf2::toMsg(Affine3d::Identity());
-  normal.color = common::MakeColorRGBA(common::Color::kRed);
+  normal.color = MakeColorRGBA(Color::kRed);
   normal.points.resize(2);
   for (int i = 0; i < n; ++i) {
     ++normal.id;

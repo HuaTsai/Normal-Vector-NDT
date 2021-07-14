@@ -108,11 +108,10 @@ int main(int argc, char **argv) {
     auto ma4_nm_ = MarkerArrayOfArrow(cell->GetPointsMatrix(), cell->GetPointsMatrix() + cell->GetNormalsMatrix());
     ma4_nm = JoinMarkerArraysAndMarkers({ma4_nm, ma4_nm_});
     if (cell->GetNHasGaussian()) {
-      auto neclipse = MarkerOfEclipse(cell->GetPointMean() + cell->GetNormalMean(), cell->GetNormalCov(), common::Color::kGray);
+      auto neclipse = MarkerOfEclipse(cell->GetPointMean() + cell->GetNormalMean(), cell->GetNormalCov(), Color::kGray);
       UpdateMarkerArray(ma5_nmc, neclipse);
       auto points = FindTangentPoints(neclipse, cell->GetPointMean());
-      UpdateMarkerArray(ma6_tg, MarkerOfLines({points[0], cell->GetPointMean(),
-                                               cell->GetPointMean(), points[1]}));
+      UpdateMarkerArray(ma6_tg, MarkerOfLines({points[0], cell->GetPointMean(), cell->GetPointMean(), points[1]}));
     }
     UpdateMarkerArray(ma7_bd, MarkerOfBoundary(cell->GetCenter(), cell->GetSize(), cell->GetSkewRad()));
   }

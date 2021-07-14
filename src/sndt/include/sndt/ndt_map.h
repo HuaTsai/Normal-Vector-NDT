@@ -78,15 +78,15 @@ class NDTMap {
   NDTGrid *index() const { return index_; }
   Vector2d map_size() const { return map_size_; }
   Vector2d map_center() const { return map_center_; }
-  Vector2d cell_size() const { return cell_size_; }
+  double cell_size() const { return cell_size_; }
 
  private:
   NDTGrid *index_;
   bool is_initialized_;
   bool guess_map_size_;
+  double cell_size_;
   Vector2d map_size_;
   Vector2d map_center_;
-  Vector2d cell_size_;
 
   void GuessMapSize(const PCXY &pc, double range_limit = -1);
   void GuessMapSize(const MatrixXd &pc, double range_limit = -1);

@@ -184,7 +184,7 @@ int main(int argc, char **argv) {
   ros::Publisher pub2 = nh.advertise<visualization_msgs::MarkerArray>("markers2", 0, true);
   auto ma1 = MarkerArrayOfNDTCell(cellp);
   auto ma2 = MarkerArrayOfNDTCell2(cellq);
-  auto ma3 = MarkerOfLines({cellp->GetPointMean(), cellq->GetPointMean()}, common::Color::kBlack, 1.0);
+  auto ma3 = MarkerOfLines({cellp->GetPointMean(), cellq->GetPointMean()}, Color::kBlack, 1.0);
   pub1.publish(JoinMarkerArraysAndMarkers({ma1, ma2}, {ma3}));
   ros::spin();
 }

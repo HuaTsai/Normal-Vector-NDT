@@ -47,14 +47,12 @@ struct CostFunction {
                anp * sin(th) * sin(th) + 2. * bnp * sin(th) * cos(th) +
                    cnp * cos(th) * cos(th) + cnq};
     T f = (m1[0] * m2[0] + m1[1] * m2[1]) * (m1[0] * m2[0] + m1[1] * m2[1]);
-    // T f = m1[0] * m2[0] + m1[1] * m2[1];
     T g = (c2[0] * m1[0] * m1[0] + 2. * c2[1] * m1[0] * m1[1] +
            c2[2] * m1[1] * m1[1]) +
           (c1[0] * m2[0] * m2[0] + 2. * c1[1] * m2[0] * m2[1] +
            c1[2] * m2[1] * m2[1]) +
           (c1[0] * c2[0] + 2. * c1[1] * c2[1] + c1[2] * c2[2]);
     T l = f / g;
-    // e[0] = -exp(l / 2.);
     e[0] = l;
     return true;
   }
@@ -167,6 +165,7 @@ NDTMatcher::NDTMatcher() {
 }
 
 Matrix3d NDTMatcher::CeresMatch(NDTMap &target_map, NDTMap &source_map, const Matrix3d &guess_tf) {
+  vmas.clear();
   auto kd = MakeKDTree(target_map);
   bool converge = false;
   double max_dist2 = numeric_limits<double>::max();
@@ -181,7 +180,11 @@ Matrix3d NDTMatcher::CeresMatch(NDTMap &target_map, NDTMap &source_map, const Ma
     auto nextNDT = source_map.PseudoTransformCells(cur_tf);
     ceres::Problem problem;
 
+    int corres_cnt = 0;
+    vector<MarkerArray> vma;
     for (auto cellp : nextNDT) {
+      if (!cellp->BothHasGaussian()) continue;
+
       if (strategy_ == kDEFAULT) {
         auto cellq = target_map.GetClosestCellForPoint(cellp->GetPointMean(),
                                                         maxdist_of_cells_);
@@ -205,8 +208,27 @@ Matrix3d NDTMatcher::CeresMatch(NDTMap &target_map, NDTMap &source_map, const Ma
                       kd.getInputCloud()->at(idx.at(0)).y));
         if (!cellq || !cellq->BothHasGaussian()) continue;
         dist2s.push_back({dist2.front(), {cellp.get(), cellq}});
+      } else if (strategy_ == kUSE_CELLS_GREATER_THAN_TWO_POINTS) {
+        pcl::PointXYZ pt;
+        pt.x = cellp->GetPointMean()(0), pt.y = cellp->GetPointMean()(1), pt.z = 0;
+        vector<int> idx{0};
+        vector<float> dist2{0};
+        int found = kd.nearestKSearch(pt, 1, idx, dist2);
+        if (!found) continue;
+        auto cellq = target_map.GetCellForPoint(
+            Vector2d(kd.getInputCloud()->at(idx.at(0)).x,
+                      kd.getInputCloud()->at(idx.at(0)).y));
+        if (!cellq || !cellq->BothHasGaussian()) continue;
+        vma.push_back(MarkerArrayOfCorrespondences(cellp.get(), cellq));
+        problem.AddResidualBlock(
+            new ceres::AutoDiffCostFunction<CostFunction, 1, 3>(
+                new CostFunction(cellp.get(), cellq)),
+            nullptr, xyt);
+        ++corres_cnt;
       }
     }
+    vmas.push_back(JoinMarkerArraysAndMarkers(vma));
+    cout << "Iteration " << iteration_ << ": " << corres_cnt << "Corres" << endl;
 
     if (strategy_ == kNEAREST_1_POINTS) {
       sort(dist2s.begin(), dist2s.end(),

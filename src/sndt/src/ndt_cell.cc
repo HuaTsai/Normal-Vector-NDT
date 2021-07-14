@@ -27,7 +27,7 @@ Matrix2d ComputeCov(const vector<Vector2d> &points, const Vector2d &mean,
                     const Matrix2d &intrinsic = Matrix2d::Zero()) {
   Matrix2d ret;
   int n = points.size();
-  if (n == 1) { return intrinsic; }
+  if (n <= 2) { return intrinsic; }
   MatrixXd mp(2, n);
   for (int i = 0; i < n; ++i)
     mp.col(i) = points.at(i) - mean;
@@ -45,23 +45,30 @@ Matrix2d ComputeCov(const vector<Vector2d> &points, const Vector2d &mean,
 void ComputeEvalEvec(const Matrix2d &covariance, Vector2d &evals,
                      Matrix2d &evecs) {
   EigenSolver<Matrix2d> es(covariance);
-  Matrix2d evals_ = es.pseudoEigenvalueMatrix();
-  Matrix2d evecs_ = es.pseudoEigenvectors();
-  if (evals_(0, 0) < evals_(1, 1)) {
-    evals(0) = evals_(1, 1);
-    evals(1) = evals_(0, 0);
-    evecs.col(0) = evecs_.col(1);
-    evecs.col(1) = evecs_.col(0);
-  } else {
-    evals = evals_.diagonal();
-    evecs = evecs_;
-  }
+  evals = es.pseudoEigenvalueMatrix().diagonal();
+  evecs = es.pseudoEigenvectors();
 }
 
 vector<Vector2d> ExcludeNaNInf(const vector<Vector2d> &points) {
   vector<Vector2d> ret;
   copy_if(points.begin(), points.end(), back_inserter(ret),
           [](const Vector2d &v) { return v.allFinite(); });
+  return ret;
+}
+
+// FIXME: not use now, we should not remove duplicates
+vector<Vector2d> RemoveDuplicates(const vector<Vector2d> &points) {
+  vector<Vector2d> ret;
+  for (const auto &pt : points) {
+    bool exist = false;
+    for (const auto &retpt : ret)
+      if (retpt == pt) {
+        exist = true;
+        break;
+      }
+    if (!exist)
+      ret.push_back(pt);
+  }
   return ret;
 }
 
@@ -139,19 +146,35 @@ void NDTCell::ComputePGaussianWithCovariances() {
     pcov_ = ComputeCov(valids.first, pmean_, valids.second);
     if (!pcov_.isZero()) {
       ComputeEvalEvec(pcov_, pevals_, pevecs_);
-      phasgaussian_ = true;
+      if (pevals_(0) != 0 && pevals_(1) != 0)
+        phasgaussian_ = true;
     }
   }
 }
 
+// TODO: set minimum eigen value
 void NDTCell::ComputeNGaussianWithCovariances() {
   if (!nhasgaussian_) {
     nmean_.setZero(), ncov_.setZero();
     auto valids = ExcludeNaNInf(normals_);
     if (!valids.size()) { return; }
     nmean_ = ComputeMean(valids);
-    ncov_ = ComputeCov(valids, nmean_, Matrix2d::Identity() * 0.1);
-    if (!ncov_.isZero()) nhasgaussian_ = true;
+    // FIXME: Here we try to use cell that >= 3 points
+    // ncov_ = ComputeCov(valids, nmean_, Matrix2d::Identity() * 0.01);
+    ncov_ = ComputeCov(valids, nmean_);
+    if (!ncov_.isZero()) {
+      ComputeEvalEvec(ncov_, nevals_, nevecs_);
+      if (nevals_(0) <= 0 || nevals_(1) <= 0)
+        return;
+      int maxidx, minidx;
+      double maxval = nevals_.maxCoeff(&maxidx);
+      double minval = nevals_.minCoeff(&minidx);
+      if (maxval > 1000 * minval) {
+        nevals_(minidx) = maxval / 1000.;
+        ncov_ = nevecs_ * nevals_.asDiagonal() * nevecs_.transpose();
+      }
+      nhasgaussian_ = true;
+    }
   }
 }
 
@@ -196,9 +219,15 @@ string NDTCell::ToString() {
      << "  μp: (" << pmean_(0) << ", " << pmean_(1) << ")" << endl
      << "  Σp: (" << pcov_(0, 0) << ", " << pcov_(0, 1) << ", " << pcov_(1, 0)
      << ", " << pcov_(1, 1) << ")" << endl
+     << " evp: (" << pevals_(0) << ", " << pevals_(1) << ")" << endl
+     << " ecp: (" << pevecs_(0, 0) << ", " << pevecs_(1, 0) << ")"
+     << ", (" << pevecs_(1, 0) << ", " << pevecs_(1, 1) << ")" << endl
      << "  μn: (" << nmean_(0) << ", " << nmean_(1) << ")" << endl
      << "  Σn: (" << ncov_(0, 0) << ", " << ncov_(0, 1) << ", " << ncov_(1, 0)
-     << ", " << ncov_(1, 1) << ")" << endl;
+     << ", " << ncov_(1, 1) << ")" << endl
+     << " evn: (" << nevals_(0) << ", " << nevals_(1) << ")" << endl
+     << " ecn: (" << nevecs_(0, 0) << ", " << nevecs_(1, 0) << ")"
+     << ", (" << nevecs_(1, 0) << ", " << nevecs_(1, 1) << ")" << endl;
   for (int i = 0; i < N_; ++i) {
     ss << "  p[" << i << "]: (" << points_[i](0) << ", " << points_[i](1) << ")"
        << endl

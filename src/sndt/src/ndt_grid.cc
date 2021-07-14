@@ -10,7 +10,7 @@ using namespace Eigen;
 
 NDTGrid::NDTGrid(double cell_size) {
   has_grid_center_ = has_cellptrs_size_ = is_initialized_ = false;
-  cell_size_ = 0;
+  cell_size_ = cell_size;
   grid_center_.setZero();
   grid_size_.setZero();
   grid_center_index_.setZero();

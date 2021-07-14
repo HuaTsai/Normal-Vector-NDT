@@ -1,9 +1,9 @@
 #pragma once
 
 #include <bits/stdc++.h>
-#include <common/common.h>
 
 #include <Eigen/Eigen>
+#include <visualization_msgs/MarkerArray.h>
 
 #include "sndt/ndt_map.h"
 
@@ -11,6 +11,20 @@ using namespace std;
 using namespace Eigen;
 using visualization_msgs::Marker;
 using visualization_msgs::MarkerArray;
+
+enum class Color {
+  kRed,
+  kLime,
+  kBlue,
+  kWhite,
+  kBlack,
+  kGray,
+  kYellow,
+  kAqua,
+  kFuchsia
+};
+
+std_msgs::ColorRGBA MakeColorRGBA(const Color &color, double alpha = 1.);
 
 vector<Vector2d> FindTangentPoints(const Marker &eclipse,
                                    const Vector2d &point);
@@ -24,38 +38,46 @@ MarkerArray JoinMarkerArraysAndMarkers(const vector<MarkerArray> &mas,
 
 Marker MarkerOfBoundary(const Vector2d &center, double size,
                         double skew_rad = 0,
-                        const common::Color &color = common::Color::kBlack);
+                        const Color &color = Color::kBlack);
 
 Marker MarkerOfEclipse(const Vector2d &mean, const Matrix2d &covariance,
-                       const common::Color &color = common::Color::kLime,
+                       const Color &color = Color::kLime,
                        double alpha = 0.6);
 
+Marker MarkerOfCircle(const Vector2d &mean, double size,
+                      const Color &color = Color::kLime,
+                      double alpha = 0.6);
+
 Marker MarkerOfLines(const vector<Vector2d> &points,
-                     const common::Color &color = common::Color::kGray,
+                     const Color &color = Color::kGray,
                      double alpha = 0.6);
 
 Marker MarkerOfLinesByEndPoints(
     const vector<Vector2d> &points,
-    const common::Color &color = common::Color::kGray, double alpha = 0.6);
+    const Color &color = Color::kGray, double alpha = 0.6);
 
 vector<Vector2d> PointsOfNDTMap(const NDTMap &map);
 
 vector<Vector2d> PointsOfNDTMap(const vector<shared_ptr<NDTCell>> &map);
 
 Marker MarkerOfPoints(const vector<Vector2d> &points, double size = 0.1,
-                      const common::Color &color = common::Color::kLime,
+                      const Color &color = Color::kLime,
                       double alpha = 1.0);
 
 Marker MarkerOfPoints(const MatrixXd &points, double size = 0.1,
-                      const common::Color &color = common::Color::kLime,
+                      const Color &color = Color::kLime,
                       double alpha = 1.0);
 
 Marker MarkerOfArrow(const Vector2d &start, const Vector2d &end,
-                     const common::Color &color = common::Color::kGray,
+                     const Color &color = Color::kGray,
                      double alpha = 0.6);
 
 MarkerArray MarkerArrayOfArrow(const MatrixXd &start, const MatrixXd &end,
-                               const common::Color &color = common::Color::kRed,
+                               const Color &color = Color::kRed,
+                               double alpha = 1.0);
+
+MarkerArray MarkerArrayOfArrow(const vector<Vector2d> &starts, const vector<Vector2d> &ends,
+                               const Color &color = Color::kRed,
                                double alpha = 1.0);
 
 // Color set for general usage
@@ -69,5 +91,7 @@ MarkerArray MarkerArrayOfNDTMap(const NDTMap &map,
 
 MarkerArray MarkerArrayOfNDTMap(const vector<shared_ptr<NDTCell>> &map,
                                 bool is_target_color = false);
+
+MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell, const NDTCell *target_cell);
 
 MarkerArray MarkerArrayOfSensor(const vector<Affine2d> &affs);
