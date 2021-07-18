@@ -1,10 +1,12 @@
 #include <bits/stdc++.h>
 #include <nav_msgs/Path.h>
 #include "common/common.h"
+#include <boost/program_options.hpp>
 
+namespace po = boost::program_options;
 using namespace std;
 
-void MakeLocalGt(nav_msgs::Path &path, ros::Time start) {
+void MakeGtLocal(nav_msgs::Path &path, ros::Time start) {
   auto startpose = common::GetPose(path.poses, start);
   Eigen::Affine3d preT;
   tf2::fromMsg(startpose, preT);
@@ -37,15 +39,25 @@ void WriteToFile(const nav_msgs::Path &path, string filename) {
 }
 
 int main(int argc, char **argv) {
-  nav_msgs::Path path, pathgt, pathgtsync;
-  common::SerializationInput(argv[1], path);
-  common::SerializationInput(argv[2], pathgt);
-  // for (auto &p : path.poses) {
-  //   geometry_msgs::PoseStamped pst;
-  //   pst.header = p.header;
-  //   pst.pose = common::GetPose(pathgt.poses, p.header.stamp);
-  // }
-  MakeLocalGt(pathgt, path.poses[0].header.stamp);
-  WriteToFile(path, "stamped_traj_estimate.txt");
-  WriteToFile(pathgt, "stamped_groundtruth.txt");
+  string estpathfile, gtpathfile, outfolder;
+  po::options_description desc("Allowed options");
+  desc.add_options()
+      ("help,h", "Produce help message")
+      ("estpath,e", po::value<string>(&estpathfile)->required(), "Path of estpath.ser")
+      ("gtpath,g", po::value<string>(&gtpathfile)->required(), "Path of gtpath.ser")
+      ("outpath,o", po::value<string>(&outfolder)->required(), "Path of output folder");
+  po::variables_map vm;
+  po::store(po::parse_command_line(argc, argv, desc), vm);
+  po::notify(vm);
+  if (vm.count("help")) {
+    cout << desc << endl;
+    return 1;
+  }
+
+  nav_msgs::Path estpath, gtpath;
+  common::SerializationInput(estpathfile, estpath);
+  common::SerializationInput(gtpathfile, gtpath);
+  MakeGtLocal(gtpath, estpath.poses[0].header.stamp);
+  WriteToFile(estpath, outfolder + "/" + "stamped_traj_estimate.txt");
+  WriteToFile(gtpath, outfolder + "/" + "stamped_groundtruth.txt");
 }

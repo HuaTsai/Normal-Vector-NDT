@@ -22,11 +22,13 @@ using namespace visualization_msgs;
 namespace po = boost::program_options;
 
 vector<common::EgoPointClouds> vepcs;  
-ros::Publisher pub1, pub2, pub3, pub4, pub5, pub6;
+ros::Publisher pub1, pub2, pub3, pub4, pub5, pub6, pubd;
 vector<Marker> allcircs;
 vector<MarkerArray> vmas;
+vector<Vector2d> costs;
 int frames;
 double cell_size, radius;
+bool usehuber;
 
 // start, ..., end, end+1
 // <<------- T -------->>
@@ -76,13 +78,15 @@ void cb(const std_msgs::Int32 &num) {
 
   NDTMatcher matcher;
   matcher.SetStrategy(NDTMatcher::kUSE_CELLS_GREATER_THAN_TWO_POINTS);
+  matcher.usehuber = usehuber;
   cout << "start frame: " << start_frame << endl;
   auto res = matcher.CeresMatch(mapt, maps, T611);
   vmas = matcher.vmas;
+  costs = matcher.costs;
+
   cout << "guess: " << common::XYTDegreeFromMatrix3d(T611.matrix()).transpose() << endl;
   cout << "result: " << common::XYTDegreeFromMatrix3d(res.matrix()).transpose() << endl;
   auto maps2 = maps.PseudoTransformCells(res, true);
-  cout << "vis mapt" << endl;
 
   pub1.publish(MarkerArrayOfNDTMap(mapt, true));
   pub2.publish(MarkerArrayOfNDTMap(maps));
@@ -105,8 +109,10 @@ void cb(const std_msgs::Int32 &num) {
 
 void cb2(const std_msgs::Int32 &num) {
   int n = num.data;
-  if (n >= 0 && n < (int)vmas.size())
+  if (n >= 0 && n < (int)vmas.size()) {
     pub6.publish(vmas[n]);
+    cout << "cost from " << costs[n][0] << " to " << costs[n][1] << endl;
+  }
 }
 
 int main(int argc, char **argv) {
@@ -117,7 +123,8 @@ int main(int argc, char **argv) {
       ("datapath,p", po::value<string>(&path)->required(), "Data Path")
       ("frames,f", po::value<int>(&frames)->default_value(5), "Frames")
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
-      ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius");
+      ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
+      ("usehuber,u", po::value<bool>(&usehuber)->default_value(false)->implicit_value(true), "Huber");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
@@ -140,6 +147,7 @@ int main(int argc, char **argv) {
   pub4 = nh.advertise<MarkerArray>("markers4", 0, true);  // target sensor
   pub5 = nh.advertise<MarkerArray>("markers5", 0, true);  // source sensor
   pub6 = nh.advertise<MarkerArray>("markers6", 0, true);  // iterations
+  pubd = nh.advertise<Marker>("markerd", 0, true);  // iterations
 
   ros::spin();
 }

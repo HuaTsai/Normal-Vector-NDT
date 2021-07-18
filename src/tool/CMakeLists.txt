@@ -27,3 +27,9 @@ target_link_libraries(showpath ${catkin_LIBRARIES})
 
 add_executable(pathtotext src/pathtotext.cc)
 target_link_libraries(pathtotext ${catkin_LIBRARIES})
+
+add_executable(gtpath src/gtpath.cc)
+target_link_libraries(gtpath ${catkin_LIBRARIES})
+
+add_executable(gtdis src/gtdis.cc)
+target_link_libraries(gtdis ${catkin_LIBRARIES})

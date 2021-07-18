@@ -72,6 +72,9 @@ Marker MarkerOfArrow(const Vector2d &start, const Vector2d &end,
                      const Color &color = Color::kGray,
                      double alpha = 0.6);
 
+Marker MarkerOfText(string text, const Vector2d &position,
+                    const Color &color = Color::kBlack, double alpha = 1.0);
+
 MarkerArray MarkerArrayOfArrow(const MatrixXd &start, const MatrixXd &end,
                                const Color &color = Color::kRed,
                                double alpha = 1.0);
@@ -92,6 +95,7 @@ MarkerArray MarkerArrayOfNDTMap(const NDTMap &map,
 MarkerArray MarkerArrayOfNDTMap(const vector<shared_ptr<NDTCell>> &map,
                                 bool is_target_color = false);
 
-MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell, const NDTCell *target_cell);
+MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell, const NDTCell *target_cell, double score);
+
 
 MarkerArray MarkerArrayOfSensor(const vector<Affine2d> &affs);

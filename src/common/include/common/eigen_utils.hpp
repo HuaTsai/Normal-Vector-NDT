@@ -47,7 +47,7 @@ Eigen::Matrix<double, 6, 1> XYZRPYFromAffine3d(const Eigen::Affine3d &mtx) {
     pitch = angles::normalize_angle(-pitch + M_PI);
     yaw = angles::normalize_angle(yaw + M_PI);
   }
-  ret.block<3, 1>(0, 3) = Eigen::Vector3d(roll, pitch, yaw);
+  ret.block<3, 1>(3, 0) = Eigen::Vector3d(roll, pitch, yaw);
   return ret;
 }
 
@@ -117,7 +117,7 @@ geometry_msgs::TransformStamped TstFromMatrix4f(
 Eigen::Affine3d Conserve2DFromAffine3d(const Eigen::Affine3d &T) {
   auto xyzrpy = XYZRPYFromAffine3d(T);
   auto xyz = xyzrpy.block<3, 1>(0, 0);
-  auto rpy = xyzrpy.block<3, 1>(0, 3);
+  auto rpy = xyzrpy.block<3, 1>(3, 0);
   xyz(2) = rpy(0) = rpy(1) = 0;
   return Affine3dFromXYZRPY(xyz, rpy);
 }

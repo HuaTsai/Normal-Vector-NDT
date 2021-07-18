@@ -84,7 +84,7 @@ bitern = Button(axitern, 'Itern')
 bitern.on_clicked(iterncb)
 
 axiter = plt.axes([0.15, 0.03, 0.1, 0.075])
-biter = Button(axiter, 'Iter0')
-biter.on_clicked(iter0cb)
+biter0 = Button(axiter, 'Iter0')
+biter0.on_clicked(iter0cb)
 
 plt.show()

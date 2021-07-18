@@ -309,6 +309,24 @@ Marker MarkerOfArrow(const Vector2d &start, const Vector2d &end,
   return ret;
 }
 
+Marker MarkerOfText(string text, const Vector2d &position,
+                    const Color &color, double alpha) {
+  visualization_msgs::Marker ret;
+  ret.header.frame_id = "map";
+  ret.header.stamp = ros::Time::now();
+  ret.id = 0;
+  ret.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+  ret.action = visualization_msgs::Marker::ADD;
+  ret.text = text;
+  ret.pose.position.x = position(0);
+  ret.pose.position.y = position(1);
+  ret.pose.position.z = 0;
+  ret.pose.orientation.w = 1;
+  ret.scale.z = 0.7;
+  ret.color = MakeColorRGBA(color);
+  return ret;
+}
+
 MarkerArray MarkerArrayOfArrow(const MatrixXd &start, const MatrixXd &end,
                                const Color &color,
                                double alpha) {
@@ -452,13 +470,17 @@ MarkerArray MarkerArrayOfNDTMap(const vector<shared_ptr<NDTCell>> &map,
 }
 
 // TODO: add text with cost value at the middle point
-MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell, const NDTCell *target_cell) {
+MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell, const NDTCell *target_cell, double score) {
   auto mas = MarkerArrayOfNDTCell(source_cell);
   auto mat = MarkerArrayOfNDTCell2(target_cell);
   auto line =
       MarkerOfLines({source_cell->GetPointMean(), target_cell->GetPointMean()},
                     Color::kBlack, 1);
-  return JoinMarkerArraysAndMarkers({mas, mat}, {line});
+  Vector2d middle = (source_cell->GetPointMean() + target_cell->GetPointMean()) / 2;
+  char buf[10];
+  sprintf(buf, "%.2f", score);
+  auto text = MarkerOfText(string(buf), middle);
+  return JoinMarkerArraysAndMarkers({mas, mat}, {line, text});
 }
 
 MarkerArray MarkerArrayOfSensor(const vector<Affine2d> &affs) {

@@ -29,6 +29,9 @@ class NDTMatcher {
   void SetThreshold(double threshold) { threshold_ = threshold; }
 
   vector<MarkerArray> vmas;
+  vector<Vector2d> costs;
+  bool usehuber;
+  bool verbose;
  private:
   Strategy strategy_;
   int max_iterations_;

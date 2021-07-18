@@ -354,15 +354,15 @@ if __name__ == '__main__':
         default=default_path)
 
     parser.add_argument(
-        '--platform', help='HW platform: [laptop, nuc, odroid, up]',
-        default='laptop')
+        '--platform', help='HW platform: [pc, laptop, nuc, odroid, up]',
+        default='pc')
     parser.add_argument(
         '--alg',
         help='Algorithm configurations',
         default='all')
     parser.add_argument(
         '--dataset',
-        help='[MH_01,...,MH_05,V1_01,...,V1_03,V2_01,...,V2_03, all]',
+        help='log24,log62,log62-2 or all',
         default='all')
 
     parser.add_argument(
@@ -402,14 +402,15 @@ if __name__ == '__main__':
         ALGORITHM_CONFIGS = alg
     print('Will process configurations: {0}'.format(alg))
 
-    datasets = [args.dataset]
+    datasets = args.dataset.split(',')
     if args.dataset is 'all':
         datasets = DATASETS
     else:
-        DATASETS = [datasets]
+        DATASETS = datasets
     print("Will process datasets: {0}".format(datasets))
 
     if args.png:
+        rc('text', usetex=False)
         FORMAT = '.png'
 
     print("#####################################")
@@ -482,7 +483,7 @@ if __name__ == '__main__':
     print(">>> Start plotting and writing results....")
     print("#####################################")
     if args.plot_trajectories:
-        print('\n--- Plotting trajectory top and side view ... ---')
+        print('\n--- Plotting trajectory top view ... ---')
         plot_trajectories(dataset_trajectories_list, datasets, output_dir)
     if args.odometry_error_per_dataset:
         print('\n--- Generating relative (KITTI style) error plots... ---')
