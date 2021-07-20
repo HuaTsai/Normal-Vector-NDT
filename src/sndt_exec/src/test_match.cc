@@ -16,19 +16,21 @@
 #include <std_msgs/Int32.h>
 #include <geometry_msgs/Vector3.h>
 #include <std_msgs/Float64MultiArray.h>
+#include <nav_msgs/Path.h>
 
 using namespace std;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
 
 vector<common::EgoPointClouds> vepcs;  
-ros::Publisher pub1, pub2, pub3, pub4, pub5, pub6, pubd;
+ros::Publisher pub1, pub2, pub3, pub4, pub5, pub6, pub7, pubd, pube;
 vector<Marker> allcircs;
 vector<MarkerArray> vmas;
 vector<Vector2d> costs;
 int frames;
-double cell_size, radius;
+double cell_size, radius, rvar, tvar;
 bool usehuber;
+nav_msgs::Path gtpath;
 
 // start, ..., end, end+1
 // <<------- T -------->>
@@ -60,51 +62,62 @@ vector<pair<MatrixXd, Affine2d>> Augment(
   return ret;
 }
 
+// i-f, ..., i-1 | i, i+1, ..., i+f-1 | i+f, ..., i+2f-1 | i+2f -> actual id
+// ..., ...,  m  | i, ..., ...,   n   |  o , ...,   p    |  q   -> symbol id
+// -- frames  -- | ----- target ----- | ---- source ---- |
+//                 <<---- Computed T ---->>
+//                Tr (before iter)      Tr (after iter)
 void cb(const std_msgs::Int32 &num) {
-  int start_frame = num.data;
-  vector<Affine2d> T611s, T1116s;
-  Affine2d T611, T1116;
-  auto datat = Augment(vepcs, start_frame, start_frame + frames - 1, T611, T611s);
-  auto mapt = MakeMap(datat, {0.0625, 0.0001}, {cell_size, radius});
+  int i = num.data;
+  int f = frames;
+  Affine2d Tio, Toq;
+  vector<Affine2d> Tios, Toqs;
+  auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
+  auto mapt = MakeMap(datat, {rvar, tvar}, {cell_size, radius});
   int tvc = count_if(mapt.begin(), mapt.end(), [](NDTCell *cell) { return cell->BothHasGaussian(); });
-  // cout << mapt.ToString() << endl;
 
-  auto datas = Augment(vepcs, start_frame + frames, start_frame + 2 * frames - 1, T1116, T1116s);
-  auto maps = MakeMap(datas, {0.0625, 0.0001}, {cell_size, radius});
+  auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
+  auto maps = MakeMap(datas, {rvar, tvar}, {cell_size, radius});
   int svc = count_if(maps.begin(), maps.end(), [](NDTCell *cell) { return cell->BothHasGaussian(); });
   cout << "valid target cells: " << tvc << endl;
   cout << "valid source cells: " << svc << endl;
-  // cerr << maps.ToString() << endl;
+
+  /********* Compute Ground Truth *********/
+  Affine3d To, Ti;
+  tf2::fromMsg(common::GetPose(gtpath.poses, vepcs[i + f].stamp), To);
+  tf2::fromMsg(common::GetPose(gtpath.poses, vepcs[i].stamp), Ti);
+  Affine3d gtTio3 = common::Conserve2DFromAffine3d(Ti.inverse() * To);
+  Affine2d gtTio = Translation2d(gtTio3.translation()(0), gtTio3.translation()(1)) *
+                   Rotation2Dd(gtTio3.rotation().block<2, 2>(0, 0));
+  /********* Compute End Here     *********/
 
   NDTMatcher matcher;
   matcher.SetStrategy(NDTMatcher::kUSE_CELLS_GREATER_THAN_TWO_POINTS);
   matcher.usehuber = usehuber;
-  cout << "start frame: " << start_frame << endl;
-  auto res = matcher.CeresMatch(mapt, maps, T611);
+  cout << "start frame: " << i << endl;
+  auto res = matcher.CeresMatch(mapt, maps, Tio);
   vmas = matcher.vmas;
   costs = matcher.costs;
 
-  cout << "guess: " << common::XYTDegreeFromMatrix3d(T611.matrix()).transpose() << endl;
+  cout << "guess: " << common::XYTDegreeFromMatrix3d(Tio.matrix()).transpose() << endl;
   cout << "result: " << common::XYTDegreeFromMatrix3d(res.matrix()).transpose() << endl;
+  cout << "grount truth: " << common::XYTDegreeFromMatrix3d(gtTio.matrix()).transpose() << endl;
+  auto err = common::TransNormRotDegAbsFromMatrix3d(res.inverse() * gtTio.matrix());
+  cout << "err: " << err.transpose() << endl;
   auto maps2 = maps.PseudoTransformCells(res, true);
+  auto mapsg = maps.PseudoTransformCells(gtTio, true);
 
   pub1.publish(MarkerArrayOfNDTMap(mapt, true));
-  pub2.publish(MarkerArrayOfNDTMap(maps));
-  pub3.publish(MarkerArrayOfNDTMap(maps2));
-  vector<Affine2d> affs, afft;
-  transform(datas.begin(), datas.end(), back_inserter(affs), [&T611](auto a) { return T611 * a.second; });
-  transform(datat.begin(), datat.end(), back_inserter(afft), [](auto a) { return a.second; });
-  vector<Vector2d> cars, cart;
-  transform(T1116s.begin(), T1116s.end(), back_inserter(cars), [&T611](auto a) { return T611 * a.translation(); });
-  transform(T611s.begin(), T611s.end(), back_inserter(cart), [](auto a) { return a.translation(); });
-  pub4.publish(JoinMarkerArraysAndMarkers(
-      {MarkerArrayOfSensor(afft)},
-      {MarkerOfLinesByEndPoints(cart, Color::kLime, 1.0),
-       MarkerOfPoints(cart, 0.1, Color::kBlack)}));
-  pub5.publish(JoinMarkerArraysAndMarkers(
-      {MarkerArrayOfSensor(affs)},
-      {MarkerOfLinesByEndPoints(cars, Color::kRed, 1.0),
-       MarkerOfPoints(cars, 0.1, Color::kBlack)}));
+  pub2.publish(MarkerArrayOfNDTMap(maps));   // source map
+  pub3.publish(MarkerArrayOfNDTMap(maps2));  // source map after T0
+  pub4.publish(MarkerArrayOfNDTMap(mapsg));  // source map after Tgt
+  auto corr = matcher.MarkerArrayOfMapCorrespondences(mapt, maps, Tio.matrix(), res);
+  pub5.publish(corr.first);     // corr Tio
+  pub6.publish(corr.second);    // corr res
+  // pub7.publish(matcher.MarkerArrayOfMapCorrespondences(mapt, maps, gtTio));  // corr Tgt
+  geometry_msgs::Vector3 errmsg;
+  errmsg.x = err(0), errmsg.y = err(1);
+  pube.publish(errmsg);
 }
 
 void cb2(const std_msgs::Int32 &num) {
@@ -116,12 +129,15 @@ void cb2(const std_msgs::Int32 &num) {
 }
 
 int main(int argc, char **argv) {
-  string path;
+  string datafile, gtfile;
   po::options_description desc("Allowed options");
   desc.add_options()
       ("help,h", "Produce help message")
-      ("datapath,p", po::value<string>(&path)->required(), "Data Path")
+      ("gtfile,g", po::value<string>(&gtfile)->required(), "Groudtruth Path")
+      ("datafile,d", po::value<string>(&datafile)->required(), "Data Path")
       ("frames,f", po::value<int>(&frames)->default_value(5), "Frames")
+      ("rvar", po::value<double>(&rvar)->default_value(0.0625), "Intrinsic radius variance")
+      ("tvar", po::value<double>(&tvar)->default_value(0.0001), "Intrinsic theta variance")
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
       ("usehuber,u", po::value<bool>(&usehuber)->default_value(false)->implicit_value(true), "Huber");
@@ -136,7 +152,8 @@ int main(int argc, char **argv) {
   ros::init(argc, argv, "test_match");
   ros::NodeHandle nh;
 
-  common::SerializationInput(path, vepcs);
+  common::SerializationInput(datafile, vepcs);
+  common::SerializationInput(gtfile, gtpath);
 
   ros::Subscriber sub = nh.subscribe("idx", 0, cb);
   ros::Subscriber sub2 = nh.subscribe("iter", 0, cb2);
@@ -144,10 +161,12 @@ int main(int argc, char **argv) {
   pub1 = nh.advertise<MarkerArray>("markers1", 0, true);  // target
   pub2 = nh.advertise<MarkerArray>("markers2", 0, true);  // source
   pub3 = nh.advertise<MarkerArray>("markers3", 0, true);  // aligned source
-  pub4 = nh.advertise<MarkerArray>("markers4", 0, true);  // target sensor
-  pub5 = nh.advertise<MarkerArray>("markers5", 0, true);  // source sensor
-  pub6 = nh.advertise<MarkerArray>("markers6", 0, true);  // iterations
+  pub4 = nh.advertise<MarkerArray>("markers4", 0, true);
+  pub5 = nh.advertise<MarkerArray>("markers5", 0, true);
+  pub6 = nh.advertise<MarkerArray>("markers6", 0, true);
+  pub7 = nh.advertise<MarkerArray>("markers7", 0, true);
   pubd = nh.advertise<Marker>("markerd", 0, true);  // iterations
+  pube = nh.advertise<geometry_msgs::Vector3>("err", 0, true);
 
   ros::spin();
 }

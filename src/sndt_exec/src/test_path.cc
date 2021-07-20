@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
       ("outfile,o", po::value<string>(&outfile)->required(), "Output file path")
       ("frames,f", po::value<int>(&frames)->default_value(5), "Frames")
       ("rvar", po::value<double>(&rvar)->default_value(0.0625), "Intrinsic radius variance")
-      ("tvar", po::value<double>(&rvar)->default_value(0.0001), "Intrinsic theta variance")
+      ("tvar", po::value<double>(&tvar)->default_value(0.0001), "Intrinsic theta variance")
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
       ("usehuber,u", po::value<bool>(&usehuber)->default_value(false)->implicit_value(true), "Use Huber loss");

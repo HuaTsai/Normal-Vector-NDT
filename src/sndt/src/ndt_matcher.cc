@@ -160,8 +160,8 @@ Matrix3d NDTMatcher::CeresMatch(NDTMap &target_map, NDTMap &source_map, const Ma
                       kd.getInputCloud()->at(idx.at(0)).y));
         if (!cellq || !cellq->BothHasGaussian()) continue;
         vma.push_back(MarkerArrayOfCorrespondences(
-            cellp.get(), cellq, CostFunctor::Score(cellp.get(), cellq)));
-        scores.push_back(CostFunctor::Score(cellp.get(), cellq));
+            cellp.get(), cellq, abs(CostFunctor::Score(cellp.get(), cellq))));
+        scores.push_back(abs(CostFunctor::Score(cellp.get(), cellq)));
         // double jj[3] = {0, 0, 0};
         // double ee[1] = {0};
         // CostFunctor(cellp.get(), cellq)(jj, ee);
@@ -190,14 +190,14 @@ Matrix3d NDTMatcher::CeresMatch(NDTMap &target_map, NDTMap &source_map, const Ma
     }
 
     // FIXME: heuristic?
-    problem.SetParameterLowerBound(xyt, 0, -0.3);
-    problem.SetParameterUpperBound(xyt, 0, 0.3);
+    // problem.SetParameterLowerBound(xyt, 0, -0.3);
+    // problem.SetParameterUpperBound(xyt, 0, 0.3);
 
-    problem.SetParameterLowerBound(xyt, 1, -0.1);
-    problem.SetParameterUpperBound(xyt, 1, 0.1);
+    // problem.SetParameterLowerBound(xyt, 1, -0.1);
+    // problem.SetParameterUpperBound(xyt, 1, 0.1);
 
-    problem.SetParameterLowerBound(xyt, 2, -0.05);
-    problem.SetParameterUpperBound(xyt, 2, 0.05);
+    // problem.SetParameterLowerBound(xyt, 2, -0.05);
+    // problem.SetParameterUpperBound(xyt, 2, 0.05);
 
     ceres::Solver::Options options;
     // options.minimizer_progress_to_stdout = true;
@@ -227,4 +227,47 @@ Matrix3d NDTMatcher::CeresMatch(NDTMap &target_map, NDTMap &source_map, const Ma
     ++iteration_;
   }
   return cur_tf;
+}
+
+pair<MarkerArray, MarkerArray> NDTMatcher::MarkerArrayOfMapCorrespondences(
+    NDTMap &target_map, NDTMap &source_map, const Matrix3d &T1,
+    const Matrix3d &T2) {
+  vector<pair<int, NDTCell *>> corr_indices;
+  auto kd = MakeKDTree(target_map);
+
+  auto nextNDT1 = source_map.PseudoTransformCells(T1);
+  vector<MarkerArray> vma1;
+  for (size_t i = 0; i < nextNDT1.size(); ++i) {
+    auto cellp = nextNDT1[i].get();
+    if (!cellp->BothHasGaussian()) continue;
+    if (strategy_ == kUSE_CELLS_GREATER_THAN_TWO_POINTS) {
+      pcl::PointXYZ pt;
+      pt.x = cellp->GetPointMean()(0), pt.y = cellp->GetPointMean()(1), pt.z = 0;
+      vector<int> idx{0};
+      vector<float> dist2{0};
+      int found = kd.nearestKSearch(pt, 1, idx, dist2);
+      if (!found) continue;
+      auto cellq = target_map.GetCellForPoint(
+          Vector2d(kd.getInputCloud()->at(idx.at(0)).x,
+                   kd.getInputCloud()->at(idx.at(0)).y));
+      if (!cellq || !cellq->BothHasGaussian()) continue;
+      corr_indices.push_back({i, cellq});
+      vma1.push_back(MarkerArrayOfCorrespondences(
+          cellp, cellq, abs(CostFunctor::Score(cellp, cellq))));
+    }
+  }
+
+  auto nextNDT2 = source_map.PseudoTransformCells(T2);
+  vector<MarkerArray> vma2;
+  for (auto corr : corr_indices) {
+    auto cellp = nextNDT2[corr.first].get();
+    auto cellq = corr.second;
+    vma2.push_back(MarkerArrayOfCorrespondences(
+        cellp, cellq, abs(CostFunctor::Score(cellp, cellq))));
+  }
+
+  pair<MarkerArray, MarkerArray> ret;
+  ret.first = JoinMarkerArraysAndMarkers(vma1);
+  ret.second = JoinMarkerArraysAndMarkers(vma2);
+  return ret;
 }

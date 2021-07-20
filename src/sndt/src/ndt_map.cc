@@ -152,7 +152,7 @@ void NDTMap::LoadPointCloudWithCovariances(const MatrixXd &points,
 }
 
 vector<shared_ptr<NDTCell>> NDTMap::PseudoTransformCells(
-    const Matrix3d &T, bool include_data) {
+    const Matrix3d &T, bool include_data) const {
   vector<shared_ptr<NDTCell>> ret;
   Matrix2d R = T.block<2, 2>(0, 0);
   Vector2d t = T.block<2, 1>(0, 2);

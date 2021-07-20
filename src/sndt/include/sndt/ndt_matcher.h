@@ -23,6 +23,21 @@ class NDTMatcher {
 
   Matrix3d CeresMatch(NDTMap &target_map, NDTMap &source_map, const Matrix3d &guess_tf = Matrix3d::Identity());
 
+  pair<MarkerArray, MarkerArray> MarkerArrayOfMapCorrespondences(
+      NDTMap &target_map, NDTMap &source_map, const Affine2d &T1,
+      const Affine2d &T2) {
+    return MarkerArrayOfMapCorrespondences(target_map, source_map, T1.matrix(),
+                                           T2.matrix());
+  }
+
+  /**
+   * @brief This function takes two transforms of start and end of matching, and
+   * the first transform determines the correspondences.
+   */
+  pair<MarkerArray, MarkerArray> MarkerArrayOfMapCorrespondences(
+      NDTMap &target_map, NDTMap &source_map, const Matrix3d &T1,
+      const Matrix3d &T2);
+
   int GetIteration() { return iteration_; }
   void SetStrategy(Strategy strategy) { strategy_ = strategy; }
   void SetMaxIterations(int max_iterations) { max_iterations_ = max_iterations; }

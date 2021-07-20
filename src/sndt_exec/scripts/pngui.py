@@ -7,24 +7,36 @@ import rospy
 from std_msgs.msg import Int32
 from geometry_msgs.msg import Vector3
 
-
-fig, ax = plt.subplots()
-plt.subplots_adjust(bottom=0.2, top=0.8)
-
-rospy.init_node('pngui')
-pub = rospy.Publisher('idx', Int32, queue_size=0)
-pub2 = rospy.Publisher('iter', Int32, queue_size=0)
 idx = 0
 ite = 0
+fig, ax = plt.subplots()
+plt.subplots_adjust(bottom=0.2, top=0.8)
 ax = plt.gca()
+
+
+def cb(msg):
+    idx = msg.data
+
+
+def cb2(msg):
+    er = msg.x
+    et = msg.y
+    ax.set_title('Index #{}: err ({}, {})\n'.format(idx, er, et))
+    plt.draw()
+
+
+
+rospy.init_node('pngui')
+rospy.Subscriber('setidx', Int32, cb)
+rospy.Subscriber('err', Vector3, cb2)
+pub = rospy.Publisher('idx', Int32, queue_size=0)
+pub2 = rospy.Publisher('iter', Int32, queue_size=0)
 
 
 def posttask(offset):
     global idx
     idx += offset
-    ax.set_title('Index #{}\n'.format(idx))
     pub.publish(Int32(idx))
-    plt.draw()
 
 
 def nextcb(event):

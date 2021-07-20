@@ -44,11 +44,11 @@ class NDTMap {
                                      const MatrixXd &point_covs,
                                      double range_limit = -1);
 
-  vector<shared_ptr<NDTCell>> PseudoTransformCells(const Affine2d &T, bool include_data = false) {
+  vector<shared_ptr<NDTCell>> PseudoTransformCells(const Affine2d &T, bool include_data = false) const {
     return PseudoTransformCells(T.matrix(), include_data);
   }
 
-  vector<shared_ptr<NDTCell>> PseudoTransformCells(const Matrix3d &T, bool include_data = false);
+  vector<shared_ptr<NDTCell>> PseudoTransformCells(const Matrix3d &T, bool include_data = false) const;
 
   // Inherited methods
   NDTCell *GetCellForPoint(const Vector2d &point) {
