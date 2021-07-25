@@ -61,7 +61,7 @@ geometry_msgs::PoseStamped MakePST(const ros::Time &time, const Matrix4f &mtx) {
 }
 
 int main(int argc, char **argv) {
-  bool usehuber;
+  double huber;
   int frames;
   double cell_size, radius, rvar, tvar;
   string infile, outfile;
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
       ("tvar", po::value<double>(&tvar)->default_value(0.0001), "Intrinsic theta variance")
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
-      ("usehuber,u", po::value<bool>(&usehuber)->default_value(false)->implicit_value(true), "Use Huber loss");
+      ("huber,u", po::value<double>(&huber)->default_value(5.0), "Use Huber loss");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
@@ -111,18 +111,18 @@ int main(int argc, char **argv) {
     int svc = count_if(maps.begin(), maps.end(), [](NDTCell *cell) { return cell->BothHasGaussian(); });
 
     NDTMatcher matcher;
-    matcher.verbose = true;
+    matcher.verbose = false;
     matcher.SetStrategy(NDTMatcher::kUSE_CELLS_GREATER_THAN_TWO_POINTS);
-    matcher.usehuber = usehuber;
+    matcher.huber = huber;
     auto T = matcher.CeresMatch(mapt, maps, Tio);
 
     cout << "Run Matching (" << i << "/" << n - 2 * f << "): "
          << common::XYTDegreeFromMatrix3d(Tio.matrix()).transpose()
          << " -> " << common::XYTDegreeFromMatrix3d(T).transpose()
-         << "(" << tvc << ", " << svc << ")" << endl;
+         << " (" << tvc << ", " << svc << ")" << endl;
 
     Tr = Tr * common::Matrix4fFromMatrix3d(T);
-    cout << Tr << endl;
+    cout << "Position: " << Tr.block<2, 1>(0, 3).transpose() << endl;
     vp.push_back(MakePST(vepcs[i + f].stamp, Tr));
   } 
 

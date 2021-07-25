@@ -33,6 +33,8 @@ void UpdateMarkerArray(MarkerArray &markerarray, Marker marker);
 
 MarkerArray JoinMarkers(const vector<Marker> &ms);
 
+MarkerArray JoinMarkerArrays(const vector<MarkerArray> &mas);
+
 MarkerArray JoinMarkerArraysAndMarkers(const vector<MarkerArray> &mas,
                                        const vector<Marker> &ms = {});
 
@@ -95,7 +97,8 @@ MarkerArray MarkerArrayOfNDTMap(const NDTMap &map,
 MarkerArray MarkerArrayOfNDTMap(const vector<shared_ptr<NDTCell>> &map,
                                 bool is_target_color = false);
 
-MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell, const NDTCell *target_cell, double score);
-
+MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell,
+                                         const NDTCell *target_cell,
+                                         string text, const Color &color = Color::kBlack);
 
 MarkerArray MarkerArrayOfSensor(const vector<Affine2d> &affs);

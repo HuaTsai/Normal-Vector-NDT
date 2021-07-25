@@ -100,6 +100,20 @@ MarkerArray JoinMarkers(const vector<Marker> &ms) {
   return ret;
 }
 
+MarkerArray JoinMarkerArrays(const vector<MarkerArray> &mas) {
+  MarkerArray ret;
+  int id = 0;
+  auto now = ros::Time::now();
+  for (const auto &ma : mas) {
+    for (const auto &m : ma.markers) {
+      ret.markers.push_back(m);
+      ret.markers.back().header.stamp = now;
+      ret.markers.back().id = id++;
+    }
+  }
+  return ret;
+}
+
 MarkerArray JoinMarkerArraysAndMarkers(const vector<MarkerArray> &mas,
                                        const vector<Marker> &ms) {
   MarkerArray ret;
@@ -469,18 +483,17 @@ MarkerArray MarkerArrayOfNDTMap(const vector<shared_ptr<NDTCell>> &map,
   return JoinMarkerArraysAndMarkers(vma);
 }
 
-// TODO: add text with cost value at the middle point
-MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell, const NDTCell *target_cell, double score) {
+MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell,
+                                         const NDTCell *target_cell,
+                                         string text, const Color &color) {
   auto mas = MarkerArrayOfNDTCell(source_cell);
   auto mat = MarkerArrayOfNDTCell2(target_cell);
-  auto line =
+  auto mline =
       MarkerOfLines({source_cell->GetPointMean(), target_cell->GetPointMean()},
                     Color::kBlack, 1);
   Vector2d middle = (source_cell->GetPointMean() + target_cell->GetPointMean()) / 2;
-  char buf[10];
-  sprintf(buf, "%.2f", score);
-  auto text = MarkerOfText(string(buf), middle);
-  return JoinMarkerArraysAndMarkers({mas, mat}, {line, text});
+  auto mtext = MarkerOfText(text, middle, color);
+  return JoinMarkerArraysAndMarkers({mas, mat}, {mline, mtext});
 }
 
 MarkerArray MarkerArrayOfSensor(const vector<Affine2d> &affs) {

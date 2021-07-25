@@ -1,6 +1,6 @@
-devel/lib/sndt_exec/test_path -i ../Analysis/1Data/vepcs24.ser -o ../Analysis/20210719/paths/est_log24.ser -u
-devel/lib/sndt_exec/test_path -i ../Analysis/1Data/vepcs62-1.ser -o ../Analysis/20210719/paths/est_log62-1.ser -u
-devel/lib/sndt_exec/test_path -i ../Analysis/1Data/vepcs62-2.ser -o ../Analysis/20210719/paths/est_log62-2.ser -u
+devel/lib/sndt_exec/test_path -i ../Analysis/1Data/vepcs24.ser -o ../Analysis/20210719/paths/est_log24.ser -u 1
+devel/lib/sndt_exec/test_path -i ../Analysis/1Data/vepcs62-1.ser -o ../Analysis/20210719/paths/est_log62-1.ser -u 1
+devel/lib/sndt_exec/test_path -i ../Analysis/1Data/vepcs62-2.ser -o ../Analysis/20210719/paths/est_log62-2.ser -u 1
 
 devel/lib/tool/pathtotext -e ../Analysis/20210719/paths/est_log24.ser -g ../Analysis/20210719/paths/gt_log24.ser -o ../Analysis/20210719/results/pc/sndt/pc_sndt_log24
 devel/lib/tool/pathtotext -e ../Analysis/20210719/paths/est_log62-1.ser -g ../Analysis/20210719/paths/gt_log62-1.ser -o ../Analysis/20210719/results/pc/sndt/pc_sndt_log62-1

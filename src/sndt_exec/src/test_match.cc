@@ -25,11 +25,10 @@ namespace po = boost::program_options;
 vector<common::EgoPointClouds> vepcs;  
 ros::Publisher pub1, pub2, pub3, pub4, pub5, pub6, pub7, pubd, pube;
 vector<Marker> allcircs;
-vector<MarkerArray> vmas;
-vector<Vector2d> costs;
+vector<pair<MarkerArray, MarkerArray>> vmas;
 int frames;
 double cell_size, radius, rvar, tvar;
-bool usehuber;
+double huber;
 nav_msgs::Path gtpath;
 
 // start, ..., end, end+1
@@ -74,13 +73,13 @@ void cb(const std_msgs::Int32 &num) {
   vector<Affine2d> Tios, Toqs;
   auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
   auto mapt = MakeMap(datat, {rvar, tvar}, {cell_size, radius});
-  int tvc = count_if(mapt.begin(), mapt.end(), [](NDTCell *cell) { return cell->BothHasGaussian(); });
+  // int tvc = count_if(mapt.begin(), mapt.end(), [](NDTCell *cell) { return cell->BothHasGaussian(); });
 
   auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
   auto maps = MakeMap(datas, {rvar, tvar}, {cell_size, radius});
-  int svc = count_if(maps.begin(), maps.end(), [](NDTCell *cell) { return cell->BothHasGaussian(); });
-  cout << "valid target cells: " << tvc << endl;
-  cout << "valid source cells: " << svc << endl;
+  // int svc = count_if(maps.begin(), maps.end(), [](NDTCell *cell) { return cell->BothHasGaussian(); });
+  // cout << "valid target cells: " << tvc << endl;
+  // cout << "valid source cells: " << svc << endl;
 
   /********* Compute Ground Truth *********/
   Affine3d To, Ti;
@@ -93,15 +92,15 @@ void cb(const std_msgs::Int32 &num) {
 
   NDTMatcher matcher;
   matcher.SetStrategy(NDTMatcher::kUSE_CELLS_GREATER_THAN_TWO_POINTS);
-  matcher.usehuber = usehuber;
-  cout << "start frame: " << i << endl;
+  matcher.huber = huber;
+  cout << "start frame: " << i;
+  // matcher.verbose = true;
   auto res = matcher.CeresMatch(mapt, maps, Tio);
   vmas = matcher.vmas;
-  costs = matcher.costs;
 
-  cout << "guess: " << common::XYTDegreeFromMatrix3d(Tio.matrix()).transpose() << endl;
-  cout << "result: " << common::XYTDegreeFromMatrix3d(res.matrix()).transpose() << endl;
-  cout << "grount truth: " << common::XYTDegreeFromMatrix3d(gtTio.matrix()).transpose() << endl;
+  // cout << "guess: " << common::XYTDegreeFromMatrix3d(Tio.matrix()).transpose() << endl;
+  // cout << "result: " << common::XYTDegreeFromMatrix3d(res.matrix()).transpose() << endl;
+  // cout << "grount truth: " << common::XYTDegreeFromMatrix3d(gtTio.matrix()).transpose() << endl;
   auto err = common::TransNormRotDegAbsFromMatrix3d(res.inverse() * gtTio.matrix());
   cout << "err: " << err.transpose() << endl;
   auto maps2 = maps.PseudoTransformCells(res, true);
@@ -111,10 +110,9 @@ void cb(const std_msgs::Int32 &num) {
   pub2.publish(MarkerArrayOfNDTMap(maps));   // source map
   pub3.publish(MarkerArrayOfNDTMap(maps2));  // source map after T0
   pub4.publish(MarkerArrayOfNDTMap(mapsg));  // source map after Tgt
-  auto corr = matcher.MarkerArrayOfMapCorrespondences(mapt, maps, Tio.matrix(), res);
-  pub5.publish(corr.first);     // corr Tio
-  pub6.publish(corr.second);    // corr res
-  // pub7.publish(matcher.MarkerArrayOfMapCorrespondences(mapt, maps, gtTio));  // corr Tgt
+  // pub5 ?
+  pub6.publish(vmas[0].first);
+  pub7.publish(vmas[0].second);
   geometry_msgs::Vector3 errmsg;
   errmsg.x = err(0), errmsg.y = err(1);
   pube.publish(errmsg);
@@ -123,8 +121,8 @@ void cb(const std_msgs::Int32 &num) {
 void cb2(const std_msgs::Int32 &num) {
   int n = num.data;
   if (n >= 0 && n < (int)vmas.size()) {
-    pub6.publish(vmas[n]);
-    cout << "cost from " << costs[n][0] << " to " << costs[n][1] << endl;
+    pub6.publish(vmas[n].first);
+    pub7.publish(vmas[n].second);
   }
 }
 
@@ -140,7 +138,7 @@ int main(int argc, char **argv) {
       ("tvar", po::value<double>(&tvar)->default_value(0.0001), "Intrinsic theta variance")
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
-      ("usehuber,u", po::value<bool>(&usehuber)->default_value(false)->implicit_value(true), "Huber");
+      ("huber,u", po::value<double>(&huber)->default_value(0), "Huber");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
@@ -167,6 +165,12 @@ int main(int argc, char **argv) {
   pub7 = nh.advertise<MarkerArray>("markers7", 0, true);
   pubd = nh.advertise<Marker>("markerd", 0, true);  // iterations
   pube = nh.advertise<geometry_msgs::Vector3>("err", 0, true);
+
+  // for (int i = 0; i < (int)vepcs.size() - 15; ++i) {
+  //   std_msgs::Int32 i32;
+  //   i32.data = i;
+  //   cb(i32);
+  // }
 
   ros::spin();
 }
