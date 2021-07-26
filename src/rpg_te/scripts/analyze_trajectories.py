@@ -50,7 +50,7 @@ MAX_TRAJ_LENGTHS = {'MH_01': 80.6,
                     'V2_02': 83.2,
                     'V2_03': 86.1}
 # boxplot distances that will be used for all datasets for overall errors
-OVERALL_BOXPLOT_DISTANCES = [7.0, 14.0, 21.0, 28.0, 35.0]
+OVERALL_BOXPLOT_DISTANCES = [35.0, 70.0, 105.0, 140.0]
 
 
 def compute_odometry_error_per_dataset(dataset_trajectories_dict,

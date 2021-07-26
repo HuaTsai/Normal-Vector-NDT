@@ -96,6 +96,7 @@ void NDTCell::InitializeVariables() {
   pmean_.setZero(), pevals_.setZero();
   ncov_.setZero(), nevecs_.setZero();
   nmean_.setZero(), nevals_.setZero();
+  mark = false;
 }
 
 void NDTCell::ComputeGaussian() {
@@ -174,6 +175,12 @@ void NDTCell::ComputeNGaussianWithCovariances() {
         ncov_ = nevecs_ * nevals_.asDiagonal() * nevecs_.transpose();
       }
       nhasgaussian_ = true;
+    }
+    // BUG
+    if (ncov_.isZero() && valids.size() >= 3) {
+      ncov_ = Matrix2d::Identity() * 0.01;
+      nhasgaussian_ = true;
+      mark = true;
     }
   }
 }

@@ -1,0 +1,26 @@
+<launch>
+  <node pkg="rosbag" type="play" name="playbag" output="screen" args="--clock -r0.5
+    /home/ee904/Desktop/Dataset/nuScenes/log24_1535729278446231_scene-0299.bag
+    /home/ee904/Desktop/Dataset/nuScenes/log24_1535729298446271_scene-0300.bag
+    /home/ee904/Desktop/Dataset/nuScenes/log24_1535729318549677_scene-0301.bag" />
+  <!-- <node pkg="rosbag" type="play" name="playbag" output="screen" args="-clock -r0.5
+    /home/ee904/Desktop/Dataset/nuScenes/log62_1542193241547892_scene-0997.bag
+    /home/ee904/Desktop/Dataset/nuScenes/log62_1542193261546825_scene-0998.bag
+    /home/ee904/Desktop/Dataset/nuScenes/log62_1542193281648047_scene-0999.bag
+    /home/ee904/Desktop/Dataset/nuScenes/log62_1542193301547950_scene-1000.bag" /> -->
+  <!-- <node pkg="rosbag" type="play" name="playbag" output="screen" args="-clock -r0.5
+    /home/ee904/Desktop/Dataset/nuScenes/log62_1542193461547574_scene-1004.bag
+    /home/ee904/Desktop/Dataset/nuScenes/log62_1542193481898177_scene-1005.bag
+    /home/ee904/Desktop/Dataset/nuScenes/log62_1542193501549291_scene-1006.bag
+    /home/ee904/Desktop/Dataset/nuScenes/log62_1542193521798725_scene-1007.bag" /> -->
+
+  <!-- <node pkg="image_transport" type="republish" name="republish" args="compressed in:=image_front raw out:=image2" /> -->
+  <!-- <node pkg="image_transport" type="republish" name="republish" args="compressed in:=image_front_left raw out:=image2" /> -->
+  <!-- <node pkg="image_transport" type="republish" name="republish" args="compressed in:=image_front_right raw out:=image2" /> -->
+  <!-- <node pkg="image_transport" type="republish" name="republish" args="compressed in:=image_back raw out:=image2" /> -->
+  <!-- <node pkg="image_transport" type="republish" name="republish" args="compressed in:=image_back_left raw out:=image2" /> -->
+  <node pkg="image_transport" type="republish" name="republish" args="compressed in:=image_back_right raw out:=image2" />
+  <node pkg="image_view" name="extract" type="extract_images" respawn="false" required="true" output="screen" cwd="ROS_HOME">
+    <remap from="image" to="/image2"/>
+  </node>
+</launch>

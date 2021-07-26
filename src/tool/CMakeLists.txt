@@ -33,3 +33,6 @@ target_link_libraries(gtpath ${catkin_LIBRARIES})
 
 add_executable(gtdis src/gtdis.cc)
 target_link_libraries(gtdis ${catkin_LIBRARIES})
+
+add_executable(getimages src/getimages.cc)
+target_link_libraries(getimages ${catkin_LIBRARIES})

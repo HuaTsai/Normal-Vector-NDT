@@ -144,7 +144,7 @@ Marker MarkerOfBoundary(const Vector2d &center, double size,
   ret.type = Marker::LINE_LIST;
   ret.action = Marker::ADD;
   ret.pose = tf2::toMsg(Affine3d::Identity());
-  ret.scale.x = 0.02;
+  ret.scale.x = 0.2;
   ret.color = MakeColorRGBA(color);
   double r = size / 2, t = skew_rad;
   auto R = Rotation2Dd(t);
@@ -432,7 +432,7 @@ MarkerArray MarkerArrayOfNDTCell(const NDTCell *cell) {
 MarkerArray MarkerArrayOfNDTCell2(const NDTCell *cell) {
   MarkerArray ret;
   auto boundary = MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
-                                   cell->GetSkewRad(), Color::kRed);
+                                   cell->GetSkewRad(), Color::kRed);//cell->mark ? Color::kLime : Color::kRed);
   auto p_eclipse = MarkerOfEclipse(cell->GetPointMean(), cell->GetPointCov(),
                                    Color::kRed);
   // Old

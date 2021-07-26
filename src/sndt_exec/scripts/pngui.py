@@ -15,6 +15,7 @@ ax = plt.gca()
 
 
 def cb(msg):
+    global idx
     idx = msg.data
 
 

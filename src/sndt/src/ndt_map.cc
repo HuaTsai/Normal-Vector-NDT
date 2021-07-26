@@ -189,6 +189,22 @@ vector<shared_ptr<NDTCell>> NDTMap::PseudoTransformCells(
   return ret;
 }
 
+vector<Vector2d> NDTMap::GetPoints() {
+  vector<Vector2d> ret;
+  for (auto it = begin(); it != end(); ++it)
+    for (auto pt : (*it)->GetPoints())
+      ret.push_back(pt);
+  return ret;
+}
+
+vector<Vector2d> NDTMap::GetNormals() {
+  vector<Vector2d> ret;
+  for (auto it = begin(); it != end(); ++it)
+    for (auto nm : (*it)->GetNormals())
+      ret.push_back(nm);
+  return ret;
+}
+
 void NDTMap::GuessMapSize(const PCXY &pc, double range_limit) {
   int n = 0;
   map_center_.setZero();

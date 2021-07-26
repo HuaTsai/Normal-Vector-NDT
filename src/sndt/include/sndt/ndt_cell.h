@@ -69,6 +69,7 @@ class NDTCell {
   void SetNormalCov(const Matrix2d &cov) { ncov_ = cov; }
   void SetNormalEvals(const Vector2d &evals) { nevals_ = evals; }
   void SetNormalEvecs(const Matrix2d &evecs) { nevecs_ = evecs; }
+  bool mark;
 
  private:
   int N_;

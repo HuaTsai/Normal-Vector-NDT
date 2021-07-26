@@ -63,6 +63,9 @@ class NDTMap {
     return index_->GetClosestCellsForPoint(point, maxdist_of_cells, include_locate);
   }
 
+  vector<Vector2d> GetPoints();
+  vector<Vector2d> GetNormals();
+
   string ToString() {
     return index_->ToString();
   }
