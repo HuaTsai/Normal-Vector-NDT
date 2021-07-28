@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$da/dcf/structstd_1_1integral__constant.html" title="std::integral_constant\l\&lt; bool, ::std::numeric\l_limits\&lt; T \&gt;::is_specialized\l &amp;&amp;!::std::numeric_limits\&lt;\l T \&gt;::is_integer \&gt;" alt="" coords="5,5,188,91"/>
+<area shape="rect" id="node2" href="$dd/dca/structstd_1_1is__floating__point.html" title="std::is_floating_point\&lt; T \&gt;" alt="" coords="236,35,411,61"/>
+<area shape="rect" id="node3" href="$de/df8/structstd_1_1is__floating__point_3_01const_01T_01_4.html" title="std::is_floating_point\l\&lt; const T \&gt;" alt="" coords="459,27,601,69"/>
+</map>

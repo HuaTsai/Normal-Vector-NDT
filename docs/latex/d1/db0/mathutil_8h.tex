@@ -1,0 +1,540 @@
+\hypertarget{mathutil_8h}{}\section{mathutil.\+h File Reference}
+\label{mathutil_8h}\index{mathutil.\+h@{mathutil.\+h}}
+{\ttfamily \#include $<$cstddef$>$}\newline
+{\ttfamily \#include $<$cstdlib$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$limits$>$}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$utility$>$}\newline
+{\ttfamily \#include \char`\"{}mathcompat.\+h\char`\"{}}\newline
+Include dependency graph for mathutil.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d5/dc6/mathutil_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d7/d6a/mathutil_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtrimesh_1_1STATIC__ASSERTION__FAILURE}{trimesh\+::\+S\+T\+A\+T\+I\+C\+\_\+\+A\+S\+S\+E\+R\+T\+I\+O\+N\+\_\+\+F\+A\+I\+L\+U\+R\+E$<$ X $>$}
+\item 
+struct \hyperlink{structtrimesh_1_1STATIC__ASSERTION__FAILURE_3_01true_01_4}{trimesh\+::\+S\+T\+A\+T\+I\+C\+\_\+\+A\+S\+S\+E\+R\+T\+I\+O\+N\+\_\+\+F\+A\+I\+L\+U\+R\+E$<$ true $>$}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetrimesh}{trimesh}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{mathutil_8h_a9f918755b601cf4bffca775992e6fb90}{N\+O\+M\+I\+N\+M\+AX}
+\item 
+\#define \hyperlink{mathutil_8h_a525335710b53cb064ca56b936120431e}{\+\_\+\+U\+S\+E\+\_\+\+M\+A\+T\+H\+\_\+\+D\+E\+F\+I\+N\+ES}
+\item 
+\#define \hyperlink{mathutil_8h_ad4f22a2341fc0116e3d09f30386a8b15}{T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE}~\hyperlink{XForm_8h_a00d24c7231be28dbaf71f5408f30e44c}{inline}
+\item 
+\#define \hyperlink{mathutil_8h_a684f12386ff5c830e067304ed743f74e}{M\+\_\+\+Ef}~2.\+7182818f
+\item 
+\#define \hyperlink{mathutil_8h_ab102722265021b4c35316c7665c68fb6}{M\+\_\+\+L\+O\+G2\+Ef}~1.\+4426950f
+\item 
+\#define \hyperlink{mathutil_8h_a447a52da30ca54e1065dc38bbbf5b79d}{M\+\_\+\+L\+O\+G10\+Ef}~0.\+4342945f
+\item 
+\#define \hyperlink{mathutil_8h_acaee8ea501d30f1e0e5142fea72b9a65}{M\+\_\+\+L\+N2f}~0.\+6931472f
+\item 
+\#define \hyperlink{mathutil_8h_af0d421d6bcc5f450bb55d84eaf0100a6}{M\+\_\+\+L\+N10f}~2.\+3025851f
+\item 
+\#define \hyperlink{mathutil_8h_acbb42dc053fedc161079f0a4d20a64e8}{M\+\_\+\+P\+If}~3.\+1415927f
+\item 
+\#define \hyperlink{mathutil_8h_a777ba8065498a31f7a3c11c5aac8aa2f}{M\+\_\+\+P\+I\+\_\+2f}~1.\+5707963f
+\item 
+\#define \hyperlink{mathutil_8h_a3456dcadffd6d1c2106877ae572e0d95}{M\+\_\+\+P\+I\+\_\+4f}~0.\+7853982f
+\item 
+\#define \hyperlink{mathutil_8h_ac1d95533cc25fb1e588f74ffdd15a99c}{M\+\_\+1\+\_\+\+P\+If}~0.\+3183099f
+\item 
+\#define \hyperlink{mathutil_8h_ac49c40082a93d5bf7244721597ff55f6}{M\+\_\+2\+\_\+\+P\+If}~0.\+6366198f
+\item 
+\#define \hyperlink{mathutil_8h_a9e28ebca167c870dee28ed556d0823f9}{M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+If}~1.\+1283792f
+\item 
+\#define \hyperlink{mathutil_8h_adcd469193a884030dcec679e5a77c4bf}{M\+\_\+\+S\+Q\+R\+T2f}~1.\+4142136f
+\item 
+\#define \hyperlink{mathutil_8h_a5330d4737f89cfaec639a6e07202b0e0}{M\+\_\+\+S\+Q\+R\+T1\+\_\+2f}~0.\+7071068f
+\item 
+\#define \hyperlink{mathutil_8h_ab06435ff07e27ccdb5ece62cf5d371f2}{M\+\_\+\+El}~2.\+718281828459045235360287471352662498L
+\item 
+\#define \hyperlink{mathutil_8h_a3b9c3217bad9a8c6e09be6c8cb72cfdc}{M\+\_\+\+L\+O\+G2\+El}~1.\+442695040888963407359924681001892137L
+\item 
+\#define \hyperlink{mathutil_8h_af5840646db663fbd6749bf4caed8f3e0}{M\+\_\+\+L\+O\+G10\+El}~0.\+434294481903251827651128918916605082L
+\item 
+\#define \hyperlink{mathutil_8h_a977ed5f9353c93e68594d93e42256bf1}{M\+\_\+\+L\+N2l}~0.\+693147180559945309417232121458176568L
+\item 
+\#define \hyperlink{mathutil_8h_ace0f0f1f1d84eb88ab7b7b5f0d28dc6d}{M\+\_\+\+L\+N10l}~2.\+302585092994045684017991454684364208L
+\item 
+\#define \hyperlink{mathutil_8h_a126570edaffa4fa37291be26b3b8fdce}{M\+\_\+\+P\+Il}~3.\+141592653589793238462643383279502884L
+\item 
+\#define \hyperlink{mathutil_8h_afb951b3cb9bee66be6b0fa2f337308be}{M\+\_\+\+P\+I\+\_\+2l}~1.\+570796326794896619231321691639751442L
+\item 
+\#define \hyperlink{mathutil_8h_a0128b16e957314d6adfc13f4a21363ae}{M\+\_\+\+P\+I\+\_\+4l}~0.\+785398163397448309615660845819875721L
+\item 
+\#define \hyperlink{mathutil_8h_ab66e00fead1f5d622e990e204fb0900d}{M\+\_\+1\+\_\+\+P\+Il}~0.\+318309886183790671537767526745028724L
+\item 
+\#define \hyperlink{mathutil_8h_aa052b5202cecf6a27b6ee1f052316a7b}{M\+\_\+2\+\_\+\+P\+Il}~0.\+636619772367581343075535053490057448L
+\item 
+\#define \hyperlink{mathutil_8h_aecb31901b9f07a9e3449956bc1d2a9a5}{M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+Il}~1.\+128379167095512573896158903121545172L
+\item 
+\#define \hyperlink{mathutil_8h_aa7a1ee4f2407d3ad120ea0f8c4591e48}{M\+\_\+\+S\+Q\+R\+T2l}~1.\+414213562373095048801688724209698079L
+\item 
+\#define \hyperlink{mathutil_8h_afa79c83757d2b6396c9de76bb2e9b9e1}{M\+\_\+\+S\+Q\+R\+T1\+\_\+2l}~0.\+707106781186547524400844362104849039L
+\item 
+\#define \hyperlink{mathutil_8h_a141633e3d1acfc6b738a942d83920bb9}{M\+\_\+2\+P\+If}~6.\+2831855f
+\item 
+\#define \hyperlink{mathutil_8h_a4aa2c43b09c1300c334821f5507d6f71}{M\+\_\+2\+PI}~6.\+28318530717958647693
+\item 
+\#define \hyperlink{mathutil_8h_a814d8a349b17777cedabb34b0cc61441}{M\+\_\+2\+P\+Il}~6.\+283185307179586476925286766559005768L
+\item 
+\#define \hyperlink{mathutil_8h_a5ede69d2615a0a2f46be682d5be54c75}{M\+\_\+\+P\+I\+\_\+3f}~1.\+0471976f
+\item 
+\#define \hyperlink{mathutil_8h_a091f7cfff0ed8c0bde362d5e0cd51d4a}{M\+\_\+\+P\+I\+\_\+3}~1.\+04719755119659774615
+\item 
+\#define \hyperlink{mathutil_8h_ae807d6331257457d1f95c3316205a26c}{M\+\_\+\+P\+I\+\_\+3l}~1.\+047197551196597746154214461093167628L
+\item 
+\#define \hyperlink{mathutil_8h_a7301a88470e2039a71c2ff77716661ab}{M\+\_\+\+P\+I\+\_\+180f}~0.\+017453293f
+\item 
+\#define \hyperlink{mathutil_8h_a893e7964ae5d1ea5137a25d70c8642a2}{M\+\_\+\+P\+I\+\_\+180}~0.\+0174532925199432957692
+\item 
+\#define \hyperlink{mathutil_8h_ab54df50279b808bfbc3ecea170e7ff96}{M\+\_\+\+P\+I\+\_\+180l}~0.\+01745329251994329576923690768488612713L
+\item 
+\#define \hyperlink{mathutil_8h_adadc764e889d60d036ad1be25ffe5e53}{M\+\_\+180\+\_\+\+P\+If}~57.\+2957795f
+\item 
+\#define \hyperlink{mathutil_8h_aa72c815141a6a1d35404fd914f663f63}{M\+\_\+180\+\_\+\+PI}~57.\+2957795130823208768
+\item 
+\#define \hyperlink{mathutil_8h_a6d82cd8c829900472921efd3113a8703}{M\+\_\+180\+\_\+\+P\+Il}~57.\+29577951308232087679815481410517033L
+\item 
+\#define \hyperlink{mathutil_8h_adf4b71e9670ca04618e71aba26821c97}{N\+E\+X\+T\+\_\+\+M\+O\+D3}(i)~((i) $<$ 2 ? (i) + 1 \+: (i) -\/ 2)
+\item 
+\#define \hyperlink{mathutil_8h_a6d5e88f4a26ed4aa6b60b71085ef7fa3}{P\+R\+E\+V\+\_\+\+M\+O\+D3}(i)~((i) $>$ 0 ? (i) -\/ 1 \+: (i) + 2)
+\item 
+\#define \hyperlink{mathutil_8h_a217a0bd562b98ae8c2ffce44935351e1}{likely}(x)~(x)
+\item 
+\#define \hyperlink{mathutil_8h_ac6c45889010c1bd68631771b64f18101}{unlikely}(x)~(x)
+\item 
+\#define \hyperlink{mathutil_8h_a00d24c7231be28dbaf71f5408f30e44c}{inline}~\hyperlink{mathutil_8h_ad4f22a2341fc0116e3d09f30386a8b15}{T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE}
+\item 
+\#define \hyperlink{mathutil_8h_a89fd14d7b564c856d4e5a4cff56b43ea}{T\+R\+I\+M\+E\+S\+H\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+C\+H\+E\+CK}(expr)~S\+T\+A\+T\+I\+C\+\_\+\+A\+S\+S\+E\+R\+T\+I\+O\+N\+\_\+\+F\+A\+I\+L\+U\+RE$<$bool(expr)$>$()
+\item 
+\#define \hyperlink{mathutil_8h_a642ee87acd19a9b33be6b7955d3dfcaa}{T\+R\+I\+M\+E\+S\+H\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class T $>$ }\\static T \hyperlink{namespacetrimesh_a51b76a98ab947ef387705b2c10b1c090}{trimesh\+::sqr} (const T \&x)
+\item 
+{\footnotesize template$<$class T $>$ }\\static T \hyperlink{namespacetrimesh_ab10142c482d70b93786d10a1fe716690}{trimesh\+::cube} (const T \&x)
+\item 
+{\footnotesize template$<$class T $>$ }\\static T \hyperlink{namespacetrimesh_a3af22a58e26c43a0604eed7184911832}{trimesh\+::sgn} (const T \&x)
+\item 
+{\footnotesize template$<$class T $>$ }\\static T \hyperlink{namespacetrimesh_a734917113fc3e54c3327d91ad0ea88c3}{trimesh\+::sign} (const T \&x)
+\item 
+{\footnotesize template$<$class T $>$ }\\static double \hyperlink{namespacetrimesh_ab544311a1caac19fcd9de0556782dac5}{trimesh\+::radians} (const T \&x)
+\item 
+static float \hyperlink{namespacetrimesh_a7d0700b74406bdf2c1d89a761ab9976d}{trimesh\+::radians} (const float \&x)
+\item 
+static long double \hyperlink{namespacetrimesh_ab5bdc2d41abb1c4a85aedf902c33a239}{trimesh\+::radians} (const long double \&x)
+\item 
+{\footnotesize template$<$class T $>$ }\\static double \hyperlink{namespacetrimesh_a115f178dd4c80646d77ad5f61ff20f83}{trimesh\+::degrees} (const T \&x)
+\item 
+static float \hyperlink{namespacetrimesh_a4df1c1f62bc5c8254e4d7c37579add10}{trimesh\+::degrees} (const float \&x)
+\item 
+static long double \hyperlink{namespacetrimesh_a30acf3d700e46bf12b16c60a10efc12d}{trimesh\+::degrees} (const long double \&x)
+\item 
+{\footnotesize template$<$class T $>$ }\\static T \hyperlink{namespacetrimesh_a18250ea8eccf9a09028266592b8d5738}{trimesh\+::fract} (const T \&x)
+\item 
+{\footnotesize template$<$class T , class A , class B $>$ }\\static T \hyperlink{namespacetrimesh_ae913dc8d8f6d1d2161705a6bdd9b4a8f}{trimesh\+::clamp} (const T \&x, const A \&a, const B \&b)
+\item 
+{\footnotesize template$<$class T , class A $>$ }\\static T \hyperlink{namespacetrimesh_afbfc5cc41975c0039611c6da6cc2f35b}{trimesh\+::mix} (const T \&x, const T \&y, const A \&a)
+\item 
+{\footnotesize template$<$class T , class A $>$ }\\static T \hyperlink{namespacetrimesh_acb6637b7876342110a33099891cc23e1}{trimesh\+::step} (const A \&a, const T \&x)
+\item 
+{\footnotesize template$<$class T , class A , class B $>$ }\\static T \hyperlink{namespacetrimesh_abf9461d50c23930206bc063132b88552}{trimesh\+::smoothstep} (const A \&a, const B \&b, const T \&x)
+\item 
+static unsigned \hyperlink{namespacetrimesh_ae031f5f6744297540cc92742bb2ffead}{trimesh\+::xorshift\+\_\+rnd} (unsigned n=$\sim$0u)
+\item 
+{\footnotesize template$<$class T $>$ }\\static typename \+::\hyperlink{structstd_1_1enable__if}{std\+::enable\+\_\+if}$<$ \+::\hyperlink{structstd_1_1is__integral}{std\+::is\+\_\+integral}$<$ T $>$\+::value, T $>$\+::type \hyperlink{namespacetrimesh_a2c25f135957e8b30006d06ff4b84df08}{trimesh\+::uniform\+\_\+rnd} (T n)
+\item 
+{\footnotesize template$<$class T $>$ }\\static typename \+::\hyperlink{structstd_1_1enable__if}{std\+::enable\+\_\+if}$<$ \+::\hyperlink{structstd_1_1is__floating__point}{std\+::is\+\_\+floating\+\_\+point}$<$ T $>$\+::value, T $>$\+::type \hyperlink{namespacetrimesh_a945b2b78e3a86753130c62d266e85492}{trimesh\+::uniform\+\_\+rnd} (T n)
+\item 
+static float \hyperlink{namespacetrimesh_a4f0571559648c5888eb24b0697808d0b}{trimesh\+::uniform\+\_\+rnd} ()
+\item 
+{\footnotesize template$<$class T $>$ }\\static typename \+::\hyperlink{structstd_1_1enable__if}{std\+::enable\+\_\+if}$<$ \+::\hyperlink{structstd_1_1is__floating__point}{std\+::is\+\_\+floating\+\_\+point}$<$ T $>$\+::value, T $>$\+::type \hyperlink{namespacetrimesh_a6d0babd7680a6eb905c92af4d2ae558d}{trimesh\+::normal\+\_\+rnd} (T sigma)
+\item 
+{\footnotesize template$<$class T $>$ }\\static typename \+::\hyperlink{structstd_1_1enable__if}{std\+::enable\+\_\+if}$<$ \+::\hyperlink{structstd_1_1is__integral}{std\+::is\+\_\+integral}$<$ T $>$\+::value, double $>$\+::type \hyperlink{namespacetrimesh_acd2b8cf62ea31db90638e69e189a14ac}{trimesh\+::normal\+\_\+rnd} (T sigma)
+\item 
+static float \hyperlink{namespacetrimesh_a8365b585f63a97afe9c9ec4167170f73}{trimesh\+::normal\+\_\+rnd} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{mathutil_8h_a525335710b53cb064ca56b936120431e}\label{mathutil_8h_a525335710b53cb064ca56b936120431e}} 
+\index{mathutil.\+h@{mathutil.\+h}!\+\_\+\+U\+S\+E\+\_\+\+M\+A\+T\+H\+\_\+\+D\+E\+F\+I\+N\+ES@{\+\_\+\+U\+S\+E\+\_\+\+M\+A\+T\+H\+\_\+\+D\+E\+F\+I\+N\+ES}}
+\index{\+\_\+\+U\+S\+E\+\_\+\+M\+A\+T\+H\+\_\+\+D\+E\+F\+I\+N\+ES@{\+\_\+\+U\+S\+E\+\_\+\+M\+A\+T\+H\+\_\+\+D\+E\+F\+I\+N\+ES}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{\+\_\+\+U\+S\+E\+\_\+\+M\+A\+T\+H\+\_\+\+D\+E\+F\+I\+N\+ES}{\_USE\_MATH\_DEFINES}}
+{\footnotesize\ttfamily \#define \+\_\+\+U\+S\+E\+\_\+\+M\+A\+T\+H\+\_\+\+D\+E\+F\+I\+N\+ES}
+
+\mbox{\Hypertarget{mathutil_8h_a00d24c7231be28dbaf71f5408f30e44c}\label{mathutil_8h_a00d24c7231be28dbaf71f5408f30e44c}} 
+\index{mathutil.\+h@{mathutil.\+h}!inline@{inline}}
+\index{inline@{inline}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{inline}{inline}}
+{\footnotesize\ttfamily \#define inline~\hyperlink{mathutil_8h_ad4f22a2341fc0116e3d09f30386a8b15}{T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE}}
+
+\mbox{\Hypertarget{mathutil_8h_a217a0bd562b98ae8c2ffce44935351e1}\label{mathutil_8h_a217a0bd562b98ae8c2ffce44935351e1}} 
+\index{mathutil.\+h@{mathutil.\+h}!likely@{likely}}
+\index{likely@{likely}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{likely}{likely}}
+{\footnotesize\ttfamily \#define likely(\begin{DoxyParamCaption}\item[{}]{x }\end{DoxyParamCaption})~(x)}
+
+
+
+Referenced by trimesh\+::decompose\+\_\+rot(), trimesh\+::diagonalize\+\_\+curv(), trimesh\+::normalize(), trimesh\+::normals\+\_\+from\+\_\+tstrips\+\_\+area(), trimesh\+::normals\+\_\+from\+\_\+tstrips\+\_\+\+Max(), trimesh\+::\+Box$<$ 3, float $>$\+::operator+=(), and trimesh\+::xorshift\+\_\+rnd().
+
+\mbox{\Hypertarget{mathutil_8h_aa72c815141a6a1d35404fd914f663f63}\label{mathutil_8h_aa72c815141a6a1d35404fd914f663f63}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+180\+\_\+\+PI@{M\+\_\+180\+\_\+\+PI}}
+\index{M\+\_\+180\+\_\+\+PI@{M\+\_\+180\+\_\+\+PI}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+180\+\_\+\+PI}{M\_180\_PI}}
+{\footnotesize\ttfamily \#define M\+\_\+180\+\_\+\+PI~57.\+2957795130823208768}
+
+
+
+Referenced by trimesh\+::degrees().
+
+\mbox{\Hypertarget{mathutil_8h_adadc764e889d60d036ad1be25ffe5e53}\label{mathutil_8h_adadc764e889d60d036ad1be25ffe5e53}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+180\+\_\+\+P\+If@{M\+\_\+180\+\_\+\+P\+If}}
+\index{M\+\_\+180\+\_\+\+P\+If@{M\+\_\+180\+\_\+\+P\+If}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+180\+\_\+\+P\+If}{M\_180\_PIf}}
+{\footnotesize\ttfamily \#define M\+\_\+180\+\_\+\+P\+If~57.\+2957795f}
+
+
+
+Referenced by trimesh\+::degrees().
+
+\mbox{\Hypertarget{mathutil_8h_a6d82cd8c829900472921efd3113a8703}\label{mathutil_8h_a6d82cd8c829900472921efd3113a8703}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+180\+\_\+\+P\+Il@{M\+\_\+180\+\_\+\+P\+Il}}
+\index{M\+\_\+180\+\_\+\+P\+Il@{M\+\_\+180\+\_\+\+P\+Il}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+180\+\_\+\+P\+Il}{M\_180\_PIl}}
+{\footnotesize\ttfamily \#define M\+\_\+180\+\_\+\+P\+Il~57.\+29577951308232087679815481410517033L}
+
+
+
+Referenced by trimesh\+::degrees().
+
+\mbox{\Hypertarget{mathutil_8h_ac1d95533cc25fb1e588f74ffdd15a99c}\label{mathutil_8h_ac1d95533cc25fb1e588f74ffdd15a99c}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+1\+\_\+\+P\+If@{M\+\_\+1\+\_\+\+P\+If}}
+\index{M\+\_\+1\+\_\+\+P\+If@{M\+\_\+1\+\_\+\+P\+If}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+1\+\_\+\+P\+If}{M\_1\_PIf}}
+{\footnotesize\ttfamily \#define M\+\_\+1\+\_\+\+P\+If~0.\+3183099f}
+
+\mbox{\Hypertarget{mathutil_8h_ab66e00fead1f5d622e990e204fb0900d}\label{mathutil_8h_ab66e00fead1f5d622e990e204fb0900d}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+1\+\_\+\+P\+Il@{M\+\_\+1\+\_\+\+P\+Il}}
+\index{M\+\_\+1\+\_\+\+P\+Il@{M\+\_\+1\+\_\+\+P\+Il}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+1\+\_\+\+P\+Il}{M\_1\_PIl}}
+{\footnotesize\ttfamily \#define M\+\_\+1\+\_\+\+P\+Il~0.\+318309886183790671537767526745028724L}
+
+\mbox{\Hypertarget{mathutil_8h_ac49c40082a93d5bf7244721597ff55f6}\label{mathutil_8h_ac49c40082a93d5bf7244721597ff55f6}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+2\+\_\+\+P\+If@{M\+\_\+2\+\_\+\+P\+If}}
+\index{M\+\_\+2\+\_\+\+P\+If@{M\+\_\+2\+\_\+\+P\+If}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+2\+\_\+\+P\+If}{M\_2\_PIf}}
+{\footnotesize\ttfamily \#define M\+\_\+2\+\_\+\+P\+If~0.\+6366198f}
+
+\mbox{\Hypertarget{mathutil_8h_aa052b5202cecf6a27b6ee1f052316a7b}\label{mathutil_8h_aa052b5202cecf6a27b6ee1f052316a7b}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+2\+\_\+\+P\+Il@{M\+\_\+2\+\_\+\+P\+Il}}
+\index{M\+\_\+2\+\_\+\+P\+Il@{M\+\_\+2\+\_\+\+P\+Il}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+2\+\_\+\+P\+Il}{M\_2\_PIl}}
+{\footnotesize\ttfamily \#define M\+\_\+2\+\_\+\+P\+Il~0.\+636619772367581343075535053490057448L}
+
+\mbox{\Hypertarget{mathutil_8h_a9e28ebca167c870dee28ed556d0823f9}\label{mathutil_8h_a9e28ebca167c870dee28ed556d0823f9}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+If@{M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+If}}
+\index{M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+If@{M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+If}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+If}{M\_2\_SQRTPIf}}
+{\footnotesize\ttfamily \#define M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+If~1.\+1283792f}
+
+\mbox{\Hypertarget{mathutil_8h_aecb31901b9f07a9e3449956bc1d2a9a5}\label{mathutil_8h_aecb31901b9f07a9e3449956bc1d2a9a5}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+Il@{M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+Il}}
+\index{M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+Il@{M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+Il}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+Il}{M\_2\_SQRTPIl}}
+{\footnotesize\ttfamily \#define M\+\_\+2\+\_\+\+S\+Q\+R\+T\+P\+Il~1.\+128379167095512573896158903121545172L}
+
+\mbox{\Hypertarget{mathutil_8h_a4aa2c43b09c1300c334821f5507d6f71}\label{mathutil_8h_a4aa2c43b09c1300c334821f5507d6f71}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+2\+PI@{M\+\_\+2\+PI}}
+\index{M\+\_\+2\+PI@{M\+\_\+2\+PI}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+2\+PI}{M\_2PI}}
+{\footnotesize\ttfamily \#define M\+\_\+2\+PI~6.\+28318530717958647693}
+
+\mbox{\Hypertarget{mathutil_8h_a141633e3d1acfc6b738a942d83920bb9}\label{mathutil_8h_a141633e3d1acfc6b738a942d83920bb9}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+2\+P\+If@{M\+\_\+2\+P\+If}}
+\index{M\+\_\+2\+P\+If@{M\+\_\+2\+P\+If}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+2\+P\+If}{M\_2PIf}}
+{\footnotesize\ttfamily \#define M\+\_\+2\+P\+If~6.\+2831855f}
+
+
+
+Referenced by trimesh\+::\+Color\+::col\+\_\+transform(), trimesh\+::make\+\_\+ccone(), trimesh\+::make\+\_\+ccyl(), trimesh\+::make\+\_\+disc(), trimesh\+::make\+\_\+helix(), trimesh\+::make\+\_\+scyl(), trimesh\+::make\+\_\+sphere\+\_\+polar(), and trimesh\+::make\+\_\+torus().
+
+\mbox{\Hypertarget{mathutil_8h_a814d8a349b17777cedabb34b0cc61441}\label{mathutil_8h_a814d8a349b17777cedabb34b0cc61441}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+2\+P\+Il@{M\+\_\+2\+P\+Il}}
+\index{M\+\_\+2\+P\+Il@{M\+\_\+2\+P\+Il}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+2\+P\+Il}{M\_2PIl}}
+{\footnotesize\ttfamily \#define M\+\_\+2\+P\+Il~6.\+283185307179586476925286766559005768L}
+
+\mbox{\Hypertarget{mathutil_8h_a684f12386ff5c830e067304ed743f74e}\label{mathutil_8h_a684f12386ff5c830e067304ed743f74e}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+Ef@{M\+\_\+\+Ef}}
+\index{M\+\_\+\+Ef@{M\+\_\+\+Ef}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+Ef}{M\_Ef}}
+{\footnotesize\ttfamily \#define M\+\_\+\+Ef~2.\+7182818f}
+
+\mbox{\Hypertarget{mathutil_8h_ab06435ff07e27ccdb5ece62cf5d371f2}\label{mathutil_8h_ab06435ff07e27ccdb5ece62cf5d371f2}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+El@{M\+\_\+\+El}}
+\index{M\+\_\+\+El@{M\+\_\+\+El}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+El}{M\_El}}
+{\footnotesize\ttfamily \#define M\+\_\+\+El~2.\+718281828459045235360287471352662498L}
+
+\mbox{\Hypertarget{mathutil_8h_af0d421d6bcc5f450bb55d84eaf0100a6}\label{mathutil_8h_af0d421d6bcc5f450bb55d84eaf0100a6}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+L\+N10f@{M\+\_\+\+L\+N10f}}
+\index{M\+\_\+\+L\+N10f@{M\+\_\+\+L\+N10f}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+L\+N10f}{M\_LN10f}}
+{\footnotesize\ttfamily \#define M\+\_\+\+L\+N10f~2.\+3025851f}
+
+\mbox{\Hypertarget{mathutil_8h_ace0f0f1f1d84eb88ab7b7b5f0d28dc6d}\label{mathutil_8h_ace0f0f1f1d84eb88ab7b7b5f0d28dc6d}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+L\+N10l@{M\+\_\+\+L\+N10l}}
+\index{M\+\_\+\+L\+N10l@{M\+\_\+\+L\+N10l}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+L\+N10l}{M\_LN10l}}
+{\footnotesize\ttfamily \#define M\+\_\+\+L\+N10l~2.\+302585092994045684017991454684364208L}
+
+\mbox{\Hypertarget{mathutil_8h_acaee8ea501d30f1e0e5142fea72b9a65}\label{mathutil_8h_acaee8ea501d30f1e0e5142fea72b9a65}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+L\+N2f@{M\+\_\+\+L\+N2f}}
+\index{M\+\_\+\+L\+N2f@{M\+\_\+\+L\+N2f}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+L\+N2f}{M\_LN2f}}
+{\footnotesize\ttfamily \#define M\+\_\+\+L\+N2f~0.\+6931472f}
+
+\mbox{\Hypertarget{mathutil_8h_a977ed5f9353c93e68594d93e42256bf1}\label{mathutil_8h_a977ed5f9353c93e68594d93e42256bf1}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+L\+N2l@{M\+\_\+\+L\+N2l}}
+\index{M\+\_\+\+L\+N2l@{M\+\_\+\+L\+N2l}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+L\+N2l}{M\_LN2l}}
+{\footnotesize\ttfamily \#define M\+\_\+\+L\+N2l~0.\+693147180559945309417232121458176568L}
+
+\mbox{\Hypertarget{mathutil_8h_a447a52da30ca54e1065dc38bbbf5b79d}\label{mathutil_8h_a447a52da30ca54e1065dc38bbbf5b79d}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+L\+O\+G10\+Ef@{M\+\_\+\+L\+O\+G10\+Ef}}
+\index{M\+\_\+\+L\+O\+G10\+Ef@{M\+\_\+\+L\+O\+G10\+Ef}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+L\+O\+G10\+Ef}{M\_LOG10Ef}}
+{\footnotesize\ttfamily \#define M\+\_\+\+L\+O\+G10\+Ef~0.\+4342945f}
+
+\mbox{\Hypertarget{mathutil_8h_af5840646db663fbd6749bf4caed8f3e0}\label{mathutil_8h_af5840646db663fbd6749bf4caed8f3e0}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+L\+O\+G10\+El@{M\+\_\+\+L\+O\+G10\+El}}
+\index{M\+\_\+\+L\+O\+G10\+El@{M\+\_\+\+L\+O\+G10\+El}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+L\+O\+G10\+El}{M\_LOG10El}}
+{\footnotesize\ttfamily \#define M\+\_\+\+L\+O\+G10\+El~0.\+434294481903251827651128918916605082L}
+
+\mbox{\Hypertarget{mathutil_8h_ab102722265021b4c35316c7665c68fb6}\label{mathutil_8h_ab102722265021b4c35316c7665c68fb6}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+L\+O\+G2\+Ef@{M\+\_\+\+L\+O\+G2\+Ef}}
+\index{M\+\_\+\+L\+O\+G2\+Ef@{M\+\_\+\+L\+O\+G2\+Ef}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+L\+O\+G2\+Ef}{M\_LOG2Ef}}
+{\footnotesize\ttfamily \#define M\+\_\+\+L\+O\+G2\+Ef~1.\+4426950f}
+
+\mbox{\Hypertarget{mathutil_8h_a3b9c3217bad9a8c6e09be6c8cb72cfdc}\label{mathutil_8h_a3b9c3217bad9a8c6e09be6c8cb72cfdc}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+L\+O\+G2\+El@{M\+\_\+\+L\+O\+G2\+El}}
+\index{M\+\_\+\+L\+O\+G2\+El@{M\+\_\+\+L\+O\+G2\+El}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+L\+O\+G2\+El}{M\_LOG2El}}
+{\footnotesize\ttfamily \#define M\+\_\+\+L\+O\+G2\+El~1.\+442695040888963407359924681001892137L}
+
+\mbox{\Hypertarget{mathutil_8h_a893e7964ae5d1ea5137a25d70c8642a2}\label{mathutil_8h_a893e7964ae5d1ea5137a25d70c8642a2}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+P\+I\+\_\+180@{M\+\_\+\+P\+I\+\_\+180}}
+\index{M\+\_\+\+P\+I\+\_\+180@{M\+\_\+\+P\+I\+\_\+180}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+P\+I\+\_\+180}{M\_PI\_180}}
+{\footnotesize\ttfamily \#define M\+\_\+\+P\+I\+\_\+180~0.\+0174532925199432957692}
+
+
+
+Referenced by trimesh\+::radians().
+
+\mbox{\Hypertarget{mathutil_8h_a7301a88470e2039a71c2ff77716661ab}\label{mathutil_8h_a7301a88470e2039a71c2ff77716661ab}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+P\+I\+\_\+180f@{M\+\_\+\+P\+I\+\_\+180f}}
+\index{M\+\_\+\+P\+I\+\_\+180f@{M\+\_\+\+P\+I\+\_\+180f}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+P\+I\+\_\+180f}{M\_PI\_180f}}
+{\footnotesize\ttfamily \#define M\+\_\+\+P\+I\+\_\+180f~0.\+017453293f}
+
+
+
+Referenced by trimesh\+::radians().
+
+\mbox{\Hypertarget{mathutil_8h_ab54df50279b808bfbc3ecea170e7ff96}\label{mathutil_8h_ab54df50279b808bfbc3ecea170e7ff96}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+P\+I\+\_\+180l@{M\+\_\+\+P\+I\+\_\+180l}}
+\index{M\+\_\+\+P\+I\+\_\+180l@{M\+\_\+\+P\+I\+\_\+180l}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+P\+I\+\_\+180l}{M\_PI\_180l}}
+{\footnotesize\ttfamily \#define M\+\_\+\+P\+I\+\_\+180l~0.\+01745329251994329576923690768488612713L}
+
+
+
+Referenced by trimesh\+::radians().
+
+\mbox{\Hypertarget{mathutil_8h_a777ba8065498a31f7a3c11c5aac8aa2f}\label{mathutil_8h_a777ba8065498a31f7a3c11c5aac8aa2f}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+P\+I\+\_\+2f@{M\+\_\+\+P\+I\+\_\+2f}}
+\index{M\+\_\+\+P\+I\+\_\+2f@{M\+\_\+\+P\+I\+\_\+2f}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+P\+I\+\_\+2f}{M\_PI\_2f}}
+{\footnotesize\ttfamily \#define M\+\_\+\+P\+I\+\_\+2f~1.\+5707963f}
+
+
+
+Referenced by trimesh\+::make\+\_\+scyl().
+
+\mbox{\Hypertarget{mathutil_8h_afb951b3cb9bee66be6b0fa2f337308be}\label{mathutil_8h_afb951b3cb9bee66be6b0fa2f337308be}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+P\+I\+\_\+2l@{M\+\_\+\+P\+I\+\_\+2l}}
+\index{M\+\_\+\+P\+I\+\_\+2l@{M\+\_\+\+P\+I\+\_\+2l}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+P\+I\+\_\+2l}{M\_PI\_2l}}
+{\footnotesize\ttfamily \#define M\+\_\+\+P\+I\+\_\+2l~1.\+570796326794896619231321691639751442L}
+
+
+
+Referenced by trimesh\+::decompose\+\_\+rot().
+
+\mbox{\Hypertarget{mathutil_8h_a091f7cfff0ed8c0bde362d5e0cd51d4a}\label{mathutil_8h_a091f7cfff0ed8c0bde362d5e0cd51d4a}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+P\+I\+\_\+3@{M\+\_\+\+P\+I\+\_\+3}}
+\index{M\+\_\+\+P\+I\+\_\+3@{M\+\_\+\+P\+I\+\_\+3}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+P\+I\+\_\+3}{M\_PI\_3}}
+{\footnotesize\ttfamily \#define M\+\_\+\+P\+I\+\_\+3~1.\+04719755119659774615}
+
+\mbox{\Hypertarget{mathutil_8h_a5ede69d2615a0a2f46be682d5be54c75}\label{mathutil_8h_a5ede69d2615a0a2f46be682d5be54c75}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+P\+I\+\_\+3f@{M\+\_\+\+P\+I\+\_\+3f}}
+\index{M\+\_\+\+P\+I\+\_\+3f@{M\+\_\+\+P\+I\+\_\+3f}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+P\+I\+\_\+3f}{M\_PI\_3f}}
+{\footnotesize\ttfamily \#define M\+\_\+\+P\+I\+\_\+3f~1.\+0471976f}
+
+
+
+Referenced by trimesh\+::\+Color\+::col\+\_\+transform().
+
+\mbox{\Hypertarget{mathutil_8h_ae807d6331257457d1f95c3316205a26c}\label{mathutil_8h_ae807d6331257457d1f95c3316205a26c}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+P\+I\+\_\+3l@{M\+\_\+\+P\+I\+\_\+3l}}
+\index{M\+\_\+\+P\+I\+\_\+3l@{M\+\_\+\+P\+I\+\_\+3l}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+P\+I\+\_\+3l}{M\_PI\_3l}}
+{\footnotesize\ttfamily \#define M\+\_\+\+P\+I\+\_\+3l~1.\+047197551196597746154214461093167628L}
+
+\mbox{\Hypertarget{mathutil_8h_a3456dcadffd6d1c2106877ae572e0d95}\label{mathutil_8h_a3456dcadffd6d1c2106877ae572e0d95}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+P\+I\+\_\+4f@{M\+\_\+\+P\+I\+\_\+4f}}
+\index{M\+\_\+\+P\+I\+\_\+4f@{M\+\_\+\+P\+I\+\_\+4f}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+P\+I\+\_\+4f}{M\_PI\_4f}}
+{\footnotesize\ttfamily \#define M\+\_\+\+P\+I\+\_\+4f~0.\+7853982f}
+
+\mbox{\Hypertarget{mathutil_8h_a0128b16e957314d6adfc13f4a21363ae}\label{mathutil_8h_a0128b16e957314d6adfc13f4a21363ae}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+P\+I\+\_\+4l@{M\+\_\+\+P\+I\+\_\+4l}}
+\index{M\+\_\+\+P\+I\+\_\+4l@{M\+\_\+\+P\+I\+\_\+4l}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+P\+I\+\_\+4l}{M\_PI\_4l}}
+{\footnotesize\ttfamily \#define M\+\_\+\+P\+I\+\_\+4l~0.\+785398163397448309615660845819875721L}
+
+\mbox{\Hypertarget{mathutil_8h_acbb42dc053fedc161079f0a4d20a64e8}\label{mathutil_8h_acbb42dc053fedc161079f0a4d20a64e8}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+P\+If@{M\+\_\+\+P\+If}}
+\index{M\+\_\+\+P\+If@{M\+\_\+\+P\+If}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+P\+If}{M\_PIf}}
+{\footnotesize\ttfamily \#define M\+\_\+\+P\+If~3.\+1415927f}
+
+
+
+Referenced by trimesh\+::\+Tri\+Mesh\+::dihedral(), trimesh\+::make\+\_\+helix(), and trimesh\+::make\+\_\+sphere\+\_\+polar().
+
+\mbox{\Hypertarget{mathutil_8h_a126570edaffa4fa37291be26b3b8fdce}\label{mathutil_8h_a126570edaffa4fa37291be26b3b8fdce}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+P\+Il@{M\+\_\+\+P\+Il}}
+\index{M\+\_\+\+P\+Il@{M\+\_\+\+P\+Il}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+P\+Il}{M\_PIl}}
+{\footnotesize\ttfamily \#define M\+\_\+\+P\+Il~3.\+141592653589793238462643383279502884L}
+
+\mbox{\Hypertarget{mathutil_8h_a5330d4737f89cfaec639a6e07202b0e0}\label{mathutil_8h_a5330d4737f89cfaec639a6e07202b0e0}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+S\+Q\+R\+T1\+\_\+2f@{M\+\_\+\+S\+Q\+R\+T1\+\_\+2f}}
+\index{M\+\_\+\+S\+Q\+R\+T1\+\_\+2f@{M\+\_\+\+S\+Q\+R\+T1\+\_\+2f}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+S\+Q\+R\+T1\+\_\+2f}{M\_SQRT1\_2f}}
+{\footnotesize\ttfamily \#define M\+\_\+\+S\+Q\+R\+T1\+\_\+2f~0.\+7071068f}
+
+\mbox{\Hypertarget{mathutil_8h_afa79c83757d2b6396c9de76bb2e9b9e1}\label{mathutil_8h_afa79c83757d2b6396c9de76bb2e9b9e1}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+S\+Q\+R\+T1\+\_\+2l@{M\+\_\+\+S\+Q\+R\+T1\+\_\+2l}}
+\index{M\+\_\+\+S\+Q\+R\+T1\+\_\+2l@{M\+\_\+\+S\+Q\+R\+T1\+\_\+2l}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+S\+Q\+R\+T1\+\_\+2l}{M\_SQRT1\_2l}}
+{\footnotesize\ttfamily \#define M\+\_\+\+S\+Q\+R\+T1\+\_\+2l~0.\+707106781186547524400844362104849039L}
+
+\mbox{\Hypertarget{mathutil_8h_adcd469193a884030dcec679e5a77c4bf}\label{mathutil_8h_adcd469193a884030dcec679e5a77c4bf}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+S\+Q\+R\+T2f@{M\+\_\+\+S\+Q\+R\+T2f}}
+\index{M\+\_\+\+S\+Q\+R\+T2f@{M\+\_\+\+S\+Q\+R\+T2f}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+S\+Q\+R\+T2f}{M\_SQRT2f}}
+{\footnotesize\ttfamily \#define M\+\_\+\+S\+Q\+R\+T2f~1.\+4142136f}
+
+\mbox{\Hypertarget{mathutil_8h_aa7a1ee4f2407d3ad120ea0f8c4591e48}\label{mathutil_8h_aa7a1ee4f2407d3ad120ea0f8c4591e48}} 
+\index{mathutil.\+h@{mathutil.\+h}!M\+\_\+\+S\+Q\+R\+T2l@{M\+\_\+\+S\+Q\+R\+T2l}}
+\index{M\+\_\+\+S\+Q\+R\+T2l@{M\+\_\+\+S\+Q\+R\+T2l}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{M\+\_\+\+S\+Q\+R\+T2l}{M\_SQRT2l}}
+{\footnotesize\ttfamily \#define M\+\_\+\+S\+Q\+R\+T2l~1.\+414213562373095048801688724209698079L}
+
+\mbox{\Hypertarget{mathutil_8h_adf4b71e9670ca04618e71aba26821c97}\label{mathutil_8h_adf4b71e9670ca04618e71aba26821c97}} 
+\index{mathutil.\+h@{mathutil.\+h}!N\+E\+X\+T\+\_\+\+M\+O\+D3@{N\+E\+X\+T\+\_\+\+M\+O\+D3}}
+\index{N\+E\+X\+T\+\_\+\+M\+O\+D3@{N\+E\+X\+T\+\_\+\+M\+O\+D3}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{N\+E\+X\+T\+\_\+\+M\+O\+D3}{NEXT\_MOD3}}
+{\footnotesize\ttfamily \#define N\+E\+X\+T\+\_\+\+M\+O\+D3(\begin{DoxyParamCaption}\item[{}]{i }\end{DoxyParamCaption})~((i) $<$ 2 ? (i) + 1 \+: (i) -\/ 2)}
+
+
+
+Referenced by trimesh\+::avg\+\_\+bdy(), trimesh\+::\+Tri\+Mesh\+::cornerangle(), trimesh\+::\+Tri\+Mesh\+::dihedral(), trimesh\+::edge\+\_\+flip(), trimesh\+::flip\+\_\+benefit(), trimesh\+::insert\+\_\+vert(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+across\+\_\+edge(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+curvatures(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+dcurv(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+neighbors(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+pointareas(), trimesh\+::new\+\_\+loop\+\_\+edge(), trimesh\+::opposite(), trimesh\+::orient(), trimesh\+::\+Tri\+Mesh\+::stat(), trimesh\+::subdiv(), trimesh\+::tstrip\+\_\+build(), and trimesh\+::zorin\+\_\+edge().
+
+\mbox{\Hypertarget{mathutil_8h_a9f918755b601cf4bffca775992e6fb90}\label{mathutil_8h_a9f918755b601cf4bffca775992e6fb90}} 
+\index{mathutil.\+h@{mathutil.\+h}!N\+O\+M\+I\+N\+M\+AX@{N\+O\+M\+I\+N\+M\+AX}}
+\index{N\+O\+M\+I\+N\+M\+AX@{N\+O\+M\+I\+N\+M\+AX}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{N\+O\+M\+I\+N\+M\+AX}{NOMINMAX}}
+{\footnotesize\ttfamily \#define N\+O\+M\+I\+N\+M\+AX}
+
+\mbox{\Hypertarget{mathutil_8h_a6d5e88f4a26ed4aa6b60b71085ef7fa3}\label{mathutil_8h_a6d5e88f4a26ed4aa6b60b71085ef7fa3}} 
+\index{mathutil.\+h@{mathutil.\+h}!P\+R\+E\+V\+\_\+\+M\+O\+D3@{P\+R\+E\+V\+\_\+\+M\+O\+D3}}
+\index{P\+R\+E\+V\+\_\+\+M\+O\+D3@{P\+R\+E\+V\+\_\+\+M\+O\+D3}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{P\+R\+E\+V\+\_\+\+M\+O\+D3}{PREV\_MOD3}}
+{\footnotesize\ttfamily \#define P\+R\+E\+V\+\_\+\+M\+O\+D3(\begin{DoxyParamCaption}\item[{}]{i }\end{DoxyParamCaption})~((i) $>$ 0 ? (i) -\/ 1 \+: (i) + 2)}
+
+
+
+Referenced by trimesh\+::avg\+\_\+bdy(), trimesh\+::\+Tri\+Mesh\+::cornerangle(), trimesh\+::\+Tri\+Mesh\+::dihedral(), trimesh\+::edge\+\_\+flip(), trimesh\+::flip\+\_\+benefit(), trimesh\+::insert\+\_\+vert(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+across\+\_\+edge(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+curvatures(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+dcurv(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+neighbors(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+pointareas(), trimesh\+::opposite(), trimesh\+::subdiv(), and trimesh\+::tstrip\+\_\+build().
+
+\mbox{\Hypertarget{mathutil_8h_a642ee87acd19a9b33be6b7955d3dfcaa}\label{mathutil_8h_a642ee87acd19a9b33be6b7955d3dfcaa}} 
+\index{mathutil.\+h@{mathutil.\+h}!T\+R\+I\+M\+E\+S\+H\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED@{T\+R\+I\+M\+E\+S\+H\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED}}
+\index{T\+R\+I\+M\+E\+S\+H\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED@{T\+R\+I\+M\+E\+S\+H\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{T\+R\+I\+M\+E\+S\+H\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED}{TRIMESH\_DEPRECATED}}
+{\footnotesize\ttfamily \#define T\+R\+I\+M\+E\+S\+H\+\_\+\+D\+E\+P\+R\+E\+C\+A\+T\+ED}
+
+
+
+Referenced by trimesh\+::\+Vec$<$ 3, float $>$\+::max\+\_\+size().
+
+\mbox{\Hypertarget{mathutil_8h_ad4f22a2341fc0116e3d09f30386a8b15}\label{mathutil_8h_ad4f22a2341fc0116e3d09f30386a8b15}} 
+\index{mathutil.\+h@{mathutil.\+h}!T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE@{T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE}}
+\index{T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE@{T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE}{TRIMESH\_INLINE}}
+{\footnotesize\ttfamily \#define T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE~\hyperlink{XForm_8h_a00d24c7231be28dbaf71f5408f30e44c}{inline}}
+
+\mbox{\Hypertarget{mathutil_8h_a89fd14d7b564c856d4e5a4cff56b43ea}\label{mathutil_8h_a89fd14d7b564c856d4e5a4cff56b43ea}} 
+\index{mathutil.\+h@{mathutil.\+h}!T\+R\+I\+M\+E\+S\+H\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+C\+H\+E\+CK@{T\+R\+I\+M\+E\+S\+H\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+C\+H\+E\+CK}}
+\index{T\+R\+I\+M\+E\+S\+H\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+C\+H\+E\+CK@{T\+R\+I\+M\+E\+S\+H\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+C\+H\+E\+CK}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{T\+R\+I\+M\+E\+S\+H\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+C\+H\+E\+CK}{TRIMESH\_STATIC\_CHECK}}
+{\footnotesize\ttfamily \#define T\+R\+I\+M\+E\+S\+H\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+C\+H\+E\+CK(\begin{DoxyParamCaption}\item[{}]{expr }\end{DoxyParamCaption})~S\+T\+A\+T\+I\+C\+\_\+\+A\+S\+S\+E\+R\+T\+I\+O\+N\+\_\+\+F\+A\+I\+L\+U\+RE$<$bool(expr)$>$()}
+
+
+
+Referenced by trimesh\+::\+Vec$<$ 3, float $>$\+::cross(), std\+::get(), trimesh\+::\+Vec$<$ 3, float $>$\+::set(), and trimesh\+::\+Vec$<$ 3, float $>$\+::\+Vec().
+
+\mbox{\Hypertarget{mathutil_8h_ac6c45889010c1bd68631771b64f18101}\label{mathutil_8h_ac6c45889010c1bd68631771b64f18101}} 
+\index{mathutil.\+h@{mathutil.\+h}!unlikely@{unlikely}}
+\index{unlikely@{unlikely}!mathutil.\+h@{mathutil.\+h}}
+\subsubsection{\texorpdfstring{unlikely}{unlikely}}
+{\footnotesize\ttfamily \#define unlikely(\begin{DoxyParamCaption}\item[{}]{x }\end{DoxyParamCaption})~(x)}
+
+
+
+Referenced by trimesh\+::\+Box$<$ 3, float $>$\+::center(), trimesh\+::\+Tri\+Mesh\+::centroid(), trimesh\+::\+Box$<$ 3, float $>$\+::contains(), trimesh\+::\+Tri\+Mesh\+::cornerangle(), trimesh\+::\+Tri\+Mesh\+::dihedral(), trimesh\+::\+Box$<$ 3, float $>$\+::intersects(), trimesh\+::inv(), trimesh\+::\+Tri\+Mesh\+::is\+\_\+bdy(), trimesh\+::ldltdc(), trimesh\+::ludcmp(), trimesh\+::opposite(), trimesh\+::orthogonalize(), trimesh\+::\+Box$<$ 3, float $>$\+::radius(), trimesh\+::refract(), trimesh\+::\+X\+Form$<$ T $>$\+::rot(), trimesh\+::rot\+\_\+coord\+\_\+sys(), trimesh\+::\+X\+Form$<$ T $>$\+::rot\+\_\+into(), trimesh\+::\+Vec$<$ 3, float $>$\+::shift(), trimesh\+::\+Box$<$ 3, float $>$\+::size(), trimesh\+::smoothstep(), and trimesh\+::\+Tri\+Mesh\+::trinorm().
+

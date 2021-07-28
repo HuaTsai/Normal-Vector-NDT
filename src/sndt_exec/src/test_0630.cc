@@ -84,7 +84,7 @@ NDTCell MakeCell(const Vector2d &center,
     ret.AddPointWithCovariance(T * pt, J * S * J.transpose());
     ret.AddNormal(normals.col(i));
   }
-  ret.ComputeGaussianWithCovariances();
+  ret.ComputeGaussian();
   return ret;
 }
 

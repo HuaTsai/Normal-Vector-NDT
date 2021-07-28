@@ -1,0 +1,78 @@
+\hypertarget{test__path_8cc}{}\section{test\+\_\+path.\+cc File Reference}
+\label{test__path_8cc}\index{test\+\_\+path.\+cc@{test\+\_\+path.\+cc}}
+
+
+run for whole data log24, log62, log62-\/2  
+
+
+{\ttfamily \#include $<$bits/stdc++.\+h$>$}\newline
+{\ttfamily \#include $<$sndt\+\_\+exec/wrapper.\+hpp$>$}\newline
+{\ttfamily \#include $<$boost/program\+\_\+options.\+hpp$>$}\newline
+{\ttfamily \#include $<$common/\+Ego\+Point\+Clouds.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/ndt\+\_\+visualizations.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+msgs/\+Int32.\+h$>$}\newline
+{\ttfamily \#include $<$geometry\+\_\+msgs/\+Vector3.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+msgs/\+Float64\+Multi\+Array.\+h$>$}\newline
+{\ttfamily \#include $<$nav\+\_\+msgs/\+Path.\+h$>$}\newline
+Include dependency graph for test\+\_\+path.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d5/d9b/test__path_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ pair$<$ Matrix\+Xd, Affine2d $>$ $>$ \hyperlink{test__path_8cc_aabe4ed907be8fc3af5411d0606d9c0c1}{Augment} (const vector$<$ common\+::\+Ego\+Point\+Clouds $>$ \&\hyperlink{test__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}, int start, int end, Affine2d \&T, vector$<$ Affine2d $>$ \&allT)
+\item 
+geometry\+\_\+msgs\+::\+Pose\+Stamped \hyperlink{test__path_8cc_abeafbec75a7703a74b31a2acb86f9720}{Make\+P\+ST} (const ros\+::\+Time \&time, const Matrix4f \&mtx)
+\item 
+int \hyperlink{test__path_8cc_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+run for whole data log24, log62, log62-\/2 
+
+\begin{DoxyAuthor}{Author}
+Hua\+Tsai (\href{mailto:huatsai.eed07g@nctu.edu.tw}{\tt huatsai.\+eed07g@nctu.\+edu.\+tw}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/07-\/17
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021 
+\end{DoxyCopyright}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{test__path_8cc_aabe4ed907be8fc3af5411d0606d9c0c1}\label{test__path_8cc_aabe4ed907be8fc3af5411d0606d9c0c1}} 
+\index{test\+\_\+path.\+cc@{test\+\_\+path.\+cc}!Augment@{Augment}}
+\index{Augment@{Augment}!test\+\_\+path.\+cc@{test\+\_\+path.\+cc}}
+\subsubsection{\texorpdfstring{Augment()}{Augment()}}
+{\footnotesize\ttfamily vector$<$pair$<$Matrix\+Xd, Affine2d$>$ $>$ Augment (\begin{DoxyParamCaption}\item[{const vector$<$ common\+::\+Ego\+Point\+Clouds $>$ \&}]{vepcs,  }\item[{int}]{start,  }\item[{int}]{end,  }\item[{Affine2d \&}]{T,  }\item[{vector$<$ Affine2d $>$ \&}]{allT }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{test__path_8cc_a3c04138a5bfe5d72780bb7e82a18e627}\label{test__path_8cc_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{test\+\_\+path.\+cc@{test\+\_\+path.\+cc}!main@{main}}
+\index{main@{main}!test\+\_\+path.\+cc@{test\+\_\+path.\+cc}}
+\subsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__path_8cc_abeafbec75a7703a74b31a2acb86f9720}\label{test__path_8cc_abeafbec75a7703a74b31a2acb86f9720}} 
+\index{test\+\_\+path.\+cc@{test\+\_\+path.\+cc}!Make\+P\+ST@{Make\+P\+ST}}
+\index{Make\+P\+ST@{Make\+P\+ST}!test\+\_\+path.\+cc@{test\+\_\+path.\+cc}}
+\subsubsection{\texorpdfstring{Make\+P\+S\+T()}{MakePST()}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Pose\+Stamped Make\+P\+ST (\begin{DoxyParamCaption}\item[{const ros\+::\+Time \&}]{time,  }\item[{const Matrix4f \&}]{mtx }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+

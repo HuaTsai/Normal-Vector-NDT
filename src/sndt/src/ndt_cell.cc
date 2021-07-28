@@ -87,9 +87,9 @@ pair<vector<Vector2d>, vector<Matrix2d>> ExcludeNaNInf2(
 
 /********* NDTCell Definitions Start Here *********/
 
-void NDTCell::InitializeVariables() {
+NDTCell::NDTCell() {
   phasgaussian_ = nhasgaussian_ = false;
-  N_ = 0;
+  n_ = 0;
   skew_rad_ = size_ = 0;
   center_.setZero();
   pcov_.setZero(), pevecs_.setZero();
@@ -101,44 +101,13 @@ void NDTCell::InitializeVariables() {
 
 void NDTCell::ComputeGaussian() {
   Expects(points_.size() == normals_.size());
-  N_ = points_.size();
+  Expects(points_.size() == point_covs_.size());
+  n_ = points_.size();
   ComputePGaussian();
   ComputeNGaussian();
 }
 
 void NDTCell::ComputePGaussian() {
-  if (!phasgaussian_) {
-    pmean_.setZero(), pcov_.setZero();
-    auto valids = ExcludeNaNInf(points_);
-    if (!valids.size()) { return; }
-    pmean_ = ComputeMean(valids);
-    pcov_ = ComputeCov(valids, pmean_);
-    if (!pcov_.isZero())
-      phasgaussian_ = true;
-  }
-}
-
-void NDTCell::ComputeNGaussian() {
-  if (!nhasgaussian_) {
-    nmean_.setZero(), ncov_.setZero();
-    auto valids = ExcludeNaNInf(normals_);
-    if (!valids.size()) { return; }
-    nmean_ = ComputeMean(valids);
-    ncov_ = ComputeCov(valids, nmean_);
-    if (!ncov_.isZero())
-      nhasgaussian_ = true;
-  }
-}
-
-void NDTCell::ComputeGaussianWithCovariances() {
-  Expects(points_.size() == normals_.size());
-  Expects(points_.size() == point_covs_.size());
-  N_ = points_.size();
-  ComputePGaussianWithCovariances();
-  ComputeNGaussianWithCovariances();
-}
-
-void NDTCell::ComputePGaussianWithCovariances() {
   if (!phasgaussian_) {
     pmean_.setZero(), pcov_.setZero();
     auto valids = ExcludeNaNInf2(points_, point_covs_);
@@ -154,7 +123,7 @@ void NDTCell::ComputePGaussianWithCovariances() {
 }
 
 // TODO: set minimum eigen value
-void NDTCell::ComputeNGaussianWithCovariances() {
+void NDTCell::ComputeNGaussian() {
   if (!nhasgaussian_) {
     nmean_.setZero(), ncov_.setZero();
     auto valids = ExcludeNaNInf(normals_);
@@ -195,12 +164,6 @@ void NDTCell::AddPointWithCovariance(const Vector2d &point,
 
 void NDTCell::AddNormal(const Vector2d &normal) { normals_.push_back(normal); }
 
-// void NDTCell::AddNormalWithCovariance(const Vector2d &normal,
-//                                       const Matrix2d &covariance) {
-//   normals_.push_back(normal);
-//   normal_covs_.push_back(covariance);
-// }
-
 MatrixXd NDTCell::GetPointsMatrix() const {
   MatrixXd ret(2, points_.size());
   for (int i = 0; i < ret.cols(); ++i)
@@ -216,32 +179,33 @@ MatrixXd NDTCell::GetNormalsMatrix() const {
 }
 
 string NDTCell::ToString() {
+  char c[600];
+  sprintf(c, "cell @ (%.2f, %.2f):\n"
+             "   N: %d\n"
+             "  𝓝p: %s, 𝓝n: %s\n"
+             "  sz: %.2f\n"
+             "  μp: (%.2f, %.2f)\n"
+             "  Σp: (%.4f, %.4f, %.4f, %.4f)\n"
+             " evp: (%.2f, %.2f)\n"
+             " ecp: (%.2f, %.2f), (%.2f, %.2f)\n"
+             "  μn: (%.2f, %.2f)\n"
+             "  Σn: (%.4f, %.4f, %.4f, %.4f)\n"
+             " evn: (%.2f, %.2f)\n"
+             " ecn: (%.2f, %.2f), (%.2f, %.2f)\n"
+             "skew: %.2f\n",
+             center_(0), center_(1), n_,
+             phasgaussian_ ? "true" : "false", nhasgaussian_ ? "true" : "false", size_,
+             pmean_(0), pmean_(1), pcov_(0, 0), pcov_(0, 1), pcov_(1, 0), pcov_(1, 1),
+             pevals_(0), pevals_(1), pevecs_(0, 0), pevecs_(1, 0), pevecs_(1, 0), pevecs_(1, 1),
+             nmean_(0), nmean_(1), ncov_(0, 0), ncov_(0, 1), ncov_(1, 0), ncov_(1, 1),
+             nevals_(0), nevals_(1), nevecs_(0, 0), nevecs_(1, 0), nevecs_(1, 0), nevecs_(1, 1),
+             skew_rad_);
   stringstream ss;
   ss.setf(ios::fixed | ios::boolalpha);
   ss.precision(2);
-  ss << "cell @ (" << center_(0) << ", " << center_(1) << "):" << endl
-     << "  N: " << N_ << endl
-     << "  𝓝p: " << phasgaussian_ << ", 𝓝n: " << nhasgaussian_ << endl
-     << "  sz: " << size_ << endl
-     << "  μp: (" << pmean_(0) << ", " << pmean_(1) << ")" << endl
-     << "  Σp: (" << pcov_(0, 0) << ", " << pcov_(0, 1) << ", " << pcov_(1, 0)
-     << ", " << pcov_(1, 1) << ")" << endl
-     << " evp: (" << pevals_(0) << ", " << pevals_(1) << ")" << endl
-     << " ecp: (" << pevecs_(0, 0) << ", " << pevecs_(1, 0) << ")"
-     << ", (" << pevecs_(1, 0) << ", " << pevecs_(1, 1) << ")" << endl
-     << "  μn: (" << nmean_(0) << ", " << nmean_(1) << ")" << endl
-     << "  Σn: (" << ncov_(0, 0) << ", " << ncov_(0, 1) << ", " << ncov_(1, 0)
-     << ", " << ncov_(1, 1) << ")" << endl
-     << " evn: (" << nevals_(0) << ", " << nevals_(1) << ")" << endl
-     << " ecn: (" << nevecs_(0, 0) << ", " << nevecs_(1, 0) << ")"
-     << ", (" << nevecs_(1, 0) << ", " << nevecs_(1, 1) << ")" << endl;
-  for (int i = 0; i < N_; ++i) {
-    ss << "  p[" << i << "]: (" << points_[i](0) << ", " << points_[i](1) << ")"
-       << endl
-       << "  n[" << i << "]: (" << normals_[i](0) << ", " << normals_[i](1)
-       << ")" << endl;
+  for (int i = 0; i < n_; ++i) {
+    ss << "p[" << i << "]: (" << points_[i](0) << ", " << points_[i](1) << "), "
+       << "n[" << i << "]: (" << normals_[i](0) << ", " << normals_[i](1) << ")" << endl;
   }
-  if (skew_rad_ != 0)
-    ss << "  skewed cell with " << skew_rad_ << " rad" << endl;
-  return ss.str();
+  return string(c) + ss.str();
 }

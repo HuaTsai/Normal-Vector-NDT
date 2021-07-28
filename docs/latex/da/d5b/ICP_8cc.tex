@@ -1,0 +1,313 @@
+\hypertarget{ICP_8cc}{}\section{I\+C\+P.\+cc File Reference}
+\label{ICP_8cc}\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+{\ttfamily \#include \char`\"{}I\+C\+P.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}K\+Dtree.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}timestamp.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}lineqn.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}common/match\+\_\+utils.\+hpp\char`\"{}}\newline
+{\ttfamily \#include $<$angles/angles.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}common/common.\+h\char`\"{}}\newline
+Include dependency graph for I\+C\+P.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d9/d79/ICP_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtrimesh_1_1PtPair}{trimesh\+::\+Pt\+Pair}
+\item 
+class \hyperlink{classtrimesh_1_1NormCompat}{trimesh\+::\+Norm\+Compat}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetrimesh}{trimesh}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{ICP_8cc_a0ea0040e87eeb2a4c9605ebc4959315e}{M\+A\+X\+\_\+\+I\+T\+E\+RS}~150
+\item 
+\#define \hyperlink{ICP_8cc_a642b564254f1a003d8a15dde26ceedad}{T\+E\+R\+M\+I\+N\+A\+T\+I\+O\+N\+\_\+\+I\+T\+E\+R\+\_\+\+T\+H\+R\+E\+SH}~25
+\item 
+\#define \hyperlink{ICP_8cc_ad6d6e8d4f646311106883680197a5641}{F\+I\+N\+A\+L\+\_\+\+I\+T\+E\+RS}~0
+\item 
+\#define \hyperlink{ICP_8cc_aa93dd3c96922fefedbddfeca8e723cf4}{M\+I\+N\+\_\+\+P\+A\+I\+RS}~10
+\item 
+\#define \hyperlink{ICP_8cc_adbbd568d30337150cd238ad073092d3a}{D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+RS}~200
+\item 
+\#define \hyperlink{ICP_8cc_a9442570bc32db4a09e4f6854e9755ca6}{D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+R\+S\+\_\+\+F\+I\+N\+AL}~5000
+\item 
+\#define \hyperlink{ICP_8cc_aed351d7d122990e1f49670df65c6f687}{C\+D\+F\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+I\+N\+T\+E\+R\+V\+AL}~20
+\item 
+\#define \hyperlink{ICP_8cc_af17c2a0779ac1ac81bf2e2fc31ab1fcb}{A\+P\+P\+R\+O\+X\+\_\+\+E\+PS}~0.\+05f
+\item 
+\#define \hyperlink{ICP_8cc_a25ab34968833396e499d10318a74df00}{R\+E\+J\+E\+C\+T\+\_\+\+B\+DY}~false
+\item 
+\#define \hyperlink{ICP_8cc_adad126276223a06fb292ceedafb0260e}{U\+S\+E\+\_\+\+N\+O\+R\+M\+C\+O\+M\+P\+AT}~true
+\item 
+\#define \hyperlink{ICP_8cc_ac81386460e9c2d8daff51710d6d178c2}{H\+U\+B\+E\+R\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT}~2.\+0f
+\item 
+\#define \hyperlink{ICP_8cc_a5537c46585176174b1c5fed2e6bf9d87}{R\+E\+G\+U\+L\+A\+R\+I\+Z\+A\+T\+I\+ON}~0.\+0002f
+\item 
+\#define \hyperlink{ICP_8cc_a4b04438700c809c9532be5b89c45c500}{D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT}~12.\+0f
+\item 
+\#define \hyperlink{ICP_8cc_a9ef7a86cee922dd0b95f90ac2d1bd185}{D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+L\+T\+\_\+\+F\+I\+N\+AL}~4.\+0f
+\item 
+\#define \hyperlink{ICP_8cc_ac4ec236d67332e4413bd515ce0683327}{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT}~1.\+5f
+\item 
+\#define \hyperlink{ICP_8cc_ac56c2fef5b82a72bc226f951dea6d5b2}{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+IN}~0.\+1f
+\item 
+\#define \hyperlink{ICP_8cc_a9aae761cdca421edec10a07cf51d6e93}{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+AX}~1.\+0f
+\item 
+\#define \hyperlink{ICP_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}{dprintf}~Tri\+Mesh\+::dprintf
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{namespacetrimesh_ac0f0ea541f1e548263c6fb0f09670b65}{trimesh\+::\+X\+Y\+T\+Degree\+From\+X\+Form} (const xform \&xf)
+\item 
+void \hyperlink{namespacetrimesh_a86f331623ebf0f0a682502e20e436f2b}{trimesh\+::compute\+\_\+overlaps} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, const xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2, vector$<$ float $>$ \&o1, vector$<$ float $>$ \&o2, float maxdist, int verbose)
+\item 
+static void \hyperlink{namespacetrimesh_a01d4962969eadde2f5a448780df070b9}{trimesh\+::selectall\+\_\+and\+\_\+match} (Tri\+Mesh $\ast$tgt, Tri\+Mesh $\ast$src, const xform \&srcxf, const K\+Dtree $\ast$tgtkd, float maxdist, float angle\+\_\+thresh, vector$<$ Pt\+Pair $>$ \&pairs)
+\item 
+static void \hyperlink{namespacetrimesh_a3ee9ec7e4e2421ba6ef8913368472591}{trimesh\+::align\+\_\+symm} (const vector$<$ Pt\+Pair $>$ \&pairs, float scale, const point \&centroid1, const point \&centroid2, float median\+\_\+dist, xform \&alignxf)
+\item 
+static void \hyperlink{namespacetrimesh_a8db90e552808a9a4b42fd94dbdba8a2d}{trimesh\+::align\+\_\+pt2pl\+\_\+trans} (const vector$<$ Pt\+Pair $>$ \&pairs, const point \&centroid1, const point \&centroid2, xform \&alignxf)
+\item 
+static void \hyperlink{namespacetrimesh_a4623940ecf4915dd04c99789847b016e}{trimesh\+::align\+\_\+scale} (const vector$<$ Pt\+Pair $>$ \&pairs, xform \&alignxf, const point \&centroid1, const point \&centroid2, bool do\+\_\+affine)
+\item 
+static float \hyperlink{namespacetrimesh_ae351c79429a7707be3fe35aee5e941a5}{trimesh\+::median} (vector$<$ float $>$ vals)
+\item 
+static float \hyperlink{namespacetrimesh_a484efbede6b25125c214f658b8420947}{trimesh\+::\+I\+C\+P\+\_\+iter} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2, const vector$<$ float $>$ \&weights1, const vector$<$ float $>$ \&weights2, vector$<$ float $>$ \&sampcdf1, vector$<$ float $>$ \&sampcdf2, int desired\+\_\+pairs, float \&cdfincr, bool update\+\_\+cdfs, float \&maxdist, float \&angle\+\_\+thresh, int verbose, I\+C\+P\+\_\+xform\+\_\+type xform\+\_\+type)
+\item 
+static void \hyperlink{namespacetrimesh_ac54c202ca56dcc7087c6a2607cad912e}{trimesh\+::make\+\_\+uniform\+\_\+cdfs} (const vector$<$ float $>$ \&weights1, vector$<$ float $>$ \&sampcdf1, const vector$<$ float $>$ \&weights2, vector$<$ float $>$ \&sampcdf2)
+\item 
+float \hyperlink{namespacetrimesh_a15a6ad9c78a34388aed21cfda8a62436}{trimesh\+::\+I\+CP} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2, vector$<$ float $>$ \&weights1, vector$<$ float $>$ \&weights2, float maxdist, int verbose, I\+C\+P\+\_\+xform\+\_\+type xform\+\_\+type)
+\item 
+float \hyperlink{namespacetrimesh_a48c046b2eee6d9f2febe817f3491e0ae}{trimesh\+::\+I\+CP} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2, int verbose=0, I\+C\+P\+\_\+xform\+\_\+type xform\+\_\+type=I\+C\+P\+\_\+\+R\+I\+G\+ID)
+\item 
+float \hyperlink{namespacetrimesh_a0eee6ad23539d352b6afcefc4b521793}{trimesh\+::\+I\+CP} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, int verbose=0, I\+C\+P\+\_\+xform\+\_\+type xform\+\_\+type=I\+C\+P\+\_\+\+R\+I\+G\+ID)
+\item 
+float \hyperlink{namespacetrimesh_a71ee28e5aabcb5da6055c743e00d920b}{trimesh\+::\+I\+CP} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2, \+::std\+::vector$<$ float $>$ \&weights1, \+::std\+::vector$<$ float $>$ \&weights2, float maxdist, int verbose, bool do\+\_\+scale, bool do\+\_\+affine=false)
+\item 
+float \hyperlink{namespacetrimesh_a00bf593d97e195670637651eca9c9bd4}{trimesh\+::\+I\+CP} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2, int verbose, bool do\+\_\+scale, bool do\+\_\+affine=false)
+\item 
+float \hyperlink{namespacetrimesh_aa22c15523373c06e7a01a2243c1ab309}{trimesh\+::\+I\+CP} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, int verbose, bool do\+\_\+scale, bool do\+\_\+affine=false)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcommon_1_1MatchInternal}{common\+::\+Match\+Internal} \hyperlink{ICP_8cc_aa9a8f472b6c5b3fec182ecd7ef20af08}{mit}
+\item 
+int \hyperlink{ICP_8cc_a7460ff431235790129d5ae74dfd7111a}{iters}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ICP_8cc_a9aae761cdca421edec10a07cf51d6e93}\label{ICP_8cc_a9aae761cdca421edec10a07cf51d6e93}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+AX@{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+AX}}
+\index{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+AX@{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+AX}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+AX}{ANGLE\_THRESH\_MAX}}
+{\footnotesize\ttfamily \#define A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+AX~1.\+0f}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P(), and trimesh\+::\+I\+C\+P\+\_\+iter().
+
+\mbox{\Hypertarget{ICP_8cc_ac56c2fef5b82a72bc226f951dea6d5b2}\label{ICP_8cc_ac56c2fef5b82a72bc226f951dea6d5b2}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+IN@{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+IN}}
+\index{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+IN@{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+IN}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+IN}{ANGLE\_THRESH\_MIN}}
+{\footnotesize\ttfamily \#define A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+IN~0.\+1f}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P\+\_\+iter().
+
+\mbox{\Hypertarget{ICP_8cc_ac4ec236d67332e4413bd515ce0683327}\label{ICP_8cc_ac4ec236d67332e4413bd515ce0683327}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT@{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT}}
+\index{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT@{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT}{ANGLE\_THRESH\_MULT}}
+{\footnotesize\ttfamily \#define A\+N\+G\+L\+E\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT~1.\+5f}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P\+\_\+iter().
+
+\mbox{\Hypertarget{ICP_8cc_af17c2a0779ac1ac81bf2e2fc31ab1fcb}\label{ICP_8cc_af17c2a0779ac1ac81bf2e2fc31ab1fcb}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!A\+P\+P\+R\+O\+X\+\_\+\+E\+PS@{A\+P\+P\+R\+O\+X\+\_\+\+E\+PS}}
+\index{A\+P\+P\+R\+O\+X\+\_\+\+E\+PS@{A\+P\+P\+R\+O\+X\+\_\+\+E\+PS}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{A\+P\+P\+R\+O\+X\+\_\+\+E\+PS}{APPROX\_EPS}}
+{\footnotesize\ttfamily \#define A\+P\+P\+R\+O\+X\+\_\+\+E\+PS~0.\+05f}
+
+
+
+Referenced by trimesh\+::selectall\+\_\+and\+\_\+match().
+
+\mbox{\Hypertarget{ICP_8cc_aed351d7d122990e1f49670df65c6f687}\label{ICP_8cc_aed351d7d122990e1f49670df65c6f687}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!C\+D\+F\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+I\+N\+T\+E\+R\+V\+AL@{C\+D\+F\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+I\+N\+T\+E\+R\+V\+AL}}
+\index{C\+D\+F\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+I\+N\+T\+E\+R\+V\+AL@{C\+D\+F\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+I\+N\+T\+E\+R\+V\+AL}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{C\+D\+F\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+I\+N\+T\+E\+R\+V\+AL}{CDF\_UPDATE\_INTERVAL}}
+{\footnotesize\ttfamily \#define C\+D\+F\+\_\+\+U\+P\+D\+A\+T\+E\+\_\+\+I\+N\+T\+E\+R\+V\+AL~20}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P().
+
+\mbox{\Hypertarget{ICP_8cc_adbbd568d30337150cd238ad073092d3a}\label{ICP_8cc_adbbd568d30337150cd238ad073092d3a}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+RS@{D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+RS}}
+\index{D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+RS@{D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+RS}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+RS}{DESIRED\_PAIRS}}
+{\footnotesize\ttfamily \#define D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+RS~200}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P().
+
+\mbox{\Hypertarget{ICP_8cc_a9442570bc32db4a09e4f6854e9755ca6}\label{ICP_8cc_a9442570bc32db4a09e4f6854e9755ca6}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+R\+S\+\_\+\+F\+I\+N\+AL@{D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+R\+S\+\_\+\+F\+I\+N\+AL}}
+\index{D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+R\+S\+\_\+\+F\+I\+N\+AL@{D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+R\+S\+\_\+\+F\+I\+N\+AL}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+R\+S\+\_\+\+F\+I\+N\+AL}{DESIRED\_PAIRS\_FINAL}}
+{\footnotesize\ttfamily \#define D\+E\+S\+I\+R\+E\+D\+\_\+\+P\+A\+I\+R\+S\+\_\+\+F\+I\+N\+AL~5000}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P().
+
+\mbox{\Hypertarget{ICP_8cc_a4b04438700c809c9532be5b89c45c500}\label{ICP_8cc_a4b04438700c809c9532be5b89c45c500}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT@{D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT}}
+\index{D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT@{D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT}{DIST\_THRESH\_MULT}}
+{\footnotesize\ttfamily \#define D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT~12.\+0f}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P(), and trimesh\+::\+I\+C\+P\+\_\+iter().
+
+\mbox{\Hypertarget{ICP_8cc_a9ef7a86cee922dd0b95f90ac2d1bd185}\label{ICP_8cc_a9ef7a86cee922dd0b95f90ac2d1bd185}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+L\+T\+\_\+\+F\+I\+N\+AL@{D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+L\+T\+\_\+\+F\+I\+N\+AL}}
+\index{D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+L\+T\+\_\+\+F\+I\+N\+AL@{D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+L\+T\+\_\+\+F\+I\+N\+AL}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+L\+T\+\_\+\+F\+I\+N\+AL}{DIST\_THRESH\_MULT\_FINAL}}
+{\footnotesize\ttfamily \#define D\+I\+S\+T\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+L\+T\+\_\+\+F\+I\+N\+AL~4.\+0f}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P().
+
+\mbox{\Hypertarget{ICP_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}\label{ICP_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!dprintf@{dprintf}}
+\index{dprintf@{dprintf}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{dprintf}{dprintf}}
+{\footnotesize\ttfamily \#define dprintf~Tri\+Mesh\+::dprintf}
+
+
+
+Referenced by trimesh\+::align\+\_\+symm(), trimesh\+::compute\+\_\+overlaps(), trimesh\+::\+I\+C\+P(), and trimesh\+::\+I\+C\+P\+\_\+iter().
+
+\mbox{\Hypertarget{ICP_8cc_ad6d6e8d4f646311106883680197a5641}\label{ICP_8cc_ad6d6e8d4f646311106883680197a5641}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!F\+I\+N\+A\+L\+\_\+\+I\+T\+E\+RS@{F\+I\+N\+A\+L\+\_\+\+I\+T\+E\+RS}}
+\index{F\+I\+N\+A\+L\+\_\+\+I\+T\+E\+RS@{F\+I\+N\+A\+L\+\_\+\+I\+T\+E\+RS}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{F\+I\+N\+A\+L\+\_\+\+I\+T\+E\+RS}{FINAL\_ITERS}}
+{\footnotesize\ttfamily \#define F\+I\+N\+A\+L\+\_\+\+I\+T\+E\+RS~0}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P().
+
+\mbox{\Hypertarget{ICP_8cc_ac81386460e9c2d8daff51710d6d178c2}\label{ICP_8cc_ac81386460e9c2d8daff51710d6d178c2}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!H\+U\+B\+E\+R\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT@{H\+U\+B\+E\+R\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT}}
+\index{H\+U\+B\+E\+R\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT@{H\+U\+B\+E\+R\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{H\+U\+B\+E\+R\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT}{HUBER\_THRESH\_MULT}}
+{\footnotesize\ttfamily \#define H\+U\+B\+E\+R\+\_\+\+T\+H\+R\+E\+S\+H\+\_\+\+M\+U\+LT~2.\+0f}
+
+
+
+Referenced by trimesh\+::align\+\_\+symm().
+
+\mbox{\Hypertarget{ICP_8cc_a0ea0040e87eeb2a4c9605ebc4959315e}\label{ICP_8cc_a0ea0040e87eeb2a4c9605ebc4959315e}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!M\+A\+X\+\_\+\+I\+T\+E\+RS@{M\+A\+X\+\_\+\+I\+T\+E\+RS}}
+\index{M\+A\+X\+\_\+\+I\+T\+E\+RS@{M\+A\+X\+\_\+\+I\+T\+E\+RS}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+I\+T\+E\+RS}{MAX\_ITERS}}
+{\footnotesize\ttfamily \#define M\+A\+X\+\_\+\+I\+T\+E\+RS~150}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P().
+
+\mbox{\Hypertarget{ICP_8cc_aa93dd3c96922fefedbddfeca8e723cf4}\label{ICP_8cc_aa93dd3c96922fefedbddfeca8e723cf4}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!M\+I\+N\+\_\+\+P\+A\+I\+RS@{M\+I\+N\+\_\+\+P\+A\+I\+RS}}
+\index{M\+I\+N\+\_\+\+P\+A\+I\+RS@{M\+I\+N\+\_\+\+P\+A\+I\+RS}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{M\+I\+N\+\_\+\+P\+A\+I\+RS}{MIN\_PAIRS}}
+{\footnotesize\ttfamily \#define M\+I\+N\+\_\+\+P\+A\+I\+RS~10}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P\+\_\+iter().
+
+\mbox{\Hypertarget{ICP_8cc_a5537c46585176174b1c5fed2e6bf9d87}\label{ICP_8cc_a5537c46585176174b1c5fed2e6bf9d87}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!R\+E\+G\+U\+L\+A\+R\+I\+Z\+A\+T\+I\+ON@{R\+E\+G\+U\+L\+A\+R\+I\+Z\+A\+T\+I\+ON}}
+\index{R\+E\+G\+U\+L\+A\+R\+I\+Z\+A\+T\+I\+ON@{R\+E\+G\+U\+L\+A\+R\+I\+Z\+A\+T\+I\+ON}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{R\+E\+G\+U\+L\+A\+R\+I\+Z\+A\+T\+I\+ON}{REGULARIZATION}}
+{\footnotesize\ttfamily \#define R\+E\+G\+U\+L\+A\+R\+I\+Z\+A\+T\+I\+ON~0.\+0002f}
+
+
+
+Referenced by trimesh\+::align\+\_\+pt2pl\+\_\+trans(), trimesh\+::align\+\_\+symm(), and trimesh\+::\+I\+C\+P\+\_\+iter().
+
+\mbox{\Hypertarget{ICP_8cc_a25ab34968833396e499d10318a74df00}\label{ICP_8cc_a25ab34968833396e499d10318a74df00}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!R\+E\+J\+E\+C\+T\+\_\+\+B\+DY@{R\+E\+J\+E\+C\+T\+\_\+\+B\+DY}}
+\index{R\+E\+J\+E\+C\+T\+\_\+\+B\+DY@{R\+E\+J\+E\+C\+T\+\_\+\+B\+DY}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{R\+E\+J\+E\+C\+T\+\_\+\+B\+DY}{REJECT\_BDY}}
+{\footnotesize\ttfamily \#define R\+E\+J\+E\+C\+T\+\_\+\+B\+DY~false}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P(), and trimesh\+::selectall\+\_\+and\+\_\+match().
+
+\mbox{\Hypertarget{ICP_8cc_a642b564254f1a003d8a15dde26ceedad}\label{ICP_8cc_a642b564254f1a003d8a15dde26ceedad}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!T\+E\+R\+M\+I\+N\+A\+T\+I\+O\+N\+\_\+\+I\+T\+E\+R\+\_\+\+T\+H\+R\+E\+SH@{T\+E\+R\+M\+I\+N\+A\+T\+I\+O\+N\+\_\+\+I\+T\+E\+R\+\_\+\+T\+H\+R\+E\+SH}}
+\index{T\+E\+R\+M\+I\+N\+A\+T\+I\+O\+N\+\_\+\+I\+T\+E\+R\+\_\+\+T\+H\+R\+E\+SH@{T\+E\+R\+M\+I\+N\+A\+T\+I\+O\+N\+\_\+\+I\+T\+E\+R\+\_\+\+T\+H\+R\+E\+SH}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{T\+E\+R\+M\+I\+N\+A\+T\+I\+O\+N\+\_\+\+I\+T\+E\+R\+\_\+\+T\+H\+R\+E\+SH}{TERMINATION\_ITER\_THRESH}}
+{\footnotesize\ttfamily \#define T\+E\+R\+M\+I\+N\+A\+T\+I\+O\+N\+\_\+\+I\+T\+E\+R\+\_\+\+T\+H\+R\+E\+SH~25}
+
+
+
+Referenced by trimesh\+::\+I\+C\+P().
+
+\mbox{\Hypertarget{ICP_8cc_adad126276223a06fb292ceedafb0260e}\label{ICP_8cc_adad126276223a06fb292ceedafb0260e}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!U\+S\+E\+\_\+\+N\+O\+R\+M\+C\+O\+M\+P\+AT@{U\+S\+E\+\_\+\+N\+O\+R\+M\+C\+O\+M\+P\+AT}}
+\index{U\+S\+E\+\_\+\+N\+O\+R\+M\+C\+O\+M\+P\+AT@{U\+S\+E\+\_\+\+N\+O\+R\+M\+C\+O\+M\+P\+AT}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{U\+S\+E\+\_\+\+N\+O\+R\+M\+C\+O\+M\+P\+AT}{USE\_NORMCOMPAT}}
+{\footnotesize\ttfamily \#define U\+S\+E\+\_\+\+N\+O\+R\+M\+C\+O\+M\+P\+AT~true}
+
+
+
+Referenced by trimesh\+::selectall\+\_\+and\+\_\+match().
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{ICP_8cc_a7460ff431235790129d5ae74dfd7111a}\label{ICP_8cc_a7460ff431235790129d5ae74dfd7111a}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!iters@{iters}}
+\index{iters@{iters}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{iters}{iters}}
+{\footnotesize\ttfamily int iters}
+
+
+
+Referenced by Do\+S\+I\+C\+P(), and trimesh\+::\+I\+C\+P().
+
+\mbox{\Hypertarget{ICP_8cc_aa9a8f472b6c5b3fec182ecd7ef20af08}\label{ICP_8cc_aa9a8f472b6c5b3fec182ecd7ef20af08}} 
+\index{I\+C\+P.\+cc@{I\+C\+P.\+cc}!mit@{mit}}
+\index{mit@{mit}!I\+C\+P.\+cc@{I\+C\+P.\+cc}}
+\subsubsection{\texorpdfstring{mit}{mit}}
+{\footnotesize\ttfamily \hyperlink{classcommon_1_1MatchInternal}{common\+::\+Match\+Internal} mit}
+
+
+
+Referenced by main().
+

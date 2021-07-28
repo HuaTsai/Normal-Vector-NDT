@@ -1,0 +1,75 @@
+\hypertarget{diffuse_8cc}{}\section{diffuse.\+cc File Reference}
+\label{diffuse_8cc}\index{diffuse.\+cc@{diffuse.\+cc}}
+{\ttfamily \#include \char`\"{}Tri\+Mesh.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Tri\+Mesh\+\_\+algo.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}timestamp.\+h\char`\"{}}\newline
+Include dependency graph for diffuse.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{df/dc7/diffuse_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtrimesh_1_1AccumVec}{trimesh\+::\+Accum\+Vec$<$ T $>$}
+\item 
+struct \hyperlink{structtrimesh_1_1AccumCurv}{trimesh\+::\+Accum\+Curv}
+\item 
+struct \hyperlink{structtrimesh_1_1AccumDCurv}{trimesh\+::\+Accum\+D\+Curv}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetrimesh}{trimesh}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{diffuse_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}{dprintf}~Tri\+Mesh\+::dprintf
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static float \hyperlink{namespacetrimesh_a16cbd25f270d7b7e59ab643cbcbc3f30}{trimesh\+::wt} (const point \&p1, const point \&p2, float invsigma2)
+\item 
+static float \hyperlink{namespacetrimesh_ad8da87245d58b4883f726ae35f03d062}{trimesh\+::wt} (const Tri\+Mesh $\ast$themesh, int v1, int v2, float invsigma2)
+\item 
+{\footnotesize template$<$class A\+C\+C\+UM , class T $>$ }\\static void \hyperlink{namespacetrimesh_a4feb8070f9a75a776c06f029972fc9e1}{trimesh\+::diffuse\+\_\+vert\+\_\+field} (Tri\+Mesh $\ast$themesh, vector$<$ unsigned $>$ \&flags, unsigned \&flag\+\_\+curr, const A\+C\+C\+UM \&accum, int v, float invsigma2, T \&flt)
+\item 
+void \hyperlink{namespacetrimesh_a8b38bcecd65c147dfe9011c2a4d6fdda}{trimesh\+::smooth\+\_\+mesh} (Tri\+Mesh $\ast$themesh, float sigma)
+\item 
+static void \hyperlink{namespacetrimesh_ae8e9e11f392a4b0bf07246c5c206275c}{trimesh\+::jones\+\_\+filter} (Tri\+Mesh $\ast$themesh, vector$<$ unsigned $>$ \&flags, unsigned \&flag\+\_\+curr, int v, float invsigma2\+\_\+1, float invsigma2\+\_\+2, vector$<$ point $>$ \&oldverts)
+\item 
+void \hyperlink{namespacetrimesh_a7ceff7daca94fc7bdb7f39fdd7f4324b}{trimesh\+::bilateral\+\_\+smooth\+\_\+mesh} (Tri\+Mesh $\ast$themesh, float sigma1, float sigma2)
+\item 
+{\footnotesize template$<$class T $>$ }\\void \hyperlink{namespacetrimesh_aa523883de851df1f1ecb2e2d26156c84}{trimesh\+::diffuse\+\_\+vector} (Tri\+Mesh $\ast$themesh, std\+::vector$<$ T $>$ \&field, float sigma)
+\item 
+void \hyperlink{namespacetrimesh_ad8505186d2e0e0ffff60dbb77ad9be8d}{trimesh\+::diffuse\+\_\+normals} (Tri\+Mesh $\ast$themesh, float sigma)
+\item 
+void \hyperlink{namespacetrimesh_a3985e4c8a4cb1fcaebc0a6edffcd58bb}{trimesh\+::diffuse\+\_\+curv} (Tri\+Mesh $\ast$themesh, float sigma)
+\item 
+void \hyperlink{namespacetrimesh_ab0d66915ca4f2f71c7726947463fe36d}{trimesh\+::diffuse\+\_\+dcurv} (Tri\+Mesh $\ast$themesh, float sigma)
+\item 
+template void \hyperlink{namespacetrimesh_a7c2e73fadf50bd3d2a431aa7e5924fd2}{trimesh\+::diffuse\+\_\+vector$<$ float $>$} (Tri\+Mesh $\ast$, vector$<$ float $>$ \&, float)
+\item 
+template void \hyperlink{namespacetrimesh_a2dbe3f073888c87f6853c5c0ea262688}{trimesh\+::diffuse\+\_\+vector$<$ Vec$<$ 2, float $>$ $>$} (Tri\+Mesh $\ast$, vector$<$ Vec$<$ 2, float $>$ $>$ \&, float)
+\item 
+template void \hyperlink{namespacetrimesh_a1e29a6392a8305ee947e3fed7d6ab08c}{trimesh\+::diffuse\+\_\+vector$<$ Vec$<$ 3, float $>$ $>$} (Tri\+Mesh $\ast$, vector$<$ Vec$<$ 3, float $>$ $>$ \&, float)
+\item 
+template void \hyperlink{namespacetrimesh_ac4bffaf28cf5ae024955368b90a9d0e6}{trimesh\+::diffuse\+\_\+vector$<$ Vec$<$ 4, float $>$ $>$} (Tri\+Mesh $\ast$, vector$<$ Vec$<$ 4, float $>$ $>$ \&, float)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{diffuse_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}\label{diffuse_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}} 
+\index{diffuse.\+cc@{diffuse.\+cc}!dprintf@{dprintf}}
+\index{dprintf@{dprintf}!diffuse.\+cc@{diffuse.\+cc}}
+\subsubsection{\texorpdfstring{dprintf}{dprintf}}
+{\footnotesize\ttfamily \#define dprintf~Tri\+Mesh\+::dprintf}
+
+
+
+Referenced by trimesh\+::bilateral\+\_\+smooth\+\_\+mesh(), trimesh\+::diffuse\+\_\+curv(), trimesh\+::diffuse\+\_\+dcurv(), trimesh\+::diffuse\+\_\+normals(), trimesh\+::diffuse\+\_\+vector(), and trimesh\+::smooth\+\_\+mesh().
+

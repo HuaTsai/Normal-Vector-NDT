@@ -1,0 +1,214 @@
+\hypertarget{classNDTGrid}{}\section{N\+D\+T\+Grid Class Reference}
+\label{classNDTGrid}\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+
+
+{\ttfamily \#include $<$ndt\+\_\+grid.\+h$>$}
+
+
+
+Collaboration diagram for N\+D\+T\+Grid\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=270pt]{dc/dab/classNDTGrid__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classNDTGrid_a3b06177c67f897a783b74b07bf520772}{N\+D\+T\+Grid} (double \hyperlink{test__match_8cc_a456553c1fc05d94c07e74c5fd45f6621}{cell\+\_\+size})
+\item 
+\hyperlink{classNDTGrid_abe32141829ff630aced21234b5dbafd8}{$\sim$\+N\+D\+T\+Grid} ()
+\item 
+void \hyperlink{classNDTGrid_a4a823b4a67ff79277e0f6faeb34614b9}{Set\+Grid\+Center} (const Vector2d \&grid\+\_\+center)
+\item 
+void \hyperlink{classNDTGrid_abc68ec18e30d186a1901a48473bba99a}{Set\+Grid\+Size} (const Vector2d \&grid\+\_\+size)
+\item 
+Vector2i \hyperlink{classNDTGrid_ae9fee8b3dbce19a564f75fc4b9b391da}{Get\+Index\+For\+Point} (const Vector2d \&point)
+\item 
+\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ \hyperlink{classNDTGrid_a9f11cfc35c17ac988917c99fad42bb22}{Get\+Cell\+For\+Point} (const Vector2d \&point)
+\item 
+\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ \hyperlink{classNDTGrid_aa0343aa6882ed7764815fbd853fc8569}{Get\+Cell\+And\+Allocate} (const Vector2d \&point)
+\item 
+\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ \hyperlink{classNDTGrid_a74535af05594018f876cebed80ac2779}{Add\+Point} (const Vector2d \&point)
+\item 
+\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ \hyperlink{classNDTGrid_a60a39e286cc87db6b40bd04d5bf75dca}{Add\+Point\+And\+Normal} (const Vector2d \&point, const Vector2d \&normal)
+\item 
+\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ \hyperlink{classNDTGrid_ae2d4baff34cfb4d86d9c0b7cdb1985ad}{Add\+Point\+And\+Normal\+With\+Covariance} (const Vector2d \&point, const Matrix2d \&point\+\_\+cov, const Vector2d \&normal)
+\item 
+\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ \hyperlink{classNDTGrid_a48ca9fc2739748d16cd03c53139a4ac4}{Get\+Closest\+Cell\+For\+Point\+By\+Radius} (const Vector2d \&point, double \hyperlink{test__match_8cc_a3f67c53b80389c5f53961936edba04c9}{radius}, bool include\+\_\+locate=true)
+\item 
+\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ \hyperlink{classNDTGrid_abb5431c2d79d69a0a798930aa83449e1}{Get\+Closest\+Cell\+For\+Point} (const Vector2d \&point, int maxdist\+\_\+of\+\_\+cells, bool include\+\_\+locate=true)
+\item 
+vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$ \hyperlink{classNDTGrid_ab26b25cf8ccd37ecf99c34fb60f79e90}{Get\+Closest\+Cells\+For\+Point\+By\+Radius} (const Vector2d \&point, double \hyperlink{test__match_8cc_a3f67c53b80389c5f53961936edba04c9}{radius}, bool include\+\_\+locate=false)
+\item 
+vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$ \hyperlink{classNDTGrid_a56e989343639b8eafac036f2dee614f6}{Get\+Closest\+Cells\+For\+Point} (const Vector2d \&point, int maxdist\+\_\+of\+\_\+cells, bool include\+\_\+locate=false)
+\item 
+string \hyperlink{classNDTGrid_a53ab3dca007fddacb4ca09d165eab93d}{To\+String} ()
+\item 
+int \hyperlink{classNDTGrid_a8a55fc9ac056847baaff928c8cd5f59a}{size} ()
+\item 
+vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$\+::iterator \hyperlink{classNDTGrid_a8f7266d28b638b1da7ba4e17e52d6241}{begin} ()
+\item 
+vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$\+::const\+\_\+iterator \hyperlink{classNDTGrid_a05cbce8015bf6696fa08a9c9a78961d9}{begin} () const
+\item 
+vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$\+::iterator \hyperlink{classNDTGrid_a788db3557af5ce9bfc6917a8a84aec97}{end} ()
+\item 
+vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$\+::const\+\_\+iterator \hyperlink{classNDTGrid_a5c83cdcf6fe6ac829c39a05a2a491156}{end} () const
+\item 
+double \hyperlink{classNDTGrid_ad79296564d68f52f63b103af2145308b}{Get\+Cell\+Size} () const
+\item 
+Vector2d \hyperlink{classNDTGrid_ac6e8b872b26bbbb154882e4c4db0d417}{Get\+Grid\+Size} () const
+\item 
+Vector2d \hyperlink{classNDTGrid_ae65d3aa2f34bf0801456df852853950e}{Get\+Grid\+Center} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classNDTGrid_a3b06177c67f897a783b74b07bf520772}\label{classNDTGrid_a3b06177c67f897a783b74b07bf520772}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{N\+D\+T\+Grid()}{NDTGrid()}}
+{\footnotesize\ttfamily N\+D\+T\+Grid\+::\+N\+D\+T\+Grid (\begin{DoxyParamCaption}\item[{double}]{cell\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+\mbox{\Hypertarget{classNDTGrid_abe32141829ff630aced21234b5dbafd8}\label{classNDTGrid_abe32141829ff630aced21234b5dbafd8}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!````~N\+D\+T\+Grid@{$\sim$\+N\+D\+T\+Grid}}
+\index{````~N\+D\+T\+Grid@{$\sim$\+N\+D\+T\+Grid}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{$\sim$\+N\+D\+T\+Grid()}{~NDTGrid()}}
+{\footnotesize\ttfamily N\+D\+T\+Grid\+::$\sim$\+N\+D\+T\+Grid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classNDTGrid_a74535af05594018f876cebed80ac2779}\label{classNDTGrid_a74535af05594018f876cebed80ac2779}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Add\+Point@{Add\+Point}}
+\index{Add\+Point@{Add\+Point}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Add\+Point()}{AddPoint()}}
+{\footnotesize\ttfamily \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ N\+D\+T\+Grid\+::\+Add\+Point (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTGrid_a60a39e286cc87db6b40bd04d5bf75dca}\label{classNDTGrid_a60a39e286cc87db6b40bd04d5bf75dca}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Add\+Point\+And\+Normal@{Add\+Point\+And\+Normal}}
+\index{Add\+Point\+And\+Normal@{Add\+Point\+And\+Normal}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Add\+Point\+And\+Normal()}{AddPointAndNormal()}}
+{\footnotesize\ttfamily \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ N\+D\+T\+Grid\+::\+Add\+Point\+And\+Normal (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point,  }\item[{const Vector2d \&}]{normal }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTGrid_ae2d4baff34cfb4d86d9c0b7cdb1985ad}\label{classNDTGrid_ae2d4baff34cfb4d86d9c0b7cdb1985ad}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Add\+Point\+And\+Normal\+With\+Covariance@{Add\+Point\+And\+Normal\+With\+Covariance}}
+\index{Add\+Point\+And\+Normal\+With\+Covariance@{Add\+Point\+And\+Normal\+With\+Covariance}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Add\+Point\+And\+Normal\+With\+Covariance()}{AddPointAndNormalWithCovariance()}}
+{\footnotesize\ttfamily \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ N\+D\+T\+Grid\+::\+Add\+Point\+And\+Normal\+With\+Covariance (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point,  }\item[{const Matrix2d \&}]{point\+\_\+cov,  }\item[{const Vector2d \&}]{normal }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTGrid_a8f7266d28b638b1da7ba4e17e52d6241}\label{classNDTGrid_a8f7266d28b638b1da7ba4e17e52d6241}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!begin@{begin}}
+\index{begin@{begin}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{begin()}{begin()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$\+::iterator N\+D\+T\+Grid\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTGrid_a05cbce8015bf6696fa08a9c9a78961d9}\label{classNDTGrid_a05cbce8015bf6696fa08a9c9a78961d9}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!begin@{begin}}
+\index{begin@{begin}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{begin()}{begin()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$\+::const\+\_\+iterator N\+D\+T\+Grid\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTGrid_a788db3557af5ce9bfc6917a8a84aec97}\label{classNDTGrid_a788db3557af5ce9bfc6917a8a84aec97}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!end@{end}}
+\index{end@{end}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{end()}{end()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$\+::iterator N\+D\+T\+Grid\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTGrid_a5c83cdcf6fe6ac829c39a05a2a491156}\label{classNDTGrid_a5c83cdcf6fe6ac829c39a05a2a491156}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!end@{end}}
+\index{end@{end}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{end()}{end()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$\+::const\+\_\+iterator N\+D\+T\+Grid\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTGrid_aa0343aa6882ed7764815fbd853fc8569}\label{classNDTGrid_aa0343aa6882ed7764815fbd853fc8569}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Get\+Cell\+And\+Allocate@{Get\+Cell\+And\+Allocate}}
+\index{Get\+Cell\+And\+Allocate@{Get\+Cell\+And\+Allocate}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Get\+Cell\+And\+Allocate()}{GetCellAndAllocate()}}
+{\footnotesize\ttfamily \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ N\+D\+T\+Grid\+::\+Get\+Cell\+And\+Allocate (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTGrid_a9f11cfc35c17ac988917c99fad42bb22}\label{classNDTGrid_a9f11cfc35c17ac988917c99fad42bb22}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Get\+Cell\+For\+Point@{Get\+Cell\+For\+Point}}
+\index{Get\+Cell\+For\+Point@{Get\+Cell\+For\+Point}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Get\+Cell\+For\+Point()}{GetCellForPoint()}}
+{\footnotesize\ttfamily \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ N\+D\+T\+Grid\+::\+Get\+Cell\+For\+Point (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTGrid_ad79296564d68f52f63b103af2145308b}\label{classNDTGrid_ad79296564d68f52f63b103af2145308b}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Get\+Cell\+Size@{Get\+Cell\+Size}}
+\index{Get\+Cell\+Size@{Get\+Cell\+Size}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Get\+Cell\+Size()}{GetCellSize()}}
+{\footnotesize\ttfamily double N\+D\+T\+Grid\+::\+Get\+Cell\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTGrid_abb5431c2d79d69a0a798930aa83449e1}\label{classNDTGrid_abb5431c2d79d69a0a798930aa83449e1}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Get\+Closest\+Cell\+For\+Point@{Get\+Closest\+Cell\+For\+Point}}
+\index{Get\+Closest\+Cell\+For\+Point@{Get\+Closest\+Cell\+For\+Point}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Get\+Closest\+Cell\+For\+Point()}{GetClosestCellForPoint()}}
+{\footnotesize\ttfamily \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ N\+D\+T\+Grid\+::\+Get\+Closest\+Cell\+For\+Point (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point,  }\item[{int}]{maxdist\+\_\+of\+\_\+cells,  }\item[{bool}]{include\+\_\+locate = {\ttfamily true} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTGrid_a48ca9fc2739748d16cd03c53139a4ac4}\label{classNDTGrid_a48ca9fc2739748d16cd03c53139a4ac4}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Get\+Closest\+Cell\+For\+Point\+By\+Radius@{Get\+Closest\+Cell\+For\+Point\+By\+Radius}}
+\index{Get\+Closest\+Cell\+For\+Point\+By\+Radius@{Get\+Closest\+Cell\+For\+Point\+By\+Radius}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Get\+Closest\+Cell\+For\+Point\+By\+Radius()}{GetClosestCellForPointByRadius()}}
+{\footnotesize\ttfamily \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ N\+D\+T\+Grid\+::\+Get\+Closest\+Cell\+For\+Point\+By\+Radius (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point,  }\item[{double}]{radius,  }\item[{bool}]{include\+\_\+locate = {\ttfamily true} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTGrid_a56e989343639b8eafac036f2dee614f6}\label{classNDTGrid_a56e989343639b8eafac036f2dee614f6}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Get\+Closest\+Cells\+For\+Point@{Get\+Closest\+Cells\+For\+Point}}
+\index{Get\+Closest\+Cells\+For\+Point@{Get\+Closest\+Cells\+For\+Point}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Get\+Closest\+Cells\+For\+Point()}{GetClosestCellsForPoint()}}
+{\footnotesize\ttfamily vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$ N\+D\+T\+Grid\+::\+Get\+Closest\+Cells\+For\+Point (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point,  }\item[{int}]{maxdist\+\_\+of\+\_\+cells,  }\item[{bool}]{include\+\_\+locate = {\ttfamily false} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTGrid_ab26b25cf8ccd37ecf99c34fb60f79e90}\label{classNDTGrid_ab26b25cf8ccd37ecf99c34fb60f79e90}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Get\+Closest\+Cells\+For\+Point\+By\+Radius@{Get\+Closest\+Cells\+For\+Point\+By\+Radius}}
+\index{Get\+Closest\+Cells\+For\+Point\+By\+Radius@{Get\+Closest\+Cells\+For\+Point\+By\+Radius}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Get\+Closest\+Cells\+For\+Point\+By\+Radius()}{GetClosestCellsForPointByRadius()}}
+{\footnotesize\ttfamily vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$ N\+D\+T\+Grid\+::\+Get\+Closest\+Cells\+For\+Point\+By\+Radius (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point,  }\item[{double}]{radius,  }\item[{bool}]{include\+\_\+locate = {\ttfamily false} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTGrid_ae65d3aa2f34bf0801456df852853950e}\label{classNDTGrid_ae65d3aa2f34bf0801456df852853950e}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Get\+Grid\+Center@{Get\+Grid\+Center}}
+\index{Get\+Grid\+Center@{Get\+Grid\+Center}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Get\+Grid\+Center()}{GetGridCenter()}}
+{\footnotesize\ttfamily Vector2d N\+D\+T\+Grid\+::\+Get\+Grid\+Center (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTGrid_ac6e8b872b26bbbb154882e4c4db0d417}\label{classNDTGrid_ac6e8b872b26bbbb154882e4c4db0d417}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Get\+Grid\+Size@{Get\+Grid\+Size}}
+\index{Get\+Grid\+Size@{Get\+Grid\+Size}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Get\+Grid\+Size()}{GetGridSize()}}
+{\footnotesize\ttfamily Vector2d N\+D\+T\+Grid\+::\+Get\+Grid\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTGrid_ae9fee8b3dbce19a564f75fc4b9b391da}\label{classNDTGrid_ae9fee8b3dbce19a564f75fc4b9b391da}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Get\+Index\+For\+Point@{Get\+Index\+For\+Point}}
+\index{Get\+Index\+For\+Point@{Get\+Index\+For\+Point}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Get\+Index\+For\+Point()}{GetIndexForPoint()}}
+{\footnotesize\ttfamily Vector2i N\+D\+T\+Grid\+::\+Get\+Index\+For\+Point (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTGrid_a4a823b4a67ff79277e0f6faeb34614b9}\label{classNDTGrid_a4a823b4a67ff79277e0f6faeb34614b9}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Set\+Grid\+Center@{Set\+Grid\+Center}}
+\index{Set\+Grid\+Center@{Set\+Grid\+Center}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Set\+Grid\+Center()}{SetGridCenter()}}
+{\footnotesize\ttfamily void N\+D\+T\+Grid\+::\+Set\+Grid\+Center (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{grid\+\_\+center }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTGrid_abc68ec18e30d186a1901a48473bba99a}\label{classNDTGrid_abc68ec18e30d186a1901a48473bba99a}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!Set\+Grid\+Size@{Set\+Grid\+Size}}
+\index{Set\+Grid\+Size@{Set\+Grid\+Size}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{Set\+Grid\+Size()}{SetGridSize()}}
+{\footnotesize\ttfamily void N\+D\+T\+Grid\+::\+Set\+Grid\+Size (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{grid\+\_\+size }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTGrid_a8a55fc9ac056847baaff928c8cd5f59a}\label{classNDTGrid_a8a55fc9ac056847baaff928c8cd5f59a}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!size@{size}}
+\index{size@{size}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily int N\+D\+T\+Grid\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTGrid_a53ab3dca007fddacb4ca09d165eab93d}\label{classNDTGrid_a53ab3dca007fddacb4ca09d165eab93d}} 
+\index{N\+D\+T\+Grid@{N\+D\+T\+Grid}!To\+String@{To\+String}}
+\index{To\+String@{To\+String}!N\+D\+T\+Grid@{N\+D\+T\+Grid}}
+\subsubsection{\texorpdfstring{To\+String()}{ToString()}}
+{\footnotesize\ttfamily string N\+D\+T\+Grid\+::\+To\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ndt__grid_8h}{ndt\+\_\+grid.\+h}\item 
+\hyperlink{ndt__grid_8cc}{ndt\+\_\+grid.\+cc}\end{DoxyCompactItemize}

@@ -1,0 +1,224 @@
+\hypertarget{TriMesh__algo_8h}{}\section{Tri\+Mesh\+\_\+algo.\+h File Reference}
+\label{TriMesh__algo_8h}\index{Tri\+Mesh\+\_\+algo.\+h@{Tri\+Mesh\+\_\+algo.\+h}}
+{\ttfamily \#include \char`\"{}Tri\+Mesh.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}X\+Form.\+h\char`\"{}}\newline
+Include dependency graph for Tri\+Mesh\+\_\+algo.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d1/db8/TriMesh__algo_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{db/df3/TriMesh__algo_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetrimesh}{trimesh}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{namespacetrimesh_a3480f7a1d4d92b412ded9f7cfb1450bd}{trimesh\+::\+Subdiv\+Scheme} \{ \newline
+\hyperlink{namespacetrimesh_a3480f7a1d4d92b412ded9f7cfb1450bda65ea97222b90edb4daeca54231fdcc62}{trimesh\+::\+S\+U\+B\+D\+I\+V\+\_\+\+P\+L\+A\+N\+AR}, 
+\hyperlink{namespacetrimesh_a3480f7a1d4d92b412ded9f7cfb1450bdafebba588d345b33d58dd0fe8e2868a57}{trimesh\+::\+S\+U\+B\+D\+I\+V\+\_\+\+L\+O\+OP}, 
+\hyperlink{namespacetrimesh_a3480f7a1d4d92b412ded9f7cfb1450bdac36f0d41e443cfda4920a2230bfed23d}{trimesh\+::\+S\+U\+B\+D\+I\+V\+\_\+\+L\+O\+O\+P\+\_\+\+O\+R\+IG}, 
+\hyperlink{namespacetrimesh_a3480f7a1d4d92b412ded9f7cfb1450bda7798ecb601cc0b9a9d467fff28f2d1c9}{trimesh\+::\+S\+U\+B\+D\+I\+V\+\_\+\+L\+O\+O\+P\+\_\+\+N\+EW}, 
+\newline
+\hyperlink{namespacetrimesh_a3480f7a1d4d92b412ded9f7cfb1450bda84a78ac3a49ba4e7d7da429c20766eac}{trimesh\+::\+S\+U\+B\+D\+I\+V\+\_\+\+B\+U\+T\+T\+E\+R\+F\+LY}, 
+\hyperlink{namespacetrimesh_a3480f7a1d4d92b412ded9f7cfb1450bda94b865a83a4fb0af283b6ae32596cd66}{trimesh\+::\+S\+U\+B\+D\+I\+V\+\_\+\+B\+U\+T\+T\+E\+R\+F\+L\+Y\+\_\+\+M\+O\+D\+I\+F\+I\+ED}
+ \}
+\item 
+enum \hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3}{trimesh\+::\+Fixed\+Shape} \{ \newline
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a22a2f1d358b63082f427cde7a6ed68c1}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+T\+E\+T\+R\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3ab32e3dee366ed09ba4c020a6c0a227bb}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+C\+U\+BE}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a81fa1711b5f47961bd485a8bcb5b8c2f}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+O\+C\+T\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3aca64f30c96494ed021a7993dd99888ff}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+D\+O\+D\+E\+C\+A\+H\+E\+D\+R\+ON}, 
+\newline
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a7b2c197989a27a464a360c5b0c5e0b9c}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+I\+C\+O\+S\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3ad83e5ee37841ed112db15d13e2f5ae86}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+T\+R\+U\+N\+C\+A\+T\+E\+D\+\_\+\+T\+E\+T\+R\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a6d9b475bd76c70849c4b601bad84ad89}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+C\+U\+B\+O\+C\+T\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3ad8cddbb229c9b983e2ffeec9e29202db}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+T\+R\+U\+N\+C\+A\+T\+E\+D\+\_\+\+C\+U\+BE}, 
+\newline
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3ae64c74b201a6595bd97b1ffb00db09dd}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+T\+R\+U\+N\+C\+A\+T\+E\+D\+\_\+\+O\+C\+T\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3aa49ee29bcf1cff7448fd9339d2328939}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+R\+H\+O\+M\+B\+I\+C\+U\+B\+O\+C\+T\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a0a8c9406e9169d0891f12387eb6370aa}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+T\+R\+U\+N\+C\+A\+T\+E\+D\+\_\+\+C\+U\+B\+O\+C\+T\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a3d680ebc723082e99470b64be47a2245}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+I\+C\+O\+S\+I\+D\+O\+D\+E\+C\+A\+H\+E\+D\+R\+ON}, 
+\newline
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3ae92e01c24727481a63c04ec24998af41}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+T\+R\+U\+N\+C\+A\+T\+E\+D\+\_\+\+D\+O\+D\+E\+C\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a5255c3bba8cafce35b4ac0add1084697}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+T\+R\+U\+N\+C\+A\+T\+E\+D\+\_\+\+I\+C\+O\+S\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a393f34675a7343be2e1df19ef59226ef}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+S\+N\+U\+B\+\_\+\+C\+U\+BE}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a0386066631b6d0d216992dd43b652032}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+R\+H\+O\+M\+B\+I\+C\+O\+S\+I\+D\+O\+D\+E\+C\+A\+H\+E\+D\+R\+ON}, 
+\newline
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3aeb06d607f0062655a3a4ed0e13b53036}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+T\+R\+U\+N\+C\+A\+T\+E\+D\+\_\+\+I\+C\+O\+S\+I\+D\+O\+D\+E\+C\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3aa0d4472700a72314d0e45e1f0d66cc8d}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+S\+N\+U\+B\+\_\+\+D\+O\+D\+E\+C\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3afa78d127a1a29069df4a9a3bb8cc26f2}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+T\+R\+I\+A\+K\+I\+S\+\_\+\+T\+E\+T\+R\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3ad0c4ef147977d5957f07070efeff1964}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+R\+H\+O\+M\+B\+I\+C\+\_\+\+D\+O\+D\+E\+C\+A\+H\+E\+D\+R\+ON}, 
+\newline
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3ae993163bd3c033ca927aa46a261c4f1b}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+T\+R\+I\+A\+K\+I\+S\+\_\+\+O\+C\+T\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3afd6ad2516c4546aee124deb1be0c0730}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+T\+E\+T\+R\+A\+K\+I\+S\+\_\+\+H\+E\+X\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3ab258faf9d2ffa5aad2cf906cecab3d12}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+D\+E\+L\+T\+O\+I\+D\+A\+L\+\_\+\+I\+C\+O\+S\+I\+T\+E\+T\+R\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a4c205e2b79fdfed656d7f2f239255cd4}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+D\+I\+S\+D\+Y\+A\+K\+I\+S\+\_\+\+D\+O\+D\+E\+C\+A\+H\+E\+D\+R\+ON}, 
+\newline
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a99bec3472ebf92beda4718e4dc7eec36}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+R\+H\+O\+M\+B\+I\+C\+\_\+\+T\+R\+I\+A\+C\+O\+N\+T\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3ab1c1a53947243c4f49214f12308bb33b}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+T\+R\+I\+A\+K\+I\+S\+\_\+\+I\+C\+O\+S\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3afd768deee9e621a02d49ce73301e6fc2}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+P\+E\+N\+T\+A\+K\+I\+S\+\_\+\+D\+O\+D\+E\+C\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3af7fa316f60df9f7bea0724fb9a5d59fb}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+P\+E\+N\+T\+A\+G\+O\+N\+A\+L\+\_\+\+I\+C\+O\+S\+I\+T\+E\+T\+R\+A\+H\+E\+D\+R\+ON}, 
+\newline
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a00f74c42ce38273fe7ccad61dc29ee9f}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+D\+E\+L\+T\+O\+I\+D\+A\+L\+\_\+\+H\+E\+X\+E\+C\+O\+N\+T\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a4588a58d3396998383dee0282cbaf236}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+D\+I\+S\+D\+Y\+A\+K\+I\+S\+\_\+\+T\+R\+I\+A\+C\+O\+N\+T\+A\+H\+E\+D\+R\+ON}, 
+\hyperlink{namespacetrimesh_ad11e2786eb398003af80c2dceef6d5a3a44e370b0dcaa34fcba46327400258e88}{trimesh\+::\+S\+H\+A\+P\+E\+\_\+\+P\+E\+N\+T\+A\+G\+O\+N\+A\+L\+\_\+\+H\+E\+X\+E\+C\+O\+N\+T\+A\+H\+E\+D\+R\+ON}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespacetrimesh_a53d8b8510a41991617d9cccc707460ea}{trimesh\+::edgeflip} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_af304d7d230cbf6775650f317ce2c85d3}{trimesh\+::faceflip} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a5650b822926d11c64efb1aff2eff8b8a}{trimesh\+::umbrella} (Tri\+Mesh $\ast$mesh, float stepsize, bool tangent=false)
+\item 
+void \hyperlink{namespacetrimesh_a21626ba22ad674850099acc05042f970}{trimesh\+::lmsmooth} (Tri\+Mesh $\ast$mesh, int niters)
+\item 
+void \hyperlink{namespacetrimesh_ae182a141ba9c94adca9f6d6f733ae4d1}{trimesh\+::numbrella} (Tri\+Mesh $\ast$mesh, float stepsize)
+\item 
+void \hyperlink{namespacetrimesh_a0fcaeb83417f32b5128881cb1076e7de}{trimesh\+::remove\+\_\+vertices} (Tri\+Mesh $\ast$mesh, const \+::std\+::vector$<$ bool $>$ \&toremove)
+\item 
+void \hyperlink{namespacetrimesh_a0930a3eeaa4d0e80fbccb6b1baf71525}{trimesh\+::remove\+\_\+unused\+\_\+vertices} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a8aa31b33984576eec08cbddfd59456f4}{trimesh\+::remove\+\_\+faces} (Tri\+Mesh $\ast$mesh, const \+::std\+::vector$<$ bool $>$ \&toremove)
+\item 
+void \hyperlink{namespacetrimesh_afe82003e1666436750d8920cc5f8aa1c}{trimesh\+::remove\+\_\+sliver\+\_\+faces} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a21a4ec76f2dfeff182e6170eab0ce31b}{trimesh\+::remap\+\_\+verts} (Tri\+Mesh $\ast$mesh, const \+::std\+::vector$<$ int $>$ \&remap\+\_\+table)
+\item 
+void \hyperlink{namespacetrimesh_a69f38c2c1647027b3c1b50e8244dc6e3}{trimesh\+::reorder\+\_\+verts} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a6f861eefce96c48dfcdfda348a2efa43}{trimesh\+::subdiv} (Tri\+Mesh $\ast$mesh, Subdiv\+Scheme scheme=S\+U\+B\+D\+I\+V\+\_\+\+L\+O\+OP)
+\item 
+void \hyperlink{namespacetrimesh_a8b38bcecd65c147dfe9011c2a4d6fdda}{trimesh\+::smooth\+\_\+mesh} (Tri\+Mesh $\ast$themesh, float sigma)
+\item 
+void \hyperlink{namespacetrimesh_a7ceff7daca94fc7bdb7f39fdd7f4324b}{trimesh\+::bilateral\+\_\+smooth\+\_\+mesh} (Tri\+Mesh $\ast$themesh, float sigma1, float sigma2)
+\item 
+{\footnotesize template$<$class T $>$ }\\void \hyperlink{namespacetrimesh_a8fa6ac94a71d33cb6e11c29e76501519}{trimesh\+::diffuse\+\_\+vector} (Tri\+Mesh $\ast$themesh, \+::std\+::vector$<$ T $>$ \&field, float sigma)
+\item 
+void \hyperlink{namespacetrimesh_ad8505186d2e0e0ffff60dbb77ad9be8d}{trimesh\+::diffuse\+\_\+normals} (Tri\+Mesh $\ast$themesh, float sigma)
+\item 
+void \hyperlink{namespacetrimesh_a3985e4c8a4cb1fcaebc0a6edffcd58bb}{trimesh\+::diffuse\+\_\+curv} (Tri\+Mesh $\ast$themesh, float sigma)
+\item 
+void \hyperlink{namespacetrimesh_ab0d66915ca4f2f71c7726947463fe36d}{trimesh\+::diffuse\+\_\+dcurv} (Tri\+Mesh $\ast$themesh, float sigma)
+\item 
+void \hyperlink{namespacetrimesh_a598226133f56948e8f2b139a1eba4291}{trimesh\+::diagonalize\+\_\+curv} (const vec \&old\+\_\+u, const vec \&old\+\_\+v, float ku, float kuv, float kv, const vec \&new\+\_\+norm, vec \&pdir1, vec \&pdir2, float \&k1, float \&k2)
+\item 
+void \hyperlink{namespacetrimesh_afa7eab0c3bb13bd1c31da85e46984a6a}{trimesh\+::proj\+\_\+curv} (const vec \&old\+\_\+u, const vec \&old\+\_\+v, float old\+\_\+ku, float old\+\_\+kuv, float old\+\_\+kv, const vec \&new\+\_\+u, const vec \&new\+\_\+v, float \&new\+\_\+ku, float \&new\+\_\+kuv, float \&new\+\_\+kv)
+\item 
+void \hyperlink{namespacetrimesh_a0869493c6351b5ff95889cd7c3a0eb24}{trimesh\+::proj\+\_\+dcurv} (const vec \&old\+\_\+u, const vec \&old\+\_\+v, const Vec$<$ 4 $>$ old\+\_\+dcurv, const vec \&new\+\_\+u, const vec \&new\+\_\+v, Vec$<$ 4 $>$ \&new\+\_\+dcurv)
+\item 
+void \hyperlink{namespacetrimesh_aa066982422b3d01638abe8e043d85839}{trimesh\+::inflate} (Tri\+Mesh $\ast$mesh, float amount)
+\item 
+void \hyperlink{namespacetrimesh_a64437f39a2aa06bf645b8433091a65f2}{trimesh\+::apply\+\_\+xform} (Tri\+Mesh $\ast$mesh, const xform \&xf)
+\item 
+void \hyperlink{namespacetrimesh_ab21687effea4389b4cb46ae1bce1576b}{trimesh\+::trans} (Tri\+Mesh $\ast$mesh, const vec \&transvec)
+\item 
+void \hyperlink{namespacetrimesh_a56d92b6392bcb92a44c3fff9d26b7711}{trimesh\+::rot} (Tri\+Mesh $\ast$mesh, float r, const vec \&axis)
+\item 
+void \hyperlink{namespacetrimesh_a7ab42ca91e0f6e2913219091b098fc4b}{trimesh\+::scale} (Tri\+Mesh $\ast$mesh, float s)
+\item 
+void \hyperlink{namespacetrimesh_a9589dc160b5d9615c33a31cd6c68cd9d}{trimesh\+::scale} (Tri\+Mesh $\ast$mesh, float sx, float sy, float sz)
+\item 
+void \hyperlink{namespacetrimesh_acfb0b9b5e4ca98a5a9f3a8d41d86d2ee}{trimesh\+::scale} (Tri\+Mesh $\ast$mesh, float s, const vec \&d)
+\item 
+void \hyperlink{namespacetrimesh_ad8b9f09b6441080d7e0eb7161574c11b}{trimesh\+::clip} (Tri\+Mesh $\ast$mesh, const box \&b)
+\item 
+point \hyperlink{namespacetrimesh_a93a754d2dc9fbf362b8ae136c7c818f0}{trimesh\+::point\+\_\+center\+\_\+of\+\_\+mass} (const \+::std\+::vector$<$ point $>$ \&pts)
+\item 
+point \hyperlink{namespacetrimesh_aba568e2df505cabcca614749e6569e40}{trimesh\+::mesh\+\_\+center\+\_\+of\+\_\+mass} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a96ebf4e1f7c1e0006873a4cd655d3342}{trimesh\+::point\+\_\+covariance} (const \+::std\+::vector$<$ point $>$ \&pts, float(\&C)\mbox{[}3\mbox{]}\mbox{[}3\mbox{]})
+\item 
+void \hyperlink{namespacetrimesh_ae859cdffd0660c404766403a241da53d}{trimesh\+::mesh\+\_\+covariance} (Tri\+Mesh $\ast$mesh, float(\&C)\mbox{[}3\mbox{]}\mbox{[}3\mbox{]})
+\item 
+void \hyperlink{namespacetrimesh_a936db9eacc51c469bf2200b49b078356}{trimesh\+::normalize\+\_\+variance} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a2a3669b47f05d87d8a8a13b80377f1a0}{trimesh\+::pca\+\_\+rotate} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a6b6c8d067ad921e0219c16f7872b267a}{trimesh\+::pca\+\_\+snap} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a4b96f265ec05951dc2447a641fbfcabf}{trimesh\+::orient} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a8376ba0b1555d2d21aedd51e78b219fe}{trimesh\+::erode} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_ad8abaeef03cff4b8d2b79fdce2ae88b1}{trimesh\+::noisify} (Tri\+Mesh $\ast$mesh, float amount)
+\item 
+void \hyperlink{namespacetrimesh_a12c73eb3c766d6aeb4848749e7d2284f}{trimesh\+::find\+\_\+comps} (Tri\+Mesh $\ast$mesh, \+::std\+::vector$<$ int $>$ \&comps, \+::std\+::vector$<$ int $>$ \&compsizes, bool conn\+\_\+vert=false)
+\item 
+void \hyperlink{namespacetrimesh_ad5569b44306d1bd25b5964524a46e6be}{trimesh\+::select\+\_\+comp} (Tri\+Mesh $\ast$mesh, const \+::std\+::vector$<$ int $>$ \&comps, int whichcc)
+\item 
+void \hyperlink{namespacetrimesh_a8224279c81a51548f945fc55a2b8f11f}{trimesh\+::select\+\_\+big\+\_\+comps} (Tri\+Mesh $\ast$mesh, const \+::std\+::vector$<$ int $>$ \&comps, const \+::std\+::vector$<$ int $>$ \&compsizes, int min\+\_\+size, int total\+\_\+largest=\+::std\+::numeric\+\_\+limits$<$ int $>$\+::max())
+\item 
+void \hyperlink{namespacetrimesh_a2ce21b5b98ba2c6875d4c4506b344e91}{trimesh\+::select\+\_\+small\+\_\+comps} (Tri\+Mesh $\ast$mesh, const \+::std\+::vector$<$ int $>$ \&comps, const \+::std\+::vector$<$ int $>$ \&compsizes, int max\+\_\+size, int total\+\_\+smallest=\+::std\+::numeric\+\_\+limits$<$ int $>$\+::max())
+\item 
+void \hyperlink{namespacetrimesh_afd23e86e789949b55df12657a3c4e5e9}{trimesh\+::find\+\_\+overlap} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, float \&area, float \&rmsdist)
+\item 
+void \hyperlink{namespacetrimesh_a317544eacae9d2ab40961b745321a82f}{trimesh\+::find\+\_\+overlap} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, const xform \&xf2, float \&area, float \&rmsdist)
+\item 
+void \hyperlink{namespacetrimesh_a3cba50c5fc7eb4957838dfbf00e131e1}{trimesh\+::find\+\_\+overlap} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, const xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2, float \&area, float \&rmsdist)
+\item 
+float \hyperlink{namespacetrimesh_a5af812fcd442454f05a172c4b3b132b2}{trimesh\+::iou} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2)
+\item 
+float \hyperlink{namespacetrimesh_ade49644c26711ac5636cdadeaf9cd6cb}{trimesh\+::iou} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, const xform \&xf2)
+\item 
+float \hyperlink{namespacetrimesh_a0cc5429c6b69538825fc7e9975cccc03}{trimesh\+::iou} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, const xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2)
+\item 
+void \hyperlink{namespacetrimesh_a369efda9a580f1a92c01b6ce7f90318e}{trimesh\+::shared} (Tri\+Mesh $\ast$mesh, float tol)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_ae92a4fbee942b06b47f12ce9fc65f14b}{trimesh\+::join} (const \+::std\+::vector$<$ Tri\+Mesh $\ast$$>$ \&meshes, float tol=-\/1.\+0f)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_ab62642fc68697384e554928509b3d54e}{trimesh\+::make\+\_\+plane} (int tess\+\_\+x, int tess\+\_\+y=-\/1)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a7b8d1ea4466f1e4fa15da392cfb53c7c}{trimesh\+::make\+\_\+bump} (int tess, float sigma=1.\+0f)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a5048001851c9e8a3d6ce04c083f1b7e7}{trimesh\+::make\+\_\+wave} (int tess, float omega=\hyperlink{mathutil_8h_acbb42dc053fedc161079f0a4d20a64e8}{M\+\_\+\+P\+If})
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a6e1d422eedb285d1081f85b1af2f6ba3}{trimesh\+::make\+\_\+frac} (int tess)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a4cea0b6c59008a228a49789ddb7ef32a}{trimesh\+::make\+\_\+cube} (int tess)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a1030b871fc3bc5612fef3ceebd64f1c5}{trimesh\+::make\+\_\+disc} (int tess\+\_\+th, int tess\+\_\+r)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a903dc8c22c95c9005ccbded226416d17}{trimesh\+::make\+\_\+cyl} (int tess\+\_\+th, int tess\+\_\+h, float r=1.\+0f)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a15ed630028c3fbc7ed99a738ba3a3f86}{trimesh\+::make\+\_\+ccyl} (int tess\+\_\+th, int tess\+\_\+h, float r=1.\+0f)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_af6e8ce0e3a16b4ea8f1ac43657b9ebaf}{trimesh\+::make\+\_\+scyl} (int tess\+\_\+th, int tess\+\_\+h, float r=1.\+0f)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a7c992f5a57f713ce40a2e780bb30ffed}{trimesh\+::make\+\_\+cone} (int tess\+\_\+th, int tess\+\_\+r, float r=1.\+0f)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a77082e081b367be3a5f74e20934c78b2}{trimesh\+::make\+\_\+ccone} (int tess\+\_\+th, int tess\+\_\+r, float r=1.\+0f)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a7352eb3e1eab4cbcaa32bf6c6ecd63d8}{trimesh\+::make\+\_\+torus} (int tess\+\_\+th, int tess\+\_\+ph, float r=0.\+25f)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_ae54a06286a36b82cb706082d53fb70bc}{trimesh\+::make\+\_\+knot} (int tess\+\_\+th, int tess\+\_\+ph, float r=0.\+2f)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a01a882fe11f71ed777296a49ece62fa0}{trimesh\+::make\+\_\+klein} (int tess\+\_\+th, int tess\+\_\+ph)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_ab8ffaaf32764c4d2e2af4ac42f3b7e2c}{trimesh\+::make\+\_\+helix} (int tess\+\_\+th, int tess\+\_\+ph, float turns, float r=0.\+2f)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_aa574c5777b2d5ee3b0cde3a8c1d9e132}{trimesh\+::make\+\_\+sphere\+\_\+polar} (int tess\+\_\+ph, int tess\+\_\+th)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a94ad95f874725b6ca0fd9c70bb207890}{trimesh\+::make\+\_\+sphere\+\_\+subdiv} (int nfaces, int nsubdiv)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a2fb2e09b33c2888f076292ff845960b0}{trimesh\+::make\+\_\+fixed\+\_\+shape} (Fixed\+Shape shape)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_ade7ab00357a31b6c07aa601ef79f2f1d}{trimesh\+::make\+\_\+platonic} (int nfaces)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_adc40d4f3767ea4d12eeadb410ee92011}{trimesh\+::make\+\_\+surface\+\_\+of\+\_\+revolution} (int tess\+\_\+th, const \+::std\+::vector$<$ point $>$ \&curve\+\_\+pts)
+\item 
+Tri\+Mesh $\ast$ \hyperlink{namespacetrimesh_a1bda267d461f7e666805d7acfb40c8c9}{trimesh\+::make\+\_\+teapot} (int tess, bool omit\+\_\+bottom=false, bool taller=false)
+\end{DoxyCompactItemize}

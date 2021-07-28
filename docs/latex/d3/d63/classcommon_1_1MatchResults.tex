@@ -1,0 +1,181 @@
+\hypertarget{classcommon_1_1MatchResults}{}\section{common\+:\+:Match\+Results Class Reference}
+\label{classcommon_1_1MatchResults}\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+
+
+{\ttfamily \#include $<$match\+\_\+utils.\+hpp$>$}
+
+
+
+Collaboration diagram for common\+:\+:Match\+Results\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=201pt]{d5/d84/classcommon_1_1MatchResults__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcommon_1_1MatchResults_a61b5ade3dc8c0f5ec8cc1a28d66316d9}{Match\+Results} ()
+\item 
+void \hyperlink{classcommon_1_1MatchResults_a3949bcd0e53bbce1c95bfa174033e6c4}{Push\+Back} (const Eigen\+::\+Vector3d \&guess, const Eigen\+::\+Vector3d \&result, double score)
+\item 
+void \hyperlink{classcommon_1_1MatchResults_a52646251d704b8f02f628f057ce678ac}{Push\+Back} (const std\+::vector$<$ double $>$ \&guess, const std\+::vector$<$ double $>$ \&result, double score)
+\item 
+{\footnotesize template$<$typename Archive $>$ }\\void \hyperlink{classcommon_1_1MatchResults_aaa028c2125c808d8ed6a399be6a4a30d}{serialize\+\_\+mtx} (Archive \&ar, std\+::string str, Eigen\+::\+Matrix\+Xd \&mtx)
+\item 
+{\footnotesize template$<$typename Archive $>$ }\\void \hyperlink{classcommon_1_1MatchResults_a47c29ca4386acfdfe204eee69a3d18fc}{serialize} (Archive \&ar, const unsigned int version)
+\item 
+Eigen\+::\+Matrix\+Xd \hyperlink{classcommon_1_1MatchResults_aee873ffecdcfb1c00c520326eb24d43e}{source} () const
+\item 
+Eigen\+::\+Matrix\+Xd \hyperlink{classcommon_1_1MatchResults_a4eccb30043877c55780aa935a404e8af}{target} () const
+\item 
+Eigen\+::\+Matrix\+Xd \hyperlink{classcommon_1_1MatchResults_a94ec129bf54fec917642b5b016bd345b}{guesses} () const
+\item 
+Eigen\+::\+Matrix\+Xd \hyperlink{classcommon_1_1MatchResults_a71899359d5ff15f8fc782969491eaad7}{results} () const
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classcommon_1_1MatchResults_a51a4a0076719e2ab140cb223fc7f414c}{actual} () const
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classcommon_1_1MatchResults_a33963f0089a5938ef58b9813d03a29f9}{scores} () const
+\item 
+std\+::string \hyperlink{classcommon_1_1MatchResults_a872852821e248926ff428de5e8bf24d6}{comment} () const
+\item 
+void \hyperlink{classcommon_1_1MatchResults_aefc957f33852ec0b2c6ce3732ad28f58}{set\+\_\+has\+\_\+data} (bool has\+\_\+data)
+\item 
+void \hyperlink{classcommon_1_1MatchResults_a409305a6a8eedf233b429a4c77fd4bcf}{set\+\_\+source} (const Eigen\+::\+Matrix\+Xd \&\hyperlink{classcommon_1_1MatchResults_aee873ffecdcfb1c00c520326eb24d43e}{source})
+\item 
+void \hyperlink{classcommon_1_1MatchResults_a1a37ed44f6684609ee7416824eb884e1}{set\+\_\+target} (const Eigen\+::\+Matrix\+Xd \&\hyperlink{classcommon_1_1MatchResults_a4eccb30043877c55780aa935a404e8af}{target})
+\item 
+void \hyperlink{classcommon_1_1MatchResults_ab87b887370037de7ae611be2420071a8}{set\+\_\+actual} (const std\+::vector$<$ double $>$ \&\hyperlink{classcommon_1_1MatchResults_a51a4a0076719e2ab140cb223fc7f414c}{actual})
+\item 
+void \hyperlink{classcommon_1_1MatchResults_a2e4d287fb5ceb112d09cf564b334bb5b}{set\+\_\+comment} (const std\+::string \&\hyperlink{classcommon_1_1MatchResults_a872852821e248926ff428de5e8bf24d6}{comment})
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classcommon_1_1MatchResults_ac98d07dd8f7b70e16ccb9a01abf56b9c}{boost\+::serialization\+::access}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a61b5ade3dc8c0f5ec8cc1a28d66316d9}\label{classcommon_1_1MatchResults_a61b5ade3dc8c0f5ec8cc1a28d66316d9}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!Match\+Results@{Match\+Results}}
+\index{Match\+Results@{Match\+Results}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{Match\+Results()}{MatchResults()}}
+{\footnotesize\ttfamily common\+::\+Match\+Results\+::\+Match\+Results (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a51a4a0076719e2ab140cb223fc7f414c}\label{classcommon_1_1MatchResults_a51a4a0076719e2ab140cb223fc7f414c}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!actual@{actual}}
+\index{actual@{actual}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{actual()}{actual()}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ common\+::\+Match\+Results\+::actual (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a872852821e248926ff428de5e8bf24d6}\label{classcommon_1_1MatchResults_a872852821e248926ff428de5e8bf24d6}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!comment@{comment}}
+\index{comment@{comment}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{comment()}{comment()}}
+{\footnotesize\ttfamily std\+::string common\+::\+Match\+Results\+::comment (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a94ec129bf54fec917642b5b016bd345b}\label{classcommon_1_1MatchResults_a94ec129bf54fec917642b5b016bd345b}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!guesses@{guesses}}
+\index{guesses@{guesses}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{guesses()}{guesses()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix\+Xd common\+::\+Match\+Results\+::guesses (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a3949bcd0e53bbce1c95bfa174033e6c4}\label{classcommon_1_1MatchResults_a3949bcd0e53bbce1c95bfa174033e6c4}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!Push\+Back@{Push\+Back}}
+\index{Push\+Back@{Push\+Back}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{Push\+Back()}{PushBack()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void common\+::\+Match\+Results\+::\+Push\+Back (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector3d \&}]{guess,  }\item[{const Eigen\+::\+Vector3d \&}]{result,  }\item[{double}]{score }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a52646251d704b8f02f628f057ce678ac}\label{classcommon_1_1MatchResults_a52646251d704b8f02f628f057ce678ac}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!Push\+Back@{Push\+Back}}
+\index{Push\+Back@{Push\+Back}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{Push\+Back()}{PushBack()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void common\+::\+Match\+Results\+::\+Push\+Back (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{guess,  }\item[{const std\+::vector$<$ double $>$ \&}]{result,  }\item[{double}]{score }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a71899359d5ff15f8fc782969491eaad7}\label{classcommon_1_1MatchResults_a71899359d5ff15f8fc782969491eaad7}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!results@{results}}
+\index{results@{results}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{results()}{results()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix\+Xd common\+::\+Match\+Results\+::results (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a33963f0089a5938ef58b9813d03a29f9}\label{classcommon_1_1MatchResults_a33963f0089a5938ef58b9813d03a29f9}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!scores@{scores}}
+\index{scores@{scores}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{scores()}{scores()}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ common\+::\+Match\+Results\+::scores (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a47c29ca4386acfdfe204eee69a3d18fc}\label{classcommon_1_1MatchResults_a47c29ca4386acfdfe204eee69a3d18fc}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!serialize@{serialize}}
+\index{serialize@{serialize}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{serialize()}{serialize()}}
+{\footnotesize\ttfamily template$<$typename Archive $>$ \\
+void common\+::\+Match\+Results\+::serialize (\begin{DoxyParamCaption}\item[{Archive \&}]{ar,  }\item[{const unsigned int}]{version }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_aaa028c2125c808d8ed6a399be6a4a30d}\label{classcommon_1_1MatchResults_aaa028c2125c808d8ed6a399be6a4a30d}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!serialize\+\_\+mtx@{serialize\+\_\+mtx}}
+\index{serialize\+\_\+mtx@{serialize\+\_\+mtx}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{serialize\+\_\+mtx()}{serialize\_mtx()}}
+{\footnotesize\ttfamily template$<$typename Archive $>$ \\
+void common\+::\+Match\+Results\+::serialize\+\_\+mtx (\begin{DoxyParamCaption}\item[{Archive \&}]{ar,  }\item[{std\+::string}]{str,  }\item[{Eigen\+::\+Matrix\+Xd \&}]{mtx }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_ab87b887370037de7ae611be2420071a8}\label{classcommon_1_1MatchResults_ab87b887370037de7ae611be2420071a8}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!set\+\_\+actual@{set\+\_\+actual}}
+\index{set\+\_\+actual@{set\+\_\+actual}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{set\+\_\+actual()}{set\_actual()}}
+{\footnotesize\ttfamily void common\+::\+Match\+Results\+::set\+\_\+actual (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{actual }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a2e4d287fb5ceb112d09cf564b334bb5b}\label{classcommon_1_1MatchResults_a2e4d287fb5ceb112d09cf564b334bb5b}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!set\+\_\+comment@{set\+\_\+comment}}
+\index{set\+\_\+comment@{set\+\_\+comment}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{set\+\_\+comment()}{set\_comment()}}
+{\footnotesize\ttfamily void common\+::\+Match\+Results\+::set\+\_\+comment (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{comment }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_aefc957f33852ec0b2c6ce3732ad28f58}\label{classcommon_1_1MatchResults_aefc957f33852ec0b2c6ce3732ad28f58}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!set\+\_\+has\+\_\+data@{set\+\_\+has\+\_\+data}}
+\index{set\+\_\+has\+\_\+data@{set\+\_\+has\+\_\+data}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{set\+\_\+has\+\_\+data()}{set\_has\_data()}}
+{\footnotesize\ttfamily void common\+::\+Match\+Results\+::set\+\_\+has\+\_\+data (\begin{DoxyParamCaption}\item[{bool}]{has\+\_\+data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a409305a6a8eedf233b429a4c77fd4bcf}\label{classcommon_1_1MatchResults_a409305a6a8eedf233b429a4c77fd4bcf}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!set\+\_\+source@{set\+\_\+source}}
+\index{set\+\_\+source@{set\+\_\+source}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{set\+\_\+source()}{set\_source()}}
+{\footnotesize\ttfamily void common\+::\+Match\+Results\+::set\+\_\+source (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix\+Xd \&}]{source }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a1a37ed44f6684609ee7416824eb884e1}\label{classcommon_1_1MatchResults_a1a37ed44f6684609ee7416824eb884e1}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!set\+\_\+target@{set\+\_\+target}}
+\index{set\+\_\+target@{set\+\_\+target}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{set\+\_\+target()}{set\_target()}}
+{\footnotesize\ttfamily void common\+::\+Match\+Results\+::set\+\_\+target (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix\+Xd \&}]{target }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_aee873ffecdcfb1c00c520326eb24d43e}\label{classcommon_1_1MatchResults_aee873ffecdcfb1c00c520326eb24d43e}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!source@{source}}
+\index{source@{source}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{source()}{source()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix\+Xd common\+::\+Match\+Results\+::source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classcommon_1_1MatchResults_a4eccb30043877c55780aa935a404e8af}\label{classcommon_1_1MatchResults_a4eccb30043877c55780aa935a404e8af}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!target@{target}}
+\index{target@{target}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{target()}{target()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix\+Xd common\+::\+Match\+Results\+::target (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{classcommon_1_1MatchResults_ac98d07dd8f7b70e16ccb9a01abf56b9c}\label{classcommon_1_1MatchResults_ac98d07dd8f7b70e16ccb9a01abf56b9c}} 
+\index{common\+::\+Match\+Results@{common\+::\+Match\+Results}!boost\+::serialization\+::access@{boost\+::serialization\+::access}}
+\index{boost\+::serialization\+::access@{boost\+::serialization\+::access}!common\+::\+Match\+Results@{common\+::\+Match\+Results}}
+\subsubsection{\texorpdfstring{boost\+::serialization\+::access}{boost::serialization::access}}
+{\footnotesize\ttfamily friend class boost\+::serialization\+::access\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{match__utils_8hpp}{match\+\_\+utils.\+hpp}\end{DoxyCompactItemize}

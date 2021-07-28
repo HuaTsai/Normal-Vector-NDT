@@ -7,36 +7,27 @@ using namespace std;
 using namespace Eigen;
 
 class NDTCell {
+  enum CellType { kLACK_POINTS, kREGULAR, kRESCALE, kASSIGN };
  public:
-  NDTCell() { InitializeVariables(); }
-  void InitializeVariables();
+  NDTCell();
 
-  // Compute Gaussians w/o Covariances
+  // Compute Gaussians w/ Covariances
   void ComputeGaussian();
   void ComputePGaussian();
   void ComputeNGaussian();
-
-  // Compute Gaussians w/ Covariances
-  void ComputeGaussianWithCovariances();
-  void ComputePGaussianWithCovariances();
-  void ComputeNGaussianWithCovariances();
 
   // Add Point and Normal
   void AddPoint(const Vector2d &point);
   void AddPointWithCovariance(const Vector2d &point, const Matrix2d &covariance);
   void AddNormal(const Vector2d &normal);
-  // FIXME: How does individual normal have covariance?
-  // void AddNormalWithCovariance(const Vector2d &normal, const Matrix2d &covariance);
 
   // MatrixXd Getter of Points and Normals
   MatrixXd GetPointsMatrix() const;
   MatrixXd GetNormalsMatrix() const;
-
-  // Debug Message
   string ToString();
 
   // Defined Get Methods of Variables
-  int GetN() const { return N_; }
+  int GetN() const { return n_; }
   bool GetPHasGaussian() const { return phasgaussian_; }
   bool GetNHasGaussian() const { return nhasgaussian_; }
   bool BothHasGaussian() const { return phasgaussian_ && nhasgaussian_; }
@@ -54,8 +45,8 @@ class NDTCell {
   vector<Vector2d> GetPoints() const { return points_; }
   vector<Vector2d> GetNormals() const { return normals_; }
 
-	// Defined Set Methods of Variables
-  void SetN(int N) { N_ = N; }
+  // Defined Set Methods of Variables
+  void SetN(int n) { n_ = n; }
   void SetPHasGaussian(bool phasgaussian) { phasgaussian_ = phasgaussian; }
   void SetNHasGaussian(bool nhasgaussian) { nhasgaussian_ = nhasgaussian; }
   void SetSkewRad(double skew_rad) { skew_rad_ = skew_rad; }
@@ -72,7 +63,7 @@ class NDTCell {
   bool mark;
 
  private:
-  int N_;
+  int n_;
   bool phasgaussian_, nhasgaussian_; 
   double skew_rad_, size_;
   Vector2d center_;
@@ -80,6 +71,4 @@ class NDTCell {
   Matrix2d pcov_, pevecs_, ncov_, nevecs_;
   vector<Vector2d> points_, normals_;
   vector<Matrix2d> point_covs_;
-  // FIXME: How does individual normal have covariance?
-  // vector<Matrix2d> normal_covs_; 
 };

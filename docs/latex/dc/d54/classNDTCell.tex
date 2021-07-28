@@ -1,0 +1,456 @@
+\hypertarget{classNDTCell}{}\section{N\+D\+T\+Cell Class Reference}
+\label{classNDTCell}\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+
+
+{\ttfamily \#include $<$ndt\+\_\+cell.\+h$>$}
+
+
+
+Collaboration diagram for N\+D\+T\+Cell\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{db/d0b/classNDTCell__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classNDTCell_acfc90537523f63170f002f74d7db1bd5}{N\+D\+T\+Cell} ()
+\item 
+void \hyperlink{classNDTCell_afdc99c3644f62eeffff96f98fe3fdeda}{Compute\+Gaussian} ()
+\item 
+void \hyperlink{classNDTCell_a7e8ff09fd2f739e3185721fd3c6bc910}{Compute\+P\+Gaussian} ()
+\item 
+void \hyperlink{classNDTCell_a3c390e46a748a735f528495d3c14f4a6}{Compute\+N\+Gaussian} ()
+\item 
+void \hyperlink{classNDTCell_a3471fe2826aa78a9f36e0f6435ad564e}{Add\+Point} (const Vector2d \&point)
+\item 
+void \hyperlink{classNDTCell_a0724e1fb86da119b2886bc63490152a2}{Add\+Point\+With\+Covariance} (const Vector2d \&point, const Matrix2d \&covariance)
+\item 
+void \hyperlink{classNDTCell_ada906677c0bf7f0c614bce81c4493425}{Add\+Normal} (const Vector2d \&normal)
+\item 
+Matrix\+Xd \hyperlink{classNDTCell_a942f05a2aac27a698113aac5e84e328a}{Get\+Points\+Matrix} () const
+\item 
+Matrix\+Xd \hyperlink{classNDTCell_aa868a56366702ac5d5871c10af438a66}{Get\+Normals\+Matrix} () const
+\item 
+string \hyperlink{classNDTCell_ae1e1133b097ce7e78fbff8a1fda4ae59}{To\+String} ()
+\item 
+int \hyperlink{classNDTCell_a0bb405d7e5bc95bd21848ae3d6283f71}{GetN} () const
+\item 
+bool \hyperlink{classNDTCell_ac4ba033f59542e40722105b6aec5540f}{Get\+P\+Has\+Gaussian} () const
+\item 
+bool \hyperlink{classNDTCell_a2953d2b36d9887794f9aa7637a52c80b}{Get\+N\+Has\+Gaussian} () const
+\item 
+bool \hyperlink{classNDTCell_a7864f7609b376f7c60af9a715081608b}{Both\+Has\+Gaussian} () const
+\item 
+double \hyperlink{classNDTCell_adb431bb96255a7a6dbafc15da7e0fdf6}{Get\+Skew\+Rad} () const
+\item 
+double \hyperlink{classNDTCell_a0dee81a09a00843003766536998b73f0}{Get\+Size} () const
+\item 
+Vector2d \hyperlink{classNDTCell_a322b936861945a4da2e712295529eda3}{Get\+Center} () const
+\item 
+Vector2d \hyperlink{classNDTCell_a61b2a9500daf0d912bfd904cbf169762}{Get\+Point\+Mean} () const
+\item 
+Matrix2d \hyperlink{classNDTCell_a0766397f0999272036edab26866c7c03}{Get\+Point\+Cov} () const
+\item 
+Vector2d \hyperlink{classNDTCell_abdebdcf6e0cfd0715efdad6b6aebd5be}{Get\+Point\+Evals} () const
+\item 
+Matrix2d \hyperlink{classNDTCell_aabd7f47d9683071303a431ebd640797a}{Get\+Point\+Evecs} () const
+\item 
+Vector2d \hyperlink{classNDTCell_ac4567367161fe878a2fe86b8f29aba04}{Get\+Normal\+Mean} () const
+\item 
+Matrix2d \hyperlink{classNDTCell_a8ea2ea0b713a10d39b3f640d42cdc055}{Get\+Normal\+Cov} () const
+\item 
+Vector2d \hyperlink{classNDTCell_a352b15be7318d1bccf60029e479491e2}{Get\+Normal\+Evals} () const
+\item 
+Matrix2d \hyperlink{classNDTCell_a15edc678da9fcc206a2a1697bc893463}{Get\+Normal\+Evecs} () const
+\item 
+vector$<$ Vector2d $>$ \hyperlink{classNDTCell_ad1e93479cbbec1b90d7eec8cb9b486a1}{Get\+Points} () const
+\item 
+vector$<$ Vector2d $>$ \hyperlink{classNDTCell_a04b9a2c831ecb8bcd5c0f5a1e183a248}{Get\+Normals} () const
+\item 
+void \hyperlink{classNDTCell_a6d75aba8fc79b0f93da8f814114d8bd2}{SetN} (int n)
+\item 
+void \hyperlink{classNDTCell_a6611090c8ef12f754032b72c5f17d795}{Set\+P\+Has\+Gaussian} (bool phasgaussian)
+\item 
+void \hyperlink{classNDTCell_a5e0af0c81b4efc61bde2616993055b14}{Set\+N\+Has\+Gaussian} (bool nhasgaussian)
+\item 
+void \hyperlink{classNDTCell_aaa8e07701412d6c47e8d3f9172a4d86c}{Set\+Skew\+Rad} (double skew\+\_\+rad)
+\item 
+void \hyperlink{classNDTCell_a304509d07db69d380e60e474932ded1b}{Set\+Size} (double size)
+\item 
+void \hyperlink{classNDTCell_aa99d66a755f591c7d0859d3203e9fb5c}{Set\+Center} (const Vector2d \&center)
+\item 
+void \hyperlink{classNDTCell_a3c3254891a543255f7beede3ed4c40b5}{Set\+Point\+Mean} (const Vector2d \&mean)
+\item 
+void \hyperlink{classNDTCell_a6d94d720f43f5ce74b9937668c5ca305}{Set\+Point\+Cov} (const Matrix2d \&cov)
+\item 
+void \hyperlink{classNDTCell_a4293e58ef5d4854c498ea0ad106814f7}{Set\+Point\+Evals} (const Vector2d \&evals)
+\item 
+void \hyperlink{classNDTCell_a6737cd9418e06edc8bf4b30a1ae19878}{Set\+Point\+Evecs} (const Matrix2d \&evecs)
+\item 
+void \hyperlink{classNDTCell_aa4ae332c7e61006d4690921ae8882d1b}{Set\+Normal\+Mean} (const Vector2d \&mean)
+\item 
+void \hyperlink{classNDTCell_a18ac3bd685318520b21bd015e8c94ef3}{Set\+Normal\+Cov} (const Matrix2d \&cov)
+\item 
+void \hyperlink{classNDTCell_a345105fcf5addd6802e4769619e3532d}{Set\+Normal\+Evals} (const Vector2d \&evals)
+\item 
+void \hyperlink{classNDTCell_ab2300ea06704e0dfb348ba31a5d4fc83}{Set\+Normal\+Evecs} (const Matrix2d \&evecs)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{classNDTCell_ae2c7aeea3860e92433adc72d108d65b4}{mark}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classNDTCell_acfc90537523f63170f002f74d7db1bd5}\label{classNDTCell_acfc90537523f63170f002f74d7db1bd5}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{N\+D\+T\+Cell()}{NDTCell()}}
+{\footnotesize\ttfamily N\+D\+T\+Cell\+::\+N\+D\+T\+Cell (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classNDTCell_ada906677c0bf7f0c614bce81c4493425}\label{classNDTCell_ada906677c0bf7f0c614bce81c4493425}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Add\+Normal@{Add\+Normal}}
+\index{Add\+Normal@{Add\+Normal}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Add\+Normal()}{AddNormal()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Add\+Normal (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{normal }\end{DoxyParamCaption})}
+
+
+
+Referenced by N\+D\+T\+Grid\+::\+Add\+Point\+And\+Normal(), N\+D\+T\+Grid\+::\+Add\+Point\+And\+Normal\+With\+Covariance(), and Make\+Cell().
+
+\mbox{\Hypertarget{classNDTCell_a3471fe2826aa78a9f36e0f6435ad564e}\label{classNDTCell_a3471fe2826aa78a9f36e0f6435ad564e}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Add\+Point@{Add\+Point}}
+\index{Add\+Point@{Add\+Point}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Add\+Point()}{AddPoint()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Add\+Point (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point }\end{DoxyParamCaption})}
+
+
+
+Referenced by N\+D\+T\+Grid\+::\+Add\+Point(), and N\+D\+T\+Grid\+::\+Add\+Point\+And\+Normal().
+
+\mbox{\Hypertarget{classNDTCell_a0724e1fb86da119b2886bc63490152a2}\label{classNDTCell_a0724e1fb86da119b2886bc63490152a2}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Add\+Point\+With\+Covariance@{Add\+Point\+With\+Covariance}}
+\index{Add\+Point\+With\+Covariance@{Add\+Point\+With\+Covariance}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Add\+Point\+With\+Covariance()}{AddPointWithCovariance()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Add\+Point\+With\+Covariance (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point,  }\item[{const Matrix2d \&}]{covariance }\end{DoxyParamCaption})}
+
+
+
+Referenced by N\+D\+T\+Grid\+::\+Add\+Point\+And\+Normal\+With\+Covariance(), and Make\+Cell().
+
+\mbox{\Hypertarget{classNDTCell_a7864f7609b376f7c60af9a715081608b}\label{classNDTCell_a7864f7609b376f7c60af9a715081608b}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Both\+Has\+Gaussian@{Both\+Has\+Gaussian}}
+\index{Both\+Has\+Gaussian@{Both\+Has\+Gaussian}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Both\+Has\+Gaussian()}{BothHasGaussian()}}
+{\footnotesize\ttfamily bool N\+D\+T\+Cell\+::\+Both\+Has\+Gaussian (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_afdc99c3644f62eeffff96f98fe3fdeda}\label{classNDTCell_afdc99c3644f62eeffff96f98fe3fdeda}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Compute\+Gaussian@{Compute\+Gaussian}}
+\index{Compute\+Gaussian@{Compute\+Gaussian}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Compute\+Gaussian()}{ComputeGaussian()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Compute\+Gaussian (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Referenced by N\+D\+T\+Map\+::\+Load\+Point\+Cloud(), N\+D\+T\+Map\+::\+Load\+Point\+Cloud\+With\+Covariances(), and Make\+Cell().
+
+\mbox{\Hypertarget{classNDTCell_a3c390e46a748a735f528495d3c14f4a6}\label{classNDTCell_a3c390e46a748a735f528495d3c14f4a6}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Compute\+N\+Gaussian@{Compute\+N\+Gaussian}}
+\index{Compute\+N\+Gaussian@{Compute\+N\+Gaussian}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Compute\+N\+Gaussian()}{ComputeNGaussian()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Compute\+N\+Gaussian (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTCell_a7e8ff09fd2f739e3185721fd3c6bc910}\label{classNDTCell_a7e8ff09fd2f739e3185721fd3c6bc910}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Compute\+P\+Gaussian@{Compute\+P\+Gaussian}}
+\index{Compute\+P\+Gaussian@{Compute\+P\+Gaussian}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Compute\+P\+Gaussian()}{ComputePGaussian()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Compute\+P\+Gaussian (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classNDTCell_a322b936861945a4da2e712295529eda3}\label{classNDTCell_a322b936861945a4da2e712295529eda3}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Center@{Get\+Center}}
+\index{Get\+Center@{Get\+Center}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Center()}{GetCenter()}}
+{\footnotesize\ttfamily Vector2d N\+D\+T\+Cell\+::\+Get\+Center (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by Correspondence\+Msg(), Marker\+Array\+Of\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+N\+D\+T\+Cell2().
+
+\mbox{\Hypertarget{classNDTCell_a0bb405d7e5bc95bd21848ae3d6283f71}\label{classNDTCell_a0bb405d7e5bc95bd21848ae3d6283f71}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!GetN@{GetN}}
+\index{GetN@{GetN}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+N()}{GetN()}}
+{\footnotesize\ttfamily int N\+D\+T\+Cell\+::\+GetN (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by Correspondence\+Msg().
+
+\mbox{\Hypertarget{classNDTCell_a2953d2b36d9887794f9aa7637a52c80b}\label{classNDTCell_a2953d2b36d9887794f9aa7637a52c80b}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+N\+Has\+Gaussian@{Get\+N\+Has\+Gaussian}}
+\index{Get\+N\+Has\+Gaussian@{Get\+N\+Has\+Gaussian}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+N\+Has\+Gaussian()}{GetNHasGaussian()}}
+{\footnotesize\ttfamily bool N\+D\+T\+Cell\+::\+Get\+N\+Has\+Gaussian (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by Marker\+Array\+Of\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+N\+D\+T\+Cell2().
+
+\mbox{\Hypertarget{classNDTCell_a8ea2ea0b713a10d39b3f640d42cdc055}\label{classNDTCell_a8ea2ea0b713a10d39b3f640d42cdc055}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Normal\+Cov@{Get\+Normal\+Cov}}
+\index{Get\+Normal\+Cov@{Get\+Normal\+Cov}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Normal\+Cov()}{GetNormalCov()}}
+{\footnotesize\ttfamily Matrix2d N\+D\+T\+Cell\+::\+Get\+Normal\+Cov (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by Correspondence\+Msg(), Marker\+Array\+Of\+N\+D\+T\+Cell(), Marker\+Array\+Of\+N\+D\+T\+Cell2(), Cost\+Functor\+::\+Mean\+And\+Cov(), Cost\+Functions\+::\+Old\+Mean\+And\+Cov(), Cost\+Functor\+::operator()(), and Cost\+Functor\+::\+Score().
+
+\mbox{\Hypertarget{classNDTCell_a352b15be7318d1bccf60029e479491e2}\label{classNDTCell_a352b15be7318d1bccf60029e479491e2}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Normal\+Evals@{Get\+Normal\+Evals}}
+\index{Get\+Normal\+Evals@{Get\+Normal\+Evals}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Normal\+Evals()}{GetNormalEvals()}}
+{\footnotesize\ttfamily Vector2d N\+D\+T\+Cell\+::\+Get\+Normal\+Evals (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_a15edc678da9fcc206a2a1697bc893463}\label{classNDTCell_a15edc678da9fcc206a2a1697bc893463}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Normal\+Evecs@{Get\+Normal\+Evecs}}
+\index{Get\+Normal\+Evecs@{Get\+Normal\+Evecs}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Normal\+Evecs()}{GetNormalEvecs()}}
+{\footnotesize\ttfamily Matrix2d N\+D\+T\+Cell\+::\+Get\+Normal\+Evecs (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_ac4567367161fe878a2fe86b8f29aba04}\label{classNDTCell_ac4567367161fe878a2fe86b8f29aba04}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Normal\+Mean@{Get\+Normal\+Mean}}
+\index{Get\+Normal\+Mean@{Get\+Normal\+Mean}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Normal\+Mean()}{GetNormalMean()}}
+{\footnotesize\ttfamily Vector2d N\+D\+T\+Cell\+::\+Get\+Normal\+Mean (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by Correspondence\+Msg(), Marker\+Array\+Of\+N\+D\+T\+Cell(), Marker\+Array\+Of\+N\+D\+T\+Cell2(), Cost\+Functor\+::\+Mean\+And\+Cov(), Cost\+Functions\+::\+New\+Mean\+And\+Cov(), Cost\+Functions\+::\+Old\+Mean\+And\+Cov(), Cost\+Functor\+::operator()(), and Cost\+Functor\+::\+Score().
+
+\mbox{\Hypertarget{classNDTCell_a04b9a2c831ecb8bcd5c0f5a1e183a248}\label{classNDTCell_a04b9a2c831ecb8bcd5c0f5a1e183a248}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Normals@{Get\+Normals}}
+\index{Get\+Normals@{Get\+Normals}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Normals()}{GetNormals()}}
+{\footnotesize\ttfamily vector$<$Vector2d$>$ N\+D\+T\+Cell\+::\+Get\+Normals (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by Correspondence\+Msg().
+
+\mbox{\Hypertarget{classNDTCell_aa868a56366702ac5d5871c10af438a66}\label{classNDTCell_aa868a56366702ac5d5871c10af438a66}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Normals\+Matrix@{Get\+Normals\+Matrix}}
+\index{Get\+Normals\+Matrix@{Get\+Normals\+Matrix}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Normals\+Matrix()}{GetNormalsMatrix()}}
+{\footnotesize\ttfamily Matrix\+Xd N\+D\+T\+Cell\+::\+Get\+Normals\+Matrix (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classNDTCell_ac4ba033f59542e40722105b6aec5540f}\label{classNDTCell_ac4ba033f59542e40722105b6aec5540f}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+P\+Has\+Gaussian@{Get\+P\+Has\+Gaussian}}
+\index{Get\+P\+Has\+Gaussian@{Get\+P\+Has\+Gaussian}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+P\+Has\+Gaussian()}{GetPHasGaussian()}}
+{\footnotesize\ttfamily bool N\+D\+T\+Cell\+::\+Get\+P\+Has\+Gaussian (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_a0766397f0999272036edab26866c7c03}\label{classNDTCell_a0766397f0999272036edab26866c7c03}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Point\+Cov@{Get\+Point\+Cov}}
+\index{Get\+Point\+Cov@{Get\+Point\+Cov}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Point\+Cov()}{GetPointCov()}}
+{\footnotesize\ttfamily Matrix2d N\+D\+T\+Cell\+::\+Get\+Point\+Cov (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by Correspondence\+Msg(), Marker\+Array\+Of\+N\+D\+T\+Cell(), Marker\+Array\+Of\+N\+D\+T\+Cell2(), Cost\+Functor\+::\+Mean\+And\+Cov(), Cost\+Functions\+::\+New\+Mean\+And\+Cov(), Cost\+Functions\+::\+Old\+Mean\+And\+Cov(), Cost\+Functor\+::operator()(), and Cost\+Functor\+::\+Score().
+
+\mbox{\Hypertarget{classNDTCell_abdebdcf6e0cfd0715efdad6b6aebd5be}\label{classNDTCell_abdebdcf6e0cfd0715efdad6b6aebd5be}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Point\+Evals@{Get\+Point\+Evals}}
+\index{Get\+Point\+Evals@{Get\+Point\+Evals}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Point\+Evals()}{GetPointEvals()}}
+{\footnotesize\ttfamily Vector2d N\+D\+T\+Cell\+::\+Get\+Point\+Evals (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_aabd7f47d9683071303a431ebd640797a}\label{classNDTCell_aabd7f47d9683071303a431ebd640797a}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Point\+Evecs@{Get\+Point\+Evecs}}
+\index{Get\+Point\+Evecs@{Get\+Point\+Evecs}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Point\+Evecs()}{GetPointEvecs()}}
+{\footnotesize\ttfamily Matrix2d N\+D\+T\+Cell\+::\+Get\+Point\+Evecs (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_a61b2a9500daf0d912bfd904cbf169762}\label{classNDTCell_a61b2a9500daf0d912bfd904cbf169762}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Point\+Mean@{Get\+Point\+Mean}}
+\index{Get\+Point\+Mean@{Get\+Point\+Mean}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Point\+Mean()}{GetPointMean()}}
+{\footnotesize\ttfamily Vector2d N\+D\+T\+Cell\+::\+Get\+Point\+Mean (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by Correspondence\+Msg(), main(), Marker\+Array\+Of\+Correspondences(), Marker\+Array\+Of\+N\+D\+T\+Cell(), Marker\+Array\+Of\+N\+D\+T\+Cell2(), Cost\+Functor\+::\+Mean\+And\+Cov(), Cost\+Functions\+::\+New\+Mean\+And\+Cov(), Cost\+Functions\+::\+Old\+Mean\+And\+Cov(), Cost\+Functor\+::operator()(), and Cost\+Functor\+::\+Score().
+
+\mbox{\Hypertarget{classNDTCell_ad1e93479cbbec1b90d7eec8cb9b486a1}\label{classNDTCell_ad1e93479cbbec1b90d7eec8cb9b486a1}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Points@{Get\+Points}}
+\index{Get\+Points@{Get\+Points}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Points()}{GetPoints()}}
+{\footnotesize\ttfamily vector$<$Vector2d$>$ N\+D\+T\+Cell\+::\+Get\+Points (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_a942f05a2aac27a698113aac5e84e328a}\label{classNDTCell_a942f05a2aac27a698113aac5e84e328a}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Points\+Matrix@{Get\+Points\+Matrix}}
+\index{Get\+Points\+Matrix@{Get\+Points\+Matrix}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Points\+Matrix()}{GetPointsMatrix()}}
+{\footnotesize\ttfamily Matrix\+Xd N\+D\+T\+Cell\+::\+Get\+Points\+Matrix (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classNDTCell_a0dee81a09a00843003766536998b73f0}\label{classNDTCell_a0dee81a09a00843003766536998b73f0}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Size@{Get\+Size}}
+\index{Get\+Size@{Get\+Size}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Size()}{GetSize()}}
+{\footnotesize\ttfamily double N\+D\+T\+Cell\+::\+Get\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by Marker\+Array\+Of\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+N\+D\+T\+Cell2().
+
+\mbox{\Hypertarget{classNDTCell_adb431bb96255a7a6dbafc15da7e0fdf6}\label{classNDTCell_adb431bb96255a7a6dbafc15da7e0fdf6}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Get\+Skew\+Rad@{Get\+Skew\+Rad}}
+\index{Get\+Skew\+Rad@{Get\+Skew\+Rad}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Get\+Skew\+Rad()}{GetSkewRad()}}
+{\footnotesize\ttfamily double N\+D\+T\+Cell\+::\+Get\+Skew\+Rad (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by Marker\+Array\+Of\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+N\+D\+T\+Cell2().
+
+\mbox{\Hypertarget{classNDTCell_aa99d66a755f591c7d0859d3203e9fb5c}\label{classNDTCell_aa99d66a755f591c7d0859d3203e9fb5c}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+Center@{Set\+Center}}
+\index{Set\+Center@{Set\+Center}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+Center()}{SetCenter()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+Center (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{center }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by main(), and Make\+Cell().
+
+\mbox{\Hypertarget{classNDTCell_a6d75aba8fc79b0f93da8f814114d8bd2}\label{classNDTCell_a6d75aba8fc79b0f93da8f814114d8bd2}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!SetN@{SetN}}
+\index{SetN@{SetN}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+N()}{SetN()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+SetN (\begin{DoxyParamCaption}\item[{int}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_a5e0af0c81b4efc61bde2616993055b14}\label{classNDTCell_a5e0af0c81b4efc61bde2616993055b14}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+N\+Has\+Gaussian@{Set\+N\+Has\+Gaussian}}
+\index{Set\+N\+Has\+Gaussian@{Set\+N\+Has\+Gaussian}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+N\+Has\+Gaussian()}{SetNHasGaussian()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+N\+Has\+Gaussian (\begin{DoxyParamCaption}\item[{bool}]{nhasgaussian }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{classNDTCell_a18ac3bd685318520b21bd015e8c94ef3}\label{classNDTCell_a18ac3bd685318520b21bd015e8c94ef3}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+Normal\+Cov@{Set\+Normal\+Cov}}
+\index{Set\+Normal\+Cov@{Set\+Normal\+Cov}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+Normal\+Cov()}{SetNormalCov()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+Normal\+Cov (\begin{DoxyParamCaption}\item[{const Matrix2d \&}]{cov }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{classNDTCell_a345105fcf5addd6802e4769619e3532d}\label{classNDTCell_a345105fcf5addd6802e4769619e3532d}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+Normal\+Evals@{Set\+Normal\+Evals}}
+\index{Set\+Normal\+Evals@{Set\+Normal\+Evals}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+Normal\+Evals()}{SetNormalEvals()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+Normal\+Evals (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{evals }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_ab2300ea06704e0dfb348ba31a5d4fc83}\label{classNDTCell_ab2300ea06704e0dfb348ba31a5d4fc83}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+Normal\+Evecs@{Set\+Normal\+Evecs}}
+\index{Set\+Normal\+Evecs@{Set\+Normal\+Evecs}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+Normal\+Evecs()}{SetNormalEvecs()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+Normal\+Evecs (\begin{DoxyParamCaption}\item[{const Matrix2d \&}]{evecs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_aa4ae332c7e61006d4690921ae8882d1b}\label{classNDTCell_aa4ae332c7e61006d4690921ae8882d1b}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+Normal\+Mean@{Set\+Normal\+Mean}}
+\index{Set\+Normal\+Mean@{Set\+Normal\+Mean}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+Normal\+Mean()}{SetNormalMean()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+Normal\+Mean (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{mean }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{classNDTCell_a6611090c8ef12f754032b72c5f17d795}\label{classNDTCell_a6611090c8ef12f754032b72c5f17d795}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+P\+Has\+Gaussian@{Set\+P\+Has\+Gaussian}}
+\index{Set\+P\+Has\+Gaussian@{Set\+P\+Has\+Gaussian}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+P\+Has\+Gaussian()}{SetPHasGaussian()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+P\+Has\+Gaussian (\begin{DoxyParamCaption}\item[{bool}]{phasgaussian }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_a6d94d720f43f5ce74b9937668c5ca305}\label{classNDTCell_a6d94d720f43f5ce74b9937668c5ca305}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+Point\+Cov@{Set\+Point\+Cov}}
+\index{Set\+Point\+Cov@{Set\+Point\+Cov}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+Point\+Cov()}{SetPointCov()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+Point\+Cov (\begin{DoxyParamCaption}\item[{const Matrix2d \&}]{cov }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{classNDTCell_a4293e58ef5d4854c498ea0ad106814f7}\label{classNDTCell_a4293e58ef5d4854c498ea0ad106814f7}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+Point\+Evals@{Set\+Point\+Evals}}
+\index{Set\+Point\+Evals@{Set\+Point\+Evals}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+Point\+Evals()}{SetPointEvals()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+Point\+Evals (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{evals }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_a6737cd9418e06edc8bf4b30a1ae19878}\label{classNDTCell_a6737cd9418e06edc8bf4b30a1ae19878}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+Point\+Evecs@{Set\+Point\+Evecs}}
+\index{Set\+Point\+Evecs@{Set\+Point\+Evecs}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+Point\+Evecs()}{SetPointEvecs()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+Point\+Evecs (\begin{DoxyParamCaption}\item[{const Matrix2d \&}]{evecs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_a3c3254891a543255f7beede3ed4c40b5}\label{classNDTCell_a3c3254891a543255f7beede3ed4c40b5}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+Point\+Mean@{Set\+Point\+Mean}}
+\index{Set\+Point\+Mean@{Set\+Point\+Mean}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+Point\+Mean()}{SetPointMean()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+Point\+Mean (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{mean }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{classNDTCell_a304509d07db69d380e60e474932ded1b}\label{classNDTCell_a304509d07db69d380e60e474932ded1b}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+Size@{Set\+Size}}
+\index{Set\+Size@{Set\+Size}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+Size()}{SetSize()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+Size (\begin{DoxyParamCaption}\item[{double}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Referenced by main(), and Make\+Cell().
+
+\mbox{\Hypertarget{classNDTCell_aaa8e07701412d6c47e8d3f9172a4d86c}\label{classNDTCell_aaa8e07701412d6c47e8d3f9172a4d86c}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!Set\+Skew\+Rad@{Set\+Skew\+Rad}}
+\index{Set\+Skew\+Rad@{Set\+Skew\+Rad}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{Set\+Skew\+Rad()}{SetSkewRad()}}
+{\footnotesize\ttfamily void N\+D\+T\+Cell\+::\+Set\+Skew\+Rad (\begin{DoxyParamCaption}\item[{double}]{skew\+\_\+rad }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classNDTCell_ae1e1133b097ce7e78fbff8a1fda4ae59}\label{classNDTCell_ae1e1133b097ce7e78fbff8a1fda4ae59}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!To\+String@{To\+String}}
+\index{To\+String@{To\+String}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{To\+String()}{ToString()}}
+{\footnotesize\ttfamily string N\+D\+T\+Cell\+::\+To\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classNDTCell_ae2c7aeea3860e92433adc72d108d65b4}\label{classNDTCell_ae2c7aeea3860e92433adc72d108d65b4}} 
+\index{N\+D\+T\+Cell@{N\+D\+T\+Cell}!mark@{mark}}
+\index{mark@{mark}!N\+D\+T\+Cell@{N\+D\+T\+Cell}}
+\subsubsection{\texorpdfstring{mark}{mark}}
+{\footnotesize\ttfamily bool N\+D\+T\+Cell\+::mark}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ndt__cell_8h}{ndt\+\_\+cell.\+h}\item 
+\hyperlink{ndt__cell_8cc}{ndt\+\_\+cell.\+cc}\end{DoxyCompactItemize}

@@ -1,0 +1,57 @@
+\hypertarget{test__covmap_8cc}{}\section{test\+\_\+covmap.\+cc File Reference}
+\label{test__covmap_8cc}\index{test\+\_\+covmap.\+cc@{test\+\_\+covmap.\+cc}}
+{\ttfamily \#include $<$bits/stdc++.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}sndt\+\_\+exec/wrapper.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}common/common.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}common/\+Ego\+Point\+Clouds.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}sndt/ndt\+\_\+visualizations.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$boost/program\+\_\+options.\+hpp$>$}\newline
+Include dependency graph for test\+\_\+covmap.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{dd/db5/test__covmap_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Matrix\+Xd \hyperlink{test__covmap_8cc_a84f375440ecafd5fb52a618c2dfa4c6c}{Remove\+Infinite\+Column} (const Matrix\+Xd \&mtx)
+\item 
+pair$<$ Matrix\+Xd, Affine2d $>$ \hyperlink{test__covmap_8cc_aa8b8fb3da9166b3e160e199069a27bf9}{To\+Pair} (const common\+::\+Point\+Cloud\+Sensor \&pcs)
+\item 
+vector$<$ pair$<$ Matrix\+Xd, Affine2d $>$ $>$ \hyperlink{test__covmap_8cc_abcb365858423bd72f7b38cfe67f8c408}{Augment} (const vector$<$ common\+::\+Ego\+Point\+Clouds $>$ \&\hyperlink{test__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}, int start, int end, Affine2d \&T)
+\item 
+int \hyperlink{test__covmap_8cc_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{test__covmap_8cc_abcb365858423bd72f7b38cfe67f8c408}\label{test__covmap_8cc_abcb365858423bd72f7b38cfe67f8c408}} 
+\index{test\+\_\+covmap.\+cc@{test\+\_\+covmap.\+cc}!Augment@{Augment}}
+\index{Augment@{Augment}!test\+\_\+covmap.\+cc@{test\+\_\+covmap.\+cc}}
+\subsubsection{\texorpdfstring{Augment()}{Augment()}}
+{\footnotesize\ttfamily vector$<$pair$<$Matrix\+Xd, Affine2d$>$ $>$ Augment (\begin{DoxyParamCaption}\item[{const vector$<$ common\+::\+Ego\+Point\+Clouds $>$ \&}]{vepcs,  }\item[{int}]{start,  }\item[{int}]{end,  }\item[{Affine2d \&}]{T }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{test__covmap_8cc_a3c04138a5bfe5d72780bb7e82a18e627}\label{test__covmap_8cc_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{test\+\_\+covmap.\+cc@{test\+\_\+covmap.\+cc}!main@{main}}
+\index{main@{main}!test\+\_\+covmap.\+cc@{test\+\_\+covmap.\+cc}}
+\subsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__covmap_8cc_a84f375440ecafd5fb52a618c2dfa4c6c}\label{test__covmap_8cc_a84f375440ecafd5fb52a618c2dfa4c6c}} 
+\index{test\+\_\+covmap.\+cc@{test\+\_\+covmap.\+cc}!Remove\+Infinite\+Column@{Remove\+Infinite\+Column}}
+\index{Remove\+Infinite\+Column@{Remove\+Infinite\+Column}!test\+\_\+covmap.\+cc@{test\+\_\+covmap.\+cc}}
+\subsubsection{\texorpdfstring{Remove\+Infinite\+Column()}{RemoveInfiniteColumn()}}
+{\footnotesize\ttfamily Matrix\+Xd Remove\+Infinite\+Column (\begin{DoxyParamCaption}\item[{const Matrix\+Xd \&}]{mtx }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__covmap_8cc_aa8b8fb3da9166b3e160e199069a27bf9}\label{test__covmap_8cc_aa8b8fb3da9166b3e160e199069a27bf9}} 
+\index{test\+\_\+covmap.\+cc@{test\+\_\+covmap.\+cc}!To\+Pair@{To\+Pair}}
+\index{To\+Pair@{To\+Pair}!test\+\_\+covmap.\+cc@{test\+\_\+covmap.\+cc}}
+\subsubsection{\texorpdfstring{To\+Pair()}{ToPair()}}
+{\footnotesize\ttfamily pair$<$Matrix\+Xd, Affine2d$>$ To\+Pair (\begin{DoxyParamCaption}\item[{const common\+::\+Point\+Cloud\+Sensor \&}]{pcs }\end{DoxyParamCaption})}
+

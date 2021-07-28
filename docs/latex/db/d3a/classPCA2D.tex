@@ -1,0 +1,367 @@
+\hypertarget{classPCA2D}{}\section{P\+C\+A2D Class Reference}
+\label{classPCA2D}\index{P\+C\+A2D@{P\+C\+A2D}}
+
+
+{\ttfamily \#include $<$P\+C\+A2\+D.\+h$>$}
+
+
+
+Collaboration diagram for P\+C\+A2D\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=184pt]{dc/d8c/classPCA2D__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classPCA2D_a30d944a9dc80740707c532cabe91ebdf}{P\+C\+A2D} ()
+\begin{DoxyCompactList}\small\item\em Empty constructor. \end{DoxyCompactList}\item 
+void \hyperlink{classPCA2D_a80df2e612db722f630d4c48a9a71f651}{init\+Compute} ()
+\begin{DoxyCompactList}\small\item\em Perform the P\+CA computation. \end{DoxyCompactList}\item 
+void \hyperlink{classPCA2D_ad3583e82b8d9b97f3f7253fd78af1dcc}{set\+Input\+Cloud} (const \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} \&cloud)
+\begin{DoxyCompactList}\small\item\em Provide a input cloud pointer to deal with. \end{DoxyCompactList}\item 
+void \hyperlink{classPCA2D_af6c41fea17b2a9debbef5c88dc963f1e}{set\+Indices} (const pcl\+::\+Point\+Indices \&indices)
+\begin{DoxyCompactList}\small\item\em Provide a pointer to the vector of indices that represents the input data. \end{DoxyCompactList}\item 
+void \hyperlink{classPCA2D_a0b214db07c98537f683bb69a7e9d9271}{set\+Indices} (const pcl\+::\+Point\+Indices\+Ptr \&indices)
+\begin{DoxyCompactList}\small\item\em Provide a pointer to the vector of indices that represents the input data. \end{DoxyCompactList}\item 
+void \hyperlink{classPCA2D_a51c7a6bcf7c77af6d81d98a0bb0186a6}{set\+Indices} (const pcl\+::\+Point\+Indices\+Const\+Ptr \&indices)
+\begin{DoxyCompactList}\small\item\em Provide a pointer to the vector of indices that represents the input data. \end{DoxyCompactList}\item 
+void \hyperlink{classPCA2D_a4e7f046e1198928994dfc40a4c3be40e}{set\+Indices} (const boost\+::shared\+\_\+ptr$<$ std\+::vector$<$ int $>$$>$ \&indices)
+\begin{DoxyCompactList}\small\item\em Provide a pointer to the vector of indices that represents the input data. \end{DoxyCompactList}\item 
+void \hyperlink{classPCA2D_aa5b9ccb12b5ce673ac851a2a5c4f4f97}{set\+Indices} (const std\+::vector$<$ int $>$ \&indices)
+\begin{DoxyCompactList}\small\item\em Provide a pointer to the vector of indices that represents the input data. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector2f \hyperlink{classPCA2D_a35ed9e55a614bb7fd87025945867cffa}{get\+Mean} ()
+\begin{DoxyCompactList}\small\item\em Return the mean computed, if P\+CA isn\textquotesingle{}t computed, it will perform it. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix2f \hyperlink{classPCA2D_a2243f1d03a734f7cf4f9f959f494a2e0}{get\+Eigen\+Vectors} ()
+\begin{DoxyCompactList}\small\item\em Return the eigen Vector in \hyperlink{namespaceEigen}{Eigen} Matrix , if P\+CA isn\textquotesingle{}t computed, it will perform it. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector2f \hyperlink{classPCA2D_ace26902adea167c5aef9a3219ceafbd3}{get\+Eigen\+Values} ()
+\begin{DoxyCompactList}\small\item\em Return the eigen Vector in \hyperlink{namespaceEigen}{Eigen} Matrix , if P\+CA isn\textquotesingle{}t computed, it will perform it. \end{DoxyCompactList}\item 
+void \hyperlink{classPCA2D_a9768dbce5a3b9cd0b3aacbedc3301884}{project} (const \hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \&input, \hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \&projection)
+\begin{DoxyCompactList}\small\item\em Project point into P\+CA cartesian system. \end{DoxyCompactList}\item 
+void \hyperlink{classPCA2D_ac36f8aacab8d6fe1d804f17cfa7b0f78}{project} (const \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} \&in\+\_\+cloud, \hyperlink{Normal2dEstimation_8h_a2894055ff89c63cbae90e22dfddaa610}{Ptr\+Cloud} \&out\+\_\+cloud)
+\begin{DoxyCompactList}\small\item\em Project input cloud into P\+CA cartesian system. \end{DoxyCompactList}\item 
+\hyperlink{classPCA2D_a30d944a9dc80740707c532cabe91ebdf}{P\+C\+A2D} ()
+\item 
+void \hyperlink{classPCA2D_a80df2e612db722f630d4c48a9a71f651}{init\+Compute} ()
+\item 
+void \hyperlink{classPCA2D_ad3583e82b8d9b97f3f7253fd78af1dcc}{set\+Input\+Cloud} (const \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} \&cloud)
+\item 
+void \hyperlink{classPCA2D_af6c41fea17b2a9debbef5c88dc963f1e}{set\+Indices} (const pcl\+::\+Point\+Indices \&indices)
+\item 
+void \hyperlink{classPCA2D_a0b214db07c98537f683bb69a7e9d9271}{set\+Indices} (const pcl\+::\+Point\+Indices\+Ptr \&indices)
+\item 
+void \hyperlink{classPCA2D_a51c7a6bcf7c77af6d81d98a0bb0186a6}{set\+Indices} (const pcl\+::\+Point\+Indices\+Const\+Ptr \&indices)
+\item 
+void \hyperlink{classPCA2D_a4e7f046e1198928994dfc40a4c3be40e}{set\+Indices} (const boost\+::shared\+\_\+ptr$<$ std\+::vector$<$ int $>$$>$ \&indices)
+\item 
+void \hyperlink{classPCA2D_aa5b9ccb12b5ce673ac851a2a5c4f4f97}{set\+Indices} (const std\+::vector$<$ int $>$ \&indices)
+\item 
+Eigen\+::\+Vector2f \hyperlink{classPCA2D_a35ed9e55a614bb7fd87025945867cffa}{get\+Mean} ()
+\item 
+Eigen\+::\+Matrix2f \hyperlink{classPCA2D_a2243f1d03a734f7cf4f9f959f494a2e0}{get\+Eigen\+Vectors} ()
+\item 
+Eigen\+::\+Vector2f \hyperlink{classPCA2D_ace26902adea167c5aef9a3219ceafbd3}{get\+Eigen\+Values} ()
+\item 
+void \hyperlink{classPCA2D_a9768dbce5a3b9cd0b3aacbedc3301884}{project} (const \hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \&input, \hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \&projection)
+\item 
+void \hyperlink{classPCA2D_ac36f8aacab8d6fe1d804f17cfa7b0f78}{project} (const \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} \&in\+\_\+cloud, \hyperlink{Normal2dEstimation_8h_a2894055ff89c63cbae90e22dfddaa610}{Ptr\+Cloud} \&out\+\_\+cloud)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classPCA2D_a30d944a9dc80740707c532cabe91ebdf}\label{classPCA2D_a30d944a9dc80740707c532cabe91ebdf}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!P\+C\+A2D@{P\+C\+A2D}}
+\index{P\+C\+A2D@{P\+C\+A2D}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{P\+C\+A2\+D()}{PCA2D()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily P\+C\+A2\+D\+::\+P\+C\+A2D (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Empty constructor. 
+
+\mbox{\Hypertarget{classPCA2D_a30d944a9dc80740707c532cabe91ebdf}\label{classPCA2D_a30d944a9dc80740707c532cabe91ebdf}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!P\+C\+A2D@{P\+C\+A2D}}
+\index{P\+C\+A2D@{P\+C\+A2D}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{P\+C\+A2\+D()}{PCA2D()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily P\+C\+A2\+D\+::\+P\+C\+A2D (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classPCA2D_ace26902adea167c5aef9a3219ceafbd3}\label{classPCA2D_ace26902adea167c5aef9a3219ceafbd3}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!get\+Eigen\+Values@{get\+Eigen\+Values}}
+\index{get\+Eigen\+Values@{get\+Eigen\+Values}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{get\+Eigen\+Values()}{getEigenValues()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2f P\+C\+A2\+D\+::get\+Eigen\+Values (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return the eigen Vector in \hyperlink{namespaceEigen}{Eigen} Matrix , if P\+CA isn\textquotesingle{}t computed, it will perform it. 
+
+\begin{DoxyReturn}{Returns}
+The Eigen\+Vectors matrix from P\+CA algorithm. 
+\end{DoxyReturn}
+
+
+Referenced by Normal2d\+Estimation\+::set\+Indices().
+
+\mbox{\Hypertarget{classPCA2D_ace26902adea167c5aef9a3219ceafbd3}\label{classPCA2D_ace26902adea167c5aef9a3219ceafbd3}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!get\+Eigen\+Values@{get\+Eigen\+Values}}
+\index{get\+Eigen\+Values@{get\+Eigen\+Values}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{get\+Eigen\+Values()}{getEigenValues()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2f P\+C\+A2\+D\+::get\+Eigen\+Values (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classPCA2D_a2243f1d03a734f7cf4f9f959f494a2e0}\label{classPCA2D_a2243f1d03a734f7cf4f9f959f494a2e0}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!get\+Eigen\+Vectors@{get\+Eigen\+Vectors}}
+\index{get\+Eigen\+Vectors@{get\+Eigen\+Vectors}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{get\+Eigen\+Vectors()}{getEigenVectors()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix2f P\+C\+A2\+D\+::get\+Eigen\+Vectors (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return the eigen Vector in \hyperlink{namespaceEigen}{Eigen} Matrix , if P\+CA isn\textquotesingle{}t computed, it will perform it. 
+
+\begin{DoxyReturn}{Returns}
+The Eigen\+Vectors matrix from P\+CA algorithm. 
+\end{DoxyReturn}
+
+
+Referenced by Normal2d\+Estimation\+::set\+Indices().
+
+\mbox{\Hypertarget{classPCA2D_a2243f1d03a734f7cf4f9f959f494a2e0}\label{classPCA2D_a2243f1d03a734f7cf4f9f959f494a2e0}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!get\+Eigen\+Vectors@{get\+Eigen\+Vectors}}
+\index{get\+Eigen\+Vectors@{get\+Eigen\+Vectors}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{get\+Eigen\+Vectors()}{getEigenVectors()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix2f P\+C\+A2\+D\+::get\+Eigen\+Vectors (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classPCA2D_a35ed9e55a614bb7fd87025945867cffa}\label{classPCA2D_a35ed9e55a614bb7fd87025945867cffa}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!get\+Mean@{get\+Mean}}
+\index{get\+Mean@{get\+Mean}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{get\+Mean()}{getMean()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2f P\+C\+A2\+D\+::get\+Mean (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return the mean computed, if P\+CA isn\textquotesingle{}t computed, it will perform it. 
+
+\begin{DoxyReturn}{Returns}
+The mean vector from P\+CA algorithm. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classPCA2D_a35ed9e55a614bb7fd87025945867cffa}\label{classPCA2D_a35ed9e55a614bb7fd87025945867cffa}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!get\+Mean@{get\+Mean}}
+\index{get\+Mean@{get\+Mean}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{get\+Mean()}{getMean()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2f P\+C\+A2\+D\+::get\+Mean (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classPCA2D_a80df2e612db722f630d4c48a9a71f651}\label{classPCA2D_a80df2e612db722f630d4c48a9a71f651}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!init\+Compute@{init\+Compute}}
+\index{init\+Compute@{init\+Compute}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{init\+Compute()}{initCompute()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::init\+Compute (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classPCA2D_a80df2e612db722f630d4c48a9a71f651}\label{classPCA2D_a80df2e612db722f630d4c48a9a71f651}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!init\+Compute@{init\+Compute}}
+\index{init\+Compute@{init\+Compute}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{init\+Compute()}{initCompute()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::init\+Compute (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Perform the P\+CA computation. 
+
+
+
+Referenced by get\+Eigen\+Values(), get\+Eigen\+Vectors(), get\+Mean(), and P\+C\+A2\+D().
+
+\mbox{\Hypertarget{classPCA2D_a9768dbce5a3b9cd0b3aacbedc3301884}\label{classPCA2D_a9768dbce5a3b9cd0b3aacbedc3301884}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!project@{project}}
+\index{project@{project}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{project()}{project()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::project (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \&}]{input,  }\item[{\hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \&}]{projection }\end{DoxyParamCaption})}
+
+
+
+Project point into P\+CA cartesian system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Point to project. \\
+\hline
+{\em projection} & Point to fill with projection. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by get\+Eigen\+Values(), and project().
+
+\mbox{\Hypertarget{classPCA2D_a9768dbce5a3b9cd0b3aacbedc3301884}\label{classPCA2D_a9768dbce5a3b9cd0b3aacbedc3301884}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!project@{project}}
+\index{project@{project}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{project()}{project()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::project (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \&}]{input,  }\item[{\hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \&}]{projection }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classPCA2D_ac36f8aacab8d6fe1d804f17cfa7b0f78}\label{classPCA2D_ac36f8aacab8d6fe1d804f17cfa7b0f78}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!project@{project}}
+\index{project@{project}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{project()}{project()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::project (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} \&}]{in\+\_\+cloud,  }\item[{\hyperlink{Normal2dEstimation_8h_a2894055ff89c63cbae90e22dfddaa610}{Ptr\+Cloud} \&}]{out\+\_\+cloud }\end{DoxyParamCaption})}
+
+
+
+Project input cloud into P\+CA cartesian system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & cloud with points to project. \\
+\hline
+{\em projection} & Cloud to fill with projected points. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classPCA2D_ac36f8aacab8d6fe1d804f17cfa7b0f78}\label{classPCA2D_ac36f8aacab8d6fe1d804f17cfa7b0f78}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!project@{project}}
+\index{project@{project}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{project()}{project()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::project (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} \&}]{in\+\_\+cloud,  }\item[{\hyperlink{Normal2dEstimation_8h_a2894055ff89c63cbae90e22dfddaa610}{Ptr\+Cloud} \&}]{out\+\_\+cloud }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classPCA2D_af6c41fea17b2a9debbef5c88dc963f1e}\label{classPCA2D_af6c41fea17b2a9debbef5c88dc963f1e}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!set\+Indices@{set\+Indices}}
+\index{set\+Indices@{set\+Indices}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [1/10]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::set\+Indices (\begin{DoxyParamCaption}\item[{const pcl\+::\+Point\+Indices \&}]{indices }\end{DoxyParamCaption})}
+
+
+
+Provide a pointer to the vector of indices that represents the input data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em indices} & indices a pointer to the indices that represent the input data. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by P\+C\+A2\+D(), and Normal2d\+Estimation\+::set\+Indices().
+
+\mbox{\Hypertarget{classPCA2D_a0b214db07c98537f683bb69a7e9d9271}\label{classPCA2D_a0b214db07c98537f683bb69a7e9d9271}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!set\+Indices@{set\+Indices}}
+\index{set\+Indices@{set\+Indices}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [2/10]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::set\+Indices (\begin{DoxyParamCaption}\item[{const pcl\+::\+Point\+Indices\+Ptr \&}]{indices }\end{DoxyParamCaption})}
+
+
+
+Provide a pointer to the vector of indices that represents the input data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em indices} & indices a pointer to the indices that represent the input data. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classPCA2D_a51c7a6bcf7c77af6d81d98a0bb0186a6}\label{classPCA2D_a51c7a6bcf7c77af6d81d98a0bb0186a6}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!set\+Indices@{set\+Indices}}
+\index{set\+Indices@{set\+Indices}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [3/10]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::set\+Indices (\begin{DoxyParamCaption}\item[{const pcl\+::\+Point\+Indices\+Const\+Ptr \&}]{indices }\end{DoxyParamCaption})}
+
+
+
+Provide a pointer to the vector of indices that represents the input data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em indices} & indices a pointer to the indices that represent the input data. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classPCA2D_a4e7f046e1198928994dfc40a4c3be40e}\label{classPCA2D_a4e7f046e1198928994dfc40a4c3be40e}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!set\+Indices@{set\+Indices}}
+\index{set\+Indices@{set\+Indices}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [4/10]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::set\+Indices (\begin{DoxyParamCaption}\item[{const boost\+::shared\+\_\+ptr$<$ std\+::vector$<$ int $>$$>$ \&}]{indices }\end{DoxyParamCaption})}
+
+
+
+Provide a pointer to the vector of indices that represents the input data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em indices} & indices a pointer to the indices that represent the input data. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classPCA2D_af6c41fea17b2a9debbef5c88dc963f1e}\label{classPCA2D_af6c41fea17b2a9debbef5c88dc963f1e}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!set\+Indices@{set\+Indices}}
+\index{set\+Indices@{set\+Indices}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [5/10]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::set\+Indices (\begin{DoxyParamCaption}\item[{const pcl\+::\+Point\+Indices \&}]{indices }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classPCA2D_aa5b9ccb12b5ce673ac851a2a5c4f4f97}\label{classPCA2D_aa5b9ccb12b5ce673ac851a2a5c4f4f97}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!set\+Indices@{set\+Indices}}
+\index{set\+Indices@{set\+Indices}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [6/10]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::set\+Indices (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ int $>$ \&}]{indices }\end{DoxyParamCaption})}
+
+
+
+Provide a pointer to the vector of indices that represents the input data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em indices} & indices a pointer to the indices that represent the input data. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classPCA2D_a0b214db07c98537f683bb69a7e9d9271}\label{classPCA2D_a0b214db07c98537f683bb69a7e9d9271}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!set\+Indices@{set\+Indices}}
+\index{set\+Indices@{set\+Indices}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [7/10]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::set\+Indices (\begin{DoxyParamCaption}\item[{const pcl\+::\+Point\+Indices\+Ptr \&}]{indices }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classPCA2D_a51c7a6bcf7c77af6d81d98a0bb0186a6}\label{classPCA2D_a51c7a6bcf7c77af6d81d98a0bb0186a6}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!set\+Indices@{set\+Indices}}
+\index{set\+Indices@{set\+Indices}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [8/10]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::set\+Indices (\begin{DoxyParamCaption}\item[{const pcl\+::\+Point\+Indices\+Const\+Ptr \&}]{indices }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classPCA2D_a4e7f046e1198928994dfc40a4c3be40e}\label{classPCA2D_a4e7f046e1198928994dfc40a4c3be40e}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!set\+Indices@{set\+Indices}}
+\index{set\+Indices@{set\+Indices}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [9/10]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::set\+Indices (\begin{DoxyParamCaption}\item[{const boost\+::shared\+\_\+ptr$<$ std\+::vector$<$ int $>$$>$ \&}]{indices }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classPCA2D_aa5b9ccb12b5ce673ac851a2a5c4f4f97}\label{classPCA2D_aa5b9ccb12b5ce673ac851a2a5c4f4f97}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!set\+Indices@{set\+Indices}}
+\index{set\+Indices@{set\+Indices}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [10/10]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::set\+Indices (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ int $>$ \&}]{indices }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classPCA2D_ad3583e82b8d9b97f3f7253fd78af1dcc}\label{classPCA2D_ad3583e82b8d9b97f3f7253fd78af1dcc}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!set\+Input\+Cloud@{set\+Input\+Cloud}}
+\index{set\+Input\+Cloud@{set\+Input\+Cloud}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{set\+Input\+Cloud()}{setInputCloud()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::set\+Input\+Cloud (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} \&}]{cloud }\end{DoxyParamCaption})}
+
+
+
+Provide a input cloud pointer to deal with. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cloud} & Cloud to deal with. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by P\+C\+A2\+D(), and Normal2d\+Estimation\+::set\+Indices().
+
+\mbox{\Hypertarget{classPCA2D_ad3583e82b8d9b97f3f7253fd78af1dcc}\label{classPCA2D_ad3583e82b8d9b97f3f7253fd78af1dcc}} 
+\index{P\+C\+A2D@{P\+C\+A2D}!set\+Input\+Cloud@{set\+Input\+Cloud}}
+\index{set\+Input\+Cloud@{set\+Input\+Cloud}!P\+C\+A2D@{P\+C\+A2D}}
+\subsubsection{\texorpdfstring{set\+Input\+Cloud()}{setInputCloud()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void P\+C\+A2\+D\+::set\+Input\+Cloud (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} \&}]{cloud }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{PCA2D_8h}{P\+C\+A2\+D.\+h}\item 
+\hyperlink{PCA2D_8hpp}{P\+C\+A2\+D.\+hpp}\end{DoxyCompactItemize}

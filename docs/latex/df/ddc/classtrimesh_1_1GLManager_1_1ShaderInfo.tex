@@ -1,0 +1,256 @@
+\hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo}{}\section{trimesh\+:\+:G\+L\+Manager\+:\+:Shader\+Info Class Reference}
+\label{classtrimesh_1_1GLManager_1_1ShaderInfo}\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+
+
+Collaboration diagram for trimesh\+:\+:G\+L\+Manager\+:\+:Shader\+Info\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=200pt]{d3/d49/classtrimesh_1_1GLManager_1_1ShaderInfo__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_a930aa666ff8c7b9a7004077be432adfb}{Shader\+Info} (const \hyperlink{namespacetrimesh_a51b4a31323874089623d4b17afabc1aa}{string} \&name\+\_\+, unsigned vshader\+\_\+, unsigned fshader\+\_\+, unsigned program\+\_\+, int nuniforms, int nattributes)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespacetrimesh_a51b4a31323874089623d4b17afabc1aa}{string} \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_a3fc10768cdc649b181979cfef7d8f989}{name}
+\item 
+unsigned \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_adfbd24cd9991b9e186a445173b0ee674}{vshader}
+\item 
+unsigned \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_aa443c1b6134c6d4e5aaa1f018cf7e082}{fshader}
+\item 
+unsigned \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_a629301935610a8fdedfe0df51e5afa98}{program}
+\item 
+vector$<$ bool $>$ \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_af49ea2f4c844c265563a042cef631e6a}{have\+\_\+uniform}
+\item 
+vector$<$ bool $>$ \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_af7b281e45ac7d97b590bc20ca698257e}{have\+\_\+attribute}
+\item 
+bool \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_a10741bbbc291833622bd2694001d51ce}{have\+\_\+vertex}
+\item 
+bool \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_a3b190a6af7fdbb61533494233b5e0c2a}{have\+\_\+normal}
+\item 
+bool \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_ae4ace1a2442025249e9998edf15c2e91}{have\+\_\+color3}
+\item 
+bool \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_abf29493514c982e62d8d96482c85bcd5}{have\+\_\+color4}
+\item 
+bool \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_a17bc641438ea6274f09f431a3c1e9043}{have\+\_\+texcoord}
+\item 
+vector$<$ \hyperlink{structtrimesh_1_1GLManager_1_1UniformInfo}{Uniform\+Info} $>$ \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_a920bfaade65f472e48419d75676e2777}{uniform\+\_\+info}
+\item 
+vector$<$ \hyperlink{structtrimesh_1_1GLManager_1_1AttributeInfo}{Attribute\+Info} $>$ \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_ad4e74b92640b391cb1bf670406082f55}{attribute\+\_\+info}
+\item 
+\hyperlink{structtrimesh_1_1GLManager_1_1AttributeInfo}{Attribute\+Info} \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_a33d64ee205d1331960af5cac553c3142}{vertex\+\_\+info}
+\item 
+\hyperlink{structtrimesh_1_1GLManager_1_1AttributeInfo}{Attribute\+Info} \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_ac1219b6e332273cd98ae9ae52ce170c3}{normal\+\_\+info}
+\item 
+\hyperlink{structtrimesh_1_1GLManager_1_1AttributeInfo}{Attribute\+Info} \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_ab69d6596bd9e121a47ded82d20bc1b47}{color\+\_\+info}
+\item 
+\hyperlink{structtrimesh_1_1GLManager_1_1AttributeInfo}{Attribute\+Info} \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_a3639b7ec779911da900bf1e037faef39}{texcoord\+\_\+info}
+\item 
+vector$<$ unsigned $>$ \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_a3e8e7ea3654fdaeef555c3940a7f7591}{texunit\+\_\+binding}
+\item 
+bool \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo_ae673a8e20f8d974b8b8603b5fbdfcba7}{checked}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_a930aa666ff8c7b9a7004077be432adfb}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_a930aa666ff8c7b9a7004077be432adfb}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!Shader\+Info@{Shader\+Info}}
+\index{Shader\+Info@{Shader\+Info}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{Shader\+Info()}{ShaderInfo()}}
+{\footnotesize\ttfamily trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::\+Shader\+Info (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacetrimesh_a51b4a31323874089623d4b17afabc1aa}{string} \&}]{name\+\_\+,  }\item[{unsigned}]{vshader\+\_\+,  }\item[{unsigned}]{fshader\+\_\+,  }\item[{unsigned}]{program\+\_\+,  }\item[{int}]{nuniforms,  }\item[{int}]{nattributes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_ad4e74b92640b391cb1bf670406082f55}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_ad4e74b92640b391cb1bf670406082f55}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!attribute\+\_\+info@{attribute\+\_\+info}}
+\index{attribute\+\_\+info@{attribute\+\_\+info}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{attribute\+\_\+info}{attribute\_info}}
+{\footnotesize\ttfamily vector$<$\hyperlink{structtrimesh_1_1GLManager_1_1AttributeInfo}{Attribute\+Info}$>$ trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::attribute\+\_\+info}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_ae673a8e20f8d974b8b8603b5fbdfcba7}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_ae673a8e20f8d974b8b8603b5fbdfcba7}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!checked@{checked}}
+\index{checked@{checked}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{checked}{checked}}
+{\footnotesize\ttfamily bool trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::checked}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+attribute(), trimesh\+::\+G\+L\+Manager\+::clear\+\_\+attributes(), trimesh\+::\+G\+L\+Manager\+::clear\+\_\+uniform(), trimesh\+::\+G\+L\+Manager\+::clear\+\_\+uniforms(), and trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_ab69d6596bd9e121a47ded82d20bc1b47}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_ab69d6596bd9e121a47ded82d20bc1b47}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!color\+\_\+info@{color\+\_\+info}}
+\index{color\+\_\+info@{color\+\_\+info}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{color\+\_\+info}{color\_info}}
+{\footnotesize\ttfamily \hyperlink{structtrimesh_1_1GLManager_1_1AttributeInfo}{Attribute\+Info} trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::color\+\_\+info}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::color3f(), trimesh\+::\+G\+L\+Manager\+::color4f(), trimesh\+::\+G\+L\+Manager\+::colorarray3fv(), trimesh\+::\+G\+L\+Manager\+::colorarray4fv(), trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_aa443c1b6134c6d4e5aaa1f018cf7e082}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_aa443c1b6134c6d4e5aaa1f018cf7e082}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!fshader@{fshader}}
+\index{fshader@{fshader}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{fshader}{fshader}}
+{\footnotesize\ttfamily unsigned trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::fshader}
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_af7b281e45ac7d97b590bc20ca698257e}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_af7b281e45ac7d97b590bc20ca698257e}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!have\+\_\+attribute@{have\+\_\+attribute}}
+\index{have\+\_\+attribute@{have\+\_\+attribute}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{have\+\_\+attribute}{have\_attribute}}
+{\footnotesize\ttfamily vector$<$bool$>$ trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::have\+\_\+attribute}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+attribute(), trimesh\+::\+G\+L\+Manager\+::clear\+\_\+attributes(), trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_ae4ace1a2442025249e9998edf15c2e91}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_ae4ace1a2442025249e9998edf15c2e91}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!have\+\_\+color3@{have\+\_\+color3}}
+\index{have\+\_\+color3@{have\+\_\+color3}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{have\+\_\+color3}{have\_color3}}
+{\footnotesize\ttfamily bool trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::have\+\_\+color3}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+colorarray(), trimesh\+::\+G\+L\+Manager\+::color3f(), trimesh\+::\+G\+L\+Manager\+::color4f(), trimesh\+::\+G\+L\+Manager\+::colorarray3fv(), trimesh\+::\+G\+L\+Manager\+::colorarray4fv(), trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_abf29493514c982e62d8d96482c85bcd5}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_abf29493514c982e62d8d96482c85bcd5}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!have\+\_\+color4@{have\+\_\+color4}}
+\index{have\+\_\+color4@{have\+\_\+color4}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{have\+\_\+color4}{have\_color4}}
+{\footnotesize\ttfamily bool trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::have\+\_\+color4}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+colorarray(), trimesh\+::\+G\+L\+Manager\+::color3f(), trimesh\+::\+G\+L\+Manager\+::color4f(), trimesh\+::\+G\+L\+Manager\+::colorarray3fv(), trimesh\+::\+G\+L\+Manager\+::colorarray4fv(), trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_a3b190a6af7fdbb61533494233b5e0c2a}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_a3b190a6af7fdbb61533494233b5e0c2a}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!have\+\_\+normal@{have\+\_\+normal}}
+\index{have\+\_\+normal@{have\+\_\+normal}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{have\+\_\+normal}{have\_normal}}
+{\footnotesize\ttfamily bool trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::have\+\_\+normal}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+normalarray(), trimesh\+::\+G\+L\+Manager\+::normal3f(), trimesh\+::\+G\+L\+Manager\+::normalarray3fv(), trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_a17bc641438ea6274f09f431a3c1e9043}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_a17bc641438ea6274f09f431a3c1e9043}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!have\+\_\+texcoord@{have\+\_\+texcoord}}
+\index{have\+\_\+texcoord@{have\+\_\+texcoord}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{have\+\_\+texcoord}{have\_texcoord}}
+{\footnotesize\ttfamily bool trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::have\+\_\+texcoord}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+texcoordarray(), trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), trimesh\+::\+G\+L\+Manager\+::texcoord2f(), trimesh\+::\+G\+L\+Manager\+::texcoordarray2fv(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_af49ea2f4c844c265563a042cef631e6a}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_af49ea2f4c844c265563a042cef631e6a}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!have\+\_\+uniform@{have\+\_\+uniform}}
+\index{have\+\_\+uniform@{have\+\_\+uniform}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{have\+\_\+uniform}{have\_uniform}}
+{\footnotesize\ttfamily vector$<$bool$>$ trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::have\+\_\+uniform}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+shaders(), trimesh\+::\+G\+L\+Manager\+::clear\+\_\+uniform(), trimesh\+::\+G\+L\+Manager\+::clear\+\_\+uniforms(), and trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_a10741bbbc291833622bd2694001d51ce}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_a10741bbbc291833622bd2694001d51ce}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!have\+\_\+vertex@{have\+\_\+vertex}}
+\index{have\+\_\+vertex@{have\+\_\+vertex}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{have\+\_\+vertex}{have\_vertex}}
+{\footnotesize\ttfamily bool trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::have\+\_\+vertex}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+vertexarray(), trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader(), and trimesh\+::\+G\+L\+Manager\+::vertexarray3fv().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_a3fc10768cdc649b181979cfef7d8f989}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_a3fc10768cdc649b181979cfef7d8f989}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!name@{name}}
+\index{name@{name}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily \hyperlink{namespacetrimesh_a51b4a31323874089623d4b17afabc1aa}{string} trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::name}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_ac1219b6e332273cd98ae9ae52ce170c3}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_ac1219b6e332273cd98ae9ae52ce170c3}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!normal\+\_\+info@{normal\+\_\+info}}
+\index{normal\+\_\+info@{normal\+\_\+info}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{normal\+\_\+info}{normal\_info}}
+{\footnotesize\ttfamily \hyperlink{structtrimesh_1_1GLManager_1_1AttributeInfo}{Attribute\+Info} trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::normal\+\_\+info}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::normal3f(), trimesh\+::\+G\+L\+Manager\+::normalarray3fv(), trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_a629301935610a8fdedfe0df51e5afa98}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_a629301935610a8fdedfe0df51e5afa98}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!program@{program}}
+\index{program@{program}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{program}{program}}
+{\footnotesize\ttfamily unsigned trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::program}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::attribute(), trimesh\+::\+G\+L\+Manager\+::clear\+\_\+shader(), trimesh\+::\+G\+L\+Manager\+::clear\+\_\+shaders(), trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), trimesh\+::\+G\+L\+Manager\+::uniform(), trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+texture().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_a3639b7ec779911da900bf1e037faef39}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_a3639b7ec779911da900bf1e037faef39}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!texcoord\+\_\+info@{texcoord\+\_\+info}}
+\index{texcoord\+\_\+info@{texcoord\+\_\+info}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{texcoord\+\_\+info}{texcoord\_info}}
+{\footnotesize\ttfamily \hyperlink{structtrimesh_1_1GLManager_1_1AttributeInfo}{Attribute\+Info} trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::texcoord\+\_\+info}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), trimesh\+::\+G\+L\+Manager\+::texcoord2f(), trimesh\+::\+G\+L\+Manager\+::texcoordarray2fv(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_a3e8e7ea3654fdaeef555c3940a7f7591}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_a3e8e7ea3654fdaeef555c3940a7f7591}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!texunit\+\_\+binding@{texunit\+\_\+binding}}
+\index{texunit\+\_\+binding@{texunit\+\_\+binding}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{texunit\+\_\+binding}{texunit\_binding}}
+{\footnotesize\ttfamily vector$<$unsigned$>$ trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::texunit\+\_\+binding}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+texture().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_a920bfaade65f472e48419d75676e2777}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_a920bfaade65f472e48419d75676e2777}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!uniform\+\_\+info@{uniform\+\_\+info}}
+\index{uniform\+\_\+info@{uniform\+\_\+info}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{uniform\+\_\+info}{uniform\_info}}
+{\footnotesize\ttfamily vector$<$\hyperlink{structtrimesh_1_1GLManager_1_1UniformInfo}{Uniform\+Info}$>$ trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::uniform\+\_\+info}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+shaders(), trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), and trimesh\+::\+G\+L\+Manager\+::uniform\+Texture().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_a33d64ee205d1331960af5cac553c3142}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_a33d64ee205d1331960af5cac553c3142}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!vertex\+\_\+info@{vertex\+\_\+info}}
+\index{vertex\+\_\+info@{vertex\+\_\+info}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{vertex\+\_\+info}{vertex\_info}}
+{\footnotesize\ttfamily \hyperlink{structtrimesh_1_1GLManager_1_1AttributeInfo}{Attribute\+Info} trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::vertex\+\_\+info}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader(), and trimesh\+::\+G\+L\+Manager\+::vertexarray3fv().
+
+\mbox{\Hypertarget{classtrimesh_1_1GLManager_1_1ShaderInfo_adfbd24cd9991b9e186a445173b0ee674}\label{classtrimesh_1_1GLManager_1_1ShaderInfo_adfbd24cd9991b9e186a445173b0ee674}} 
+\index{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}!vshader@{vshader}}
+\index{vshader@{vshader}!trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info@{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}}
+\subsubsection{\texorpdfstring{vshader}{vshader}}
+{\footnotesize\ttfamily unsigned trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info\+::vshader}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{GLManager_8cc}{G\+L\+Manager.\+cc}\end{DoxyCompactItemize}

@@ -1,0 +1,103 @@
+\hypertarget{ndt__cell_8cc}{}\section{ndt\+\_\+cell.\+cc File Reference}
+\label{ndt__cell_8cc}\index{ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}}
+{\ttfamily \#include \char`\"{}sndt/ndt\+\_\+cell.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$bits/stdc++.\+h$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Eigen$>$}\newline
+{\ttfamily \#include $<$gsl/gsl$>$}\newline
+Include dependency graph for ndt\+\_\+cell.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=304pt]{d6/d58/ndt__cell_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Vector2d \hyperlink{ndt__cell_8cc_ad4cdf57f6c8e925bf1a6033892e2b7d8}{Compute\+Mean} (const vector$<$ Vector2d $>$ \&points)
+\item 
+Matrix2d \hyperlink{ndt__cell_8cc_a71ec92be2941e330a11b274755a25d93}{Compute\+Mean} (const vector$<$ Matrix2d $>$ \&points)
+\item 
+Matrix2d \hyperlink{ndt__cell_8cc_a3372b7d2d87cae3d16002bd35813004c}{Compute\+Cov} (const vector$<$ Vector2d $>$ \&points, const Vector2d \&mean, const Matrix2d \&intrinsic=Matrix2d\+::\+Zero())
+\item 
+Matrix2d \hyperlink{ndt__cell_8cc_a89e020515c5869372c6d4ea3fde7daa9}{Compute\+Cov} (const vector$<$ Vector2d $>$ \&points, const Vector2d \&mean, const vector$<$ Matrix2d $>$ \&intrinsics)
+\item 
+void \hyperlink{ndt__cell_8cc_aef25bf59fc41f02a64088fc1f1b76c89}{Compute\+Eval\+Evec} (const Matrix2d \&covariance, Vector2d \&evals, Matrix2d \&evecs)
+\item 
+vector$<$ Vector2d $>$ \hyperlink{ndt__cell_8cc_af6037df9fb05e3916c808e0fe4bb218b}{Exclude\+Na\+N\+Inf} (const vector$<$ Vector2d $>$ \&points)
+\item 
+vector$<$ Vector2d $>$ \hyperlink{ndt__cell_8cc_abb544925c2f95b760a1fbb741789bb61}{Remove\+Duplicates} (const vector$<$ Vector2d $>$ \&points)
+\item 
+pair$<$ vector$<$ Vector2d $>$, vector$<$ Matrix2d $>$ $>$ \hyperlink{ndt__cell_8cc_af173b8f0697e0b5d99f9fd7a49e62534}{Exclude\+Na\+N\+Inf2} (const vector$<$ Vector2d $>$ \&points, const vector$<$ Matrix2d $>$ \&covariances)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{ndt__cell_8cc_a3372b7d2d87cae3d16002bd35813004c}\label{ndt__cell_8cc_a3372b7d2d87cae3d16002bd35813004c}} 
+\index{ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}!Compute\+Cov@{Compute\+Cov}}
+\index{Compute\+Cov@{Compute\+Cov}!ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}}
+\subsubsection{\texorpdfstring{Compute\+Cov()}{ComputeCov()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Matrix2d Compute\+Cov (\begin{DoxyParamCaption}\item[{const vector$<$ Vector2d $>$ \&}]{points,  }\item[{const Vector2d \&}]{mean,  }\item[{const Matrix2d \&}]{intrinsic = {\ttfamily Matrix2d\+:\+:Zero()} }\end{DoxyParamCaption})}
+
+
+
+Referenced by Compute\+Cov(), N\+D\+T\+Cell\+::\+Compute\+N\+Gaussian(), and N\+D\+T\+Cell\+::\+Compute\+P\+Gaussian().
+
+\mbox{\Hypertarget{ndt__cell_8cc_a89e020515c5869372c6d4ea3fde7daa9}\label{ndt__cell_8cc_a89e020515c5869372c6d4ea3fde7daa9}} 
+\index{ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}!Compute\+Cov@{Compute\+Cov}}
+\index{Compute\+Cov@{Compute\+Cov}!ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}}
+\subsubsection{\texorpdfstring{Compute\+Cov()}{ComputeCov()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Matrix2d Compute\+Cov (\begin{DoxyParamCaption}\item[{const vector$<$ Vector2d $>$ \&}]{points,  }\item[{const Vector2d \&}]{mean,  }\item[{const vector$<$ Matrix2d $>$ \&}]{intrinsics }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ndt__cell_8cc_aef25bf59fc41f02a64088fc1f1b76c89}\label{ndt__cell_8cc_aef25bf59fc41f02a64088fc1f1b76c89}} 
+\index{ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}!Compute\+Eval\+Evec@{Compute\+Eval\+Evec}}
+\index{Compute\+Eval\+Evec@{Compute\+Eval\+Evec}!ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}}
+\subsubsection{\texorpdfstring{Compute\+Eval\+Evec()}{ComputeEvalEvec()}}
+{\footnotesize\ttfamily void Compute\+Eval\+Evec (\begin{DoxyParamCaption}\item[{const Matrix2d \&}]{covariance,  }\item[{Vector2d \&}]{evals,  }\item[{Matrix2d \&}]{evecs }\end{DoxyParamCaption})}
+
+
+
+Referenced by N\+D\+T\+Cell\+::\+Compute\+N\+Gaussian(), and N\+D\+T\+Cell\+::\+Compute\+P\+Gaussian().
+
+\mbox{\Hypertarget{ndt__cell_8cc_ad4cdf57f6c8e925bf1a6033892e2b7d8}\label{ndt__cell_8cc_ad4cdf57f6c8e925bf1a6033892e2b7d8}} 
+\index{ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}!Compute\+Mean@{Compute\+Mean}}
+\index{Compute\+Mean@{Compute\+Mean}!ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}}
+\subsubsection{\texorpdfstring{Compute\+Mean()}{ComputeMean()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Vector2d Compute\+Mean (\begin{DoxyParamCaption}\item[{const vector$<$ Vector2d $>$ \&}]{points }\end{DoxyParamCaption})}
+
+
+
+Referenced by Compute\+Cov(), N\+D\+T\+Cell\+::\+Compute\+N\+Gaussian(), and N\+D\+T\+Cell\+::\+Compute\+P\+Gaussian().
+
+\mbox{\Hypertarget{ndt__cell_8cc_a71ec92be2941e330a11b274755a25d93}\label{ndt__cell_8cc_a71ec92be2941e330a11b274755a25d93}} 
+\index{ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}!Compute\+Mean@{Compute\+Mean}}
+\index{Compute\+Mean@{Compute\+Mean}!ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}}
+\subsubsection{\texorpdfstring{Compute\+Mean()}{ComputeMean()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Matrix2d Compute\+Mean (\begin{DoxyParamCaption}\item[{const vector$<$ Matrix2d $>$ \&}]{points }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ndt__cell_8cc_af6037df9fb05e3916c808e0fe4bb218b}\label{ndt__cell_8cc_af6037df9fb05e3916c808e0fe4bb218b}} 
+\index{ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}!Exclude\+Na\+N\+Inf@{Exclude\+Na\+N\+Inf}}
+\index{Exclude\+Na\+N\+Inf@{Exclude\+Na\+N\+Inf}!ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}}
+\subsubsection{\texorpdfstring{Exclude\+Na\+N\+Inf()}{ExcludeNaNInf()}}
+{\footnotesize\ttfamily vector$<$Vector2d$>$ Exclude\+Na\+N\+Inf (\begin{DoxyParamCaption}\item[{const vector$<$ Vector2d $>$ \&}]{points }\end{DoxyParamCaption})}
+
+
+
+Referenced by N\+D\+T\+Cell\+::\+Compute\+N\+Gaussian().
+
+\mbox{\Hypertarget{ndt__cell_8cc_af173b8f0697e0b5d99f9fd7a49e62534}\label{ndt__cell_8cc_af173b8f0697e0b5d99f9fd7a49e62534}} 
+\index{ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}!Exclude\+Na\+N\+Inf2@{Exclude\+Na\+N\+Inf2}}
+\index{Exclude\+Na\+N\+Inf2@{Exclude\+Na\+N\+Inf2}!ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}}
+\subsubsection{\texorpdfstring{Exclude\+Na\+N\+Inf2()}{ExcludeNaNInf2()}}
+{\footnotesize\ttfamily pair$<$vector$<$Vector2d$>$, vector$<$Matrix2d$>$ $>$ Exclude\+Na\+N\+Inf2 (\begin{DoxyParamCaption}\item[{const vector$<$ Vector2d $>$ \&}]{points,  }\item[{const vector$<$ Matrix2d $>$ \&}]{covariances }\end{DoxyParamCaption})}
+
+
+
+Referenced by N\+D\+T\+Cell\+::\+Compute\+P\+Gaussian().
+
+\mbox{\Hypertarget{ndt__cell_8cc_abb544925c2f95b760a1fbb741789bb61}\label{ndt__cell_8cc_abb544925c2f95b760a1fbb741789bb61}} 
+\index{ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}!Remove\+Duplicates@{Remove\+Duplicates}}
+\index{Remove\+Duplicates@{Remove\+Duplicates}!ndt\+\_\+cell.\+cc@{ndt\+\_\+cell.\+cc}}
+\subsubsection{\texorpdfstring{Remove\+Duplicates()}{RemoveDuplicates()}}
+{\footnotesize\ttfamily vector$<$Vector2d$>$ Remove\+Duplicates (\begin{DoxyParamCaption}\item[{const vector$<$ Vector2d $>$ \&}]{points }\end{DoxyParamCaption})}
+

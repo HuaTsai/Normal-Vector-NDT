@@ -1,0 +1,157 @@
+\hypertarget{classtrimesh_1_1KDtree}{}\section{trimesh\+:\+:K\+Dtree Class Reference}
+\label{classtrimesh_1_1KDtree}\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+
+
+{\ttfamily \#include $<$K\+Dtree.\+h$>$}
+
+
+
+Collaboration diagram for trimesh\+:\+:K\+Dtree\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=202pt]{db/d0c/classtrimesh_1_1KDtree__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtrimesh_1_1KDtree_1_1CompatFunc}{Compat\+Func}
+\item 
+struct \hyperlink{structtrimesh_1_1KDtree_1_1Node}{Node}
+\item 
+struct \hyperlink{structtrimesh_1_1KDtree_1_1NodeStorageBlock}{Node\+Storage\+Block}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtrimesh_1_1KDtree_a7981d4d8eabd12d52c2887cfa94f4c33}{K\+Dtree} (const float $\ast$ptlist, size\+\_\+t n)
+\item 
+{\footnotesize template$<$class T $>$ }\\\hyperlink{classtrimesh_1_1KDtree_ab766871a5877b9488e90b9651a0c2b2c}{K\+Dtree} (const \+::std\+::vector$<$ T $>$ \&v)
+\item 
+\hyperlink{classtrimesh_1_1KDtree_acd7beb7544e1de886ffab14750075aab}{K\+Dtree} (const float $\ast$$\ast$pts, size\+\_\+t n)
+\item 
+{\footnotesize template$<$class T $>$ }\\\hyperlink{classtrimesh_1_1KDtree_a36b9522141b8c5f2c6bb17d58a469b10}{K\+Dtree} (\+::std\+::vector$<$ T $\ast$$>$ \&pts)
+\item 
+\hyperlink{classtrimesh_1_1KDtree_acf920211054016e32477fdbd19c5b22c}{$\sim$\+K\+Dtree} ()
+\item 
+const float $\ast$ \hyperlink{classtrimesh_1_1KDtree_a9428ce5432d045f9e3e33c381de413b2}{closest\+\_\+to\+\_\+pt} (const float $\ast$p, float maxdist2=0.\+0f, const Compat\+Func $\ast$iscompat=\+N\+U\+L\+L, float approx\+\_\+eps=0.\+0f) const
+\item 
+const float $\ast$ \hyperlink{classtrimesh_1_1KDtree_a90066965f638191f3bb2edab8d70ab3a}{closest\+\_\+to\+\_\+pt} (const float $\ast$p, float maxdist2, float approx\+\_\+eps) const
+\item 
+const float $\ast$ \hyperlink{classtrimesh_1_1KDtree_a3e3cc3eff36b04c01c065fcee1364922}{closest\+\_\+to\+\_\+ray} (const float $\ast$p, const float $\ast$dir, float maxdist2=0.\+0f, const Compat\+Func $\ast$iscompat=\+N\+U\+L\+L, float approx\+\_\+eps=0.\+0f) const
+\item 
+const float $\ast$ \hyperlink{classtrimesh_1_1KDtree_a686507f137048b734f4cc35700461701}{closest\+\_\+to\+\_\+ray} (const float $\ast$p, const float $\ast$dir, float maxdist2, float approx\+\_\+eps) const
+\item 
+\hyperlink{namespacetrimesh_a784ddfd979e1c579bda795a8edfc3f43}{void} \hyperlink{classtrimesh_1_1KDtree_a2b509a64df2781b18abac13a8683241d}{find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt} (\+::std\+::vector$<$ const float $\ast$$>$ \&knn, int k, const float $\ast$p, float maxdist2=0.\+0f, const Compat\+Func $\ast$iscompat=\+N\+U\+L\+L, float approx\+\_\+eps=0.\+0f) const
+\item 
+\hyperlink{namespacetrimesh_a784ddfd979e1c579bda795a8edfc3f43}{void} \hyperlink{classtrimesh_1_1KDtree_a1466c3d0b144459fb4472ea05f6d70bc}{find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt} (\+::std\+::vector$<$ const float $\ast$$>$ \&knn, int k, const float $\ast$p, float maxdist2, float approx\+\_\+eps) const
+\item 
+bool \hyperlink{classtrimesh_1_1KDtree_ad8e2126c11fce117f6fa699301348173}{exists\+\_\+pt\+\_\+within} (const float $\ast$p, float maxdist) const
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classtrimesh_1_1KDtree_a7981d4d8eabd12d52c2887cfa94f4c33}\label{classtrimesh_1_1KDtree_a7981d4d8eabd12d52c2887cfa94f4c33}} 
+\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}!K\+Dtree@{K\+Dtree}}
+\index{K\+Dtree@{K\+Dtree}!trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+\subsubsection{\texorpdfstring{K\+Dtree()}{KDtree()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily trimesh\+::\+K\+Dtree\+::\+K\+Dtree (\begin{DoxyParamCaption}\item[{const float $\ast$}]{ptlist,  }\item[{size\+\_\+t}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classtrimesh_1_1KDtree_ab766871a5877b9488e90b9651a0c2b2c}\label{classtrimesh_1_1KDtree_ab766871a5877b9488e90b9651a0c2b2c}} 
+\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}!K\+Dtree@{K\+Dtree}}
+\index{K\+Dtree@{K\+Dtree}!trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+\subsubsection{\texorpdfstring{K\+Dtree()}{KDtree()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+trimesh\+::\+K\+Dtree\+::\+K\+Dtree (\begin{DoxyParamCaption}\item[{const \+::std\+::vector$<$ T $>$ \&}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classtrimesh_1_1KDtree_acd7beb7544e1de886ffab14750075aab}\label{classtrimesh_1_1KDtree_acd7beb7544e1de886ffab14750075aab}} 
+\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}!K\+Dtree@{K\+Dtree}}
+\index{K\+Dtree@{K\+Dtree}!trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+\subsubsection{\texorpdfstring{K\+Dtree()}{KDtree()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily trimesh\+::\+K\+Dtree\+::\+K\+Dtree (\begin{DoxyParamCaption}\item[{const float $\ast$$\ast$}]{pts,  }\item[{size\+\_\+t}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classtrimesh_1_1KDtree_a36b9522141b8c5f2c6bb17d58a469b10}\label{classtrimesh_1_1KDtree_a36b9522141b8c5f2c6bb17d58a469b10}} 
+\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}!K\+Dtree@{K\+Dtree}}
+\index{K\+Dtree@{K\+Dtree}!trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+\subsubsection{\texorpdfstring{K\+Dtree()}{KDtree()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+trimesh\+::\+K\+Dtree\+::\+K\+Dtree (\begin{DoxyParamCaption}\item[{\+::std\+::vector$<$ T $\ast$$>$ \&}]{pts }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classtrimesh_1_1KDtree_acf920211054016e32477fdbd19c5b22c}\label{classtrimesh_1_1KDtree_acf920211054016e32477fdbd19c5b22c}} 
+\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}!````~K\+Dtree@{$\sim$\+K\+Dtree}}
+\index{````~K\+Dtree@{$\sim$\+K\+Dtree}!trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+\subsubsection{\texorpdfstring{$\sim$\+K\+Dtree()}{~KDtree()}}
+{\footnotesize\ttfamily trimesh\+::\+K\+Dtree\+::$\sim$\+K\+Dtree (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Referenced by K\+Dtree().
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtrimesh_1_1KDtree_a9428ce5432d045f9e3e33c381de413b2}\label{classtrimesh_1_1KDtree_a9428ce5432d045f9e3e33c381de413b2}} 
+\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}!closest\+\_\+to\+\_\+pt@{closest\+\_\+to\+\_\+pt}}
+\index{closest\+\_\+to\+\_\+pt@{closest\+\_\+to\+\_\+pt}!trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+\subsubsection{\texorpdfstring{closest\+\_\+to\+\_\+pt()}{closest\_to\_pt()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily const float $\ast$ trimesh\+::\+K\+Dtree\+::closest\+\_\+to\+\_\+pt (\begin{DoxyParamCaption}\item[{const float $\ast$}]{p,  }\item[{float}]{maxdist2 = {\ttfamily 0.0f},  }\item[{const \hyperlink{structtrimesh_1_1KDtree_1_1CompatFunc}{Compat\+Func} $\ast$}]{iscompat = {\ttfamily NULL},  }\item[{float}]{approx\+\_\+eps = {\ttfamily 0.0f} }\end{DoxyParamCaption}) const}
+
+
+
+Referenced by closest\+\_\+to\+\_\+pt(), trimesh\+::\+Tri\+Mesh\+::feature\+\_\+size(), trimesh\+::find\+\_\+overlap\+\_\+onedir(), K\+Dtree(), and trimesh\+::selectall\+\_\+and\+\_\+match().
+
+\mbox{\Hypertarget{classtrimesh_1_1KDtree_a90066965f638191f3bb2edab8d70ab3a}\label{classtrimesh_1_1KDtree_a90066965f638191f3bb2edab8d70ab3a}} 
+\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}!closest\+\_\+to\+\_\+pt@{closest\+\_\+to\+\_\+pt}}
+\index{closest\+\_\+to\+\_\+pt@{closest\+\_\+to\+\_\+pt}!trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+\subsubsection{\texorpdfstring{closest\+\_\+to\+\_\+pt()}{closest\_to\_pt()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily const float$\ast$ trimesh\+::\+K\+Dtree\+::closest\+\_\+to\+\_\+pt (\begin{DoxyParamCaption}\item[{const float $\ast$}]{p,  }\item[{float}]{maxdist2,  }\item[{float}]{approx\+\_\+eps }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classtrimesh_1_1KDtree_a3e3cc3eff36b04c01c065fcee1364922}\label{classtrimesh_1_1KDtree_a3e3cc3eff36b04c01c065fcee1364922}} 
+\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}!closest\+\_\+to\+\_\+ray@{closest\+\_\+to\+\_\+ray}}
+\index{closest\+\_\+to\+\_\+ray@{closest\+\_\+to\+\_\+ray}!trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+\subsubsection{\texorpdfstring{closest\+\_\+to\+\_\+ray()}{closest\_to\_ray()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily const float $\ast$ trimesh\+::\+K\+Dtree\+::closest\+\_\+to\+\_\+ray (\begin{DoxyParamCaption}\item[{const float $\ast$}]{p,  }\item[{const float $\ast$}]{dir,  }\item[{float}]{maxdist2 = {\ttfamily 0.0f},  }\item[{const \hyperlink{structtrimesh_1_1KDtree_1_1CompatFunc}{Compat\+Func} $\ast$}]{iscompat = {\ttfamily NULL},  }\item[{float}]{approx\+\_\+eps = {\ttfamily 0.0f} }\end{DoxyParamCaption}) const}
+
+
+
+Referenced by closest\+\_\+to\+\_\+pt(), and closest\+\_\+to\+\_\+ray().
+
+\mbox{\Hypertarget{classtrimesh_1_1KDtree_a686507f137048b734f4cc35700461701}\label{classtrimesh_1_1KDtree_a686507f137048b734f4cc35700461701}} 
+\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}!closest\+\_\+to\+\_\+ray@{closest\+\_\+to\+\_\+ray}}
+\index{closest\+\_\+to\+\_\+ray@{closest\+\_\+to\+\_\+ray}!trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+\subsubsection{\texorpdfstring{closest\+\_\+to\+\_\+ray()}{closest\_to\_ray()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily const float$\ast$ trimesh\+::\+K\+Dtree\+::closest\+\_\+to\+\_\+ray (\begin{DoxyParamCaption}\item[{const float $\ast$}]{p,  }\item[{const float $\ast$}]{dir,  }\item[{float}]{maxdist2,  }\item[{float}]{approx\+\_\+eps }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classtrimesh_1_1KDtree_ad8e2126c11fce117f6fa699301348173}\label{classtrimesh_1_1KDtree_ad8e2126c11fce117f6fa699301348173}} 
+\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}!exists\+\_\+pt\+\_\+within@{exists\+\_\+pt\+\_\+within}}
+\index{exists\+\_\+pt\+\_\+within@{exists\+\_\+pt\+\_\+within}!trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+\subsubsection{\texorpdfstring{exists\+\_\+pt\+\_\+within()}{exists\_pt\_within()}}
+{\footnotesize\ttfamily bool trimesh\+::\+K\+Dtree\+::exists\+\_\+pt\+\_\+within (\begin{DoxyParamCaption}\item[{const float $\ast$}]{p,  }\item[{float}]{maxdist }\end{DoxyParamCaption}) const}
+
+
+
+Referenced by trimesh\+::compute\+\_\+overlaps(), and find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt().
+
+\mbox{\Hypertarget{classtrimesh_1_1KDtree_a2b509a64df2781b18abac13a8683241d}\label{classtrimesh_1_1KDtree_a2b509a64df2781b18abac13a8683241d}} 
+\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}!find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt@{find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt}}
+\index{find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt@{find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt}!trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+\subsubsection{\texorpdfstring{find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt()}{find\_k\_closest\_to\_pt()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \hyperlink{namespacetrimesh_a784ddfd979e1c579bda795a8edfc3f43}{void} trimesh\+::\+K\+Dtree\+::find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt (\begin{DoxyParamCaption}\item[{\+::std\+::vector$<$ const float $\ast$$>$ \&}]{knn,  }\item[{int}]{k,  }\item[{const float $\ast$}]{p,  }\item[{float}]{maxdist2 = {\ttfamily 0.0f},  }\item[{const \hyperlink{structtrimesh_1_1KDtree_1_1CompatFunc}{Compat\+Func} $\ast$}]{iscompat = {\ttfamily NULL},  }\item[{float}]{approx\+\_\+eps = {\ttfamily 0.0f} }\end{DoxyParamCaption}) const}
+
+
+
+Referenced by closest\+\_\+to\+\_\+ray(), find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt(), and trimesh\+::normals\+\_\+from\+\_\+points().
+
+\mbox{\Hypertarget{classtrimesh_1_1KDtree_a1466c3d0b144459fb4472ea05f6d70bc}\label{classtrimesh_1_1KDtree_a1466c3d0b144459fb4472ea05f6d70bc}} 
+\index{trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}!find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt@{find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt}}
+\index{find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt@{find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt}!trimesh\+::\+K\+Dtree@{trimesh\+::\+K\+Dtree}}
+\subsubsection{\texorpdfstring{find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt()}{find\_k\_closest\_to\_pt()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \hyperlink{namespacetrimesh_a784ddfd979e1c579bda795a8edfc3f43}{void} trimesh\+::\+K\+Dtree\+::find\+\_\+k\+\_\+closest\+\_\+to\+\_\+pt (\begin{DoxyParamCaption}\item[{\+::std\+::vector$<$ const float $\ast$$>$ \&}]{knn,  }\item[{int}]{k,  }\item[{const float $\ast$}]{p,  }\item[{float}]{maxdist2,  }\item[{float}]{approx\+\_\+eps }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{KDtree_8h}{K\+Dtree.\+h}\item 
+\hyperlink{KDtree_8cc}{K\+Dtree.\+cc}\end{DoxyCompactItemize}

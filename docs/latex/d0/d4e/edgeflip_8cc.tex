@@ -1,0 +1,82 @@
+\hypertarget{edgeflip_8cc}{}\section{edgeflip.\+cc File Reference}
+\label{edgeflip_8cc}\index{edgeflip.\+cc@{edgeflip.\+cc}}
+{\ttfamily \#include \char`\"{}Tri\+Mesh.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Tri\+Mesh\+\_\+algo.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$queue$>$}\newline
+Include dependency graph for edgeflip.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d3/dbc/edgeflip_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetrimesh}{trimesh}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{edgeflip_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}{dprintf}~Tri\+Mesh\+::dprintf
+\item 
+\#define \hyperlink{edgeflip_8cc_a5589265465828f781baaed1f963ea0ea}{eprintf}~Tri\+Mesh\+::eprintf
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef pair$<$ int, int $>$ \hyperlink{edgeflip_8cc_a610c5812b51158a2c405ae70d2dd24ec}{Tri\+Mesh\+Edge}
+\item 
+typedef pair$<$ float, \hyperlink{edgeflip_8cc_a610c5812b51158a2c405ae70d2dd24ec}{Tri\+Mesh\+Edge} $>$ \hyperlink{edgeflip_8cc_a896a5f726ea718a7e724d9b2b6ac2c1e}{Tri\+Mesh\+Edge\+With\+Benefit}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static float \hyperlink{namespacetrimesh_af5553d80525773f785259b1198c0da70}{trimesh\+::cosmaxangle} (const point \&v1, const point \&v2, const point \&v3)
+\item 
+static float \hyperlink{namespacetrimesh_a5904077afc65b3f3fb7eaf9050af9943}{trimesh\+::flip\+\_\+benefit} (const point \&v1, const point \&v2, const point \&v3, const point \&v4)
+\item 
+static float \hyperlink{namespacetrimesh_aa1e813778d2fe154974bce5a6aca7488}{trimesh\+::flip\+\_\+benefit} (const Tri\+Mesh $\ast$mesh, int f, int e)
+\item 
+static int \hyperlink{namespacetrimesh_a77fa200471c2aa3e4c840ff365886565}{trimesh\+::edge\+\_\+flip} (Tri\+Mesh $\ast$mesh, int f1, int e)
+\item 
+void \hyperlink{namespacetrimesh_a53d8b8510a41991617d9cccc707460ea}{trimesh\+::edgeflip} (Tri\+Mesh $\ast$mesh)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{edgeflip_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}\label{edgeflip_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}} 
+\index{edgeflip.\+cc@{edgeflip.\+cc}!dprintf@{dprintf}}
+\index{dprintf@{dprintf}!edgeflip.\+cc@{edgeflip.\+cc}}
+\subsubsection{\texorpdfstring{dprintf}{dprintf}}
+{\footnotesize\ttfamily \#define dprintf~Tri\+Mesh\+::dprintf}
+
+
+
+Referenced by trimesh\+::edgeflip().
+
+\mbox{\Hypertarget{edgeflip_8cc_a5589265465828f781baaed1f963ea0ea}\label{edgeflip_8cc_a5589265465828f781baaed1f963ea0ea}} 
+\index{edgeflip.\+cc@{edgeflip.\+cc}!eprintf@{eprintf}}
+\index{eprintf@{eprintf}!edgeflip.\+cc@{edgeflip.\+cc}}
+\subsubsection{\texorpdfstring{eprintf}{eprintf}}
+{\footnotesize\ttfamily \#define eprintf~Tri\+Mesh\+::eprintf}
+
+
+
+Referenced by trimesh\+::flip\+\_\+benefit(), trimesh\+::make\+\_\+platonic(), trimesh\+::make\+\_\+surface\+\_\+of\+\_\+revolution(), and trimesh\+::\+G\+L\+Manager\+::texture().
+
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{edgeflip_8cc_a610c5812b51158a2c405ae70d2dd24ec}\label{edgeflip_8cc_a610c5812b51158a2c405ae70d2dd24ec}} 
+\index{edgeflip.\+cc@{edgeflip.\+cc}!Tri\+Mesh\+Edge@{Tri\+Mesh\+Edge}}
+\index{Tri\+Mesh\+Edge@{Tri\+Mesh\+Edge}!edgeflip.\+cc@{edgeflip.\+cc}}
+\subsubsection{\texorpdfstring{Tri\+Mesh\+Edge}{TriMeshEdge}}
+{\footnotesize\ttfamily typedef pair$<$int,int$>$ \hyperlink{edgeflip_8cc_a610c5812b51158a2c405ae70d2dd24ec}{Tri\+Mesh\+Edge}}
+
+\mbox{\Hypertarget{edgeflip_8cc_a896a5f726ea718a7e724d9b2b6ac2c1e}\label{edgeflip_8cc_a896a5f726ea718a7e724d9b2b6ac2c1e}} 
+\index{edgeflip.\+cc@{edgeflip.\+cc}!Tri\+Mesh\+Edge\+With\+Benefit@{Tri\+Mesh\+Edge\+With\+Benefit}}
+\index{Tri\+Mesh\+Edge\+With\+Benefit@{Tri\+Mesh\+Edge\+With\+Benefit}!edgeflip.\+cc@{edgeflip.\+cc}}
+\subsubsection{\texorpdfstring{Tri\+Mesh\+Edge\+With\+Benefit}{TriMeshEdgeWithBenefit}}
+{\footnotesize\ttfamily typedef pair$<$float, \hyperlink{edgeflip_8cc_a610c5812b51158a2c405ae70d2dd24ec}{Tri\+Mesh\+Edge}$>$ \hyperlink{edgeflip_8cc_a896a5f726ea718a7e724d9b2b6ac2c1e}{Tri\+Mesh\+Edge\+With\+Benefit}}
+

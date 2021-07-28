@@ -1,0 +1,125 @@
+\hypertarget{sndt__exec_2include_2sndt__exec_2wrapper_8hpp}{}\section{wrapper.\+hpp File Reference}
+\label{sndt__exec_2include_2sndt__exec_2wrapper_8hpp}\index{wrapper.\+hpp@{wrapper.\+hpp}}
+{\ttfamily \#include $<$bits/stdc++.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/io/pcd\+\_\+io.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/point\+\_\+types.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/search/kdtree.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}common/common.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}sndt/ndt\+\_\+matcher.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}normal2d/\+Normal2d\+Estimation.\+h\char`\"{}}\newline
+Include dependency graph for sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.hpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d5/d2b/sndt__exec_2include_2sndt__exec_2wrapper_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{de/d44/sndt__exec_2include_2sndt__exec_2wrapper_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$ \hyperlink{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ}
+\item 
+typedef \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$\+::Ptr \hyperlink{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Matrix\+Xd \hyperlink{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a36e0685cec04c71b21a5de3865e22429}{Matrix\+Xd\+From\+P\+CL} (\hyperlink{ndt__map_8h_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ} pc)
+\item 
+Matrix\+Xd \hyperlink{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a49016946d9086a095f6a1a7f18d04aea}{Matrix\+Xd\+From\+P\+CL} (\hyperlink{ndt__map_8h_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr} pc)
+\item 
+\hyperlink{ndt__map_8h_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr} \hyperlink{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_add3e9268940556c2ad902adf7195abb3}{P\+C\+L\+From\+Matrix\+Xd} (const Matrix\+Xd \&mtx)
+\item 
+void \hyperlink{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a065ed14171649ff6dc91209254295290}{Do\+S\+N\+DT} (\hyperlink{structcommon_1_1MatchPackage}{common\+::\+Match\+Package} \&mp, \hyperlink{classcommon_1_1MatchInternal}{common\+::\+Match\+Internal} \&\hyperlink{ICP_8cc_aa9a8f472b6c5b3fec182ecd7ef20af08}{mit}, const vector$<$ double $>$ \&params)
+\begin{DoxyCompactList}\small\item\em Wrapper of S\+N\+DT. \end{DoxyCompactList}\item 
+\hyperlink{classNDTMap}{N\+D\+T\+Map} \hyperlink{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a15c688d74ac6178ac759eb8c105c55db}{Make\+Map} (const vector$<$ pair$<$ Matrix\+Xd, Affine2d $>$$>$ \&data, const Vector2d \&intrinsic, const vector$<$ double $>$ \&params)
+\end{DoxyCompactItemize}
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a20282c1dd3c86f9bc25e124768cdbe3d}\label{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a20282c1dd3c86f9bc25e124768cdbe3d}} 
+\index{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}!P\+C\+X\+YZ@{P\+C\+X\+YZ}}
+\index{P\+C\+X\+YZ@{P\+C\+X\+YZ}!sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{P\+C\+X\+YZ}{PCXYZ}}
+{\footnotesize\ttfamily typedef \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$pcl\+::\+Point\+X\+YZ$>$ \hyperlink{ndt__map_8h_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ}}
+
+\mbox{\Hypertarget{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a467e4d48ef8154e4fd6d76d355cae2da}\label{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a467e4d48ef8154e4fd6d76d355cae2da}} 
+\index{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}!P\+C\+X\+Y\+Z\+Ptr@{P\+C\+X\+Y\+Z\+Ptr}}
+\index{P\+C\+X\+Y\+Z\+Ptr@{P\+C\+X\+Y\+Z\+Ptr}!sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{P\+C\+X\+Y\+Z\+Ptr}{PCXYZPtr}}
+{\footnotesize\ttfamily typedef \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$pcl\+::\+Point\+X\+YZ$>$\+::Ptr \hyperlink{ndt__map_8h_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr}}
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a065ed14171649ff6dc91209254295290}\label{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a065ed14171649ff6dc91209254295290}} 
+\index{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}!Do\+S\+N\+DT@{Do\+S\+N\+DT}}
+\index{Do\+S\+N\+DT@{Do\+S\+N\+DT}!sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Do\+S\+N\+D\+T()}{DoSNDT()}}
+{\footnotesize\ttfamily void Do\+S\+N\+DT (\begin{DoxyParamCaption}\item[{\hyperlink{structcommon_1_1MatchPackage}{common\+::\+Match\+Package} \&}]{mp,  }\item[{\hyperlink{classcommon_1_1MatchInternal}{common\+::\+Match\+Internal} \&}]{mit,  }\item[{const vector$<$ double $>$ \&}]{params }\end{DoxyParamCaption})}
+
+
+
+Wrapper of S\+N\+DT. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mp} & \\
+\hline
+{\em mit} & \\
+\hline
+{\em params} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a15c688d74ac6178ac759eb8c105c55db}\label{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a15c688d74ac6178ac759eb8c105c55db}} 
+\index{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}!Make\+Map@{Make\+Map}}
+\index{Make\+Map@{Make\+Map}!sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Make\+Map()}{MakeMap()}}
+{\footnotesize\ttfamily \hyperlink{classNDTMap}{N\+D\+T\+Map} Make\+Map (\begin{DoxyParamCaption}\item[{const vector$<$ pair$<$ Matrix\+Xd, Affine2d $>$$>$ \&}]{data,  }\item[{const Vector2d \&}]{intrinsic,  }\item[{const vector$<$ double $>$ \&}]{params }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Matrix\+Xd 2xN \& Affine2d \\
+\hline
+{\em point\+\_\+intrinsic} & variance (r\+\_\+sig$^\wedge$2, theta\+\_\+sig$^\wedge$2) \\
+\hline
+{\em params} & (cell\+\_\+size, radius) \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a36e0685cec04c71b21a5de3865e22429}\label{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a36e0685cec04c71b21a5de3865e22429}} 
+\index{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}!Matrix\+Xd\+From\+P\+CL@{Matrix\+Xd\+From\+P\+CL}}
+\index{Matrix\+Xd\+From\+P\+CL@{Matrix\+Xd\+From\+P\+CL}!sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Matrix\+Xd\+From\+P\+C\+L()}{MatrixXdFromPCL()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Matrix\+Xd Matrix\+Xd\+From\+P\+CL (\begin{DoxyParamCaption}\item[{\hyperlink{ndt__map_8h_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ}}]{pc }\end{DoxyParamCaption})}
+
+
+
+Referenced by Matrix\+Xd\+From\+P\+C\+L().
+
+\mbox{\Hypertarget{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a49016946d9086a095f6a1a7f18d04aea}\label{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_a49016946d9086a095f6a1a7f18d04aea}} 
+\index{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}!Matrix\+Xd\+From\+P\+CL@{Matrix\+Xd\+From\+P\+CL}}
+\index{Matrix\+Xd\+From\+P\+CL@{Matrix\+Xd\+From\+P\+CL}!sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Matrix\+Xd\+From\+P\+C\+L()}{MatrixXdFromPCL()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Matrix\+Xd Matrix\+Xd\+From\+P\+CL (\begin{DoxyParamCaption}\item[{\hyperlink{ndt__map_8h_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr}}]{pc }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_add3e9268940556c2ad902adf7195abb3}\label{sndt__exec_2include_2sndt__exec_2wrapper_8hpp_add3e9268940556c2ad902adf7195abb3}} 
+\index{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}!P\+C\+L\+From\+Matrix\+Xd@{P\+C\+L\+From\+Matrix\+Xd}}
+\index{P\+C\+L\+From\+Matrix\+Xd@{P\+C\+L\+From\+Matrix\+Xd}!sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp@{sndt\+\_\+exec/include/sndt\+\_\+exec/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{P\+C\+L\+From\+Matrix\+Xd()}{PCLFromMatrixXd()}}
+{\footnotesize\ttfamily \hyperlink{ndt__map_8h_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr} P\+C\+L\+From\+Matrix\+Xd (\begin{DoxyParamCaption}\item[{const Matrix\+Xd \&}]{mtx }\end{DoxyParamCaption})}
+
+
+
+Referenced by Do\+S\+N\+D\+T().
+

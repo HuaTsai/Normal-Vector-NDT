@@ -1,0 +1,83 @@
+\hypertarget{ICP_8h}{}\section{I\+C\+P.\+h File Reference}
+\label{ICP_8h}\index{I\+C\+P.\+h@{I\+C\+P.\+h}}
+{\ttfamily \#include \char`\"{}Tri\+Mesh.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}X\+Form.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}K\+Dtree.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}common/match\+\_\+utils.\+hpp\char`\"{}}\newline
+Include dependency graph for I\+C\+P.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{db/d42/ICP_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=258pt]{d7/dff/ICP_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetrimesh}{trimesh}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{namespacetrimesh_a64c747e4228158428e9cd911672cb1be}{trimesh\+::\+I\+C\+P\+\_\+xform\+\_\+type} \{ \hyperlink{namespacetrimesh_a64c747e4228158428e9cd911672cb1bea9ec9aa9e7301457bc12377ad8dabccce}{trimesh\+::\+I\+C\+P\+\_\+\+T\+R\+A\+N\+S\+L\+A\+T\+I\+ON}, 
+\hyperlink{namespacetrimesh_a64c747e4228158428e9cd911672cb1beab1d341808d3d7fb0bcff97fad1e83174}{trimesh\+::\+I\+C\+P\+\_\+\+R\+I\+G\+ID}, 
+\hyperlink{namespacetrimesh_a64c747e4228158428e9cd911672cb1bea51bbf36deaaf8c2588dcbb72ca957cd6}{trimesh\+::\+I\+C\+P\+\_\+\+S\+I\+M\+I\+L\+A\+R\+I\+TY}, 
+\hyperlink{namespacetrimesh_a64c747e4228158428e9cd911672cb1beaa939221a122f237156bbf694fb2306a1}{trimesh\+::\+I\+C\+P\+\_\+\+A\+F\+F\+I\+NE}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Grid $\ast$ \hyperlink{namespacetrimesh_ad6dfef32ed982206d691d6d94ad3190b}{trimesh\+::make\+\_\+grid} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_aa9254702bebad4e4f5fc958df4b30916}{trimesh\+::compute\+\_\+overlaps} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, const xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2, const Grid $\ast$g1, const Grid $\ast$g2, \+::std\+::vector$<$ float $>$ \&o1, \+::std\+::vector$<$ float $>$ \&o2, float \&maxdist, int verbose)
+\item 
+float \hyperlink{namespacetrimesh_a0998a81f51d7ca84060748ea68c52e04}{trimesh\+::\+I\+CP} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2, \+::std\+::vector$<$ float $>$ \&weights1, \+::std\+::vector$<$ float $>$ \&weights2, float maxdist=0.\+0f, int verbose=0, I\+C\+P\+\_\+xform\+\_\+type xform\+\_\+type=\+I\+C\+P\+\_\+\+R\+I\+G\+I\+D)
+\item 
+float \hyperlink{namespacetrimesh_a48c046b2eee6d9f2febe817f3491e0ae}{trimesh\+::\+I\+CP} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2, int verbose=0, I\+C\+P\+\_\+xform\+\_\+type xform\+\_\+type=I\+C\+P\+\_\+\+R\+I\+G\+ID)
+\item 
+float \hyperlink{namespacetrimesh_a0eee6ad23539d352b6afcefc4b521793}{trimesh\+::\+I\+CP} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, int verbose=0, I\+C\+P\+\_\+xform\+\_\+type xform\+\_\+type=I\+C\+P\+\_\+\+R\+I\+G\+ID)
+\item 
+float \hyperlink{namespacetrimesh_a71ee28e5aabcb5da6055c743e00d920b}{trimesh\+::\+I\+CP} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2, \+::std\+::vector$<$ float $>$ \&weights1, \+::std\+::vector$<$ float $>$ \&weights2, float maxdist, int verbose, bool do\+\_\+scale, bool do\+\_\+affine=false)
+\item 
+float \hyperlink{namespacetrimesh_a00bf593d97e195670637651eca9c9bd4}{trimesh\+::\+I\+CP} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, const K\+Dtree $\ast$kd1, const K\+Dtree $\ast$kd2, int verbose, bool do\+\_\+scale, bool do\+\_\+affine=false)
+\item 
+float \hyperlink{namespacetrimesh_aa22c15523373c06e7a01a2243c1ab309}{trimesh\+::\+I\+CP} (Tri\+Mesh $\ast$mesh1, Tri\+Mesh $\ast$mesh2, const xform \&xf1, xform \&xf2, int verbose, bool do\+\_\+scale, bool do\+\_\+affine=false)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcommon_1_1MatchInternal}{common\+::\+Match\+Internal} \hyperlink{ICP_8h_aa9a8f472b6c5b3fec182ecd7ef20af08}{mit}
+\item 
+int \hyperlink{ICP_8h_a7460ff431235790129d5ae74dfd7111a}{iters}
+\end{DoxyCompactItemize}
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{ICP_8h_a7460ff431235790129d5ae74dfd7111a}\label{ICP_8h_a7460ff431235790129d5ae74dfd7111a}} 
+\index{I\+C\+P.\+h@{I\+C\+P.\+h}!iters@{iters}}
+\index{iters@{iters}!I\+C\+P.\+h@{I\+C\+P.\+h}}
+\subsubsection{\texorpdfstring{iters}{iters}}
+{\footnotesize\ttfamily int iters}
+
+
+
+Referenced by Do\+S\+I\+C\+P(), and trimesh\+::\+I\+C\+P().
+
+\mbox{\Hypertarget{ICP_8h_aa9a8f472b6c5b3fec182ecd7ef20af08}\label{ICP_8h_aa9a8f472b6c5b3fec182ecd7ef20af08}} 
+\index{I\+C\+P.\+h@{I\+C\+P.\+h}!mit@{mit}}
+\index{mit@{mit}!I\+C\+P.\+h@{I\+C\+P.\+h}}
+\subsubsection{\texorpdfstring{mit}{mit}}
+{\footnotesize\ttfamily \hyperlink{classcommon_1_1MatchInternal}{common\+::\+Match\+Internal} mit}
+
+
+
+Referenced by main().
+

@@ -1,0 +1,95 @@
+\hypertarget{XForm_8h}{}\section{X\+Form.\+h File Reference}
+\label{XForm_8h}\index{X\+Form.\+h@{X\+Form.\+h}}
+{\ttfamily \#include \char`\"{}Vec.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}lineqn.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}strutil.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$iomanip$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+Include dependency graph for X\+Form.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d8/d60/XForm_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{dd/d69/XForm_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtrimesh_1_1XForm}{trimesh\+::\+X\+Form$<$ T $>$}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetrimesh}{trimesh}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{XForm_8h_a00d24c7231be28dbaf71f5408f30e44c}{inline}~\hyperlink{mathutil_8h_ad4f22a2341fc0116e3d09f30386a8b15}{T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef X\+Form$<$ double $>$ \hyperlink{namespacetrimesh_ad504958f2f56e393991b848986a8459f}{trimesh\+::xform}
+\item 
+typedef X\+Form$<$ double $>$ \hyperlink{namespacetrimesh_ada17437d42f05ec2e98e3f1286f16fbb}{trimesh\+::dxform}
+\item 
+typedef X\+Form$<$ float $>$ \hyperlink{namespacetrimesh_a6dc08ea49881bb2975b7d34e0c07faad}{trimesh\+::fxform}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class T $>$ }\\static X\+Form$<$ T $>$ \hyperlink{namespacetrimesh_a2cf4a60d0201f630995ed0b4ba7c375d}{trimesh\+::operator+} (const X\+Form$<$ T $>$ \&xf1, const X\+Form$<$ T $>$ \&xf2)
+\item 
+{\footnotesize template$<$class T $>$ }\\static X\+Form$<$ T $>$ \hyperlink{namespacetrimesh_acc3ec38b95c8dcc3d5d20f3226ca1b6b}{trimesh\+::operator-\/} (const X\+Form$<$ T $>$ \&xf1, const X\+Form$<$ T $>$ \&xf2)
+\item 
+{\footnotesize template$<$class T $>$ }\\static X\+Form$<$ T $>$ \hyperlink{namespacetrimesh_afb8f7c3cf819ec607d468466aecc306c}{trimesh\+::operator$\ast$} (const X\+Form$<$ T $>$ \&xf1, const X\+Form$<$ T $>$ \&xf2)
+\item 
+{\footnotesize template$<$class S , class T $>$ }\\static const \hyperlink{ego_8cc_abde73cd36321648268fb4543509b996a}{S} \hyperlink{namespacetrimesh_a1babd12d169622c171cacddf86e6ae1a}{trimesh\+::operator$\ast$} (const X\+Form$<$ T $>$ \&xf, const \hyperlink{ego_8cc_abde73cd36321648268fb4543509b996a}{S} \&v)
+\item 
+{\footnotesize template$<$class T $>$ }\\static bool \hyperlink{namespacetrimesh_a536dfd53ef4e9b9aaa2e886c080ff64a}{trimesh\+::operator==} (const X\+Form$<$ T $>$ \&xf1, const X\+Form$<$ T $>$ \&xf2)
+\item 
+{\footnotesize template$<$class T $>$ }\\static bool \hyperlink{namespacetrimesh_af68c94d9209a2ccfd35ba698a1385be4}{trimesh\+::operator!=} (const X\+Form$<$ T $>$ \&xf1, const X\+Form$<$ T $>$ \&xf2)
+\item 
+{\footnotesize template$<$class T $>$ }\\static X\+Form$<$ T $>$ \hyperlink{namespacetrimesh_a74eac39dfba7b239ed4a863f143d6681}{trimesh\+::inv} (const X\+Form$<$ T $>$ \&xf)
+\item 
+{\footnotesize template$<$class T $>$ }\\static void \hyperlink{namespacetrimesh_aeaef0b22ea54a6d1a26152c77c2a162e}{trimesh\+::invert} (X\+Form$<$ T $>$ \&xf)
+\item 
+{\footnotesize template$<$class T $>$ }\\static X\+Form$<$ T $>$ \hyperlink{namespacetrimesh_afff8c9983f285fdb71b1451c78c3fc31}{trimesh\+::transp} (const X\+Form$<$ T $>$ \&xf)
+\item 
+{\footnotesize template$<$class T $>$ }\\static void \hyperlink{namespacetrimesh_ae0973aae6db6604e126e144841c3f7b4}{trimesh\+::transpose} (X\+Form$<$ T $>$ \&xf)
+\item 
+{\footnotesize template$<$class T $>$ }\\static X\+Form$<$ T $>$ \hyperlink{namespacetrimesh_a1ae6e55c3005878fc1338a2b0c60e746}{trimesh\+::rot\+\_\+only} (const X\+Form$<$ T $>$ \&xf)
+\item 
+{\footnotesize template$<$class T $>$ }\\static X\+Form$<$ T $>$ \hyperlink{namespacetrimesh_acb98e242d88c9ce5d4dc7d1f86e64d6b}{trimesh\+::trans\+\_\+only} (const X\+Form$<$ T $>$ \&xf)
+\item 
+{\footnotesize template$<$class T $>$ }\\static X\+Form$<$ T $>$ \hyperlink{namespacetrimesh_aa7cf6dde5fb8c44e0609b58e98757e03}{trimesh\+::norm\+\_\+xf} (const X\+Form$<$ T $>$ \&xf)
+\item 
+{\footnotesize template$<$class T , class S $>$ }\\static void \hyperlink{namespacetrimesh_a1babcab4e1f2d085678ef77689beabbf}{trimesh\+::decompose\+\_\+rot} (const X\+Form$<$ T $>$ \&xf, T \&angle, \hyperlink{ego_8cc_abde73cd36321648268fb4543509b996a}{S} \&axis)
+\item 
+{\footnotesize template$<$class T $>$ }\\static void \hyperlink{namespacetrimesh_a541e16b3b3a760407e86e5a9725982bb}{trimesh\+::orthogonalize} (X\+Form$<$ T $>$ \&xf)
+\item 
+{\footnotesize template$<$class T , class S $>$ }\\static X\+Form$<$ T $>$ \hyperlink{namespacetrimesh_ac74eeae44509f66f5bfb47fbd5321706}{trimesh\+::mix} (const X\+Form$<$ T $>$ \&x, const X\+Form$<$ T $>$ \&y, const \hyperlink{ego_8cc_abde73cd36321648268fb4543509b996a}{S} \&a)
+\item 
+{\footnotesize template$<$class T $>$ }\\static \hyperlink{XForm_8h_a00d24c7231be28dbaf71f5408f30e44c}{inline} \+::std\+::ostream \& \hyperlink{namespacetrimesh_a9989ea6db6b00c754bf2677f9eac10d4}{trimesh\+::operator$<$$<$} (\+::std\+::ostream \&os, const X\+Form$<$ T $>$ \&m)
+\item 
+{\footnotesize template$<$class T $>$ }\\static \hyperlink{XForm_8h_a00d24c7231be28dbaf71f5408f30e44c}{inline} \+::std\+::istream \& \hyperlink{namespacetrimesh_af30b096ef8c05b3a4024670f52fa42e2}{trimesh\+::operator$>$$>$} (\+::std\+::istream \&is, X\+Form$<$ T $>$ \&m)
+\item 
+static \hyperlink{XForm_8h_a00d24c7231be28dbaf71f5408f30e44c}{inline} \+::std\+::string \hyperlink{namespacetrimesh_a8c5b43bba4491404387a4e3a7fce60e0}{trimesh\+::xfname} (const \+::std\+::string \&filename)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{XForm_8h_a00d24c7231be28dbaf71f5408f30e44c}\label{XForm_8h_a00d24c7231be28dbaf71f5408f30e44c}} 
+\index{X\+Form.\+h@{X\+Form.\+h}!inline@{inline}}
+\index{inline@{inline}!X\+Form.\+h@{X\+Form.\+h}}
+\subsubsection{\texorpdfstring{inline}{inline}}
+{\footnotesize\ttfamily \#define inline~\hyperlink{mathutil_8h_ad4f22a2341fc0116e3d09f30386a8b15}{T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE}}
+

@@ -1,0 +1,67 @@
+\hypertarget{subdiv_8cc}{}\section{subdiv.\+cc File Reference}
+\label{subdiv_8cc}\index{subdiv.\+cc@{subdiv.\+cc}}
+{\ttfamily \#include \char`\"{}Tri\+Mesh.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Tri\+Mesh\+\_\+algo.\+h\char`\"{}}\newline
+Include dependency graph for subdiv.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{dc/d34/subdiv_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetrimesh}{trimesh}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{subdiv_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}{dprintf}~Tri\+Mesh\+::dprintf
+\item 
+\#define \hyperlink{subdiv_8cc_a30e4561b1aaafaff2f792ed4502a9876}{M\+\_\+\+T\+W\+O\+P\+If}~6.\+2831855f
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static point \hyperlink{namespacetrimesh_a036483075edee8dfcd56bc4828719a3c}{trimesh\+::loop} (Tri\+Mesh $\ast$mesh, int, int, int v0, int v1, int v2, int v3)
+\item 
+static point \hyperlink{namespacetrimesh_a0b6c5f4d4341d1bfb328eaa00fcbf3a6}{trimesh\+::opposite} (Tri\+Mesh $\ast$mesh, int f, int v)
+\item 
+static point \hyperlink{namespacetrimesh_af02cb5da4a7c6e10976858e904be4cc1}{trimesh\+::butterfly} (Tri\+Mesh $\ast$mesh, int f1, int f2, int v0, int v1, int v2, int v3)
+\item 
+static point \hyperlink{namespacetrimesh_a036862d2143f0fc0bc638b1858a241d9}{trimesh\+::new\+\_\+loop\+\_\+edge} (Tri\+Mesh $\ast$mesh, int f1, int f2, int v0, int v1, int v2, int v3)
+\item 
+static point \hyperlink{namespacetrimesh_a97f0de0e9ff3f27e57cab46a3d14855c}{trimesh\+::zorin\+\_\+edge} (Tri\+Mesh $\ast$mesh, int f1, int f2, int v0, int v1, int v2, int v3)
+\item 
+static point \hyperlink{namespacetrimesh_a0915fd4cff6192270f44c4ce28f8eafd}{trimesh\+::avg\+\_\+bdy} (Tri\+Mesh $\ast$mesh, int v)
+\item 
+static float \hyperlink{namespacetrimesh_abe10e85ee62d84c8304305153d63652a}{trimesh\+::loop\+\_\+update\+\_\+alpha} (Subdiv\+Scheme scheme, int n)
+\item 
+static void \hyperlink{namespacetrimesh_aaf2e03ede57ee1031fe1ceedb9d2e340}{trimesh\+::insert\+\_\+vert} (Tri\+Mesh $\ast$mesh, Subdiv\+Scheme scheme, int f, int e)
+\item 
+void \hyperlink{namespacetrimesh_a6f861eefce96c48dfcdfda348a2efa43}{trimesh\+::subdiv} (Tri\+Mesh $\ast$mesh, Subdiv\+Scheme scheme=S\+U\+B\+D\+I\+V\+\_\+\+L\+O\+OP)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{subdiv_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}\label{subdiv_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}} 
+\index{subdiv.\+cc@{subdiv.\+cc}!dprintf@{dprintf}}
+\index{dprintf@{dprintf}!subdiv.\+cc@{subdiv.\+cc}}
+\subsubsection{\texorpdfstring{dprintf}{dprintf}}
+{\footnotesize\ttfamily \#define dprintf~Tri\+Mesh\+::dprintf}
+
+
+
+Referenced by trimesh\+::subdiv().
+
+\mbox{\Hypertarget{subdiv_8cc_a30e4561b1aaafaff2f792ed4502a9876}\label{subdiv_8cc_a30e4561b1aaafaff2f792ed4502a9876}} 
+\index{subdiv.\+cc@{subdiv.\+cc}!M\+\_\+\+T\+W\+O\+P\+If@{M\+\_\+\+T\+W\+O\+P\+If}}
+\index{M\+\_\+\+T\+W\+O\+P\+If@{M\+\_\+\+T\+W\+O\+P\+If}!subdiv.\+cc@{subdiv.\+cc}}
+\subsubsection{\texorpdfstring{M\+\_\+\+T\+W\+O\+P\+If}{M\_TWOPIf}}
+{\footnotesize\ttfamily \#define M\+\_\+\+T\+W\+O\+P\+If~6.\+2831855f}
+
+
+
+Referenced by trimesh\+::loop\+\_\+update\+\_\+alpha(), trimesh\+::new\+\_\+loop\+\_\+edge(), and trimesh\+::zorin\+\_\+edge().
+

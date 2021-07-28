@@ -1,0 +1,303 @@
+\hypertarget{TriMesh__io_8cc}{}\section{Tri\+Mesh\+\_\+io.\+cc File Reference}
+\label{TriMesh__io_8cc}\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+{\ttfamily \#include \char`\"{}Tri\+Mesh.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}endianutil.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$cstdio$>$}\newline
+{\ttfamily \#include $<$cerrno$>$}\newline
+{\ttfamily \#include $<$cctype$>$}\newline
+{\ttfamily \#include $<$cstdarg$>$}\newline
+Include dependency graph for Tri\+Mesh\+\_\+io.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d6/d03/TriMesh__io_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetrimesh}{trimesh}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{TriMesh__io_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}{dprintf}~Tri\+Mesh\+::dprintf
+\item 
+\#define \hyperlink{TriMesh__io_8cc_a5589265465828f781baaed1f963ea0ea}{eprintf}~Tri\+Mesh\+::eprintf
+\item 
+\#define \hyperlink{TriMesh__io_8cc_a0fd69ea6a24300e33f65d52a1c6163ec}{G\+E\+T\+\_\+\+L\+I\+NE}()~do \{ if (!fgets(buf, 1024, f)) return false; \} while (0)
+\item 
+\#define \hyperlink{TriMesh__io_8cc_a4e9c4d7c20d18d21e9848e2cabfd2458}{G\+E\+T\+\_\+\+W\+O\+RD}()~do \{ if (fscanf(f, \char`\"{} \%1023s\char`\"{}, buf) != 1) return false; \} while (0)
+\item 
+\#define \hyperlink{TriMesh__io_8cc_a041da43f1aca00da0d86b1e670870601}{C\+O\+N\+D\+\_\+\+R\+E\+AD}(cond,  where,  len)~do \{ if ((cond) \&\& !fread((void $\ast$)\&(where), (len), 1, f)) return false; \} while (0)
+\item 
+\#define \hyperlink{TriMesh__io_8cc_ab452af0ca4e020bda4cc8ad0c098f62e}{F\+P\+R\+I\+N\+TF}(...)~do \{ if (fprintf(\+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+) $<$ 0) return false; \} while (0)
+\item 
+\#define \hyperlink{TriMesh__io_8cc_a1558789fc548372b30cd665e186c9dad}{F\+W\+R\+I\+TE}(ptr,  size,  nmemb,  stream)~do \{ if (fwrite((ptr), (size), (nmemb), (stream)) != (nmemb)) return false; \} while (0)
+\item 
+\#define \hyperlink{TriMesh__io_8cc_aee46a403502c65e326b70ffe74b3237b}{L\+I\+N\+E\+\_\+\+IS}(text)~begins\+\_\+with(buf, text)
+\item 
+\#define \hyperlink{TriMesh__io_8cc_a2d9dca85b839a48b3b942f6ad56d57a9}{B\+I\+G\+N\+UM}~1.\+0e10f
+\item 
+\#define \hyperlink{TriMesh__io_8cc_a658b67e6df7c6853f45c10b55efee116}{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+A\+IN}~0x4\+D4\+Du
+\item 
+\#define \hyperlink{TriMesh__io_8cc_a7640b501a9c265979b84c4671bcb8e25}{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+O\+D\+EL}~0x3\+D3\+Du
+\item 
+\#define \hyperlink{TriMesh__io_8cc_a91a9d3fe73c01f9fa91015ac5408b37e}{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+O\+BJ}~0x4000u
+\item 
+\#define \hyperlink{TriMesh__io_8cc_a5e7538367b0ae733bc875e3a6ad1bf87}{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+E\+SH}~0x4100u
+\item 
+\#define \hyperlink{TriMesh__io_8cc_af42b095d4f8e963cb38b624857ff2351}{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+V\+E\+RT}~0x4110u
+\item 
+\#define \hyperlink{TriMesh__io_8cc_a4a943a4e9a01b6500fec2ea345eec7d9}{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+F\+A\+CE}~0x4120u
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \hyperlink{namespacetrimesh_ad0cf7ab06d07c0569c9a7eb832ff114a}{trimesh\+::read\+\_\+ply} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh)
+\item 
+static bool \hyperlink{namespacetrimesh_af87e720574f2b83f4a1f8cb94231d676}{trimesh\+::read\+\_\+3ds} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh)
+\item 
+static bool \hyperlink{namespacetrimesh_a388de28d8189208fbaa377ffedc14cb8}{trimesh\+::read\+\_\+vvd} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh)
+\item 
+static bool \hyperlink{namespacetrimesh_a8a73e582eb0a3e4df256a4eb7e226cff}{trimesh\+::read\+\_\+ray} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh)
+\item 
+static bool \hyperlink{namespacetrimesh_a6f5afaf75436495bf724248ceba4eab7}{trimesh\+::read\+\_\+obj} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh)
+\item 
+static bool \hyperlink{namespacetrimesh_ace7124de1320b844bbf3f353f6dfab9a}{trimesh\+::read\+\_\+off} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh)
+\item 
+static bool \hyperlink{namespacetrimesh_a0a31a91f293a9ead6c5c3f87e5e234dc}{trimesh\+::read\+\_\+sm} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh)
+\item 
+static bool \hyperlink{namespacetrimesh_acbe4673a2ddcbb3b2ec550b7f16b8f2c}{trimesh\+::read\+\_\+stl} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh)
+\item 
+static bool \hyperlink{namespacetrimesh_a964f33d0b4d230bcdab3f3fc73946fa7}{trimesh\+::read\+\_\+pts} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh)
+\item 
+static bool \hyperlink{namespacetrimesh_a89396ced1b73814bb870a9541b94b9d4}{trimesh\+::read\+\_\+verts\+\_\+bin} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh, bool \&need\+\_\+swap, int nverts, int vert\+\_\+len, int vert\+\_\+pos, int vert\+\_\+norm, int vert\+\_\+color, bool float\+\_\+color, int vert\+\_\+conf)
+\item 
+static bool \hyperlink{namespacetrimesh_aff82fb96a67444ad578b0d83579b4f31}{trimesh\+::slurp\+\_\+verts\+\_\+bin} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh, bool need\+\_\+swap, int nverts)
+\item 
+static bool \hyperlink{namespacetrimesh_abcd71712bff6c4ee8c3fc4627ed6a292}{trimesh\+::read\+\_\+verts\+\_\+asc} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh, int nverts, int vert\+\_\+len, int vert\+\_\+pos, int vert\+\_\+norm, int vert\+\_\+color, bool float\+\_\+color, int vert\+\_\+conf)
+\item 
+static bool \hyperlink{namespacetrimesh_a20fe51f2d1b8a67d83f1131847b1dab5}{trimesh\+::read\+\_\+faces\+\_\+bin} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh, bool need\+\_\+swap, int nfaces, int face\+\_\+len, int face\+\_\+count, int face\+\_\+idx)
+\item 
+static bool \hyperlink{namespacetrimesh_a4ee83266cd4402cfd9c77ae4b3b53b8c}{trimesh\+::read\+\_\+faces\+\_\+asc} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh, int nfaces, int face\+\_\+len, int face\+\_\+count, int face\+\_\+idx, bool read\+\_\+to\+\_\+eol=false)
+\item 
+static bool \hyperlink{namespacetrimesh_acf511fb9c7857f1814d633a7f782872c}{trimesh\+::read\+\_\+strips\+\_\+bin} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh, bool need\+\_\+swap)
+\item 
+static bool \hyperlink{namespacetrimesh_ab480e9956963f146c83561c700c166b2}{trimesh\+::read\+\_\+strips\+\_\+asc} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh)
+\item 
+static bool \hyperlink{namespacetrimesh_a7a92c66194fd0ddb7aecee23de456f23}{trimesh\+::read\+\_\+grid\+\_\+bin} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh, bool need\+\_\+swap)
+\item 
+static bool \hyperlink{namespacetrimesh_a32f782399abd88ad764904720a8e351f}{trimesh\+::read\+\_\+grid\+\_\+asc} (F\+I\+LE $\ast$f, Tri\+Mesh $\ast$mesh)
+\item 
+static int \hyperlink{namespacetrimesh_a1203bd856b8dae134b67074f6c1cfa4b}{trimesh\+::ply\+\_\+type\+\_\+len} (const char $\ast$buf, bool binary)
+\item 
+static bool \hyperlink{namespacetrimesh_a2675cdbe870a83e10aef9e085dad6ec2}{trimesh\+::ply\+\_\+property} (const char $\ast$buf, int \&len, bool binary)
+\item 
+static void \hyperlink{namespacetrimesh_a70949984d4d6e81587f382b93aba479a}{trimesh\+::check\+\_\+need\+\_\+swap} (const point \&p, bool \&need\+\_\+swap)
+\item 
+static void \hyperlink{namespacetrimesh_af0288945772cf791e1beebe16991053d}{trimesh\+::check\+\_\+ind\+\_\+range} (Tri\+Mesh $\ast$mesh)
+\item 
+static void \hyperlink{namespacetrimesh_acfa6982e734eac19021b2dfebbaf96d7}{trimesh\+::skip\+\_\+comments} (F\+I\+LE $\ast$f)
+\item 
+static void \hyperlink{namespacetrimesh_ab9faa1a09be480a9b7b63874e84d514c}{trimesh\+::tess} (const vector$<$ point $>$ \&verts, const vector$<$ int $>$ \&thisface, vector$<$ Tri\+Mesh\+::\+Face $>$ \&tris)
+\item 
+static bool \hyperlink{namespacetrimesh_ab776a2c7edecbb77833442c20e69273e}{trimesh\+::write\+\_\+ply\+\_\+ascii} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f, bool write\+\_\+norm, bool write\+\_\+grid, bool float\+\_\+color)
+\item 
+static bool \hyperlink{namespacetrimesh_ae31b59d3573e30dd28c45a717fee89f9}{trimesh\+::write\+\_\+ply\+\_\+binary} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f, bool little\+\_\+endian, bool write\+\_\+norm, bool write\+\_\+grid, bool float\+\_\+color)
+\item 
+static bool \hyperlink{namespacetrimesh_a4271b178e08a8202cf106be6fb327632}{trimesh\+::write\+\_\+ray} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f)
+\item 
+static bool \hyperlink{namespacetrimesh_a1fd27491a7f94169a1bf5da168bf0a4e}{trimesh\+::write\+\_\+obj} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f, bool write\+\_\+norm)
+\item 
+static bool \hyperlink{namespacetrimesh_a8913ffcec7ca6172c82f3b93a1c89318}{trimesh\+::write\+\_\+off} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f)
+\item 
+static bool \hyperlink{namespacetrimesh_a1931cc0ec4adc8e542720791792a5b13}{trimesh\+::write\+\_\+sm} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f)
+\item 
+static bool \hyperlink{namespacetrimesh_aeece170ed507bd3e0bb58315b2f7ee77}{trimesh\+::write\+\_\+stl} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f)
+\item 
+static bool \hyperlink{namespacetrimesh_a12a743cd1fd6e9ed450ff82efba912bb}{trimesh\+::write\+\_\+pts} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f)
+\item 
+static bool \hyperlink{namespacetrimesh_a25928ef7b7afbe31c7ed54639b496745}{trimesh\+::write\+\_\+cc} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f, const char $\ast$filename, bool write\+\_\+norm, bool float\+\_\+color)
+\item 
+static bool \hyperlink{namespacetrimesh_a04f0ec0ebcad013e537bcd150a3b0d0f}{trimesh\+::write\+\_\+dae} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f)
+\item 
+static bool \hyperlink{namespacetrimesh_a2c61b5ad47a44a375a685a560ce2a65a}{trimesh\+::write\+\_\+verts\+\_\+asc} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f, const char $\ast$before\+\_\+vert, const char $\ast$before\+\_\+norm, const char $\ast$before\+\_\+color, bool float\+\_\+color, const char $\ast$before\+\_\+conf, const char $\ast$after\+\_\+line)
+\item 
+static bool \hyperlink{namespacetrimesh_a91ab9bd3b846abce4b51ba90a33fef53}{trimesh\+::write\+\_\+verts\+\_\+bin} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f, bool need\+\_\+swap, bool write\+\_\+norm, bool write\+\_\+color, bool float\+\_\+color, bool write\+\_\+conf)
+\item 
+static bool \hyperlink{namespacetrimesh_af34167be8d3e30e738788609dfbf54b5}{trimesh\+::write\+\_\+faces\+\_\+asc} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f, const char $\ast$before\+\_\+face, const char $\ast$after\+\_\+line)
+\item 
+static bool \hyperlink{namespacetrimesh_a0f0f9330c1eb34423e1c8801d656dbd9}{trimesh\+::write\+\_\+faces\+\_\+bin} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f, bool need\+\_\+swap, int before\+\_\+face\+\_\+len, const char $\ast$before\+\_\+face, int after\+\_\+face\+\_\+len, const char $\ast$after\+\_\+face)
+\item 
+static bool \hyperlink{namespacetrimesh_af23e1f26acdc3458b41fe189fee226c3}{trimesh\+::write\+\_\+strips\+\_\+asc} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f)
+\item 
+static bool \hyperlink{namespacetrimesh_accf791e366c5f89485b9d96029db2f13}{trimesh\+::write\+\_\+strips\+\_\+bin} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f, bool need\+\_\+swap)
+\item 
+static bool \hyperlink{namespacetrimesh_a70bf1a4c22873759ab16a3dd15c4877d}{trimesh\+::write\+\_\+grid\+\_\+asc} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f)
+\item 
+static bool \hyperlink{namespacetrimesh_a35807463091f1c41203f2e4580460ce4}{trimesh\+::write\+\_\+grid\+\_\+bin} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f, bool need\+\_\+swap)
+\item 
+static void \hyperlink{namespacetrimesh_a06aac2116003fae62ad2051991af5845}{trimesh\+::pushback} (const char $\ast$buf, F\+I\+LE $\ast$f)
+\item 
+static bool \hyperlink{namespacetrimesh_a40f3489c91c9410ab262e406cb3256d2}{trimesh\+::write\+\_\+ply\+\_\+header} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f, const char $\ast$format, bool write\+\_\+grid, bool write\+\_\+tstrips, bool write\+\_\+norm, bool float\+\_\+color)
+\item 
+static unsigned char \hyperlink{namespacetrimesh_ab7c50c76936cfb1b17e841546b2e5d0a}{trimesh\+::color2uchar} (float p)
+\item 
+static void \hyperlink{namespacetrimesh_abcf520cc53667bb3201c1c7cae2dd993}{trimesh\+::swap\+\_\+vert\+\_\+props} (Tri\+Mesh $\ast$mesh, bool swap\+\_\+color)
+\item 
+static bool \hyperlink{namespacetrimesh_aac722bf617598a0ca0b218bba6b07bb7}{trimesh\+::write\+\_\+verts\+\_\+bin\+\_\+helper} (Tri\+Mesh $\ast$mesh, F\+I\+LE $\ast$f, bool write\+\_\+norm, bool write\+\_\+color, bool float\+\_\+color, bool write\+\_\+conf)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{TriMesh__io_8cc_a2d9dca85b839a48b3b942f6ad56d57a9}\label{TriMesh__io_8cc_a2d9dca85b839a48b3b942f6ad56d57a9}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!B\+I\+G\+N\+UM@{B\+I\+G\+N\+UM}}
+\index{B\+I\+G\+N\+UM@{B\+I\+G\+N\+UM}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{B\+I\+G\+N\+UM}{BIGNUM}}
+{\footnotesize\ttfamily \#define B\+I\+G\+N\+UM~1.\+0e10f}
+
+
+
+Referenced by trimesh\+::check\+\_\+need\+\_\+swap().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_a4a943a4e9a01b6500fec2ea345eec7d9}\label{TriMesh__io_8cc_a4a943a4e9a01b6500fec2ea345eec7d9}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+F\+A\+CE@{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+F\+A\+CE}}
+\index{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+F\+A\+CE@{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+F\+A\+CE}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+F\+A\+CE}{CHUNK\_3DS\_FACE}}
+{\footnotesize\ttfamily \#define C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+F\+A\+CE~0x4120u}
+
+
+
+Referenced by trimesh\+::read\+\_\+3ds().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_a658b67e6df7c6853f45c10b55efee116}\label{TriMesh__io_8cc_a658b67e6df7c6853f45c10b55efee116}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+A\+IN@{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+A\+IN}}
+\index{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+A\+IN@{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+A\+IN}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+A\+IN}{CHUNK\_3DS\_MAIN}}
+{\footnotesize\ttfamily \#define C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+A\+IN~0x4\+D4\+Du}
+
+
+
+Referenced by trimesh\+::read\+\_\+3ds().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_a5e7538367b0ae733bc875e3a6ad1bf87}\label{TriMesh__io_8cc_a5e7538367b0ae733bc875e3a6ad1bf87}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+E\+SH@{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+E\+SH}}
+\index{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+E\+SH@{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+E\+SH}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+E\+SH}{CHUNK\_3DS\_MESH}}
+{\footnotesize\ttfamily \#define C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+E\+SH~0x4100u}
+
+
+
+Referenced by trimesh\+::read\+\_\+3ds().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_a7640b501a9c265979b84c4671bcb8e25}\label{TriMesh__io_8cc_a7640b501a9c265979b84c4671bcb8e25}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+O\+D\+EL@{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+O\+D\+EL}}
+\index{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+O\+D\+EL@{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+O\+D\+EL}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+O\+D\+EL}{CHUNK\_3DS\_MODEL}}
+{\footnotesize\ttfamily \#define C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+M\+O\+D\+EL~0x3\+D3\+Du}
+
+
+
+Referenced by trimesh\+::read\+\_\+3ds().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_a91a9d3fe73c01f9fa91015ac5408b37e}\label{TriMesh__io_8cc_a91a9d3fe73c01f9fa91015ac5408b37e}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+O\+BJ@{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+O\+BJ}}
+\index{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+O\+BJ@{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+O\+BJ}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+O\+BJ}{CHUNK\_3DS\_OBJ}}
+{\footnotesize\ttfamily \#define C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+O\+BJ~0x4000u}
+
+
+
+Referenced by trimesh\+::read\+\_\+3ds().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_af42b095d4f8e963cb38b624857ff2351}\label{TriMesh__io_8cc_af42b095d4f8e963cb38b624857ff2351}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+V\+E\+RT@{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+V\+E\+RT}}
+\index{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+V\+E\+RT@{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+V\+E\+RT}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+V\+E\+RT}{CHUNK\_3DS\_VERT}}
+{\footnotesize\ttfamily \#define C\+H\+U\+N\+K\+\_\+3\+D\+S\+\_\+\+V\+E\+RT~0x4110u}
+
+
+
+Referenced by trimesh\+::read\+\_\+3ds().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_a041da43f1aca00da0d86b1e670870601}\label{TriMesh__io_8cc_a041da43f1aca00da0d86b1e670870601}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!C\+O\+N\+D\+\_\+\+R\+E\+AD@{C\+O\+N\+D\+\_\+\+R\+E\+AD}}
+\index{C\+O\+N\+D\+\_\+\+R\+E\+AD@{C\+O\+N\+D\+\_\+\+R\+E\+AD}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{C\+O\+N\+D\+\_\+\+R\+E\+AD}{COND\_READ}}
+{\footnotesize\ttfamily \#define C\+O\+N\+D\+\_\+\+R\+E\+AD(\begin{DoxyParamCaption}\item[{}]{cond,  }\item[{}]{where,  }\item[{}]{len }\end{DoxyParamCaption})~do \{ if ((cond) \&\& !fread((void $\ast$)\&(where), (len), 1, f)) return false; \} while (0)}
+
+
+
+Referenced by trimesh\+::read\+\_\+3ds(), trimesh\+::read\+\_\+faces\+\_\+bin(), trimesh\+::read\+\_\+stl(), trimesh\+::read\+\_\+strips\+\_\+bin(), trimesh\+::read\+\_\+verts\+\_\+bin(), and trimesh\+::slurp\+\_\+verts\+\_\+bin().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}\label{TriMesh__io_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!dprintf@{dprintf}}
+\index{dprintf@{dprintf}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{dprintf}{dprintf}}
+{\footnotesize\ttfamily \#define dprintf~Tri\+Mesh\+::dprintf}
+
+
+
+Referenced by trimesh\+::check\+\_\+ind\+\_\+range(), trimesh\+::check\+\_\+need\+\_\+swap(), trimesh\+::read\+\_\+3ds(), trimesh\+::read\+\_\+faces\+\_\+asc(), trimesh\+::read\+\_\+faces\+\_\+bin(), trimesh\+::read\+\_\+grid\+\_\+asc(), trimesh\+::read\+\_\+grid\+\_\+bin(), trimesh\+::\+Tri\+Mesh\+::read\+\_\+helper(), trimesh\+::read\+\_\+strips\+\_\+asc(), trimesh\+::read\+\_\+strips\+\_\+bin(), trimesh\+::read\+\_\+verts\+\_\+asc(), trimesh\+::read\+\_\+verts\+\_\+bin(), trimesh\+::read\+\_\+vvd(), and trimesh\+::\+Tri\+Mesh\+::write().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_a5589265465828f781baaed1f963ea0ea}\label{TriMesh__io_8cc_a5589265465828f781baaed1f963ea0ea}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!eprintf@{eprintf}}
+\index{eprintf@{eprintf}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{eprintf}{eprintf}}
+{\footnotesize\ttfamily \#define eprintf~Tri\+Mesh\+::eprintf}
+
+
+
+Referenced by trimesh\+::ply\+\_\+property(), trimesh\+::\+Tri\+Mesh\+::read\+\_\+helper(), trimesh\+::read\+\_\+ply(), trimesh\+::read\+\_\+vvd(), and trimesh\+::\+Tri\+Mesh\+::write().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_ab452af0ca4e020bda4cc8ad0c098f62e}\label{TriMesh__io_8cc_ab452af0ca4e020bda4cc8ad0c098f62e}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!F\+P\+R\+I\+N\+TF@{F\+P\+R\+I\+N\+TF}}
+\index{F\+P\+R\+I\+N\+TF@{F\+P\+R\+I\+N\+TF}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{F\+P\+R\+I\+N\+TF}{FPRINTF}}
+{\footnotesize\ttfamily \#define F\+P\+R\+I\+N\+TF(\begin{DoxyParamCaption}\item[{}]{... }\end{DoxyParamCaption})~do \{ if (fprintf(\+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+) $<$ 0) return false; \} while (0)}
+
+
+
+Referenced by trimesh\+::write\+\_\+cc(), trimesh\+::write\+\_\+dae(), trimesh\+::write\+\_\+faces\+\_\+asc(), trimesh\+::write\+\_\+grid\+\_\+asc(), trimesh\+::write\+\_\+obj(), trimesh\+::write\+\_\+off(), trimesh\+::write\+\_\+ply\+\_\+ascii(), trimesh\+::write\+\_\+ply\+\_\+header(), trimesh\+::write\+\_\+ray(), trimesh\+::write\+\_\+sm(), trimesh\+::write\+\_\+strips\+\_\+asc(), and trimesh\+::write\+\_\+verts\+\_\+asc().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_a1558789fc548372b30cd665e186c9dad}\label{TriMesh__io_8cc_a1558789fc548372b30cd665e186c9dad}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!F\+W\+R\+I\+TE@{F\+W\+R\+I\+TE}}
+\index{F\+W\+R\+I\+TE@{F\+W\+R\+I\+TE}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{F\+W\+R\+I\+TE}{FWRITE}}
+{\footnotesize\ttfamily \#define F\+W\+R\+I\+TE(\begin{DoxyParamCaption}\item[{}]{ptr,  }\item[{}]{size,  }\item[{}]{nmemb,  }\item[{}]{stream }\end{DoxyParamCaption})~do \{ if (fwrite((ptr), (size), (nmemb), (stream)) != (nmemb)) return false; \} while (0)}
+
+
+
+Referenced by trimesh\+::write\+\_\+grid\+\_\+bin(), trimesh\+::write\+\_\+ply\+\_\+binary(), trimesh\+::write\+\_\+stl(), and trimesh\+::write\+\_\+verts\+\_\+bin\+\_\+helper().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_a0fd69ea6a24300e33f65d52a1c6163ec}\label{TriMesh__io_8cc_a0fd69ea6a24300e33f65d52a1c6163ec}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!G\+E\+T\+\_\+\+L\+I\+NE@{G\+E\+T\+\_\+\+L\+I\+NE}}
+\index{G\+E\+T\+\_\+\+L\+I\+NE@{G\+E\+T\+\_\+\+L\+I\+NE}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{G\+E\+T\+\_\+\+L\+I\+NE}{GET\_LINE}}
+{\footnotesize\ttfamily \#define G\+E\+T\+\_\+\+L\+I\+NE(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~do \{ if (!fgets(buf, 1024, f)) return false; \} while (0)}
+
+
+
+Referenced by trimesh\+::\+Tri\+Mesh\+::read\+\_\+helper(), trimesh\+::read\+\_\+obj(), trimesh\+::read\+\_\+off(), and trimesh\+::read\+\_\+ply().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_a4e9c4d7c20d18d21e9848e2cabfd2458}\label{TriMesh__io_8cc_a4e9c4d7c20d18d21e9848e2cabfd2458}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!G\+E\+T\+\_\+\+W\+O\+RD@{G\+E\+T\+\_\+\+W\+O\+RD}}
+\index{G\+E\+T\+\_\+\+W\+O\+RD@{G\+E\+T\+\_\+\+W\+O\+RD}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{G\+E\+T\+\_\+\+W\+O\+RD}{GET\_WORD}}
+{\footnotesize\ttfamily \#define G\+E\+T\+\_\+\+W\+O\+RD(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~do \{ if (fscanf(f, \char`\"{} \%1023s\char`\"{}, buf) != 1) return false; \} while (0)}
+
+
+
+Referenced by trimesh\+::read\+\_\+faces\+\_\+asc(), trimesh\+::read\+\_\+ply(), and trimesh\+::read\+\_\+verts\+\_\+asc().
+
+\mbox{\Hypertarget{TriMesh__io_8cc_aee46a403502c65e326b70ffe74b3237b}\label{TriMesh__io_8cc_aee46a403502c65e326b70ffe74b3237b}} 
+\index{Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}!L\+I\+N\+E\+\_\+\+IS@{L\+I\+N\+E\+\_\+\+IS}}
+\index{L\+I\+N\+E\+\_\+\+IS@{L\+I\+N\+E\+\_\+\+IS}!Tri\+Mesh\+\_\+io.\+cc@{Tri\+Mesh\+\_\+io.\+cc}}
+\subsubsection{\texorpdfstring{L\+I\+N\+E\+\_\+\+IS}{LINE\_IS}}
+{\footnotesize\ttfamily \#define L\+I\+N\+E\+\_\+\+IS(\begin{DoxyParamCaption}\item[{}]{text }\end{DoxyParamCaption})~begins\+\_\+with(buf, text)}
+
+
+
+Referenced by trimesh\+::\+Tri\+Mesh\+::read\+\_\+helper(), trimesh\+::read\+\_\+obj(), trimesh\+::read\+\_\+ply(), and trimesh\+::read\+\_\+ray().
+

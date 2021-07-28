@@ -1,0 +1,382 @@
+\hypertarget{Vec_8h}{}\section{Vec.\+h File Reference}
+\label{Vec_8h}\index{Vec.\+h@{Vec.\+h}}
+{\ttfamily \#include \char`\"{}mathutil.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$iterator$>$}\newline
+{\ttfamily \#include $<$stdexcept$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+Include dependency graph for Vec.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d2/d22/Vec_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{df/dec/Vec_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtrimesh_1_1Vec__data}{trimesh\+::\+Vec\+\_\+data$<$ D, T $>$}
+\item 
+struct \hyperlink{structtrimesh_1_1Vec__data_3_011_00_01T_01_4}{trimesh\+::\+Vec\+\_\+data$<$ 1, T $>$}
+\item 
+struct \hyperlink{structtrimesh_1_1Vec__data_3_012_00_01T_01_4}{trimesh\+::\+Vec\+\_\+data$<$ 2, T $>$}
+\item 
+struct \hyperlink{structtrimesh_1_1Vec__data_3_013_00_01T_01_4}{trimesh\+::\+Vec\+\_\+data$<$ 3, T $>$}
+\item 
+struct \hyperlink{structtrimesh_1_1Vec__data_3_014_00_01T_01_4}{trimesh\+::\+Vec\+\_\+data$<$ 4, T $>$}
+\item 
+struct \hyperlink{structtrimesh_1_1Vec__uninitialized}{trimesh\+::\+Vec\+\_\+uninitialized}
+\item 
+class \hyperlink{classtrimesh_1_1Vec}{trimesh\+::\+Vec$<$ D, T $>$}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetrimesh}{trimesh}
+\item 
+ \hyperlink{namespacestd}{std}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{Vec_8h_a00d24c7231be28dbaf71f5408f30e44c}{inline}~\hyperlink{mathutil_8h_ad4f22a2341fc0116e3d09f30386a8b15}{T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE}
+\item 
+\#define \hyperlink{Vec_8h_a0649dc86808f076fa11e7207613b89e4}{V\+E\+C\+\_\+\+U\+N\+I\+N\+I\+T\+I\+A\+L\+I\+Z\+ED}~((\+::\hyperlink{structtrimesh_1_1Vec__uninitialized}{trimesh\+::\+Vec\+\_\+uninitialized} $\ast$) 0)
+\item 
+\#define \hyperlink{Vec_8h_a8a5043e7ab655e37e903ffbd8b95d6b2}{D\+OT}~$^\wedge$
+\item 
+\#define \hyperlink{Vec_8h_aa7283cc7cd4b46dc15f0c709a0609a9e}{C\+R\+O\+SS}~\%
+\item 
+\#define \hyperlink{Vec_8h_a948d5e4e248d75f91aef099abf11d8a0}{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+N\+E\+A\+RG}(name)
+\item 
+\#define \hyperlink{Vec_8h_af1d8037ddfb2b57b422dda46a31f068c}{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VS}(name)
+\item 
+\#define \hyperlink{Vec_8h_a4c106369cb493f2d6b0ce7129c55e438}{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+SV}(name)
+\item 
+\#define \hyperlink{Vec_8h_a61038013e11edd0ff723ff7f6f7209af}{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VV}(name)
+\item 
+\#define \hyperlink{Vec_8h_a9bc04d1e102961c26cb54655b98057bc}{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+SS}(name)
+\item 
+\#define \hyperlink{Vec_8h_a04c78d3cf5da9014123494d7ac0b172d}{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+S\+SV}(name)
+\item 
+\#define \hyperlink{Vec_8h_ac68aaa7bf7a1abe47873656ce298dc58}{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+VV}(name)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef Vec$<$ 3, float $>$ \hyperlink{namespacetrimesh_a4fc2b83feba99c931f837a0c7d4b4df1}{trimesh\+::vec}
+\item 
+typedef Vec$<$ 3, float $>$ \hyperlink{namespacetrimesh_a325b99fd6454b22fa4c4bc3223271b2c}{trimesh\+::point}
+\item 
+typedef Vec$<$ 2, float $>$ \hyperlink{namespacetrimesh_a7ffb277473a9d38774ea3d2e0818ce66}{trimesh\+::vec2}
+\item 
+typedef Vec$<$ 3, float $>$ \hyperlink{namespacetrimesh_a98336803e5d279cf5f491b205f8c4813}{trimesh\+::vec3}
+\item 
+typedef Vec$<$ 4, float $>$ \hyperlink{namespacetrimesh_a3dc1251af351f2561c23c38523db0d36}{trimesh\+::vec4}
+\item 
+typedef Vec$<$ 2, float $>$ \hyperlink{namespacetrimesh_aceeb924a83e13a21adecec58dcccfed8}{trimesh\+::point2}
+\item 
+typedef Vec$<$ 3, float $>$ \hyperlink{namespacetrimesh_acebb9713d8dfa7328e10196239ca5d4e}{trimesh\+::point3}
+\item 
+typedef Vec$<$ 4, float $>$ \hyperlink{namespacetrimesh_a44139b182b9cc1d314b7bce240dc9678}{trimesh\+::point4}
+\item 
+typedef Vec$<$ 2, int $>$ \hyperlink{namespacetrimesh_a70e381a5073e5b5555b5c8c168c9375f}{trimesh\+::ivec2}
+\item 
+typedef Vec$<$ 3, int $>$ \hyperlink{namespacetrimesh_aac2b29443f1e16cabbb5da4e8a769f27}{trimesh\+::ivec3}
+\item 
+typedef Vec$<$ 4, int $>$ \hyperlink{namespacetrimesh_ab9dd19161c2242c73c5c0fb468e21d74}{trimesh\+::ivec4}
+\item 
+typedef Vec$<$ 2, double $>$ \hyperlink{namespacetrimesh_adcb23f5ef0a7e8514f6193b6c9747da7}{trimesh\+::dvec2}
+\item 
+typedef Vec$<$ 3, double $>$ \hyperlink{namespacetrimesh_a3d3b8c3fb2f53a3b3cbff0a0cd2472a4}{trimesh\+::dvec3}
+\item 
+typedef Vec$<$ 4, double $>$ \hyperlink{namespacetrimesh_a5a6ab9e9336d86643e52af143b283c60}{trimesh\+::dvec4}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const Vec$<$ D, T $>$ \hyperlink{namespacetrimesh_a2a14979005f160e87225b0e0cba5ae88}{trimesh\+::operator+} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const Vec$<$ D, T $>$ \hyperlink{namespacetrimesh_a31d15e2f372bcbdbce1764d3bc6e27ed}{trimesh\+::operator-\/} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const Vec$<$ D, T $>$ \hyperlink{namespacetrimesh_ace541ccec2282abfc3a3ed58c1c86ca7}{trimesh\+::operator$\ast$} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const Vec$<$ D, T $>$ \hyperlink{namespacetrimesh_a7fec5a52883c434a9d499c197d21f03d}{trimesh\+::operator/} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const T \hyperlink{namespacetrimesh_aa416d67511c8d651da54c871fc7905ec}{trimesh\+::operator$^\wedge$} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const T \hyperlink{namespacetrimesh_a5d326e02a6fb5bd967f9c502d2bad5cc}{trimesh\+::dot} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$class T $>$ }\\static const Vec$<$ 3, T $>$ \hyperlink{namespacetrimesh_ab15dfdb74d75baef2c04d9d6db29c974}{trimesh\+::operator\%} (const Vec$<$ 3, T $>$ \&v1, const Vec$<$ 3, T $>$ \&v2)
+\item 
+{\footnotesize template$<$class T $>$ }\\static const Vec$<$ 3, T $>$ \hyperlink{namespacetrimesh_a64d53b3f3dbbac7e91cdda30cda6e440}{trimesh\+::cross} (const Vec$<$ 3, T $>$ \&v1, const Vec$<$ 3, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static bool \hyperlink{namespacetrimesh_a3653d39ab10a61222d9ce4cd993a263a}{trimesh\+::operator==} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static bool \hyperlink{namespacetrimesh_a814e6a0f8e45dcbef63cd0ec2ddef1ff}{trimesh\+::operator!=} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static bool \hyperlink{namespacetrimesh_a015e02214c89c581ddc5692c68f7a019}{trimesh\+::operator$<$} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static bool \hyperlink{namespacetrimesh_a51a39c2920a3b4f2d36bf41f29da0001}{trimesh\+::operator$>$} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static bool \hyperlink{namespacetrimesh_a324b25b5107102b7e40fef345224feb7}{trimesh\+::operator$<$=} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static bool \hyperlink{namespacetrimesh_ae1cbc1884d934c33b1e66dcb38bfb08f}{trimesh\+::operator$>$=} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const Vec$<$ D, T $>$ \& \hyperlink{namespacetrimesh_af9ba60a3ce4c61880843064f5f5f086f}{trimesh\+::operator+} (const Vec$<$ D, T $>$ \&v)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const Vec$<$ D, T $>$ \hyperlink{namespacetrimesh_a6750bfd83e16d752cbfcfda73ddeaead}{trimesh\+::operator-\/} (const Vec$<$ D, T $>$ \&v)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static bool \hyperlink{namespacetrimesh_a80920d20f09f03aa64fa58ada7031645}{trimesh\+::operator!} (const Vec$<$ D, T $>$ \&v)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static \hyperlink{XForm_8h_a00d24c7231be28dbaf71f5408f30e44c}{inline} \+::std\+::ostream \& \hyperlink{namespacetrimesh_a52735717a3893704a310000a5fee0269}{trimesh\+::operator$<$$<$} (\+::std\+::ostream \&os, const Vec$<$ D, T $>$ \&v)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static \hyperlink{XForm_8h_a00d24c7231be28dbaf71f5408f30e44c}{inline} \+::std\+::istream \& \hyperlink{namespacetrimesh_ade316652ff80860499b6f566d597bc20}{trimesh\+::operator$>$$>$} (\+::std\+::istream \&is, Vec$<$ D, T $>$ \&v)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static Vec$<$ D, T $>$ \hyperlink{namespacetrimesh_a141b94a1ad9768323d4d3706008452bb}{trimesh\+::faceforward} (const Vec$<$ D, T $>$ \&N, const Vec$<$ D, T $>$ \&I, const Vec$<$ D, T $>$ \&Nref)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static Vec$<$ D, T $>$ \hyperlink{namespacetrimesh_a796f7912ace3eb4d8302f87fa64de391}{trimesh\+::reflect} (const Vec$<$ D, T $>$ \&I, const Vec$<$ D, T $>$ \&N)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static Vec$<$ D, T $>$ \hyperlink{namespacetrimesh_a14ff2a88c7132b9a6a114843d41ca221}{trimesh\+::refract} (const Vec$<$ D, T $>$ \&I, const Vec$<$ D, T $>$ \&N, const T \&eta)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const T \hyperlink{namespacetrimesh_a9a2f1fb61e316b55feecfb0aac5173d7}{trimesh\+::len2} (const Vec$<$ D, T $>$ \&v)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const Vec$<$ D, T $>$\+::float\+\_\+type \hyperlink{namespacetrimesh_aacbb6d9ec580813cc08ba3c996297b23}{trimesh\+::len} (const Vec$<$ D, T $>$ \&v)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const T \hyperlink{namespacetrimesh_a1061d4ad9af866e0957b60f5a007c028}{trimesh\+::length2} (const Vec$<$ D, T $>$ \&v)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const Vec$<$ D, T $>$\+::float\+\_\+type \hyperlink{namespacetrimesh_a85e3ca47f8c28713a130659df33bea0a}{trimesh\+::length} (const Vec$<$ D, T $>$ \&v)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const T \hyperlink{namespacetrimesh_a6bae650c3099c0e601cf4257ffba2f99}{trimesh\+::dist2} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const Vec$<$ D, T $>$\+::float\+\_\+type \hyperlink{namespacetrimesh_a9da3dfc5a9260f2bbb190a03f821b946}{trimesh\+::dist} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const T \hyperlink{namespacetrimesh_a5de6b8e4e289110f54c69ce88d2304a2}{trimesh\+::distance2} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const Vec$<$ D, T $>$\+::float\+\_\+type \hyperlink{namespacetrimesh_a164fd9300fcf43ae1fdb0ddcc84ea67d}{trimesh\+::distance} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static void \hyperlink{namespacetrimesh_a6112519bf9a90f2372e2d89fe341d367}{trimesh\+::normalize} (Vec$<$ D, T $>$ \&v)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static Vec$<$ D, T $>$ \hyperlink{namespacetrimesh_aefeb1eacf2916f3dd4d4e8f02927959a}{trimesh\+::normalized} (const Vec$<$ D, T $>$ \&v)
+\item 
+{\footnotesize template$<$class T $>$ }\\static Vec$<$ 3, T $>$ \hyperlink{namespacetrimesh_a23c6cbae882a5c97cb864c977effea43}{trimesh\+::trinorm} (const Vec$<$ 3, T $>$ \&v0, const Vec$<$ 3, T $>$ \&v1, const Vec$<$ 3, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static const Vec$<$ D, T $>$\+::float\+\_\+type \hyperlink{namespacetrimesh_acba06a73033388814bcced624f9bf561}{trimesh\+::angle} (const Vec$<$ D, T $>$ \&v1, const Vec$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t D, class T $>$ }\\static void \hyperlink{namespacestd_a351b57d4089e8e63d265082e8458998e}{std\+::swap} (const \+::\hyperlink{classtrimesh_1_1Vec}{trimesh\+::\+Vec}$<$ D, T $>$ \&v1, const \+::\hyperlink{classtrimesh_1_1Vec}{trimesh\+::\+Vec}$<$ D, T $>$ \&v2)
+\item 
+{\footnotesize template$<$size\+\_\+t I, size\+\_\+t D, class T $>$ }\\static T \& \hyperlink{namespacestd_a91947210c20127a94cc8b6d99d99cad5}{std\+::get} (\+::\hyperlink{classtrimesh_1_1Vec}{trimesh\+::\+Vec}$<$ D, T $>$ \&v)
+\item 
+{\footnotesize template$<$size\+\_\+t I, size\+\_\+t D, class T $>$ }\\static const T \& \hyperlink{namespacestd_a2da806b1329765712c9c301c10666ccd}{std\+::get} (const \+::\hyperlink{classtrimesh_1_1Vec}{trimesh\+::\+Vec}$<$ D, T $>$ \&v)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{Vec_8h_aa7283cc7cd4b46dc15f0c709a0609a9e}\label{Vec_8h_aa7283cc7cd4b46dc15f0c709a0609a9e}} 
+\index{Vec.\+h@{Vec.\+h}!C\+R\+O\+SS@{C\+R\+O\+SS}}
+\index{C\+R\+O\+SS@{C\+R\+O\+SS}!Vec.\+h@{Vec.\+h}}
+\subsubsection{\texorpdfstring{C\+R\+O\+SS}{CROSS}}
+{\footnotesize\ttfamily \#define C\+R\+O\+SS~\%}
+
+
+
+Referenced by trimesh\+::align\+\_\+symm(), trimesh\+::cross(), trimesh\+::diagonalize\+\_\+curv(), trimesh\+::flip\+\_\+benefit(), trimesh\+::mix(), trimesh\+::my\+Glu\+Un\+Project(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+curvatures(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+dcurv(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+pointareas(), trimesh\+::normals\+\_\+from\+\_\+faces\+\_\+area(), trimesh\+::normals\+\_\+from\+\_\+faces\+\_\+\+Max(), trimesh\+::normals\+\_\+from\+\_\+tstrips\+\_\+area(), trimesh\+::normals\+\_\+from\+\_\+tstrips\+\_\+\+Max(), trimesh\+::pca\+\_\+rotate(), trimesh\+::pca\+\_\+snap(), trimesh\+::proj\+\_\+curv(), trimesh\+::proj\+\_\+dcurv(), trimesh\+::rot\+\_\+coord\+\_\+sys(), and trimesh\+::trinorm().
+
+\mbox{\Hypertarget{Vec_8h_a8a5043e7ab655e37e903ffbd8b95d6b2}\label{Vec_8h_a8a5043e7ab655e37e903ffbd8b95d6b2}} 
+\index{Vec.\+h@{Vec.\+h}!D\+OT@{D\+OT}}
+\index{D\+OT@{D\+OT}!Vec.\+h@{Vec.\+h}}
+\subsubsection{\texorpdfstring{D\+OT}{DOT}}
+{\footnotesize\ttfamily \#define D\+OT~$^\wedge$}
+
+
+
+Referenced by trimesh\+::align\+\_\+pt2pl\+\_\+trans(), trimesh\+::align\+\_\+symm(), trimesh\+::\+Tri\+Mesh\+::cornerangle(), trimesh\+::diffuse\+\_\+vert\+\_\+field(), trimesh\+::\+Tri\+Mesh\+::dihedral(), trimesh\+::dot(), trimesh\+::faceforward(), trimesh\+::find\+\_\+overlap\+\_\+onedir(), trimesh\+::flip\+\_\+benefit(), trimesh\+::\+I\+C\+P\+\_\+iter(), trimesh\+::jones\+\_\+filter(), trimesh\+::mix(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+bsphere(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+curvatures(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+dcurv(), trimesh\+::\+Tri\+Mesh\+::need\+\_\+pointareas(), trimesh\+::normals\+\_\+from\+\_\+points(), trimesh\+::\+Norm\+Compat\+::operator()(), trimesh\+::pca\+\_\+rotate(), trimesh\+::pca\+\_\+snap(), trimesh\+::proj\+\_\+curv(), trimesh\+::proj\+\_\+dcurv(), trimesh\+::reflect(), trimesh\+::refract(), trimesh\+::rot\+\_\+coord\+\_\+sys(), trimesh\+::selectall\+\_\+and\+\_\+match(), and trimesh\+::umbrella().
+
+\mbox{\Hypertarget{Vec_8h_a00d24c7231be28dbaf71f5408f30e44c}\label{Vec_8h_a00d24c7231be28dbaf71f5408f30e44c}} 
+\index{Vec.\+h@{Vec.\+h}!inline@{inline}}
+\index{inline@{inline}!Vec.\+h@{Vec.\+h}}
+\subsubsection{\texorpdfstring{inline}{inline}}
+{\footnotesize\ttfamily \#define inline~\hyperlink{mathutil_8h_ad4f22a2341fc0116e3d09f30386a8b15}{T\+R\+I\+M\+E\+S\+H\+\_\+\+I\+N\+L\+I\+NE}}
+
+\mbox{\Hypertarget{Vec_8h_a948d5e4e248d75f91aef099abf11d8a0}\label{Vec_8h_a948d5e4e248d75f91aef099abf11d8a0}} 
+\index{Vec.\+h@{Vec.\+h}!V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+N\+E\+A\+RG@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+N\+E\+A\+RG}}
+\index{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+N\+E\+A\+RG@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+N\+E\+A\+RG}!Vec.\+h@{Vec.\+h}}
+\subsubsection{\texorpdfstring{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+N\+E\+A\+RG}{VEC\_DECLARE\_ONEARG}}
+{\footnotesize\ttfamily \#define V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+O\+N\+E\+A\+RG(\begin{DoxyParamCaption}\item[{}]{name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{template} < ::std::\textcolor{keywordtype}{size\_t} D, \textcolor{keyword}{class} T > \(\backslash\)
+ static \textcolor{keyword}{inline} \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(\textcolor{keyword}{const} 
+      \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} &v) \(\backslash\)
+ \{ \(\backslash\)
+    using namespace ::std; \(\backslash\)
+    using namespace ::trimesh; \(\backslash\)
+    Vec<D,T> result(\hyperlink{Vec_8h_a0649dc86808f076fa11e7207613b89e4}{VEC\_UNINITIALIZED}); \(\backslash\)
+    for (\textcolor{keywordtype}{size\_t} i = 0; i < D; i++) \(\backslash\)
+        result[i] = \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(v[i]); \(\backslash\)
+    return result; \(\backslash\)
+ \}
+\end{DoxyCode}
+
+
+Referenced by std\+::get().
+
+\mbox{\Hypertarget{Vec_8h_a04c78d3cf5da9014123494d7ac0b172d}\label{Vec_8h_a04c78d3cf5da9014123494d7ac0b172d}} 
+\index{Vec.\+h@{Vec.\+h}!V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+S\+SV@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+S\+SV}}
+\index{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+S\+SV@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+S\+SV}!Vec.\+h@{Vec.\+h}}
+\subsubsection{\texorpdfstring{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+S\+SV}{VEC\_DECLARE\_THREEARG\_SSV}}
+{\footnotesize\ttfamily \#define V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+S\+SV(\begin{DoxyParamCaption}\item[{}]{name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{template} < ::std::\textcolor{keywordtype}{size\_t} D, \textcolor{keyword}{class} T > \(\backslash\)
+ static \textcolor{keyword}{inline} \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(\textcolor{keyword}{const} T &a, \textcolor{keyword}{const} T &b, \textcolor{keyword}{const} 
+      \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} &v) \(\backslash\)
+ \{ \(\backslash\)
+    using namespace ::std; \(\backslash\)
+    using namespace ::trimesh; \(\backslash\)
+    Vec<D,T> result(\hyperlink{Vec_8h_a0649dc86808f076fa11e7207613b89e4}{VEC\_UNINITIALIZED}); \(\backslash\)
+    for (\textcolor{keywordtype}{size\_t} i = 0; i < D; i++) \(\backslash\)
+        result[i] = \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(a, b, v[i]); \(\backslash\)
+    return result; \(\backslash\)
+ \}
+\end{DoxyCode}
+
+
+Referenced by std\+::get().
+
+\mbox{\Hypertarget{Vec_8h_a9bc04d1e102961c26cb54655b98057bc}\label{Vec_8h_a9bc04d1e102961c26cb54655b98057bc}} 
+\index{Vec.\+h@{Vec.\+h}!V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+SS@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+SS}}
+\index{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+SS@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+SS}!Vec.\+h@{Vec.\+h}}
+\subsubsection{\texorpdfstring{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+SS}{VEC\_DECLARE\_THREEARG\_VSS}}
+{\footnotesize\ttfamily \#define V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+SS(\begin{DoxyParamCaption}\item[{}]{name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{template} < ::std::\textcolor{keywordtype}{size\_t} D, \textcolor{keyword}{class} T > \(\backslash\)
+ static \textcolor{keyword}{inline} \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(\textcolor{keyword}{const} 
+      \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} &v, \textcolor{keyword}{const} T &a, \textcolor{keyword}{const} T &b) \(\backslash\)
+ \{ \(\backslash\)
+    using namespace ::std; \(\backslash\)
+    using namespace ::trimesh; \(\backslash\)
+    Vec<D,T> result(\hyperlink{Vec_8h_a0649dc86808f076fa11e7207613b89e4}{VEC\_UNINITIALIZED}); \(\backslash\)
+    for (\textcolor{keywordtype}{size\_t} i = 0; i < D; i++) \(\backslash\)
+        result[i] = \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(v[i], a, b); \(\backslash\)
+    return result; \(\backslash\)
+ \}
+\end{DoxyCode}
+
+
+Referenced by std\+::get().
+
+\mbox{\Hypertarget{Vec_8h_ac68aaa7bf7a1abe47873656ce298dc58}\label{Vec_8h_ac68aaa7bf7a1abe47873656ce298dc58}} 
+\index{Vec.\+h@{Vec.\+h}!V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+VV@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+VV}}
+\index{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+VV@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+VV}!Vec.\+h@{Vec.\+h}}
+\subsubsection{\texorpdfstring{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+VV}{VEC\_DECLARE\_THREEARG\_VVV}}
+{\footnotesize\ttfamily \#define V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+H\+R\+E\+E\+A\+R\+G\+\_\+\+V\+VV(\begin{DoxyParamCaption}\item[{}]{name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{template} < ::std::\textcolor{keywordtype}{size\_t} D, \textcolor{keyword}{class} T > \(\backslash\)
+ static \textcolor{keyword}{inline} \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(\textcolor{keyword}{const} 
+      \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} &v, \textcolor{keyword}{const} \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} &
+      \hyperlink{namespacetrimesh_acd577db8a2f95fe39ececb95e98a6c71}{w}, \textcolor{keyword}{const} \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} &\hyperlink{namespacetrimesh_a3365d1b1a1bc5d8e9c844cf589a8c4a8}{x}) \(\backslash\)
+ \{ \(\backslash\)
+    using namespace ::std; \(\backslash\)
+    using namespace ::trimesh; \(\backslash\)
+    Vec<D,T> result(\hyperlink{Vec_8h_a0649dc86808f076fa11e7207613b89e4}{VEC\_UNINITIALIZED}); \(\backslash\)
+    for (\textcolor{keywordtype}{size\_t} i = 0; i < D; i++) \(\backslash\)
+        result[i] = \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(v[i], \hyperlink{namespacetrimesh_acd577db8a2f95fe39ececb95e98a6c71}{w}[i], \hyperlink{namespacetrimesh_a3365d1b1a1bc5d8e9c844cf589a8c4a8}{x}[i]); \(\backslash\)
+    return result; \(\backslash\)
+ \}
+\end{DoxyCode}
+
+
+Referenced by std\+::get().
+
+\mbox{\Hypertarget{Vec_8h_a4c106369cb493f2d6b0ce7129c55e438}\label{Vec_8h_a4c106369cb493f2d6b0ce7129c55e438}} 
+\index{Vec.\+h@{Vec.\+h}!V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+SV@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+SV}}
+\index{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+SV@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+SV}!Vec.\+h@{Vec.\+h}}
+\subsubsection{\texorpdfstring{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+SV}{VEC\_DECLARE\_TWOARG\_SV}}
+{\footnotesize\ttfamily \#define V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+SV(\begin{DoxyParamCaption}\item[{}]{name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{template} < ::std::\textcolor{keywordtype}{size\_t} D, \textcolor{keyword}{class} T > \(\backslash\)
+ static \textcolor{keyword}{inline} \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(\textcolor{keyword}{const} T &a, \textcolor{keyword}{const} 
+      \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} &v) \(\backslash\)
+ \{ \(\backslash\)
+    using namespace ::std; \(\backslash\)
+    using namespace ::trimesh; \(\backslash\)
+    Vec<D,T> result(\hyperlink{Vec_8h_a0649dc86808f076fa11e7207613b89e4}{VEC\_UNINITIALIZED}); \(\backslash\)
+    for (\textcolor{keywordtype}{size\_t} i = 0; i < D; i++) \(\backslash\)
+        result[i] = \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(a, v[i]); \(\backslash\)
+    return result; \(\backslash\)
+ \}
+\end{DoxyCode}
+
+
+Referenced by std\+::get().
+
+\mbox{\Hypertarget{Vec_8h_af1d8037ddfb2b57b422dda46a31f068c}\label{Vec_8h_af1d8037ddfb2b57b422dda46a31f068c}} 
+\index{Vec.\+h@{Vec.\+h}!V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VS@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VS}}
+\index{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VS@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VS}!Vec.\+h@{Vec.\+h}}
+\subsubsection{\texorpdfstring{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VS}{VEC\_DECLARE\_TWOARG\_VS}}
+{\footnotesize\ttfamily \#define V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VS(\begin{DoxyParamCaption}\item[{}]{name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{template} < ::std::\textcolor{keywordtype}{size\_t} D, \textcolor{keyword}{class} T > \(\backslash\)
+ static \textcolor{keyword}{inline} \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(\textcolor{keyword}{const} 
+      \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} &v, \textcolor{keyword}{const} T &a) \(\backslash\)
+ \{ \(\backslash\)
+    using namespace ::std; \(\backslash\)
+    using namespace ::trimesh; \(\backslash\)
+    Vec<D,T> result(\hyperlink{Vec_8h_a0649dc86808f076fa11e7207613b89e4}{VEC\_UNINITIALIZED}); \(\backslash\)
+    for (\textcolor{keywordtype}{size\_t} i = 0; i < D; i++) \(\backslash\)
+        result[i] = \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(v[i], a); \(\backslash\)
+    return result; \(\backslash\)
+ \}
+\end{DoxyCode}
+\mbox{\Hypertarget{Vec_8h_a61038013e11edd0ff723ff7f6f7209af}\label{Vec_8h_a61038013e11edd0ff723ff7f6f7209af}} 
+\index{Vec.\+h@{Vec.\+h}!V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VV@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VV}}
+\index{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VV@{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VV}!Vec.\+h@{Vec.\+h}}
+\subsubsection{\texorpdfstring{V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VV}{VEC\_DECLARE\_TWOARG\_VV}}
+{\footnotesize\ttfamily \#define V\+E\+C\+\_\+\+D\+E\+C\+L\+A\+R\+E\+\_\+\+T\+W\+O\+A\+R\+G\+\_\+\+VV(\begin{DoxyParamCaption}\item[{}]{name }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{template} < ::std::\textcolor{keywordtype}{size\_t} D, \textcolor{keyword}{class} T > \(\backslash\)
+ static \textcolor{keyword}{inline} \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(\textcolor{keyword}{const} 
+      \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} &v, \textcolor{keyword}{const} \hyperlink{classtrimesh_1_1Vec}{trimesh::Vec<D,T>} &
+      \hyperlink{namespacetrimesh_acd577db8a2f95fe39ececb95e98a6c71}{w}) \(\backslash\)
+ \{ \(\backslash\)
+    using namespace ::std; \(\backslash\)
+    using namespace ::trimesh; \(\backslash\)
+    Vec<D,T> result(\hyperlink{Vec_8h_a0649dc86808f076fa11e7207613b89e4}{VEC\_UNINITIALIZED}); \(\backslash\)
+    for (\textcolor{keywordtype}{size\_t} i = 0; i < D; i++) \(\backslash\)
+        result[i] = \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}(v[i], \hyperlink{namespacetrimesh_acd577db8a2f95fe39ececb95e98a6c71}{w}[i]); \(\backslash\)
+    return result; \(\backslash\)
+ \}
+\end{DoxyCode}
+
+
+Referenced by std\+::get().
+
+\mbox{\Hypertarget{Vec_8h_a0649dc86808f076fa11e7207613b89e4}\label{Vec_8h_a0649dc86808f076fa11e7207613b89e4}} 
+\index{Vec.\+h@{Vec.\+h}!V\+E\+C\+\_\+\+U\+N\+I\+N\+I\+T\+I\+A\+L\+I\+Z\+ED@{V\+E\+C\+\_\+\+U\+N\+I\+N\+I\+T\+I\+A\+L\+I\+Z\+ED}}
+\index{V\+E\+C\+\_\+\+U\+N\+I\+N\+I\+T\+I\+A\+L\+I\+Z\+ED@{V\+E\+C\+\_\+\+U\+N\+I\+N\+I\+T\+I\+A\+L\+I\+Z\+ED}!Vec.\+h@{Vec.\+h}}
+\subsubsection{\texorpdfstring{V\+E\+C\+\_\+\+U\+N\+I\+N\+I\+T\+I\+A\+L\+I\+Z\+ED}{VEC\_UNINITIALIZED}}
+{\footnotesize\ttfamily \#define V\+E\+C\+\_\+\+U\+N\+I\+N\+I\+T\+I\+A\+L\+I\+Z\+ED~((\+::\hyperlink{structtrimesh_1_1Vec__uninitialized}{trimesh\+::\+Vec\+\_\+uninitialized} $\ast$) 0)}
+
+
+
+Referenced by trimesh\+::\+Vec$<$ 3, float $>$\+::apply(), trimesh\+::\+Vec$<$ 3, float $>$\+::cshift(), trimesh\+::\+Vec$<$ 3, float $>$\+::normal\+\_\+rnd(), trimesh\+::operator$\ast$(), trimesh\+::operator+(), trimesh\+::operator-\/(), trimesh\+::operator/(), and trimesh\+::\+Vec$<$ 3, float $>$\+::uniform\+\_\+rnd().
+

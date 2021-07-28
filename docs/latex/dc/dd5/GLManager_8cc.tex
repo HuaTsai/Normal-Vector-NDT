@@ -1,0 +1,1017 @@
+\hypertarget{GLManager_8cc}{}\section{G\+L\+Manager.\+cc File Reference}
+\label{GLManager_8cc}\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+{\ttfamily \#include \char`\"{}G\+L\+Manager.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$cstddef$>$}\newline
+{\ttfamily \#include $<$cstdio$>$}\newline
+{\ttfamily \#include $<$cstdarg$>$}\newline
+{\ttfamily \#include $<$cstring$>$}\newline
+{\ttfamily \#include $<$cctype$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$utility$>$}\newline
+{\ttfamily \#include $<$G\+L/gl.\+h$>$}\newline
+{\ttfamily \#include $<$G\+L/glx.\+h$>$}\newline
+Include dependency graph for G\+L\+Manager.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d9/dbe/GLManager_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtrimesh_1_1GLManager_1_1ShaderDefine}{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Define}
+\item 
+struct \hyperlink{structtrimesh_1_1GLManager_1_1UniformInfo}{trimesh\+::\+G\+L\+Manager\+::\+Uniform\+Info}
+\item 
+struct \hyperlink{structtrimesh_1_1GLManager_1_1AttributeInfo}{trimesh\+::\+G\+L\+Manager\+::\+Attribute\+Info}
+\item 
+class \hyperlink{classtrimesh_1_1GLManager_1_1ShaderInfo}{trimesh\+::\+G\+L\+Manager\+::\+Shader\+Info}
+\item 
+class \hyperlink{classtrimesh_1_1GLManager_1_1BufferInfo}{trimesh\+::\+G\+L\+Manager\+::\+Buffer\+Info}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetrimesh}{trimesh}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{GLManager_8cc_a428a91acf2c2439dc1a257708ee1f805}{A\+P\+I\+E\+N\+T\+RY}
+\item 
+\#define \hyperlink{GLManager_8cc_aef0d9e5e275e1b7becf54b6aa9ce3911}{A\+P\+I\+E\+N\+T\+R\+YP}~\hyperlink{GLManager_8cc_a428a91acf2c2439dc1a257708ee1f805}{A\+P\+I\+E\+N\+T\+RY} $\ast$
+\item 
+\#define \hyperlink{GLManager_8cc_a252702a1b1e57d28c985d190d787ac84}{G\+L\+\_\+\+V\+B\+O\+\_\+\+O\+F\+F\+S\+ET}(i)~((G\+Lvoid $\ast$)(size\+\_\+t)(i))
+\item 
+\#define \hyperlink{GLManager_8cc_ad57d095154f5964429dc149add582257}{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+3\+\_\+3\+\_\+2}~0x8032
+\item 
+\#define \hyperlink{GLManager_8cc_ada3c99cc89e14622e4c62b911fda24fd}{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4}~0x8033
+\item 
+\#define \hyperlink{GLManager_8cc_a654599021b9e26bd6feb4c7cd001ef7f}{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+5\+\_\+5\+\_\+1}~0x8034
+\item 
+\#define \hyperlink{GLManager_8cc_ac164b28463958d495e51702198e6d1cf}{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8}~0x8035
+\item 
+\#define \hyperlink{GLManager_8cc_a57051f9ece699613fa17e87c9ec66910}{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+10\+\_\+10\+\_\+10\+\_\+2}~0x8036
+\item 
+\#define \hyperlink{GLManager_8cc_a35d2992fb6ceb223785f916798c69901}{G\+L\+\_\+\+B\+GR}~0x80\+E0
+\item 
+\#define \hyperlink{GLManager_8cc_a56707576fd3e2da55343c25da155294d}{G\+L\+\_\+\+B\+G\+RA}~0x80\+E1
+\item 
+\#define \hyperlink{GLManager_8cc_aebe39160c74c33c76b1e77695a179747}{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+2\+\_\+3\+\_\+3\+\_\+\+R\+EV}~0x8362
+\item 
+\#define \hyperlink{GLManager_8cc_aecec622a15619219f88d13271b5fd581}{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5}~0x8363
+\item 
+\#define \hyperlink{GLManager_8cc_a513c57ee211a7cb499956f20e1f0363d}{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5\+\_\+\+R\+EV}~0x8364
+\item 
+\#define \hyperlink{GLManager_8cc_a30dd1a52571e3a1deffa686bf1208c68}{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4\+\_\+\+R\+EV}~0x8365
+\item 
+\#define \hyperlink{GLManager_8cc_ae0f0fe9a3a82b9a25d0d35aa20931097}{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+1\+\_\+5\+\_\+5\+\_\+5\+\_\+\+R\+EV}~0x8366
+\item 
+\#define \hyperlink{GLManager_8cc_aeafffc5d69d3f9e05af201e59c0e78d3}{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8\+\_\+\+R\+EV}~0x8367
+\item 
+\#define \hyperlink{GLManager_8cc_aefaf553edc188af69b624b40bbecc380}{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+2\+\_\+10\+\_\+10\+\_\+10\+\_\+\+R\+EV}~0x8368
+\item 
+\#define \hyperlink{GLManager_8cc_a16cc91096144fc7048b45e2add14915b}{G\+L\+\_\+\+T\+E\+X\+T\+U\+R\+E0}~0x84\+C0
+\item 
+\#define \hyperlink{GLManager_8cc_a6fc1b36f39e5859ac72ebfaf3722a0c1}{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+T\+E\+X\+T\+U\+RE}~0x84\+E0
+\item 
+\#define \hyperlink{GLManager_8cc_a7180045dcb52b22af2cd0366026bc3ed}{G\+L\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER}~0x8892
+\item 
+\#define \hyperlink{GLManager_8cc_ad26c63125c72cbf0347b589d51676e6a}{G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER}~0x8893
+\item 
+\#define \hyperlink{GLManager_8cc_a2af45d6380eba1087a8e5bc684d6ab72}{G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG}~0x8895
+\item 
+\#define \hyperlink{GLManager_8cc_ab7dffdc215fbbe75b6ccacfecfc14648}{G\+L\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+D\+R\+AW}~0x88\+E4
+\item 
+\#define \hyperlink{GLManager_8cc_a1a0294662b50921555cae95fb20740d4}{G\+L\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+S\+H\+A\+D\+ER}~0x8\+B30
+\item 
+\#define \hyperlink{GLManager_8cc_aceb29bc16e885f956eb9e351a7dd6276}{G\+L\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+S\+H\+A\+D\+ER}~0x8\+B31
+\item 
+\#define \hyperlink{GLManager_8cc_ae32c545990d8412e8a8246632df99824}{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C2}~0x8\+B50
+\item 
+\#define \hyperlink{GLManager_8cc_a3bd312b25bbe841d5231ad69c4a0541a}{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C3}~0x8\+B51
+\item 
+\#define \hyperlink{GLManager_8cc_a696cfaceb3256bf19e990e46702fe527}{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C4}~0x8\+B52
+\item 
+\#define \hyperlink{GLManager_8cc_a2e72a47b144427174af2d6d87a7ab073}{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C2}~0x8\+B53
+\item 
+\#define \hyperlink{GLManager_8cc_a08b6c6a8259ac4ad9ad5d8e7c3d13bb1}{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C3}~0x8\+B54
+\item 
+\#define \hyperlink{GLManager_8cc_ae3fd6dab6e2260ce7fa4cdccbcfba0fb}{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C4}~0x8\+B55
+\item 
+\#define \hyperlink{GLManager_8cc_ab66c332d55f70b7fe36640d49235a7d7}{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T2}~0x8\+B5A
+\item 
+\#define \hyperlink{GLManager_8cc_a61fcf58656eb22c75d2353e091458e0f}{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T3}~0x8\+B5B
+\item 
+\#define \hyperlink{GLManager_8cc_af2f9eda8aec4c169cf1800b61ead61fb}{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T4}~0x8\+B5C
+\item 
+\#define \hyperlink{GLManager_8cc_a166645e482b60d35b1d31c2f6f378238}{G\+L\+\_\+\+S\+A\+M\+P\+L\+E\+R\+\_\+2D}~0x8\+B5E
+\item 
+\#define \hyperlink{GLManager_8cc_a8b14cf3c9445c50aabe5c7d21b31d215}{G\+L\+\_\+\+C\+O\+M\+P\+I\+L\+E\+\_\+\+S\+T\+A\+T\+US}~0x8\+B81
+\item 
+\#define \hyperlink{GLManager_8cc_ae644ef6b281c9378fa49d9b1ccefaf31}{G\+L\+\_\+\+L\+I\+N\+K\+\_\+\+S\+T\+A\+T\+US}~0x8\+B82
+\item 
+\#define \hyperlink{GLManager_8cc_a24b642fbcaffb55c9131a1e7d981e9cc}{G\+L\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+S\+T\+A\+T\+US}~0x8\+B83
+\item 
+\#define \hyperlink{GLManager_8cc_ae77c1e831fd164e9ac6c1a9cdb697ce5}{G\+L\+\_\+\+I\+N\+F\+O\+\_\+\+L\+O\+G\+\_\+\+L\+E\+N\+G\+TH}~0x8\+B84
+\item 
+\#define \hyperlink{GLManager_8cc_aeb14db2a9d0c7a5aaddec813bbdbfa22}{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+MS}~0x8\+B86
+\item 
+\#define \hyperlink{GLManager_8cc_a3bcf0a47bfa33bf14698c2b9eb5fa472}{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+M\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH}~0x8\+B87
+\item 
+\#define \hyperlink{GLManager_8cc_aa7c727896f0964d71eacb6ccb57ad328}{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+ES}~0x8\+B89
+\item 
+\#define \hyperlink{GLManager_8cc_ac70225d2da03ecc6671e9e7967fa6f60}{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+E\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH}~0x8\+B8A
+\item 
+\#define \hyperlink{GLManager_8cc_aa3d4d84d7e1458e03145d5db96bde045}{G\+L\+\_\+\+H\+A\+L\+F\+\_\+\+F\+L\+O\+AT}~0x140B
+\item 
+\#define \hyperlink{GLManager_8cc_a803fc7170509942b49a9de277c9445a4}{G\+L\+\_\+\+RG}~0x8227
+\item 
+\#define \hyperlink{GLManager_8cc_a8f5475f6f7d0a74fdf1a2391422dfcdb}{G\+L\+\_\+\+R16F}~0x822D
+\item 
+\#define \hyperlink{GLManager_8cc_a67a335dbe0283343395cac2700042a1b}{G\+L\+\_\+\+R32F}~0x822E
+\item 
+\#define \hyperlink{GLManager_8cc_ace86effa7def8f0a682e487f310ebf22}{G\+L\+\_\+\+R\+G16F}~0x822F
+\item 
+\#define \hyperlink{GLManager_8cc_a33126276386c2faa242c6a6568244095}{G\+L\+\_\+\+R\+G32F}~0x8230
+\item 
+\#define \hyperlink{GLManager_8cc_aaec6f87dc3b72b3175f3e127062cfc5b}{G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+S\+T\+E\+N\+C\+IL}~0x84\+F9
+\item 
+\#define \hyperlink{GLManager_8cc_ace8155682f86789a9af13e7026df4615}{G\+L\+\_\+\+R\+G\+B\+A32F}~0x8814
+\item 
+\#define \hyperlink{GLManager_8cc_ae41a95ad5a27c61fb413ec178089a803}{G\+L\+\_\+\+R\+G\+B32F}~0x8815
+\item 
+\#define \hyperlink{GLManager_8cc_a38fc920bede90cc2821cfde675ce10e2}{G\+L\+\_\+\+R\+G\+B\+A16F}~0x881A
+\item 
+\#define \hyperlink{GLManager_8cc_a44a9a79abe9dd491010c168ebea046ca}{G\+L\+\_\+\+R\+G\+B16F}~0x881B
+\item 
+\#define \hyperlink{GLManager_8cc_a3fafb1a9038bbb46f7877640c12c04f1}{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+C\+O\+L\+OR}~0x891A
+\item 
+\#define \hyperlink{GLManager_8cc_a35c590d2f83ae96c1d33645ed9cbf109}{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+C\+O\+L\+OR}~0x891B
+\item 
+\#define \hyperlink{GLManager_8cc_a83642945dadadb146bf794e85a5ef90e}{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+R\+E\+A\+D\+\_\+\+C\+O\+L\+OR}~0x891C
+\item 
+\#define \hyperlink{GLManager_8cc_ab2fc7d11690bc1e7a8800aef2a175a6c}{G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG}~0x8\+C\+A6
+\item 
+\#define \hyperlink{GLManager_8cc_a4f60aaa1367dea8d8c7e288d912d58df}{G\+L\+\_\+\+C\+O\+L\+O\+R\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+N\+T0}~0x8\+C\+E0
+\item 
+\#define \hyperlink{GLManager_8cc_ac4dc812a285640570b56acc55822dffe}{G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+NT}~0x8\+D00
+\item 
+\#define \hyperlink{GLManager_8cc_a9e626474ad3066f31b46293d535b009f}{G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+ER}~0x8\+D40
+\item 
+\#define \hyperlink{GLManager_8cc_ad27646d528e7035b0bee907fa912f53f}{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+RT}~0x8\+F9D
+\item 
+\#define \hyperlink{GLManager_8cc_a314189b842066206edbf64b7d2a8345b}{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+F\+I\+X\+E\+D\+\_\+\+I\+N\+D\+EX}~0x8\+D69
+\item 
+\#define \hyperlink{GLManager_8cc_a999db7d2d9673547a8d88d5521396e0c}{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+NV}~0x8558
+\item 
+\#define \hyperlink{GLManager_8cc_a631b658a512f96ae0ba9733b202b2c52}{G\+E\+T\+P\+R\+OC}(name,  is\+\_\+required)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef ptrdiff\+\_\+t \hyperlink{namespacetrimesh_a81f1ae6b94117df73fad0a5577fd01a9}{trimesh\+::\+G\+Lsizeiptr}
+\item 
+typedef ptrdiff\+\_\+t \hyperlink{namespacetrimesh_a77e138abc0b5c76fc39e900b4ddc2242}{trimesh\+::\+G\+Lintptr}
+\item 
+typedef char \hyperlink{namespacetrimesh_ae0c0512592dbcadf9b11efef0409d165}{trimesh\+::\+G\+Lchar}
+\item 
+typedef G\+Luint $\ast$ \hyperlink{namespacetrimesh_acc06e888c17b5866a5d0551277c1cc3e}{trimesh\+::buffers}
+\item 
+typedef G\+Lsizeiptr \hyperlink{namespacetrimesh_a1c71e2912be63f694df9e9991bddb15e}{trimesh\+::size}
+\item 
+typedef G\+Lsizeiptr const void $\ast$ \hyperlink{namespacetrimesh_ad9c3b218c6c8bf976dbcd9afb8740bb8}{trimesh\+::data}
+\item 
+typedef G\+Lsizeiptr const void G\+Lenum \hyperlink{namespacetrimesh_a1ddaaba06600c3dc8f7557589161162f}{trimesh\+::usage}
+\item 
+typedef G\+Luint \hyperlink{namespacetrimesh_ae4f60945a9da75d2dbe2212bdfd63df1}{trimesh\+::buffer}
+\item 
+typedef G\+Lsizei \hyperlink{namespacetrimesh_ac13d44425d3b59f77b5d7d2917514052}{trimesh\+::count}
+\item 
+typedef G\+Lsizei const G\+Lchar $\ast$const  $\ast$ \hyperlink{namespacetrimesh_a51b4a31323874089623d4b17afabc1aa}{trimesh\+::string}
+\item 
+typedef G\+Lsizei const G\+Lchar $\ast$const const G\+Lint $\ast$ \hyperlink{namespacetrimesh_ad67aebb2caf29002f1fc65745e7b790b}{trimesh\+::length}
+\item 
+typedef G\+Lenum \hyperlink{namespacetrimesh_aa9a53df049d69c8296a2b988a842153b}{trimesh\+::pname}
+\item 
+typedef G\+Lenum G\+Lint $\ast$ \hyperlink{namespacetrimesh_a89b05d2526a1a9c3edb62082b6e8ec17}{trimesh\+::params}
+\item 
+typedef G\+Lsizei \hyperlink{namespacetrimesh_aac63c9d1cb4d07a800743471ced428fc}{trimesh\+::buf\+Size}
+\item 
+typedef G\+Lsizei G\+Lsizei G\+Lchar $\ast$ \hyperlink{namespacetrimesh_a98d16a04665554edfd8d50cb1ea434ce}{trimesh\+::info\+Log}
+\item 
+typedef G\+Luint \hyperlink{namespacetrimesh_ad4924c86524ecb5ebcbc84cc71eee0f6}{trimesh\+::shader}
+\item 
+typedef G\+Lfloat \hyperlink{namespacetrimesh_a240b3c8ea9cf01bd707862b32fa26dff}{trimesh\+::v0}
+\item 
+typedef G\+Lfloat G\+Lfloat \hyperlink{namespacetrimesh_a02cc42cb0e29e66e5488b53767461f68}{trimesh\+::v1}
+\item 
+typedef G\+Lfloat G\+Lfloat G\+Lfloat \hyperlink{namespacetrimesh_ad2ea56e3e595d59c8a18c524465c1906}{trimesh\+::v2}
+\item 
+typedef G\+Lfloat G\+Lfloat G\+Lfloat G\+Lfloat \hyperlink{namespacetrimesh_af1de508e9256fa7722bbb44bb7788a89}{trimesh\+::v3}
+\item 
+typedef G\+Lsizei G\+Lboolean \hyperlink{namespacetrimesh_af31d9992cd459bbcf8e2705cb9b541f4}{trimesh\+::transpose}
+\item 
+typedef G\+Lsizei G\+Lboolean const G\+Lfloat $\ast$ \hyperlink{namespacetrimesh_ab10cc1052c9d1d1376d92211b6ca27dd}{trimesh\+::value}
+\item 
+typedef G\+Luint \hyperlink{namespacetrimesh_a667dc2743bc31f46137f6d941c9ebf5e}{trimesh\+::index}
+\item 
+typedef G\+Luint G\+Lsizei G\+Lsizei G\+Lint G\+Lenum $\ast$ \hyperlink{namespacetrimesh_aa726c5bf9cff74a26269e8d258ae9e3d}{trimesh\+::type}
+\item 
+typedef G\+Luint G\+Lsizei G\+Lsizei G\+Lint G\+Lenum G\+Lchar $\ast$ \hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{trimesh\+::name}
+\item 
+typedef G\+Lfloat \hyperlink{namespacetrimesh_a3365d1b1a1bc5d8e9c844cf589a8c4a8}{trimesh\+::x}
+\item 
+typedef G\+Lfloat G\+Lfloat \hyperlink{namespacetrimesh_a56b35d0eb7039be92fcc4867080c7419}{trimesh\+::y}
+\item 
+typedef G\+Lfloat G\+Lfloat G\+Lfloat \hyperlink{namespacetrimesh_a42d0d86cc8db1d2be48121fe5e52fc67}{trimesh\+::z}
+\item 
+typedef G\+Lfloat G\+Lfloat G\+Lfloat G\+Lfloat \hyperlink{namespacetrimesh_acd577db8a2f95fe39ececb95e98a6c71}{trimesh\+::w}
+\item 
+typedef G\+Lint G\+Lenum G\+Lboolean \hyperlink{namespacetrimesh_a3dae7368e1a76b54d81a4c8abd70559b}{trimesh\+::normalized}
+\item 
+typedef G\+Lint G\+Lenum G\+Lboolean G\+Lsizei \hyperlink{namespacetrimesh_adbcc86014e77656be1a9df7ecaae5f2f}{trimesh\+::stride}
+\item 
+typedef G\+Lint G\+Lenum G\+Lboolean G\+Lsizei const void $\ast$ \hyperlink{namespacetrimesh_a406a365150ad981ca5f6faf3f2ec5d91}{trimesh\+::pointer}
+\item 
+typedef G\+Luint $\ast$ \hyperlink{namespacetrimesh_afadd14df3ec31f9e1e9440ad474f9588}{trimesh\+::arrays}
+\item 
+typedef G\+Luint $\ast$ \hyperlink{namespacetrimesh_ade07442e8ed85d3bc7a6c427e6b636b6}{trimesh\+::framebuffers}
+\item 
+typedef G\+Lenum \hyperlink{namespacetrimesh_a548b4466ae8f9f5803366fdd5d6b26ea}{trimesh\+::attachment}
+\item 
+typedef G\+Lenum G\+Lenum \hyperlink{namespacetrimesh_af18b54823c03fa8b2b00f98bfbe214c4}{trimesh\+::textarget}
+\item 
+typedef G\+Lenum G\+Lenum G\+Luint \hyperlink{namespacetrimesh_a52cc6edbb725def35d45d825de68a091}{trimesh\+::texture}
+\item 
+typedef G\+Lenum G\+Lenum G\+Luint G\+Lint \hyperlink{namespacetrimesh_a4f273d6a2251d340a8657f3574b6a615}{trimesh\+::level}
+\item 
+typedef G\+Luint \hyperlink{namespacetrimesh_a513a525ef9943f1b0914fdee627c0cfb}{trimesh\+::framebuffer}
+\item 
+typedef G\+Lenum \hyperlink{namespacetrimesh_add94ef6721eddee12fecac8a43c8a912}{trimesh\+::clamp}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+typedef \hyperlink{namespacetrimesh_a784ddfd979e1c579bda795a8edfc3f43}{trimesh\+::void} (\hyperlink{GLManager_8cc_aef0d9e5e275e1b7becf54b6aa9ce3911}{A\+P\+I\+E\+N\+T\+R\+YP} gl\+Gen\+Buffers\+\_\+t)(G\+Lsizei n
+\item 
+typedef \hyperlink{namespacetrimesh_ad2289423ef47b393854afc30451d433b}{trimesh\+::\+G\+Luint} (\hyperlink{GLManager_8cc_aef0d9e5e275e1b7becf54b6aa9ce3911}{A\+P\+I\+E\+N\+T\+R\+YP} gl\+Create\+Shader\+\_\+t)(G\+Lenum type)
+\item 
+typedef \hyperlink{namespacetrimesh_aeccc290e30b317c861fb146956528187}{trimesh\+::\+G\+Lint} (\hyperlink{GLManager_8cc_aef0d9e5e275e1b7becf54b6aa9ce3911}{A\+P\+I\+E\+N\+T\+R\+YP} gl\+Get\+Uniform\+Location\+\_\+t)(G\+Luint program
+\item 
+static G\+L\+Func\+Ptr \hyperlink{namespacetrimesh_af6fd40b16470a34610f1902c7333985f}{trimesh\+::gl\+Get\+Proc\+Address} (const char $\ast$name)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static gl\+Gen\+Buffers\+\_\+t \hyperlink{namespacetrimesh_ab1a53147bba32e80742ec1c91a6130f7}{trimesh\+::gl\+Gen\+Buffers}
+\item 
+static gl\+Buffer\+Data\+\_\+t \hyperlink{namespacetrimesh_a4c87bbfb299e7881a16f5c1f0711ed88}{trimesh\+::gl\+Buffer\+Data}
+\item 
+static gl\+Bind\+Buffer\+\_\+t \hyperlink{namespacetrimesh_abbd492b8f24232129584674de7b3aad8}{trimesh\+::gl\+Bind\+Buffer}
+\item 
+static gl\+Delete\+Buffers\+\_\+t \hyperlink{namespacetrimesh_a289f75d8266249bd762435db1066de05}{trimesh\+::gl\+Delete\+Buffers}
+\item 
+static gl\+Create\+Shader\+\_\+t \hyperlink{namespacetrimesh_a3be2581b68b54314d52f5fee9c07f0b6}{trimesh\+::gl\+Create\+Shader}
+\item 
+static gl\+Shader\+Source\+\_\+t \hyperlink{namespacetrimesh_abe6c06e4d809a141322902265461d9a0}{trimesh\+::gl\+Shader\+Source}
+\item 
+static gl\+Compile\+Shader\+\_\+t \hyperlink{namespacetrimesh_abe68cbd966de6a948bb2f6411953ec60}{trimesh\+::gl\+Compile\+Shader}
+\item 
+static gl\+Delete\+Shader\+\_\+t \hyperlink{namespacetrimesh_a85b7707cd6e6ccb7be84c2458fc79343}{trimesh\+::gl\+Delete\+Shader}
+\item 
+static gl\+Get\+Shaderiv\+\_\+t \hyperlink{namespacetrimesh_ae9c0544f820aa851b6397d1432a5d34c}{trimesh\+::gl\+Get\+Shaderiv}
+\item 
+static gl\+Get\+Shader\+Info\+Log\+\_\+t \hyperlink{namespacetrimesh_a0d55575f5297e8534e2e631105ee6f99}{trimesh\+::gl\+Get\+Shader\+Info\+Log}
+\item 
+static gl\+Create\+Program\+\_\+t \hyperlink{namespacetrimesh_a2a9405ef1402a7403cedfa163a1f301e}{trimesh\+::gl\+Create\+Program}
+\item 
+static gl\+Attach\+Shader\+\_\+t \hyperlink{namespacetrimesh_ad938cb0d4d667bdd35789f46414fccb4}{trimesh\+::gl\+Attach\+Shader}
+\item 
+static gl\+Link\+Program\+\_\+t \hyperlink{namespacetrimesh_ae55bbb20f2a1b45c134bd6500c29048b}{trimesh\+::gl\+Link\+Program}
+\item 
+static gl\+Validate\+Program\+\_\+t \hyperlink{namespacetrimesh_a3f94b25ce93da00a88d586544169cd25}{trimesh\+::gl\+Validate\+Program}
+\item 
+static gl\+Use\+Program\+\_\+t \hyperlink{namespacetrimesh_afe92c5fd4e0ced39e8b4bea7cccb6606}{trimesh\+::gl\+Use\+Program}
+\item 
+static gl\+Delete\+Program\+\_\+t \hyperlink{namespacetrimesh_abe8fc73d863458a17fd4203bf277687c}{trimesh\+::gl\+Delete\+Program}
+\item 
+static gl\+Get\+Programiv\+\_\+t \hyperlink{namespacetrimesh_a2eabc86d273e5c75453c47f6b31f0ca8}{trimesh\+::gl\+Get\+Programiv}
+\item 
+static gl\+Get\+Program\+Info\+Log\+\_\+t \hyperlink{namespacetrimesh_a908a405092f51af5a8807950b4b6d61a}{trimesh\+::gl\+Get\+Program\+Info\+Log}
+\item 
+static gl\+Uniform1f\+\_\+t \hyperlink{namespacetrimesh_a182bd4e8bcaba88023ceb95977d2ed44}{trimesh\+::gl\+Uniform1f}
+\item 
+static gl\+Uniform2f\+\_\+t \hyperlink{namespacetrimesh_a0a9eb8da7d523099789721e24327e731}{trimesh\+::gl\+Uniform2f}
+\item 
+static gl\+Uniform3f\+\_\+t \hyperlink{namespacetrimesh_a7d98d4d2574fd827bc72d265d3b1e763}{trimesh\+::gl\+Uniform3f}
+\item 
+static gl\+Uniform4f\+\_\+t \hyperlink{namespacetrimesh_a1688c9b902ac92a746cc4644f7f25625}{trimesh\+::gl\+Uniform4f}
+\item 
+static gl\+Uniform1i\+\_\+t \hyperlink{namespacetrimesh_a2081a848504d5f5ca94413d700c961e6}{trimesh\+::gl\+Uniform1i}
+\item 
+static gl\+Uniform2i\+\_\+t \hyperlink{namespacetrimesh_a8d84db0c998702352beed5c71caa9601}{trimesh\+::gl\+Uniform2i}
+\item 
+static gl\+Uniform3i\+\_\+t \hyperlink{namespacetrimesh_af0371770ec12030d984b88a74ab5f7bc}{trimesh\+::gl\+Uniform3i}
+\item 
+static gl\+Uniform4i\+\_\+t \hyperlink{namespacetrimesh_abd25cffb3e0b247ec1ebd9c22f096af4}{trimesh\+::gl\+Uniform4i}
+\item 
+static gl\+Uniform\+Matrix2fv\+\_\+t \hyperlink{namespacetrimesh_aae6a81d4bd65aee0d4d11779d347afc2}{trimesh\+::gl\+Uniform\+Matrix2fv}
+\item 
+static gl\+Uniform\+Matrix3fv\+\_\+t \hyperlink{namespacetrimesh_a3f0fdb93ca33339f92c4bf8d7d53b15f}{trimesh\+::gl\+Uniform\+Matrix3fv}
+\item 
+static gl\+Uniform\+Matrix4fv\+\_\+t \hyperlink{namespacetrimesh_a6c258d9116c5c1bf56e1e7e4f3deea77}{trimesh\+::gl\+Uniform\+Matrix4fv}
+\item 
+static gl\+Get\+Active\+Uniform\+\_\+t \hyperlink{namespacetrimesh_ae8a6b5a15706b8ae605c71f68af69171}{trimesh\+::gl\+Get\+Active\+Uniform}
+\item 
+static gl\+Get\+Uniform\+Location\+\_\+t \hyperlink{namespacetrimesh_a41397db4ab44658adc5410948848895a}{trimesh\+::gl\+Get\+Uniform\+Location}
+\item 
+static gl\+Vertex\+Attrib1f\+\_\+t \hyperlink{namespacetrimesh_a06e3f7b410269c788c0109c09153c38b}{trimesh\+::gl\+Vertex\+Attrib1f}
+\item 
+static gl\+Vertex\+Attrib2f\+\_\+t \hyperlink{namespacetrimesh_a3fcd847b5ec9541c7e49163b19abf49f}{trimesh\+::gl\+Vertex\+Attrib2f}
+\item 
+static gl\+Vertex\+Attrib3f\+\_\+t \hyperlink{namespacetrimesh_a2cb7297d0172b4d4f852af31b1ba28ff}{trimesh\+::gl\+Vertex\+Attrib3f}
+\item 
+static gl\+Vertex\+Attrib4f\+\_\+t \hyperlink{namespacetrimesh_aa0b596fa07237d00a8c63baa033a8feb}{trimesh\+::gl\+Vertex\+Attrib4f}
+\item 
+static gl\+Vertex\+Attrib\+Pointer\+\_\+t \hyperlink{namespacetrimesh_afd1f61dc31435df23ab80ae8e9946019}{trimesh\+::gl\+Vertex\+Attrib\+Pointer}
+\item 
+static gl\+Enable\+Vertex\+Attrib\+Array\+\_\+t \hyperlink{namespacetrimesh_ab9fe47b6aceb987ab51a7e7106e3fc3e}{trimesh\+::gl\+Enable\+Vertex\+Attrib\+Array}
+\item 
+static gl\+Disable\+Vertex\+Attrib\+Array\+\_\+t \hyperlink{namespacetrimesh_ad0fbc644f8ce0f65cc4b3b282251127d}{trimesh\+::gl\+Disable\+Vertex\+Attrib\+Array}
+\item 
+static gl\+Get\+Active\+Attrib\+\_\+t \hyperlink{namespacetrimesh_a1a1349442b26f21511fd3bd9463a2888}{trimesh\+::gl\+Get\+Active\+Attrib}
+\item 
+static gl\+Get\+Attrib\+Location\+\_\+t \hyperlink{namespacetrimesh_a9ae68276d32d8b3941185d0bb930e1d4}{trimesh\+::gl\+Get\+Attrib\+Location}
+\item 
+static gl\+Gen\+Vertex\+Arrays\+\_\+t \hyperlink{namespacetrimesh_ac5f6da5e29e97f3bfef9958c64c1ca1e}{trimesh\+::gl\+Gen\+Vertex\+Arrays}
+\item 
+static gl\+Bind\+Vertex\+Array\+\_\+t \hyperlink{namespacetrimesh_abd42c3d7c6aeceada13664ae96f7a080}{trimesh\+::gl\+Bind\+Vertex\+Array}
+\item 
+static gl\+Delete\+Vertex\+Arrays\+\_\+t \hyperlink{namespacetrimesh_a522b40d23db2042458003087e4f6d5db}{trimesh\+::gl\+Delete\+Vertex\+Arrays}
+\item 
+static gl\+Gen\+Framebuffers\+\_\+t \hyperlink{namespacetrimesh_a511f32d57e2febad74a3a9ab3e806dbb}{trimesh\+::gl\+Gen\+Framebuffers}
+\item 
+static gl\+Framebuffer\+Texture2\+D\+\_\+t \hyperlink{namespacetrimesh_a2907a7c51bbb468e5adcf661c996ec66}{trimesh\+::gl\+Framebuffer\+Texture2D}
+\item 
+static gl\+Bind\+Framebuffer\+\_\+t \hyperlink{namespacetrimesh_ae79828a2ea75f5d9c8727fba273f15a0}{trimesh\+::gl\+Bind\+Framebuffer}
+\item 
+static gl\+Delete\+Framebuffers\+\_\+t \hyperlink{namespacetrimesh_adb592b8b605c335d4626bed7524765d7}{trimesh\+::gl\+Delete\+Framebuffers}
+\item 
+static gl\+Clamp\+Color\+\_\+t \hyperlink{namespacetrimesh_aeec8d56590fc0f6d676bb6361eb4d3aa}{trimesh\+::gl\+Clamp\+Color}
+\item 
+static gl\+Clamp\+Color\+A\+R\+B\+\_\+t \hyperlink{namespacetrimesh_a0333f6dd0714963a37318634e4a34177}{trimesh\+::gl\+Clamp\+Color\+A\+RB}
+\item 
+static gl\+Primitive\+Restart\+Index\+\_\+t \hyperlink{namespacetrimesh_a5bdfe3ad160df10815c3e230727a6098}{trimesh\+::gl\+Primitive\+Restart\+Index}
+\item 
+static gl\+Primitive\+Restart\+Index\+N\+V\+\_\+t \hyperlink{namespacetrimesh_a44c58825ddfe4b914854d57167946bbc}{trimesh\+::gl\+Primitive\+Restart\+Index\+NV}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{GLManager_8cc_a428a91acf2c2439dc1a257708ee1f805}\label{GLManager_8cc_a428a91acf2c2439dc1a257708ee1f805}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!A\+P\+I\+E\+N\+T\+RY@{A\+P\+I\+E\+N\+T\+RY}}
+\index{A\+P\+I\+E\+N\+T\+RY@{A\+P\+I\+E\+N\+T\+RY}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{A\+P\+I\+E\+N\+T\+RY}{APIENTRY}}
+{\footnotesize\ttfamily \#define A\+P\+I\+E\+N\+T\+RY}
+
+\mbox{\Hypertarget{GLManager_8cc_aef0d9e5e275e1b7becf54b6aa9ce3911}\label{GLManager_8cc_aef0d9e5e275e1b7becf54b6aa9ce3911}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!A\+P\+I\+E\+N\+T\+R\+YP@{A\+P\+I\+E\+N\+T\+R\+YP}}
+\index{A\+P\+I\+E\+N\+T\+R\+YP@{A\+P\+I\+E\+N\+T\+R\+YP}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{A\+P\+I\+E\+N\+T\+R\+YP}{APIENTRYP}}
+{\footnotesize\ttfamily \#define A\+P\+I\+E\+N\+T\+R\+YP~\hyperlink{GLManager_8cc_a428a91acf2c2439dc1a257708ee1f805}{A\+P\+I\+E\+N\+T\+RY} $\ast$}
+
+\mbox{\Hypertarget{GLManager_8cc_a631b658a512f96ae0ba9733b202b2c52}\label{GLManager_8cc_a631b658a512f96ae0ba9733b202b2c52}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+E\+T\+P\+R\+OC@{G\+E\+T\+P\+R\+OC}}
+\index{G\+E\+T\+P\+R\+OC@{G\+E\+T\+P\+R\+OC}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+E\+T\+P\+R\+OC}{GETPROC}}
+{\footnotesize\ttfamily \#define G\+E\+T\+P\+R\+OC(\begin{DoxyParamCaption}\item[{}]{name,  }\item[{}]{is\+\_\+required }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keywordflow}{do} \{ \(\backslash\)
+    if (!(\hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name} = (\hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name} ## \_t) \hyperlink{namespacetrimesh_af6fd40b16470a34610f1902c7333985f}{glGetProcAddress}(#\hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name})) && is\_required) \{ \(\backslash\)
+        eprintf(\textcolor{stringliteral}{"GLManager::glGetProcs : couldn't get %s\(\backslash\)n"}, #\hyperlink{namespacetrimesh_a7f24cdcfa73387d7fa6aa44676238a79}{name}); \(\backslash\)
+        return \textcolor{keyword}{false}; \(\backslash\)
+    \} \} \textcolor{keywordflow}{while} (0)
+\end{DoxyCode}
+
+
+Referenced by trimesh\+::gl\+Get\+Proc\+Address().
+
+\mbox{\Hypertarget{GLManager_8cc_ac70225d2da03ecc6671e9e7967fa6f60}\label{GLManager_8cc_ac70225d2da03ecc6671e9e7967fa6f60}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+E\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH@{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+E\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH}}
+\index{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+E\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH@{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+E\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+E\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH}{GL\_ACTIVE\_ATTRIBUTE\_MAX\_LENGTH}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+E\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH~0x8\+B8A}
+
+\mbox{\Hypertarget{GLManager_8cc_aa7c727896f0964d71eacb6ccb57ad328}\label{GLManager_8cc_aa7c727896f0964d71eacb6ccb57ad328}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+ES@{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+ES}}
+\index{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+ES@{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+ES}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+ES}{GL\_ACTIVE\_ATTRIBUTES}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+A\+T\+T\+R\+I\+B\+U\+T\+ES~0x8\+B89}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::make\+\_\+shader().
+
+\mbox{\Hypertarget{GLManager_8cc_a6fc1b36f39e5859ac72ebfaf3722a0c1}\label{GLManager_8cc_a6fc1b36f39e5859ac72ebfaf3722a0c1}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+T\+E\+X\+T\+U\+RE@{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+T\+E\+X\+T\+U\+RE}}
+\index{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+T\+E\+X\+T\+U\+RE@{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+T\+E\+X\+T\+U\+RE}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+T\+E\+X\+T\+U\+RE}{GL\_ACTIVE\_TEXTURE}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+T\+E\+X\+T\+U\+RE~0x84\+E0}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::use\+\_\+texture().
+
+\mbox{\Hypertarget{GLManager_8cc_a3bcf0a47bfa33bf14698c2b9eb5fa472}\label{GLManager_8cc_a3bcf0a47bfa33bf14698c2b9eb5fa472}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+M\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH@{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+M\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH}}
+\index{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+M\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH@{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+M\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+M\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH}{GL\_ACTIVE\_UNIFORM\_MAX\_LENGTH}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+M\+\_\+\+M\+A\+X\+\_\+\+L\+E\+N\+G\+TH~0x8\+B87}
+
+\mbox{\Hypertarget{GLManager_8cc_aeb14db2a9d0c7a5aaddec813bbdbfa22}\label{GLManager_8cc_aeb14db2a9d0c7a5aaddec813bbdbfa22}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+MS@{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+MS}}
+\index{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+MS@{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+MS}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+MS}{GL\_ACTIVE\_UNIFORMS}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+A\+C\+T\+I\+V\+E\+\_\+\+U\+N\+I\+F\+O\+R\+MS~0x8\+B86}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::make\+\_\+shader().
+
+\mbox{\Hypertarget{GLManager_8cc_a7180045dcb52b22af2cd0366026bc3ed}\label{GLManager_8cc_a7180045dcb52b22af2cd0366026bc3ed}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER@{G\+L\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER}}
+\index{G\+L\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER@{G\+L\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER}{GL\_ARRAY\_BUFFER}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER~0x8892}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::update\+\_\+buffer(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+buffer().
+
+\mbox{\Hypertarget{GLManager_8cc_a35d2992fb6ceb223785f916798c69901}\label{GLManager_8cc_a35d2992fb6ceb223785f916798c69901}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+B\+GR@{G\+L\+\_\+\+B\+GR}}
+\index{G\+L\+\_\+\+B\+GR@{G\+L\+\_\+\+B\+GR}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+B\+GR}{GL\_BGR}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+B\+GR~0x80\+E0}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_a56707576fd3e2da55343c25da155294d}\label{GLManager_8cc_a56707576fd3e2da55343c25da155294d}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+B\+G\+RA@{G\+L\+\_\+\+B\+G\+RA}}
+\index{G\+L\+\_\+\+B\+G\+RA@{G\+L\+\_\+\+B\+G\+RA}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+B\+G\+RA}{GL\_BGRA}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+B\+G\+RA~0x80\+E1}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_a35c590d2f83ae96c1d33645ed9cbf109}\label{GLManager_8cc_a35c590d2f83ae96c1d33645ed9cbf109}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+C\+O\+L\+OR@{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+C\+O\+L\+OR}}
+\index{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+C\+O\+L\+OR@{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+C\+O\+L\+OR}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+C\+O\+L\+OR}{GL\_CLAMP\_FRAGMENT\_COLOR}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+C\+O\+L\+OR~0x891B}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::slow\+\_\+tstrips().
+
+\mbox{\Hypertarget{GLManager_8cc_a83642945dadadb146bf794e85a5ef90e}\label{GLManager_8cc_a83642945dadadb146bf794e85a5ef90e}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+R\+E\+A\+D\+\_\+\+C\+O\+L\+OR@{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+R\+E\+A\+D\+\_\+\+C\+O\+L\+OR}}
+\index{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+R\+E\+A\+D\+\_\+\+C\+O\+L\+OR@{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+R\+E\+A\+D\+\_\+\+C\+O\+L\+OR}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+R\+E\+A\+D\+\_\+\+C\+O\+L\+OR}{GL\_CLAMP\_READ\_COLOR}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+R\+E\+A\+D\+\_\+\+C\+O\+L\+OR~0x891C}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::slow\+\_\+tstrips().
+
+\mbox{\Hypertarget{GLManager_8cc_a3fafb1a9038bbb46f7877640c12c04f1}\label{GLManager_8cc_a3fafb1a9038bbb46f7877640c12c04f1}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+C\+O\+L\+OR@{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+C\+O\+L\+OR}}
+\index{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+C\+O\+L\+OR@{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+C\+O\+L\+OR}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+C\+O\+L\+OR}{GL\_CLAMP\_VERTEX\_COLOR}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+C\+L\+A\+M\+P\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+C\+O\+L\+OR~0x891A}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::slow\+\_\+tstrips().
+
+\mbox{\Hypertarget{GLManager_8cc_a4f60aaa1367dea8d8c7e288d912d58df}\label{GLManager_8cc_a4f60aaa1367dea8d8c7e288d912d58df}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+C\+O\+L\+O\+R\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+N\+T0@{G\+L\+\_\+\+C\+O\+L\+O\+R\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+N\+T0}}
+\index{G\+L\+\_\+\+C\+O\+L\+O\+R\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+N\+T0@{G\+L\+\_\+\+C\+O\+L\+O\+R\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+N\+T0}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+C\+O\+L\+O\+R\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+N\+T0}{GL\_COLOR\_ATTACHMENT0}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+C\+O\+L\+O\+R\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+N\+T0~0x8\+C\+E0}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::rendertarget().
+
+\mbox{\Hypertarget{GLManager_8cc_a8b14cf3c9445c50aabe5c7d21b31d215}\label{GLManager_8cc_a8b14cf3c9445c50aabe5c7d21b31d215}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+C\+O\+M\+P\+I\+L\+E\+\_\+\+S\+T\+A\+T\+US@{G\+L\+\_\+\+C\+O\+M\+P\+I\+L\+E\+\_\+\+S\+T\+A\+T\+US}}
+\index{G\+L\+\_\+\+C\+O\+M\+P\+I\+L\+E\+\_\+\+S\+T\+A\+T\+US@{G\+L\+\_\+\+C\+O\+M\+P\+I\+L\+E\+\_\+\+S\+T\+A\+T\+US}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+C\+O\+M\+P\+I\+L\+E\+\_\+\+S\+T\+A\+T\+US}{GL\_COMPILE\_STATUS}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+C\+O\+M\+P\+I\+L\+E\+\_\+\+S\+T\+A\+T\+US~0x8\+B81}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::slow\+\_\+tstrips().
+
+\mbox{\Hypertarget{GLManager_8cc_ac4dc812a285640570b56acc55822dffe}\label{GLManager_8cc_ac4dc812a285640570b56acc55822dffe}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+NT@{G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+NT}}
+\index{G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+NT@{G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+NT}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+NT}{GL\_DEPTH\_ATTACHMENT}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+A\+T\+T\+A\+C\+H\+M\+E\+NT~0x8\+D00}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::rendertarget().
+
+\mbox{\Hypertarget{GLManager_8cc_aaec6f87dc3b72b3175f3e127062cfc5b}\label{GLManager_8cc_aaec6f87dc3b72b3175f3e127062cfc5b}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+S\+T\+E\+N\+C\+IL@{G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+S\+T\+E\+N\+C\+IL}}
+\index{G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+S\+T\+E\+N\+C\+IL@{G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+S\+T\+E\+N\+C\+IL}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+S\+T\+E\+N\+C\+IL}{GL\_DEPTH\_STENCIL}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+D\+E\+P\+T\+H\+\_\+\+S\+T\+E\+N\+C\+IL~0x84\+F9}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_ad26c63125c72cbf0347b589d51676e6a}\label{GLManager_8cc_ad26c63125c72cbf0347b589d51676e6a}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER@{G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER}}
+\index{G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER@{G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER}{GL\_ELEMENT\_ARRAY\_BUFFER}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+ER~0x8893}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::draw\+\_\+points(), trimesh\+::\+G\+L\+Manager\+::update\+\_\+ibuffer(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+ibuffer().
+
+\mbox{\Hypertarget{GLManager_8cc_a2af45d6380eba1087a8e5bc684d6ab72}\label{GLManager_8cc_a2af45d6380eba1087a8e5bc684d6ab72}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG@{G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG}}
+\index{G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG@{G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG}{GL\_ELEMENT\_ARRAY\_BUFFER\_BINDING}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+E\+L\+E\+M\+E\+N\+T\+\_\+\+A\+R\+R\+A\+Y\+\_\+\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG~0x8895}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::draw\+\_\+points().
+
+\mbox{\Hypertarget{GLManager_8cc_ab66c332d55f70b7fe36640d49235a7d7}\label{GLManager_8cc_ab66c332d55f70b7fe36640d49235a7d7}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T2@{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T2}}
+\index{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T2@{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T2}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T2}{GL\_FLOAT\_MAT2}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T2~0x8\+B5A}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::uniform\+Matrix2fv().
+
+\mbox{\Hypertarget{GLManager_8cc_a61fcf58656eb22c75d2353e091458e0f}\label{GLManager_8cc_a61fcf58656eb22c75d2353e091458e0f}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T3@{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T3}}
+\index{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T3@{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T3}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T3}{GL\_FLOAT\_MAT3}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T3~0x8\+B5B}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::uniform\+Matrix3fv().
+
+\mbox{\Hypertarget{GLManager_8cc_af2f9eda8aec4c169cf1800b61ead61fb}\label{GLManager_8cc_af2f9eda8aec4c169cf1800b61ead61fb}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T4@{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T4}}
+\index{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T4@{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T4}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T4}{GL\_FLOAT\_MAT4}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+M\+A\+T4~0x8\+B5C}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::uniform\+Matrix4fv().
+
+\mbox{\Hypertarget{GLManager_8cc_ae32c545990d8412e8a8246632df99824}\label{GLManager_8cc_ae32c545990d8412e8a8246632df99824}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C2@{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C2}}
+\index{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C2@{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C2}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C2}{GL\_FLOAT\_VEC2}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C2~0x8\+B50}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::make\+\_\+shader(), and trimesh\+::\+G\+L\+Manager\+::uniform2f().
+
+\mbox{\Hypertarget{GLManager_8cc_a3bd312b25bbe841d5231ad69c4a0541a}\label{GLManager_8cc_a3bd312b25bbe841d5231ad69c4a0541a}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C3@{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C3}}
+\index{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C3@{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C3}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C3}{GL\_FLOAT\_VEC3}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C3~0x8\+B51}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::make\+\_\+shader(), and trimesh\+::\+G\+L\+Manager\+::uniform3f().
+
+\mbox{\Hypertarget{GLManager_8cc_a696cfaceb3256bf19e990e46702fe527}\label{GLManager_8cc_a696cfaceb3256bf19e990e46702fe527}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C4@{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C4}}
+\index{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C4@{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C4}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C4}{GL\_FLOAT\_VEC4}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+F\+L\+O\+A\+T\+\_\+\+V\+E\+C4~0x8\+B52}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::make\+\_\+shader(), and trimesh\+::\+G\+L\+Manager\+::uniform4f().
+
+\mbox{\Hypertarget{GLManager_8cc_a1a0294662b50921555cae95fb20740d4}\label{GLManager_8cc_a1a0294662b50921555cae95fb20740d4}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+S\+H\+A\+D\+ER@{G\+L\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+S\+H\+A\+D\+ER}}
+\index{G\+L\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+S\+H\+A\+D\+ER@{G\+L\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+S\+H\+A\+D\+ER}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+S\+H\+A\+D\+ER}{GL\_FRAGMENT\_SHADER}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+F\+R\+A\+G\+M\+E\+N\+T\+\_\+\+S\+H\+A\+D\+ER~0x8\+B30}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::make\+\_\+shader().
+
+\mbox{\Hypertarget{GLManager_8cc_a9e626474ad3066f31b46293d535b009f}\label{GLManager_8cc_a9e626474ad3066f31b46293d535b009f}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+ER@{G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+ER}}
+\index{G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+ER@{G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+ER}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+ER}{GL\_FRAMEBUFFER}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+ER~0x8\+D40}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::rendertarget().
+
+\mbox{\Hypertarget{GLManager_8cc_ab2fc7d11690bc1e7a8800aef2a175a6c}\label{GLManager_8cc_ab2fc7d11690bc1e7a8800aef2a175a6c}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG@{G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG}}
+\index{G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG@{G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG}{GL\_FRAMEBUFFER\_BINDING}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+F\+R\+A\+M\+E\+B\+U\+F\+F\+E\+R\+\_\+\+B\+I\+N\+D\+I\+NG~0x8\+C\+A6}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::rendertarget().
+
+\mbox{\Hypertarget{GLManager_8cc_aa3d4d84d7e1458e03145d5db96bde045}\label{GLManager_8cc_aa3d4d84d7e1458e03145d5db96bde045}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+H\+A\+L\+F\+\_\+\+F\+L\+O\+AT@{G\+L\+\_\+\+H\+A\+L\+F\+\_\+\+F\+L\+O\+AT}}
+\index{G\+L\+\_\+\+H\+A\+L\+F\+\_\+\+F\+L\+O\+AT@{G\+L\+\_\+\+H\+A\+L\+F\+\_\+\+F\+L\+O\+AT}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+H\+A\+L\+F\+\_\+\+F\+L\+O\+AT}{GL\_HALF\_FLOAT}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+H\+A\+L\+F\+\_\+\+F\+L\+O\+AT~0x140B}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_ae77c1e831fd164e9ac6c1a9cdb697ce5}\label{GLManager_8cc_ae77c1e831fd164e9ac6c1a9cdb697ce5}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+I\+N\+F\+O\+\_\+\+L\+O\+G\+\_\+\+L\+E\+N\+G\+TH@{G\+L\+\_\+\+I\+N\+F\+O\+\_\+\+L\+O\+G\+\_\+\+L\+E\+N\+G\+TH}}
+\index{G\+L\+\_\+\+I\+N\+F\+O\+\_\+\+L\+O\+G\+\_\+\+L\+E\+N\+G\+TH@{G\+L\+\_\+\+I\+N\+F\+O\+\_\+\+L\+O\+G\+\_\+\+L\+E\+N\+G\+TH}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+I\+N\+F\+O\+\_\+\+L\+O\+G\+\_\+\+L\+E\+N\+G\+TH}{GL\_INFO\_LOG\_LENGTH}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+I\+N\+F\+O\+\_\+\+L\+O\+G\+\_\+\+L\+E\+N\+G\+TH~0x8\+B84}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready(), and trimesh\+::\+G\+L\+Manager\+::slow\+\_\+tstrips().
+
+\mbox{\Hypertarget{GLManager_8cc_a2e72a47b144427174af2d6d87a7ab073}\label{GLManager_8cc_a2e72a47b144427174af2d6d87a7ab073}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C2@{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C2}}
+\index{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C2@{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C2}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C2}{GL\_INT\_VEC2}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C2~0x8\+B53}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::uniform2i().
+
+\mbox{\Hypertarget{GLManager_8cc_a08b6c6a8259ac4ad9ad5d8e7c3d13bb1}\label{GLManager_8cc_a08b6c6a8259ac4ad9ad5d8e7c3d13bb1}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C3@{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C3}}
+\index{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C3@{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C3}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C3}{GL\_INT\_VEC3}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C3~0x8\+B54}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::uniform3i().
+
+\mbox{\Hypertarget{GLManager_8cc_ae3fd6dab6e2260ce7fa4cdccbcfba0fb}\label{GLManager_8cc_ae3fd6dab6e2260ce7fa4cdccbcfba0fb}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C4@{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C4}}
+\index{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C4@{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C4}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C4}{GL\_INT\_VEC4}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+I\+N\+T\+\_\+\+V\+E\+C4~0x8\+B55}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::uniform4i().
+
+\mbox{\Hypertarget{GLManager_8cc_ae644ef6b281c9378fa49d9b1ccefaf31}\label{GLManager_8cc_ae644ef6b281c9378fa49d9b1ccefaf31}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+L\+I\+N\+K\+\_\+\+S\+T\+A\+T\+US@{G\+L\+\_\+\+L\+I\+N\+K\+\_\+\+S\+T\+A\+T\+US}}
+\index{G\+L\+\_\+\+L\+I\+N\+K\+\_\+\+S\+T\+A\+T\+US@{G\+L\+\_\+\+L\+I\+N\+K\+\_\+\+S\+T\+A\+T\+US}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+L\+I\+N\+K\+\_\+\+S\+T\+A\+T\+US}{GL\_LINK\_STATUS}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+L\+I\+N\+K\+\_\+\+S\+T\+A\+T\+US~0x8\+B82}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::slow\+\_\+tstrips().
+
+\mbox{\Hypertarget{GLManager_8cc_ad27646d528e7035b0bee907fa912f53f}\label{GLManager_8cc_ad27646d528e7035b0bee907fa912f53f}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+RT@{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+RT}}
+\index{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+RT@{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+RT}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+RT}{GL\_PRIMITIVE\_RESTART}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+RT~0x8\+F9D}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::slow\+\_\+tstrips().
+
+\mbox{\Hypertarget{GLManager_8cc_a314189b842066206edbf64b7d2a8345b}\label{GLManager_8cc_a314189b842066206edbf64b7d2a8345b}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+F\+I\+X\+E\+D\+\_\+\+I\+N\+D\+EX@{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+F\+I\+X\+E\+D\+\_\+\+I\+N\+D\+EX}}
+\index{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+F\+I\+X\+E\+D\+\_\+\+I\+N\+D\+EX@{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+F\+I\+X\+E\+D\+\_\+\+I\+N\+D\+EX}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+F\+I\+X\+E\+D\+\_\+\+I\+N\+D\+EX}{GL\_PRIMITIVE\_RESTART\_FIXED\_INDEX}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+F\+I\+X\+E\+D\+\_\+\+I\+N\+D\+EX~0x8\+D69}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::slow\+\_\+tstrips().
+
+\mbox{\Hypertarget{GLManager_8cc_a999db7d2d9673547a8d88d5521396e0c}\label{GLManager_8cc_a999db7d2d9673547a8d88d5521396e0c}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+NV@{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+NV}}
+\index{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+NV@{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+NV}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+NV}{GL\_PRIMITIVE\_RESTART\_NV}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+P\+R\+I\+M\+I\+T\+I\+V\+E\+\_\+\+R\+E\+S\+T\+A\+R\+T\+\_\+\+NV~0x8558}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::slow\+\_\+tstrips().
+
+\mbox{\Hypertarget{GLManager_8cc_a8f5475f6f7d0a74fdf1a2391422dfcdb}\label{GLManager_8cc_a8f5475f6f7d0a74fdf1a2391422dfcdb}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+R16F@{G\+L\+\_\+\+R16F}}
+\index{G\+L\+\_\+\+R16F@{G\+L\+\_\+\+R16F}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+R16F}{GL\_R16F}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+R16F~0x822D}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::update\+\_\+texture().
+
+\mbox{\Hypertarget{GLManager_8cc_a67a335dbe0283343395cac2700042a1b}\label{GLManager_8cc_a67a335dbe0283343395cac2700042a1b}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+R32F@{G\+L\+\_\+\+R32F}}
+\index{G\+L\+\_\+\+R32F@{G\+L\+\_\+\+R32F}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+R32F}{GL\_R32F}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+R32F~0x822E}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::update\+\_\+texture().
+
+\mbox{\Hypertarget{GLManager_8cc_a803fc7170509942b49a9de277c9445a4}\label{GLManager_8cc_a803fc7170509942b49a9de277c9445a4}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+RG@{G\+L\+\_\+\+RG}}
+\index{G\+L\+\_\+\+RG@{G\+L\+\_\+\+RG}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+RG}{GL\_RG}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+RG~0x8227}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_ace86effa7def8f0a682e487f310ebf22}\label{GLManager_8cc_ace86effa7def8f0a682e487f310ebf22}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+R\+G16F@{G\+L\+\_\+\+R\+G16F}}
+\index{G\+L\+\_\+\+R\+G16F@{G\+L\+\_\+\+R\+G16F}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+R\+G16F}{GL\_RG16F}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+R\+G16F~0x822F}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::update\+\_\+texture().
+
+\mbox{\Hypertarget{GLManager_8cc_a33126276386c2faa242c6a6568244095}\label{GLManager_8cc_a33126276386c2faa242c6a6568244095}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+R\+G32F@{G\+L\+\_\+\+R\+G32F}}
+\index{G\+L\+\_\+\+R\+G32F@{G\+L\+\_\+\+R\+G32F}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+R\+G32F}{GL\_RG32F}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+R\+G32F~0x8230}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::update\+\_\+texture().
+
+\mbox{\Hypertarget{GLManager_8cc_a44a9a79abe9dd491010c168ebea046ca}\label{GLManager_8cc_a44a9a79abe9dd491010c168ebea046ca}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+R\+G\+B16F@{G\+L\+\_\+\+R\+G\+B16F}}
+\index{G\+L\+\_\+\+R\+G\+B16F@{G\+L\+\_\+\+R\+G\+B16F}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+R\+G\+B16F}{GL\_RGB16F}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+R\+G\+B16F~0x881B}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::update\+\_\+texture().
+
+\mbox{\Hypertarget{GLManager_8cc_ae41a95ad5a27c61fb413ec178089a803}\label{GLManager_8cc_ae41a95ad5a27c61fb413ec178089a803}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+R\+G\+B32F@{G\+L\+\_\+\+R\+G\+B32F}}
+\index{G\+L\+\_\+\+R\+G\+B32F@{G\+L\+\_\+\+R\+G\+B32F}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+R\+G\+B32F}{GL\_RGB32F}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+R\+G\+B32F~0x8815}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::update\+\_\+texture().
+
+\mbox{\Hypertarget{GLManager_8cc_a38fc920bede90cc2821cfde675ce10e2}\label{GLManager_8cc_a38fc920bede90cc2821cfde675ce10e2}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+R\+G\+B\+A16F@{G\+L\+\_\+\+R\+G\+B\+A16F}}
+\index{G\+L\+\_\+\+R\+G\+B\+A16F@{G\+L\+\_\+\+R\+G\+B\+A16F}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+R\+G\+B\+A16F}{GL\_RGBA16F}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+R\+G\+B\+A16F~0x881A}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::update\+\_\+texture().
+
+\mbox{\Hypertarget{GLManager_8cc_ace8155682f86789a9af13e7026df4615}\label{GLManager_8cc_ace8155682f86789a9af13e7026df4615}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+R\+G\+B\+A32F@{G\+L\+\_\+\+R\+G\+B\+A32F}}
+\index{G\+L\+\_\+\+R\+G\+B\+A32F@{G\+L\+\_\+\+R\+G\+B\+A32F}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+R\+G\+B\+A32F}{GL\_RGBA32F}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+R\+G\+B\+A32F~0x8814}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::update\+\_\+texture().
+
+\mbox{\Hypertarget{GLManager_8cc_a166645e482b60d35b1d31c2f6f378238}\label{GLManager_8cc_a166645e482b60d35b1d31c2f6f378238}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+S\+A\+M\+P\+L\+E\+R\+\_\+2D@{G\+L\+\_\+\+S\+A\+M\+P\+L\+E\+R\+\_\+2D}}
+\index{G\+L\+\_\+\+S\+A\+M\+P\+L\+E\+R\+\_\+2D@{G\+L\+\_\+\+S\+A\+M\+P\+L\+E\+R\+\_\+2D}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+S\+A\+M\+P\+L\+E\+R\+\_\+2D}{GL\_SAMPLER\_2D}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+S\+A\+M\+P\+L\+E\+R\+\_\+2D~0x8\+B5E}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::make\+\_\+shader(), and trimesh\+::\+G\+L\+Manager\+::uniform\+Texture().
+
+\mbox{\Hypertarget{GLManager_8cc_ab7dffdc215fbbe75b6ccacfecfc14648}\label{GLManager_8cc_ab7dffdc215fbbe75b6ccacfecfc14648}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+D\+R\+AW@{G\+L\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+D\+R\+AW}}
+\index{G\+L\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+D\+R\+AW@{G\+L\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+D\+R\+AW}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+D\+R\+AW}{GL\_STATIC\_DRAW}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+D\+R\+AW~0x88\+E4}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::update\+\_\+buffer(), and trimesh\+::\+G\+L\+Manager\+::update\+\_\+ibuffer().
+
+\mbox{\Hypertarget{GLManager_8cc_a16cc91096144fc7048b45e2add14915b}\label{GLManager_8cc_a16cc91096144fc7048b45e2add14915b}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+T\+E\+X\+T\+U\+R\+E0@{G\+L\+\_\+\+T\+E\+X\+T\+U\+R\+E0}}
+\index{G\+L\+\_\+\+T\+E\+X\+T\+U\+R\+E0@{G\+L\+\_\+\+T\+E\+X\+T\+U\+R\+E0}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+T\+E\+X\+T\+U\+R\+E0}{GL\_TEXTURE0}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+T\+E\+X\+T\+U\+R\+E0~0x84\+C0}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::uniform\+Texture(), trimesh\+::\+G\+L\+Manager\+::use\+\_\+shader(), and trimesh\+::\+G\+L\+Manager\+::use\+\_\+texture().
+
+\mbox{\Hypertarget{GLManager_8cc_aebe39160c74c33c76b1e77695a179747}\label{GLManager_8cc_aebe39160c74c33c76b1e77695a179747}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+2\+\_\+3\+\_\+3\+\_\+\+R\+EV@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+2\+\_\+3\+\_\+3\+\_\+\+R\+EV}}
+\index{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+2\+\_\+3\+\_\+3\+\_\+\+R\+EV@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+2\+\_\+3\+\_\+3\+\_\+\+R\+EV}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+2\+\_\+3\+\_\+3\+\_\+\+R\+EV}{GL\_UNSIGNED\_BYTE\_2\_3\_3\_REV}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+2\+\_\+3\+\_\+3\+\_\+\+R\+EV~0x8362}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_ad57d095154f5964429dc149add582257}\label{GLManager_8cc_ad57d095154f5964429dc149add582257}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+3\+\_\+3\+\_\+2@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+3\+\_\+3\+\_\+2}}
+\index{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+3\+\_\+3\+\_\+2@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+3\+\_\+3\+\_\+2}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+3\+\_\+3\+\_\+2}{GL\_UNSIGNED\_BYTE\_3\_3\_2}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+B\+Y\+T\+E\+\_\+3\+\_\+3\+\_\+2~0x8032}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_a57051f9ece699613fa17e87c9ec66910}\label{GLManager_8cc_a57051f9ece699613fa17e87c9ec66910}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+10\+\_\+10\+\_\+10\+\_\+2@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+10\+\_\+10\+\_\+10\+\_\+2}}
+\index{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+10\+\_\+10\+\_\+10\+\_\+2@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+10\+\_\+10\+\_\+10\+\_\+2}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+10\+\_\+10\+\_\+10\+\_\+2}{GL\_UNSIGNED\_INT\_10\_10\_10\_2}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+10\+\_\+10\+\_\+10\+\_\+2~0x8036}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_aefaf553edc188af69b624b40bbecc380}\label{GLManager_8cc_aefaf553edc188af69b624b40bbecc380}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+2\+\_\+10\+\_\+10\+\_\+10\+\_\+\+R\+EV@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+2\+\_\+10\+\_\+10\+\_\+10\+\_\+\+R\+EV}}
+\index{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+2\+\_\+10\+\_\+10\+\_\+10\+\_\+\+R\+EV@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+2\+\_\+10\+\_\+10\+\_\+10\+\_\+\+R\+EV}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+2\+\_\+10\+\_\+10\+\_\+10\+\_\+\+R\+EV}{GL\_UNSIGNED\_INT\_2\_10\_10\_10\_REV}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+2\+\_\+10\+\_\+10\+\_\+10\+\_\+\+R\+EV~0x8368}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_ac164b28463958d495e51702198e6d1cf}\label{GLManager_8cc_ac164b28463958d495e51702198e6d1cf}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8}}
+\index{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8}{GL\_UNSIGNED\_INT\_8\_8\_8\_8}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8~0x8035}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_aeafffc5d69d3f9e05af201e59c0e78d3}\label{GLManager_8cc_aeafffc5d69d3f9e05af201e59c0e78d3}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8\+\_\+\+R\+EV@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8\+\_\+\+R\+EV}}
+\index{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8\+\_\+\+R\+EV@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8\+\_\+\+R\+EV}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8\+\_\+\+R\+EV}{GL\_UNSIGNED\_INT\_8\_8\_8\_8\_REV}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+I\+N\+T\+\_\+8\+\_\+8\+\_\+8\+\_\+8\+\_\+\+R\+EV~0x8367}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_ae0f0fe9a3a82b9a25d0d35aa20931097}\label{GLManager_8cc_ae0f0fe9a3a82b9a25d0d35aa20931097}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+1\+\_\+5\+\_\+5\+\_\+5\+\_\+\+R\+EV@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+1\+\_\+5\+\_\+5\+\_\+5\+\_\+\+R\+EV}}
+\index{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+1\+\_\+5\+\_\+5\+\_\+5\+\_\+\+R\+EV@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+1\+\_\+5\+\_\+5\+\_\+5\+\_\+\+R\+EV}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+1\+\_\+5\+\_\+5\+\_\+5\+\_\+\+R\+EV}{GL\_UNSIGNED\_SHORT\_1\_5\_5\_5\_REV}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+1\+\_\+5\+\_\+5\+\_\+5\+\_\+\+R\+EV~0x8366}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_ada3c99cc89e14622e4c62b911fda24fd}\label{GLManager_8cc_ada3c99cc89e14622e4c62b911fda24fd}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4}}
+\index{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4}{GL\_UNSIGNED\_SHORT\_4\_4\_4\_4}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4~0x8033}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_a30dd1a52571e3a1deffa686bf1208c68}\label{GLManager_8cc_a30dd1a52571e3a1deffa686bf1208c68}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4\+\_\+\+R\+EV@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4\+\_\+\+R\+EV}}
+\index{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4\+\_\+\+R\+EV@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4\+\_\+\+R\+EV}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4\+\_\+\+R\+EV}{GL\_UNSIGNED\_SHORT\_4\_4\_4\_4\_REV}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+4\+\_\+4\+\_\+4\+\_\+4\+\_\+\+R\+EV~0x8365}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_a654599021b9e26bd6feb4c7cd001ef7f}\label{GLManager_8cc_a654599021b9e26bd6feb4c7cd001ef7f}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+5\+\_\+5\+\_\+1@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+5\+\_\+5\+\_\+1}}
+\index{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+5\+\_\+5\+\_\+1@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+5\+\_\+5\+\_\+1}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+5\+\_\+5\+\_\+1}{GL\_UNSIGNED\_SHORT\_5\_5\_5\_1}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+5\+\_\+5\+\_\+1~0x8034}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_aecec622a15619219f88d13271b5fd581}\label{GLManager_8cc_aecec622a15619219f88d13271b5fd581}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5}}
+\index{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5}{GL\_UNSIGNED\_SHORT\_5\_6\_5}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5~0x8363}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_a513c57ee211a7cb499956f20e1f0363d}\label{GLManager_8cc_a513c57ee211a7cb499956f20e1f0363d}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5\+\_\+\+R\+EV@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5\+\_\+\+R\+EV}}
+\index{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5\+\_\+\+R\+EV@{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5\+\_\+\+R\+EV}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5\+\_\+\+R\+EV}{GL\_UNSIGNED\_SHORT\_5\_6\_5\_REV}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+U\+N\+S\+I\+G\+N\+E\+D\+\_\+\+S\+H\+O\+R\+T\+\_\+5\+\_\+6\+\_\+5\+\_\+\+R\+EV~0x8364}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::clear\+\_\+ibuffers().
+
+\mbox{\Hypertarget{GLManager_8cc_a24b642fbcaffb55c9131a1e7d981e9cc}\label{GLManager_8cc_a24b642fbcaffb55c9131a1e7d981e9cc}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+S\+T\+A\+T\+US@{G\+L\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+S\+T\+A\+T\+US}}
+\index{G\+L\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+S\+T\+A\+T\+US@{G\+L\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+S\+T\+A\+T\+US}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+S\+T\+A\+T\+US}{GL\_VALIDATE\_STATUS}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+V\+A\+L\+I\+D\+A\+T\+E\+\_\+\+S\+T\+A\+T\+US~0x8\+B83}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::shader\+\_\+ready().
+
+\mbox{\Hypertarget{GLManager_8cc_a252702a1b1e57d28c985d190d787ac84}\label{GLManager_8cc_a252702a1b1e57d28c985d190d787ac84}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+V\+B\+O\+\_\+\+O\+F\+F\+S\+ET@{G\+L\+\_\+\+V\+B\+O\+\_\+\+O\+F\+F\+S\+ET}}
+\index{G\+L\+\_\+\+V\+B\+O\+\_\+\+O\+F\+F\+S\+ET@{G\+L\+\_\+\+V\+B\+O\+\_\+\+O\+F\+F\+S\+ET}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+V\+B\+O\+\_\+\+O\+F\+F\+S\+ET}{GL\_VBO\_OFFSET}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+V\+B\+O\+\_\+\+O\+F\+F\+S\+ET(\begin{DoxyParamCaption}\item[{}]{i }\end{DoxyParamCaption})~((G\+Lvoid $\ast$)(size\+\_\+t)(i))}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::colorarray3fv(), trimesh\+::\+G\+L\+Manager\+::colorarray4fv(), trimesh\+::\+G\+L\+Manager\+::draw\+\_\+points(), trimesh\+::\+G\+L\+Manager\+::normalarray3fv(), trimesh\+::\+G\+L\+Manager\+::texcoordarray2fv(), and trimesh\+::\+G\+L\+Manager\+::vertexarray3fv().
+
+\mbox{\Hypertarget{GLManager_8cc_aceb29bc16e885f956eb9e351a7dd6276}\label{GLManager_8cc_aceb29bc16e885f956eb9e351a7dd6276}} 
+\index{G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}!G\+L\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+S\+H\+A\+D\+ER@{G\+L\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+S\+H\+A\+D\+ER}}
+\index{G\+L\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+S\+H\+A\+D\+ER@{G\+L\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+S\+H\+A\+D\+ER}!G\+L\+Manager.\+cc@{G\+L\+Manager.\+cc}}
+\subsubsection{\texorpdfstring{G\+L\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+S\+H\+A\+D\+ER}{GL\_VERTEX\_SHADER}}
+{\footnotesize\ttfamily \#define G\+L\+\_\+\+V\+E\+R\+T\+E\+X\+\_\+\+S\+H\+A\+D\+ER~0x8\+B31}
+
+
+
+Referenced by trimesh\+::\+G\+L\+Manager\+::make\+\_\+shader().
+

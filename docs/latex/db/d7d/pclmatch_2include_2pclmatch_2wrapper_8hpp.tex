@@ -1,0 +1,244 @@
+\hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp}{}\section{wrapper.\+hpp File Reference}
+\label{pclmatch_2include_2pclmatch_2wrapper_8hpp}\index{wrapper.\+hpp@{wrapper.\+hpp}}
+{\ttfamily \#include $<$bits/stdc++.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/pcl\+\_\+config.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/point\+\_\+cloud.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/point\+\_\+types.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/registration/gicp.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/registration/icp.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/registration/icp\+\_\+nl.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/registration/ndt\+\_\+2d.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/registration/transformation\+\_\+estimation\+\_\+2\+D.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/filters/filter.\+h$>$}\newline
+{\ttfamily \#include $<$Tri\+Mesh.\+h$>$}\newline
+{\ttfamily \#include $<$I\+C\+P.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/registration/transformation\+\_\+estimation\+\_\+symmetric\+\_\+point\+\_\+to\+\_\+plane\+\_\+lls.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}normal2d/\+Normal2d\+Estimation.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}common/common.\+h\char`\"{}}\newline
+Include dependency graph for pclmatch/include/pclmatch/wrapper.hpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d1/d2d/pclmatch_2include_2pclmatch_2wrapper_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{d6/daa/pclmatch_2include_2pclmatch_2wrapper_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef pcl\+::registration\+::\+Default\+Convergence\+Criteria$<$ float $>$\+::Convergence\+State \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_a0e530914abda6e1594495c46c6e399bd}{State}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2}{Converge\+State} \{ \newline
+\hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a57adadea4f4143a139568e3e561613fc}{N\+O\+T\+\_\+\+C\+O\+N\+V\+E\+R\+G\+ED}, 
+\hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a88ac42dcb707f7fa8612b83dd20115cd}{I\+T\+E\+R\+A\+T\+I\+O\+NS}, 
+\hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a25f73324dc93d9024c0c75b4e6815335}{T\+R\+A\+N\+S\+F\+O\+RM}, 
+\hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a0ec134c4bc40de79e19689ed78424c83}{A\+B\+S\+\_\+\+M\+SE}, 
+\newline
+\hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2affc2c2dcbd5d5bc265596b748e8eed25}{R\+E\+L\+\_\+\+M\+SE}, 
+\hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a0937aaaf6ba200475a5dd16aa964a4e0}{N\+O\+\_\+\+C\+O\+R\+R\+E\+S\+P\+O\+N\+D\+E\+N\+C\+ES}, 
+\hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a2f3edf3439fc195ac5f48e5e2bb661b1}{F\+A\+I\+L\+U\+R\+E\+\_\+\+A\+F\+T\+E\+R\+\_\+\+M\+A\+X\+\_\+\+I\+T\+E\+R\+A\+T\+I\+O\+NS}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2}{Converge\+State} \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_ad854da016fdc500f235dbccc4ca98d3a}{From\+P\+C\+L\+State} (\hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_a0e530914abda6e1594495c46c6e399bd}{State} state)
+\item 
+\hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$ \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_a9ae217274bb12feb560774608ee75e2c}{P\+C\+L\+From\+Matrix\+Xd} (const Eigen\+::\+Matrix\+Xd \&mtx)
+\item 
+Eigen\+::\+Matrix\+Xd \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_a0192485931aef3d937459d5fc67d65c7}{Matrix\+Xd\+From\+P\+CL} (const \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$ \&pc)
+\item 
+Eigen\+::\+Matrix\+Xd \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_a4029bd17e354f4d9ec377c0fc1c714db}{Matrix\+Xd\+From\+P\+CL} (\hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$\+::Ptr pc)
+\item 
+{\footnotesize template$<$typename Point\+Cloud\+Ptr\+Type $>$ }\\void \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_a4412622ee54b81d316fc8c32e87566dd}{Compute\+Normals} (\hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$\+::Ptr pc, double \hyperlink{test__match_8cc_a3f67c53b80389c5f53961936edba04c9}{radius}, Point\+Cloud\+Ptr\+Type normals)
+\item 
+void \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_adb611cd4792af4c792c5306ce836fa5d}{Compute\+Normals\+And\+Join} (\hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$\+::Ptr pc, double \hyperlink{test__match_8cc_a3f67c53b80389c5f53961936edba04c9}{radius}, \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+Normal $>$\+::Ptr output)
+\item 
+void \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_a84fb9dd82bf989b4212d942058105b32}{Remove\+NaN} (\hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+Normal $>$\+::Ptr pc)
+\item 
+void \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_a820424e40fbcc2c77c453d78cd377ced}{Remove\+Na\+N\+And\+Inf} (\hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+Normal $>$\+::Ptr pc)
+\item 
+Eigen\+::\+Matrix3d \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_ae440cb3ff874405078e2220f7ee87453}{Matrix3d\+From\+X\+Form} (const \hyperlink{namespacetrimesh_ad504958f2f56e393991b848986a8459f}{xform} \&xf)
+\item 
+void \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_aed3f3893566054d7edc176ad2c66d320}{Do\+S\+I\+CP} (\hyperlink{structcommon_1_1MatchPackage}{common\+::\+Match\+Package} \&mp, const vector$<$ double $>$ \&\hyperlink{namespacetrimesh_a89b05d2526a1a9c3edb62082b6e8ec17}{params})
+\item 
+void \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_af23a28e5b6695598a020f28f0cf77870}{Do\+P\+C\+L\+S\+I\+CP} (\hyperlink{structcommon_1_1MatchPackage}{common\+::\+Match\+Package} \&mp, const vector$<$ double $>$ \&\hyperlink{namespacetrimesh_a89b05d2526a1a9c3edb62082b6e8ec17}{params})
+\item 
+\hyperlink{classtrimesh_1_1TriMesh}{Tri\+Mesh} $\ast$ \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_a195f22ff1a4d4930d17394b888412f31}{Make\+Mesh} (const Matrix\+Xd \&\hyperlink{namespacetrimesh_ad9c3b218c6c8bf976dbcd9afb8740bb8}{data}, const vector$<$ double $>$ \&\hyperlink{namespacetrimesh_a89b05d2526a1a9c3edb62082b6e8ec17}{params})
+\end{DoxyCompactItemize}
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_a0e530914abda6e1594495c46c6e399bd}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_a0e530914abda6e1594495c46c6e399bd}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!State@{State}}
+\index{State@{State}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{State}{State}}
+{\footnotesize\ttfamily typedef pcl\+::registration\+::\+Default\+Convergence\+Criteria$<$float$>$\+::Convergence\+State \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_a0e530914abda6e1594495c46c6e399bd}{State}}
+
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!Converge\+State@{Converge\+State}}
+\index{Converge\+State@{Converge\+State}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Converge\+State}{ConvergeState}}
+{\footnotesize\ttfamily enum \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2}{Converge\+State}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{N\+O\+T\+\_\+\+C\+O\+N\+V\+E\+R\+G\+ED@{N\+O\+T\+\_\+\+C\+O\+N\+V\+E\+R\+G\+ED}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!N\+O\+T\+\_\+\+C\+O\+N\+V\+E\+R\+G\+ED@{N\+O\+T\+\_\+\+C\+O\+N\+V\+E\+R\+G\+ED}}}\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a57adadea4f4143a139568e3e561613fc}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a57adadea4f4143a139568e3e561613fc}} 
+N\+O\+T\+\_\+\+C\+O\+N\+V\+E\+R\+G\+ED&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{I\+T\+E\+R\+A\+T\+I\+O\+NS@{I\+T\+E\+R\+A\+T\+I\+O\+NS}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!I\+T\+E\+R\+A\+T\+I\+O\+NS@{I\+T\+E\+R\+A\+T\+I\+O\+NS}}}\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a88ac42dcb707f7fa8612b83dd20115cd}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a88ac42dcb707f7fa8612b83dd20115cd}} 
+I\+T\+E\+R\+A\+T\+I\+O\+NS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{T\+R\+A\+N\+S\+F\+O\+RM@{T\+R\+A\+N\+S\+F\+O\+RM}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!T\+R\+A\+N\+S\+F\+O\+RM@{T\+R\+A\+N\+S\+F\+O\+RM}}}\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a25f73324dc93d9024c0c75b4e6815335}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a25f73324dc93d9024c0c75b4e6815335}} 
+T\+R\+A\+N\+S\+F\+O\+RM&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{A\+B\+S\+\_\+\+M\+SE@{A\+B\+S\+\_\+\+M\+SE}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!A\+B\+S\+\_\+\+M\+SE@{A\+B\+S\+\_\+\+M\+SE}}}\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a0ec134c4bc40de79e19689ed78424c83}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a0ec134c4bc40de79e19689ed78424c83}} 
+A\+B\+S\+\_\+\+M\+SE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{R\+E\+L\+\_\+\+M\+SE@{R\+E\+L\+\_\+\+M\+SE}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!R\+E\+L\+\_\+\+M\+SE@{R\+E\+L\+\_\+\+M\+SE}}}\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2affc2c2dcbd5d5bc265596b748e8eed25}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2affc2c2dcbd5d5bc265596b748e8eed25}} 
+R\+E\+L\+\_\+\+M\+SE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{N\+O\+\_\+\+C\+O\+R\+R\+E\+S\+P\+O\+N\+D\+E\+N\+C\+ES@{N\+O\+\_\+\+C\+O\+R\+R\+E\+S\+P\+O\+N\+D\+E\+N\+C\+ES}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!N\+O\+\_\+\+C\+O\+R\+R\+E\+S\+P\+O\+N\+D\+E\+N\+C\+ES@{N\+O\+\_\+\+C\+O\+R\+R\+E\+S\+P\+O\+N\+D\+E\+N\+C\+ES}}}\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a0937aaaf6ba200475a5dd16aa964a4e0}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a0937aaaf6ba200475a5dd16aa964a4e0}} 
+N\+O\+\_\+\+C\+O\+R\+R\+E\+S\+P\+O\+N\+D\+E\+N\+C\+ES&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{F\+A\+I\+L\+U\+R\+E\+\_\+\+A\+F\+T\+E\+R\+\_\+\+M\+A\+X\+\_\+\+I\+T\+E\+R\+A\+T\+I\+O\+NS@{F\+A\+I\+L\+U\+R\+E\+\_\+\+A\+F\+T\+E\+R\+\_\+\+M\+A\+X\+\_\+\+I\+T\+E\+R\+A\+T\+I\+O\+NS}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!F\+A\+I\+L\+U\+R\+E\+\_\+\+A\+F\+T\+E\+R\+\_\+\+M\+A\+X\+\_\+\+I\+T\+E\+R\+A\+T\+I\+O\+NS@{F\+A\+I\+L\+U\+R\+E\+\_\+\+A\+F\+T\+E\+R\+\_\+\+M\+A\+X\+\_\+\+I\+T\+E\+R\+A\+T\+I\+O\+NS}}}\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a2f3edf3439fc195ac5f48e5e2bb661b1}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2a2f3edf3439fc195ac5f48e5e2bb661b1}} 
+F\+A\+I\+L\+U\+R\+E\+\_\+\+A\+F\+T\+E\+R\+\_\+\+M\+A\+X\+\_\+\+I\+T\+E\+R\+A\+T\+I\+O\+NS&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_a4412622ee54b81d316fc8c32e87566dd}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_a4412622ee54b81d316fc8c32e87566dd}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!Compute\+Normals@{Compute\+Normals}}
+\index{Compute\+Normals@{Compute\+Normals}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Compute\+Normals()}{ComputeNormals()}}
+{\footnotesize\ttfamily template$<$typename Point\+Cloud\+Ptr\+Type $>$ \\
+void Compute\+Normals (\begin{DoxyParamCaption}\item[{\hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$\+::Ptr}]{pc,  }\item[{double}]{radius,  }\item[{Point\+Cloud\+Ptr\+Type}]{normals }\end{DoxyParamCaption})}
+
+
+
+Referenced by Compute\+Normals\+And\+Join(), and Do\+S\+N\+D\+T().
+
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_adb611cd4792af4c792c5306ce836fa5d}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_adb611cd4792af4c792c5306ce836fa5d}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!Compute\+Normals\+And\+Join@{Compute\+Normals\+And\+Join}}
+\index{Compute\+Normals\+And\+Join@{Compute\+Normals\+And\+Join}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Compute\+Normals\+And\+Join()}{ComputeNormalsAndJoin()}}
+{\footnotesize\ttfamily void Compute\+Normals\+And\+Join (\begin{DoxyParamCaption}\item[{\hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$\+::Ptr}]{pc,  }\item[{double}]{radius,  }\item[{\hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+Normal $>$\+::Ptr}]{output }\end{DoxyParamCaption})}
+
+
+
+Referenced by Do\+P\+C\+L\+S\+I\+C\+P(), Do\+S\+I\+C\+P(), and Make\+Mesh().
+
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_af23a28e5b6695598a020f28f0cf77870}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_af23a28e5b6695598a020f28f0cf77870}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!Do\+P\+C\+L\+S\+I\+CP@{Do\+P\+C\+L\+S\+I\+CP}}
+\index{Do\+P\+C\+L\+S\+I\+CP@{Do\+P\+C\+L\+S\+I\+CP}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Do\+P\+C\+L\+S\+I\+C\+P()}{DoPCLSICP()}}
+{\footnotesize\ttfamily void Do\+P\+C\+L\+S\+I\+CP (\begin{DoxyParamCaption}\item[{\hyperlink{structcommon_1_1MatchPackage}{common\+::\+Match\+Package} \&}]{mp,  }\item[{const vector$<$ double $>$ \&}]{params }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_aed3f3893566054d7edc176ad2c66d320}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_aed3f3893566054d7edc176ad2c66d320}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!Do\+S\+I\+CP@{Do\+S\+I\+CP}}
+\index{Do\+S\+I\+CP@{Do\+S\+I\+CP}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Do\+S\+I\+C\+P()}{DoSICP()}}
+{\footnotesize\ttfamily void Do\+S\+I\+CP (\begin{DoxyParamCaption}\item[{\hyperlink{structcommon_1_1MatchPackage}{common\+::\+Match\+Package} \&}]{mp,  }\item[{const vector$<$ double $>$ \&}]{params }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_ad854da016fdc500f235dbccc4ca98d3a}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_ad854da016fdc500f235dbccc4ca98d3a}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!From\+P\+C\+L\+State@{From\+P\+C\+L\+State}}
+\index{From\+P\+C\+L\+State@{From\+P\+C\+L\+State}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{From\+P\+C\+L\+State()}{FromPCLState()}}
+{\footnotesize\ttfamily enum \hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_afe9bbc09e5ac9ecd5fb49c0fe4274ad2}{Converge\+State} From\+P\+C\+L\+State (\begin{DoxyParamCaption}\item[{\hyperlink{pclmatch_2include_2pclmatch_2wrapper_8hpp_a0e530914abda6e1594495c46c6e399bd}{State}}]{state }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_a195f22ff1a4d4930d17394b888412f31}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_a195f22ff1a4d4930d17394b888412f31}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!Make\+Mesh@{Make\+Mesh}}
+\index{Make\+Mesh@{Make\+Mesh}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Make\+Mesh()}{MakeMesh()}}
+{\footnotesize\ttfamily \hyperlink{classtrimesh_1_1TriMesh}{Tri\+Mesh}$\ast$ Make\+Mesh (\begin{DoxyParamCaption}\item[{const Matrix\+Xd \&}]{data,  }\item[{const vector$<$ double $>$ \&}]{params }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & \\
+\hline
+{\em params} & (radius) \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_ae440cb3ff874405078e2220f7ee87453}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_ae440cb3ff874405078e2220f7ee87453}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!Matrix3d\+From\+X\+Form@{Matrix3d\+From\+X\+Form}}
+\index{Matrix3d\+From\+X\+Form@{Matrix3d\+From\+X\+Form}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Matrix3d\+From\+X\+Form()}{Matrix3dFromXForm()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix3d Matrix3d\+From\+X\+Form (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacetrimesh_ad504958f2f56e393991b848986a8459f}{xform} \&}]{xf }\end{DoxyParamCaption})}
+
+
+
+Referenced by Do\+S\+I\+C\+P().
+
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_a0192485931aef3d937459d5fc67d65c7}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_a0192485931aef3d937459d5fc67d65c7}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!Matrix\+Xd\+From\+P\+CL@{Matrix\+Xd\+From\+P\+CL}}
+\index{Matrix\+Xd\+From\+P\+CL@{Matrix\+Xd\+From\+P\+CL}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Matrix\+Xd\+From\+P\+C\+L()}{MatrixXdFromPCL()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix\+Xd Matrix\+Xd\+From\+P\+CL (\begin{DoxyParamCaption}\item[{const \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$ \&}]{pc }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_a4029bd17e354f4d9ec377c0fc1c714db}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_a4029bd17e354f4d9ec377c0fc1c714db}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!Matrix\+Xd\+From\+P\+CL@{Matrix\+Xd\+From\+P\+CL}}
+\index{Matrix\+Xd\+From\+P\+CL@{Matrix\+Xd\+From\+P\+CL}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Matrix\+Xd\+From\+P\+C\+L()}{MatrixXdFromPCL()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix\+Xd Matrix\+Xd\+From\+P\+CL (\begin{DoxyParamCaption}\item[{\hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$\+::Ptr}]{pc }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_a9ae217274bb12feb560774608ee75e2c}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_a9ae217274bb12feb560774608ee75e2c}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!P\+C\+L\+From\+Matrix\+Xd@{P\+C\+L\+From\+Matrix\+Xd}}
+\index{P\+C\+L\+From\+Matrix\+Xd@{P\+C\+L\+From\+Matrix\+Xd}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{P\+C\+L\+From\+Matrix\+Xd()}{PCLFromMatrixXd()}}
+{\footnotesize\ttfamily \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$pcl\+::\+Point\+X\+YZ$>$ P\+C\+L\+From\+Matrix\+Xd (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix\+Xd \&}]{mtx }\end{DoxyParamCaption})}
+
+
+
+Referenced by Do\+P\+C\+L\+S\+I\+C\+P(), and Do\+S\+I\+C\+P().
+
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_a84fb9dd82bf989b4212d942058105b32}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_a84fb9dd82bf989b4212d942058105b32}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!Remove\+NaN@{Remove\+NaN}}
+\index{Remove\+NaN@{Remove\+NaN}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Remove\+Na\+N()}{RemoveNaN()}}
+{\footnotesize\ttfamily void Remove\+NaN (\begin{DoxyParamCaption}\item[{\hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+Normal $>$\+::Ptr}]{pc }\end{DoxyParamCaption})}
+
+
+
+Referenced by Do\+S\+I\+C\+P().
+
+\mbox{\Hypertarget{pclmatch_2include_2pclmatch_2wrapper_8hpp_a820424e40fbcc2c77c453d78cd377ced}\label{pclmatch_2include_2pclmatch_2wrapper_8hpp_a820424e40fbcc2c77c453d78cd377ced}} 
+\index{pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}!Remove\+Na\+N\+And\+Inf@{Remove\+Na\+N\+And\+Inf}}
+\index{Remove\+Na\+N\+And\+Inf@{Remove\+Na\+N\+And\+Inf}!pclmatch/include/pclmatch/wrapper.\+hpp@{pclmatch/include/pclmatch/wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Remove\+Na\+N\+And\+Inf()}{RemoveNaNAndInf()}}
+{\footnotesize\ttfamily void Remove\+Na\+N\+And\+Inf (\begin{DoxyParamCaption}\item[{\hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+Normal $>$\+::Ptr}]{pc }\end{DoxyParamCaption})}
+
+
+
+Referenced by Make\+Mesh().
+

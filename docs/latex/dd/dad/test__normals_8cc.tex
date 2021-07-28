@@ -1,0 +1,107 @@
+\hypertarget{test__normals_8cc}{}\section{test\+\_\+normals.\+cc File Reference}
+\label{test__normals_8cc}\index{test\+\_\+normals.\+cc@{test\+\_\+normals.\+cc}}
+
+
+check individual points radius normal  
+
+
+{\ttfamily \#include $<$bits/stdc++.\+h$>$}\newline
+{\ttfamily \#include $<$sndt\+\_\+exec/wrapper.\+hpp$>$}\newline
+{\ttfamily \#include $<$boost/program\+\_\+options.\+hpp$>$}\newline
+{\ttfamily \#include $<$common/\+Ego\+Point\+Clouds.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/ndt\+\_\+visualizations.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+msgs/\+Int32.\+h$>$}\newline
+{\ttfamily \#include $<$geometry\+\_\+msgs/\+Vector3.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+msgs/\+Float64\+Multi\+Array.\+h$>$}\newline
+Include dependency graph for test\+\_\+normals.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d1/da9/test__normals_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ pair$<$ Matrix\+Xd, Affine2d $>$ $>$ \hyperlink{test__normals_8cc_aabe4ed907be8fc3af5411d0606d9c0c1}{Augment} (const vector$<$ common\+::\+Ego\+Point\+Clouds $>$ \&\hyperlink{test__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}, int start, int end, Affine2d \&T, vector$<$ Affine2d $>$ \&allT)
+\item 
+void \hyperlink{test__normals_8cc_abf7613499686c6bb646f6244258a331b}{cb} (const std\+\_\+msgs\+::\+Int32 \&num)
+\item 
+int \hyperlink{test__normals_8cc_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+ros\+::\+Publisher \hyperlink{test__normals_8cc_a338d91f2326697a1ed2a8e16a9b05c9b}{pb1}
+\item 
+vector$<$ Marker $>$ \hyperlink{test__normals_8cc_a1fad05349435cb1c60cf56b615da8896}{allcircs}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+check individual points radius normal 
+
+\begin{DoxyAuthor}{Author}
+Hua\+Tsai (\href{mailto:huatsai.eed07g@nctu.edu.tw}{\tt huatsai.\+eed07g@nctu.\+edu.\+tw}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/07-\/13
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021 
+\end{DoxyCopyright}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{test__normals_8cc_aabe4ed907be8fc3af5411d0606d9c0c1}\label{test__normals_8cc_aabe4ed907be8fc3af5411d0606d9c0c1}} 
+\index{test\+\_\+normals.\+cc@{test\+\_\+normals.\+cc}!Augment@{Augment}}
+\index{Augment@{Augment}!test\+\_\+normals.\+cc@{test\+\_\+normals.\+cc}}
+\subsubsection{\texorpdfstring{Augment()}{Augment()}}
+{\footnotesize\ttfamily vector$<$pair$<$Matrix\+Xd, Affine2d$>$ $>$ Augment (\begin{DoxyParamCaption}\item[{const vector$<$ common\+::\+Ego\+Point\+Clouds $>$ \&}]{vepcs,  }\item[{int}]{start,  }\item[{int}]{end,  }\item[{Affine2d \&}]{T,  }\item[{vector$<$ Affine2d $>$ \&}]{allT }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{test__normals_8cc_abf7613499686c6bb646f6244258a331b}\label{test__normals_8cc_abf7613499686c6bb646f6244258a331b}} 
+\index{test\+\_\+normals.\+cc@{test\+\_\+normals.\+cc}!cb@{cb}}
+\index{cb@{cb}!test\+\_\+normals.\+cc@{test\+\_\+normals.\+cc}}
+\subsubsection{\texorpdfstring{cb()}{cb()}}
+{\footnotesize\ttfamily void cb (\begin{DoxyParamCaption}\item[{const std\+\_\+msgs\+::\+Int32 \&}]{num }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{test__normals_8cc_a3c04138a5bfe5d72780bb7e82a18e627}\label{test__normals_8cc_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{test\+\_\+normals.\+cc@{test\+\_\+normals.\+cc}!main@{main}}
+\index{main@{main}!test\+\_\+normals.\+cc@{test\+\_\+normals.\+cc}}
+\subsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{test__normals_8cc_a1fad05349435cb1c60cf56b615da8896}\label{test__normals_8cc_a1fad05349435cb1c60cf56b615da8896}} 
+\index{test\+\_\+normals.\+cc@{test\+\_\+normals.\+cc}!allcircs@{allcircs}}
+\index{allcircs@{allcircs}!test\+\_\+normals.\+cc@{test\+\_\+normals.\+cc}}
+\subsubsection{\texorpdfstring{allcircs}{allcircs}}
+{\footnotesize\ttfamily vector$<$Marker$>$ allcircs}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__normals_8cc_a338d91f2326697a1ed2a8e16a9b05c9b}\label{test__normals_8cc_a338d91f2326697a1ed2a8e16a9b05c9b}} 
+\index{test\+\_\+normals.\+cc@{test\+\_\+normals.\+cc}!pb1@{pb1}}
+\index{pb1@{pb1}!test\+\_\+normals.\+cc@{test\+\_\+normals.\+cc}}
+\subsubsection{\texorpdfstring{pb1}{pb1}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb1}
+
+
+
+Referenced by cb(), and main().
+

@@ -3,7 +3,6 @@ build
 devel
 logs
 output
-docs
 CoverageReport
 src/rpg_te/results
 src/rpg_te/doc

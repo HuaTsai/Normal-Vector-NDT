@@ -1,0 +1,92 @@
+\hypertarget{mcl__eval_8cc}{}\section{mcl\+\_\+eval.\+cc File Reference}
+\label{mcl__eval_8cc}\index{mcl\+\_\+eval.\+cc@{mcl\+\_\+eval.\+cc}}
+{\ttfamily \#include $<$bits/stdc++.\+h$>$}\newline
+{\ttfamily \#include $<$boost/program\+\_\+options.\+hpp$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Dense$>$}\newline
+{\ttfamily \#include $<$boost/random/mersenne\+\_\+twister.\+hpp$>$}\newline
+{\ttfamily \#include $<$boost/random/normal\+\_\+distribution.\+hpp$>$}\newline
+{\ttfamily \#include \char`\"{}common/common.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$sndt/ndt\+\_\+visualizations.\+h$>$}\newline
+Include dependency graph for mcl\+\_\+eval.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d4/dd4/mcl__eval_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structEigen_1_1internal_1_1scalar__normal__dist__op}{Eigen\+::internal\+::scalar\+\_\+normal\+\_\+dist\+\_\+op$<$ Scalar $>$}
+\item 
+struct \hyperlink{structEigen_1_1internal_1_1functor__traits_3_01scalar__normal__dist__op_3_01Scalar_01_4_01_4}{Eigen\+::internal\+::functor\+\_\+traits$<$ scalar\+\_\+normal\+\_\+dist\+\_\+op$<$ Scalar $>$ $>$}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespaceEigen}{Eigen}
+\item 
+ \hyperlink{namespaceEigen_1_1internal}{Eigen\+::internal}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Matrix\+Xd \hyperlink{mcl__eval_8cc_a97c56779b35997f8703885c7c16f6ab7}{Generate\+Samples} (Eigen\+::\+Vector\+Xd mean, Eigen\+::\+Matrix\+Xd covar, int size, int nn, const \hyperlink{structEigen_1_1internal_1_1scalar__normal__dist__op}{Eigen\+::internal\+::scalar\+\_\+normal\+\_\+dist\+\_\+op}$<$ double $>$ \&randN)
+\item 
+void \hyperlink{mcl__eval_8cc_ae8047ae84d504e237de2920388cd9e2d}{String\+To\+Mean\+And\+Cov} (string str, Vector2d \&mean, Matrix2d \&cov)
+\item 
+void \hyperlink{mcl__eval_8cc_a342288a1540f130fb5f28c8f43e680c7}{String\+To\+Center} (string str, Vector2d \&cen)
+\item 
+vector$<$ double $>$ \hyperlink{mcl__eval_8cc_a553108cca5662f3f07a3e8745e8c3d4b}{Compute\+Mean\+And\+Cov} (const Eigen\+::\+Vector2d \&p, const Eigen\+::\+Vector2d \&q, const Eigen\+::\+Vector2d \&np, const Eigen\+::\+Vector2d \&nq, const Eigen\+::\+Matrix2d \&pcov, const Eigen\+::\+Matrix2d \&qcov, const Eigen\+::\+Matrix2d \&npcov, const Eigen\+::\+Matrix2d \&nqcov)
+\item 
+int \hyperlink{mcl__eval_8cc_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{mcl__eval_8cc_a553108cca5662f3f07a3e8745e8c3d4b}\label{mcl__eval_8cc_a553108cca5662f3f07a3e8745e8c3d4b}} 
+\index{mcl\+\_\+eval.\+cc@{mcl\+\_\+eval.\+cc}!Compute\+Mean\+And\+Cov@{Compute\+Mean\+And\+Cov}}
+\index{Compute\+Mean\+And\+Cov@{Compute\+Mean\+And\+Cov}!mcl\+\_\+eval.\+cc@{mcl\+\_\+eval.\+cc}}
+\subsubsection{\texorpdfstring{Compute\+Mean\+And\+Cov()}{ComputeMeanAndCov()}}
+{\footnotesize\ttfamily vector$<$double$>$ Compute\+Mean\+And\+Cov (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector2d \&}]{p,  }\item[{const Eigen\+::\+Vector2d \&}]{q,  }\item[{const Eigen\+::\+Vector2d \&}]{np,  }\item[{const Eigen\+::\+Vector2d \&}]{nq,  }\item[{const Eigen\+::\+Matrix2d \&}]{pcov,  }\item[{const Eigen\+::\+Matrix2d \&}]{qcov,  }\item[{const Eigen\+::\+Matrix2d \&}]{npcov,  }\item[{const Eigen\+::\+Matrix2d \&}]{nqcov }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{mcl__eval_8cc_a97c56779b35997f8703885c7c16f6ab7}\label{mcl__eval_8cc_a97c56779b35997f8703885c7c16f6ab7}} 
+\index{mcl\+\_\+eval.\+cc@{mcl\+\_\+eval.\+cc}!Generate\+Samples@{Generate\+Samples}}
+\index{Generate\+Samples@{Generate\+Samples}!mcl\+\_\+eval.\+cc@{mcl\+\_\+eval.\+cc}}
+\subsubsection{\texorpdfstring{Generate\+Samples()}{GenerateSamples()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix\+Xd Generate\+Samples (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector\+Xd}]{mean,  }\item[{Eigen\+::\+Matrix\+Xd}]{covar,  }\item[{int}]{size,  }\item[{int}]{nn,  }\item[{const \hyperlink{structEigen_1_1internal_1_1scalar__normal__dist__op}{Eigen\+::internal\+::scalar\+\_\+normal\+\_\+dist\+\_\+op}$<$ double $>$ \&}]{randN }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{mcl__eval_8cc_a3c04138a5bfe5d72780bb7e82a18e627}\label{mcl__eval_8cc_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{mcl\+\_\+eval.\+cc@{mcl\+\_\+eval.\+cc}!main@{main}}
+\index{main@{main}!mcl\+\_\+eval.\+cc@{mcl\+\_\+eval.\+cc}}
+\subsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{mcl__eval_8cc_a342288a1540f130fb5f28c8f43e680c7}\label{mcl__eval_8cc_a342288a1540f130fb5f28c8f43e680c7}} 
+\index{mcl\+\_\+eval.\+cc@{mcl\+\_\+eval.\+cc}!String\+To\+Center@{String\+To\+Center}}
+\index{String\+To\+Center@{String\+To\+Center}!mcl\+\_\+eval.\+cc@{mcl\+\_\+eval.\+cc}}
+\subsubsection{\texorpdfstring{String\+To\+Center()}{StringToCenter()}}
+{\footnotesize\ttfamily void String\+To\+Center (\begin{DoxyParamCaption}\item[{string}]{str,  }\item[{Vector2d \&}]{cen }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{mcl__eval_8cc_ae8047ae84d504e237de2920388cd9e2d}\label{mcl__eval_8cc_ae8047ae84d504e237de2920388cd9e2d}} 
+\index{mcl\+\_\+eval.\+cc@{mcl\+\_\+eval.\+cc}!String\+To\+Mean\+And\+Cov@{String\+To\+Mean\+And\+Cov}}
+\index{String\+To\+Mean\+And\+Cov@{String\+To\+Mean\+And\+Cov}!mcl\+\_\+eval.\+cc@{mcl\+\_\+eval.\+cc}}
+\subsubsection{\texorpdfstring{String\+To\+Mean\+And\+Cov()}{StringToMeanAndCov()}}
+{\footnotesize\ttfamily void String\+To\+Mean\+And\+Cov (\begin{DoxyParamCaption}\item[{string}]{str,  }\item[{Vector2d \&}]{mean,  }\item[{Matrix2d \&}]{cov }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+

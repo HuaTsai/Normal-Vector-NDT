@@ -146,7 +146,7 @@ void NDTMap::LoadPointCloudWithCovariances(const MatrixXd &points,
         index_->AddPointAndNormalWithCovariance(point, point_cov, normal);
     if (cell) update_cells.push_back(cell);
   }
-  for (auto cell : update_cells) cell->ComputeGaussianWithCovariances();
+  for (auto cell : update_cells) cell->ComputeGaussian();
   update_cells.clear();
   is_initialized_ = true;
 }

@@ -1,0 +1,64 @@
+\hypertarget{eigen__utils_8hpp}{}\section{eigen\+\_\+utils.\+hpp File Reference}
+\label{eigen__utils_8hpp}\index{eigen\+\_\+utils.\+hpp@{eigen\+\_\+utils.\+hpp}}
+{\ttfamily \#include $<$angles/angles.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+msgs/\+Float64\+Multi\+Array.\+h$>$}\newline
+{\ttfamily \#include $<$tf2\+\_\+eigen/tf2\+\_\+eigen.\+h$>$}\newline
+{\ttfamily \#include $<$tf2\+\_\+geometry\+\_\+msgs/tf2\+\_\+geometry\+\_\+msgs.\+h$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Dense$>$}\newline
+{\ttfamily \#include $<$gsl/gsl$>$}\newline
+Include dependency graph for eigen\+\_\+utils.\+hpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d3/dbe/eigen__utils_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d9/dfa/eigen__utils_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacecommon}{common}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Affine3d \hyperlink{namespacecommon_a8aeeb6f99d9f52e3f03d311bb7b724e8}{common\+::\+Affine3d\+From\+X\+Y\+Z\+R\+PY} (const Eigen\+::\+Vector3d \&xyz, const Eigen\+::\+Vector3d \&rpy)
+\item 
+Eigen\+::\+Affine3d \hyperlink{namespacecommon_ad4b5251bf0c4c9741c75b6bef6a23f30}{common\+::\+Affine3d\+From\+Affine2d} (const Eigen\+::\+Affine2d \&aff)
+\item 
+Eigen\+::\+Affine3d \hyperlink{namespacecommon_ae99f4d457d2bc28539862ba2698fc063}{common\+::\+Affine3d\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
+\item 
+Eigen\+::\+Affine3d \hyperlink{namespacecommon_a52b746932856cc09f947c6e7b30c3a09}{common\+::\+Affine3d\+From\+Matrix4f} (const Eigen\+::\+Matrix4f \&mtx)
+\item 
+Eigen\+::\+Matrix$<$ double, 6, 1 $>$ \hyperlink{namespacecommon_abf63050ffc1423dd7c334a6c3c5618a1}{common\+::\+X\+Y\+Z\+R\+P\+Y\+From\+Affine3d} (const Eigen\+::\+Affine3d \&mtx)
+\item 
+Eigen\+::\+Matrix$<$ double, 6, 1 $>$ \hyperlink{namespacecommon_a75012054387d4de49be04481e844d4aa}{common\+::\+X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f} (const Eigen\+::\+Matrix4f \&mtx)
+\item 
+Eigen\+::\+Vector3d \hyperlink{namespacecommon_a380c663a4f46d093dca7813385d5472c}{common\+::\+X\+Y\+T\+Radian\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
+\item 
+Eigen\+::\+Vector3d \hyperlink{namespacecommon_ac2334937b8f4c3b74ba6393a30876499}{common\+::\+X\+Y\+T\+Degree\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
+\item 
+Eigen\+::\+Matrix3d \hyperlink{namespacecommon_a79c5532f7b71e03e4436194f78e637ce}{common\+::\+Matrix3d\+From\+X\+Y\+T\+Radian} (const Eigen\+::\+Vector3d \&xyt)
+\item 
+Eigen\+::\+Matrix3d \hyperlink{namespacecommon_abd161a56797ce1d90331acbf3d441d90}{common\+::\+Matrix3d\+From\+X\+Y\+T\+Degree} (const Eigen\+::\+Vector3d \&xyt)
+\item 
+Eigen\+::\+Matrix3d \hyperlink{namespacecommon_a12010389a8f6bfb72230dbe65eb60ff2}{common\+::\+Matrix3d\+From\+Matrix4f} (const Eigen\+::\+Matrix4f \&mtx)
+\item 
+Eigen\+::\+Matrix4f \hyperlink{namespacecommon_a95c001ee532d4d5659496a2f3699e3d7}{common\+::\+Matrix4f\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
+\item 
+Eigen\+::\+Matrix4f \hyperlink{namespacecommon_a43b57f5e12ace94174d0110531826896}{common\+::\+Matrix4f\+From\+X\+Y\+T\+Radian} (const Eigen\+::\+Vector3d \&xyt)
+\item 
+geometry\+\_\+msgs\+::\+Transform\+Stamped \hyperlink{namespacecommon_af406e07c4c8640ce9b10a2ff45365ae1}{common\+::\+Tst\+From\+Affine3d} (const Eigen\+::\+Affine3d \&T, const ros\+::\+Time \&stamp, const std\+::string \&frame\+\_\+id, const std\+::string \&child\+\_\+frame\+\_\+id)
+\item 
+geometry\+\_\+msgs\+::\+Transform\+Stamped \hyperlink{namespacecommon_a3e57252779375868d389d7c9f943a44f}{common\+::\+Tst\+From\+Matrix4f} (const Eigen\+::\+Matrix4f \&T, const ros\+::\+Time \&stamp, const std\+::string \&frame\+\_\+id, const std\+::string \&child\+\_\+frame\+\_\+id)
+\item 
+Eigen\+::\+Affine3d \hyperlink{namespacecommon_ac1ecd24c73d1ded5d44eee957aa24b6d}{common\+::\+Conserve2\+D\+From\+Affine3d} (const Eigen\+::\+Affine3d \&T)
+\item 
+Eigen\+::\+Vector2d \hyperlink{namespacecommon_a191afad1f06d091167c390fbe1457b5d}{common\+::\+Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
+\end{DoxyCompactItemize}

@@ -1,0 +1,148 @@
+\hypertarget{sndt__exec_2src_2test__0dis_8cc}{}\section{test\+\_\+0dis.\+cc File Reference}
+\label{sndt__exec_2src_2test__0dis_8cc}\index{test\+\_\+0dis.\+cc@{test\+\_\+0dis.\+cc}}
+{\ttfamily \#include $<$bits/stdc++.\+h$>$}\newline
+{\ttfamily \#include $<$sndt\+\_\+exec/wrapper.\+hpp$>$}\newline
+{\ttfamily \#include $<$boost/program\+\_\+options.\+hpp$>$}\newline
+{\ttfamily \#include $<$common/\+Ego\+Point\+Clouds.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/ndt\+\_\+visualizations.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+msgs/\+Int32.\+h$>$}\newline
+{\ttfamily \#include $<$geometry\+\_\+msgs/\+Vector3.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+msgs/\+Float64\+Multi\+Array.\+h$>$}\newline
+Include dependency graph for sndt\+\_\+exec/src/test\+\_\+0dis.cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d4/d48/sndt__exec_2src_2test__0dis_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structCostFunctions}{Cost\+Functions}
+\item 
+struct \hyperlink{structInfo}{Info}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+pair$<$ Matrix\+Xd, Affine2d $>$ \hyperlink{sndt__exec_2src_2test__0dis_8cc_aa8b8fb3da9166b3e160e199069a27bf9}{To\+Pair} (const common\+::\+Point\+Cloud\+Sensor \&pcs)
+\item 
+vector$<$ pair$<$ Matrix\+Xd, Affine2d $>$ $>$ \hyperlink{sndt__exec_2src_2test__0dis_8cc_a9faf15236e03c1e537ec3f0b54ff9a64}{Augment} (const vector$<$ common\+::\+Ego\+Point\+Clouds $>$ \&\hyperlink{test__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}, int start, int end, Affine2d \&T, vector$<$ Affine2d $>$ \&allT, \hyperlink{structInfo}{Info} \&info)
+\item 
+void \hyperlink{sndt__exec_2src_2test__0dis_8cc_a0716cb3cd0a7af4eccacdfecb8bed949}{Info\+Of\+N\+D\+T\+Map} (const \hyperlink{classNDTMap}{N\+D\+T\+Map} \&map, double \hyperlink{test__match_8cc_a3f67c53b80389c5f53961936edba04c9}{radius}, \hyperlink{structInfo}{Info} \&info)
+\item 
+void \hyperlink{sndt__exec_2src_2test__0dis_8cc_abf7613499686c6bb646f6244258a331b}{cb} (const std\+\_\+msgs\+::\+Int32 \&num)
+\item 
+string \hyperlink{sndt__exec_2src_2test__0dis_8cc_a207598ce2584fa975f9c798546ee0ff7}{Correspondence\+Msg} (\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$p, \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$q)
+\item 
+int \hyperlink{sndt__exec_2src_2test__0dis_8cc_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ vector$<$ double $>$ $>$ \hyperlink{sndt__exec_2src_2test__0dis_8cc_a0d5a07f17a25631c05c2bc4c21a99ff2}{meancovs}
+\item 
+vector$<$ Marker\+Array $>$ \hyperlink{sndt__exec_2src_2test__0dis_8cc_a35294cea456776a7187a8f0276845ff1}{corres}
+\item 
+ros\+::\+Publisher \hyperlink{sndt__exec_2src_2test__0dis_8cc_afbec5b55605c8b8a790745fdb732b4b5}{pub7}
+\item 
+ros\+::\+Publisher \hyperlink{sndt__exec_2src_2test__0dis_8cc_a75aaa0e1741284e231d452e6abaa8bad}{pubmc}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{sndt__exec_2src_2test__0dis_8cc_a9faf15236e03c1e537ec3f0b54ff9a64}\label{sndt__exec_2src_2test__0dis_8cc_a9faf15236e03c1e537ec3f0b54ff9a64}} 
+\index{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}!Augment@{Augment}}
+\index{Augment@{Augment}!sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}}
+\subsubsection{\texorpdfstring{Augment()}{Augment()}}
+{\footnotesize\ttfamily vector$<$pair$<$Matrix\+Xd, Affine2d$>$ $>$ Augment (\begin{DoxyParamCaption}\item[{const vector$<$ common\+::\+Ego\+Point\+Clouds $>$ \&}]{vepcs,  }\item[{int}]{start,  }\item[{int}]{end,  }\item[{Affine2d \&}]{T,  }\item[{vector$<$ Affine2d $>$ \&}]{allT,  }\item[{\hyperlink{structInfo}{Info} \&}]{info }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{sndt__exec_2src_2test__0dis_8cc_abf7613499686c6bb646f6244258a331b}\label{sndt__exec_2src_2test__0dis_8cc_abf7613499686c6bb646f6244258a331b}} 
+\index{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}!cb@{cb}}
+\index{cb@{cb}!sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}}
+\subsubsection{\texorpdfstring{cb()}{cb()}}
+{\footnotesize\ttfamily void cb (\begin{DoxyParamCaption}\item[{const std\+\_\+msgs\+::\+Int32 \&}]{num }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{sndt__exec_2src_2test__0dis_8cc_a207598ce2584fa975f9c798546ee0ff7}\label{sndt__exec_2src_2test__0dis_8cc_a207598ce2584fa975f9c798546ee0ff7}} 
+\index{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}!Correspondence\+Msg@{Correspondence\+Msg}}
+\index{Correspondence\+Msg@{Correspondence\+Msg}!sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}}
+\subsubsection{\texorpdfstring{Correspondence\+Msg()}{CorrespondenceMsg()}}
+{\footnotesize\ttfamily string Correspondence\+Msg (\begin{DoxyParamCaption}\item[{\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$}]{p,  }\item[{\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$}]{q }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{sndt__exec_2src_2test__0dis_8cc_a0716cb3cd0a7af4eccacdfecb8bed949}\label{sndt__exec_2src_2test__0dis_8cc_a0716cb3cd0a7af4eccacdfecb8bed949}} 
+\index{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}!Info\+Of\+N\+D\+T\+Map@{Info\+Of\+N\+D\+T\+Map}}
+\index{Info\+Of\+N\+D\+T\+Map@{Info\+Of\+N\+D\+T\+Map}!sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}}
+\subsubsection{\texorpdfstring{Info\+Of\+N\+D\+T\+Map()}{InfoOfNDTMap()}}
+{\footnotesize\ttfamily void Info\+Of\+N\+D\+T\+Map (\begin{DoxyParamCaption}\item[{const \hyperlink{classNDTMap}{N\+D\+T\+Map} \&}]{map,  }\item[{double}]{radius,  }\item[{\hyperlink{structInfo}{Info} \&}]{info }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{sndt__exec_2src_2test__0dis_8cc_a3c04138a5bfe5d72780bb7e82a18e627}\label{sndt__exec_2src_2test__0dis_8cc_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}!main@{main}}
+\index{main@{main}!sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}}
+\subsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{sndt__exec_2src_2test__0dis_8cc_aa8b8fb3da9166b3e160e199069a27bf9}\label{sndt__exec_2src_2test__0dis_8cc_aa8b8fb3da9166b3e160e199069a27bf9}} 
+\index{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}!To\+Pair@{To\+Pair}}
+\index{To\+Pair@{To\+Pair}!sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}}
+\subsubsection{\texorpdfstring{To\+Pair()}{ToPair()}}
+{\footnotesize\ttfamily pair$<$Matrix\+Xd, Affine2d$>$ To\+Pair (\begin{DoxyParamCaption}\item[{const common\+::\+Point\+Cloud\+Sensor \&}]{pcs }\end{DoxyParamCaption})}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{sndt__exec_2src_2test__0dis_8cc_a35294cea456776a7187a8f0276845ff1}\label{sndt__exec_2src_2test__0dis_8cc_a35294cea456776a7187a8f0276845ff1}} 
+\index{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}!corres@{corres}}
+\index{corres@{corres}!sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}}
+\subsubsection{\texorpdfstring{corres}{corres}}
+{\footnotesize\ttfamily vector$<$Marker\+Array$>$ corres}
+
+
+
+Referenced by cb(), N\+D\+T\+Matcher\+::\+Ceres\+Match(), and main().
+
+\mbox{\Hypertarget{sndt__exec_2src_2test__0dis_8cc_a0d5a07f17a25631c05c2bc4c21a99ff2}\label{sndt__exec_2src_2test__0dis_8cc_a0d5a07f17a25631c05c2bc4c21a99ff2}} 
+\index{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}!meancovs@{meancovs}}
+\index{meancovs@{meancovs}!sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}}
+\subsubsection{\texorpdfstring{meancovs}{meancovs}}
+{\footnotesize\ttfamily vector$<$vector$<$double$>$ $>$ meancovs}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{sndt__exec_2src_2test__0dis_8cc_afbec5b55605c8b8a790745fdb732b4b5}\label{sndt__exec_2src_2test__0dis_8cc_afbec5b55605c8b8a790745fdb732b4b5}} 
+\index{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}!pub7@{pub7}}
+\index{pub7@{pub7}!sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}}
+\subsubsection{\texorpdfstring{pub7}{pub7}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub7}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{sndt__exec_2src_2test__0dis_8cc_a75aaa0e1741284e231d452e6abaa8bad}\label{sndt__exec_2src_2test__0dis_8cc_a75aaa0e1741284e231d452e6abaa8bad}} 
+\index{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}!pubmc@{pubmc}}
+\index{pubmc@{pubmc}!sndt\+\_\+exec/src/test\+\_\+0dis.\+cc@{sndt\+\_\+exec/src/test\+\_\+0dis.\+cc}}
+\subsubsection{\texorpdfstring{pubmc}{pubmc}}
+{\footnotesize\ttfamily ros\+::\+Publisher pubmc}
+
+
+
+Referenced by cb(), and main().
+

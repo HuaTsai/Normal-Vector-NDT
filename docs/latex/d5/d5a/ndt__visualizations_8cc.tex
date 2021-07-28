@@ -1,0 +1,303 @@
+\hypertarget{ndt__visualizations_8cc}{}\section{ndt\+\_\+visualizations.\+cc File Reference}
+\label{ndt__visualizations_8cc}\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+{\ttfamily \#include \char`\"{}sndt/ndt\+\_\+visualizations.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$bits/stdc++.\+h$>$}\newline
+{\ttfamily \#include $<$pcl\+\_\+ros/point\+\_\+cloud.\+h$>$}\newline
+{\ttfamily \#include $<$ros/ros.\+h$>$}\newline
+{\ttfamily \#include $<$tf2\+\_\+eigen/tf2\+\_\+eigen.\+h$>$}\newline
+{\ttfamily \#include $<$tf2\+\_\+geometry\+\_\+msgs/tf2\+\_\+geometry\+\_\+msgs.\+h$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Eigen$>$}\newline
+{\ttfamily \#include $<$gsl/gsl$>$}\newline
+Include dependency graph for ndt\+\_\+visualizations.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d5/dec/ndt__visualizations_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+\_\+msgs\+::\+Color\+R\+G\+BA \hyperlink{ndt__visualizations_8cc_ada7233b2c81fb4e5eb3d41a607d7244b}{Make\+Color\+R\+G\+BA} (const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
+\item 
+vector$<$ Vector2d $>$ \hyperlink{ndt__visualizations_8cc_ae63e57b4fc1bab7bf8b85a7676402aa6}{Find\+Tangent\+Points} (const Marker \&eclipse, const Vector2d \&point)
+\item 
+void \hyperlink{ndt__visualizations_8cc_a13e8f62acb0067e34867cd55c94b0b9c}{Update\+Marker\+Array} (Marker\+Array \&markerarray, Marker marker)
+\item 
+Marker\+Array \hyperlink{ndt__visualizations_8cc_a9d9f9d7def4e4b383020f9134c31482a}{Join\+Markers} (const vector$<$ Marker $>$ \&ms)
+\item 
+Marker\+Array \hyperlink{ndt__visualizations_8cc_a84b3c7184a0e2bff974d5600be7b2a43}{Join\+Marker\+Arrays} (const vector$<$ Marker\+Array $>$ \&mas)
+\item 
+Marker\+Array \hyperlink{ndt__visualizations_8cc_a018f763f5861d75bb61e5f1ce5a2e43f}{Join\+Marker\+Arrays\+And\+Markers} (const vector$<$ Marker\+Array $>$ \&mas, const vector$<$ Marker $>$ \&ms)
+\item 
+Marker \hyperlink{ndt__visualizations_8cc_a3178ed84cc05daedf8b048e0ba7d6cb3}{Marker\+Of\+Boundary} (const Vector2d \&center, double size, double skew\+\_\+rad, const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color)
+\item 
+Marker \hyperlink{ndt__visualizations_8cc_a03c95b3dd0bc00daf598be0280f8ec82}{Marker\+Of\+Eclipse} (const Vector2d \&mean, const Matrix2d \&covariance, const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
+\item 
+Marker \hyperlink{ndt__visualizations_8cc_a82068f023a26dbeb005e8e8edffd1216}{Marker\+Of\+Circle} (const Vector2d \&mean, double \hyperlink{test__match_8cc_a3f67c53b80389c5f53961936edba04c9}{radius}, const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
+\item 
+Marker \hyperlink{ndt__visualizations_8cc_a41030fe2ab81eb6b7e74351d03598134}{Marker\+Of\+Lines} (const vector$<$ Vector2d $>$ \&points, const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
+\item 
+Marker \hyperlink{ndt__visualizations_8cc_a3412fb16a916b778d43dd3df74c891bb}{Marker\+Of\+Lines\+By\+End\+Points} (const vector$<$ Vector2d $>$ \&points, const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
+\item 
+vector$<$ Vector2d $>$ \hyperlink{ndt__visualizations_8cc_a6da728a774f5a0840bcd2e3cb069b44f}{Points\+Of\+N\+D\+T\+Map} (const \hyperlink{classNDTMap}{N\+D\+T\+Map} \&map)
+\item 
+vector$<$ Vector2d $>$ \hyperlink{ndt__visualizations_8cc_a2d4acee730392b885e4974f50cedd1eb}{Points\+Of\+N\+D\+T\+Map} (const vector$<$ shared\+\_\+ptr$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $>$$>$ \&map)
+\item 
+Marker \hyperlink{ndt__visualizations_8cc_ac729e3afca037095183a443e1ba144a0}{Marker\+Of\+Points} (const vector$<$ Vector2d $>$ \&points, double size, const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
+\item 
+Marker \hyperlink{ndt__visualizations_8cc_a533845c37375b4659df3a376e52a089f}{Marker\+Of\+Points} (const Matrix\+Xd \&points, double size, const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
+\item 
+Marker \hyperlink{ndt__visualizations_8cc_a53c78c3f4aea0ef384f62f30c7ff8fd6}{Marker\+Of\+Arrow} (const Vector2d \&start, const Vector2d \&end, const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
+\item 
+Marker \hyperlink{ndt__visualizations_8cc_a672147a23f4cafc0730cbe7874814c65}{Marker\+Of\+Text} (string text, const Vector2d \&position, const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
+\item 
+Marker\+Array \hyperlink{ndt__visualizations_8cc_af43089af8743ab1cfe32eb118ec74857}{Marker\+Array\+Of\+Arrow} (const Matrix\+Xd \&start, const Matrix\+Xd \&end, const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
+\item 
+Marker\+Array \hyperlink{ndt__visualizations_8cc_aa87e82e51555fe21628ccbd5f6a9a6b2}{Marker\+Array\+Of\+Arrow} (const vector$<$ Vector2d $>$ \&starts, const vector$<$ Vector2d $>$ \&ends, const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
+\item 
+Marker\+Array \hyperlink{ndt__visualizations_8cc_af28b43b8a2657d3758929d4c03b2cd8f}{Marker\+Array\+Of\+N\+D\+T\+Cell} (const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$cell)
+\item 
+Marker\+Array \hyperlink{ndt__visualizations_8cc_a6d2ce829ee9105849a7987aa95851843}{Marker\+Array\+Of\+N\+D\+T\+Cell2} (const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$cell)
+\item 
+Marker\+Array \hyperlink{ndt__visualizations_8cc_aeec578db25bc91aab6472af6e169abe0}{Marker\+Array\+Of\+N\+D\+T\+Map} (const \hyperlink{classNDTMap}{N\+D\+T\+Map} \&map, bool is\+\_\+target\+\_\+color)
+\item 
+Marker\+Array \hyperlink{ndt__visualizations_8cc_aac0abdfabfdae7de225fb9e13fd60c4c}{Marker\+Array\+Of\+N\+D\+T\+Map} (const vector$<$ shared\+\_\+ptr$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $>$$>$ \&map, bool is\+\_\+target\+\_\+color)
+\item 
+Marker\+Array \hyperlink{ndt__visualizations_8cc_a761c92a2ec99c7177ab859f21c839d71}{Marker\+Array\+Of\+Correspondences} (const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$source\+\_\+cell, const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$target\+\_\+cell, string text, const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color)
+\item 
+Marker\+Array \hyperlink{ndt__visualizations_8cc_a95c1543f88d0601dcd3634a2c867ecb2}{Marker\+Array\+Of\+Sensor} (const vector$<$ Affine2d $>$ \&affs)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{ndt__visualizations_8cc_ae63e57b4fc1bab7bf8b85a7676402aa6}\label{ndt__visualizations_8cc_ae63e57b4fc1bab7bf8b85a7676402aa6}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Find\+Tangent\+Points@{Find\+Tangent\+Points}}
+\index{Find\+Tangent\+Points@{Find\+Tangent\+Points}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Find\+Tangent\+Points()}{FindTangentPoints()}}
+{\footnotesize\ttfamily vector$<$Vector2d$>$ Find\+Tangent\+Points (\begin{DoxyParamCaption}\item[{const Marker \&}]{eclipse,  }\item[{const Vector2d \&}]{point }\end{DoxyParamCaption})}
+
+
+
+Referenced by main(), Marker\+Array\+Of\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+N\+D\+T\+Cell2().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a84b3c7184a0e2bff974d5600be7b2a43}\label{ndt__visualizations_8cc_a84b3c7184a0e2bff974d5600be7b2a43}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Join\+Marker\+Arrays@{Join\+Marker\+Arrays}}
+\index{Join\+Marker\+Arrays@{Join\+Marker\+Arrays}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Join\+Marker\+Arrays()}{JoinMarkerArrays()}}
+{\footnotesize\ttfamily Marker\+Array Join\+Marker\+Arrays (\begin{DoxyParamCaption}\item[{const vector$<$ Marker\+Array $>$ \&}]{mas }\end{DoxyParamCaption})}
+
+
+
+Referenced by N\+D\+T\+Matcher\+::\+Ceres\+Match().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a018f763f5861d75bb61e5f1ce5a2e43f}\label{ndt__visualizations_8cc_a018f763f5861d75bb61e5f1ce5a2e43f}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Join\+Marker\+Arrays\+And\+Markers@{Join\+Marker\+Arrays\+And\+Markers}}
+\index{Join\+Marker\+Arrays\+And\+Markers@{Join\+Marker\+Arrays\+And\+Markers}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Join\+Marker\+Arrays\+And\+Markers()}{JoinMarkerArraysAndMarkers()}}
+{\footnotesize\ttfamily Marker\+Array Join\+Marker\+Arrays\+And\+Markers (\begin{DoxyParamCaption}\item[{const vector$<$ Marker\+Array $>$ \&}]{mas,  }\item[{const vector$<$ Marker $>$ \&}]{ms }\end{DoxyParamCaption})}
+
+
+
+Referenced by main(), Marker\+Array\+Of\+Correspondences(), Marker\+Array\+Of\+N\+D\+T\+Cell(), Marker\+Array\+Of\+N\+D\+T\+Cell2(), and Marker\+Array\+Of\+N\+D\+T\+Map().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a9d9f9d7def4e4b383020f9134c31482a}\label{ndt__visualizations_8cc_a9d9f9d7def4e4b383020f9134c31482a}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Join\+Markers@{Join\+Markers}}
+\index{Join\+Markers@{Join\+Markers}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Join\+Markers()}{JoinMarkers()}}
+{\footnotesize\ttfamily Marker\+Array Join\+Markers (\begin{DoxyParamCaption}\item[{const vector$<$ Marker $>$ \&}]{ms }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_ada7233b2c81fb4e5eb3d41a607d7244b}\label{ndt__visualizations_8cc_ada7233b2c81fb4e5eb3d41a607d7244b}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Make\+Color\+R\+G\+BA@{Make\+Color\+R\+G\+BA}}
+\index{Make\+Color\+R\+G\+BA@{Make\+Color\+R\+G\+BA}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Make\+Color\+R\+G\+B\+A()}{MakeColorRGBA()}}
+{\footnotesize\ttfamily std\+\_\+msgs\+::\+Color\+R\+G\+BA Make\+Color\+R\+G\+BA (\begin{DoxyParamCaption}\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color,  }\item[{double}]{alpha }\end{DoxyParamCaption})}
+
+
+
+Referenced by Marker\+Array\+Of\+Arrow(), Marker\+Array\+Of\+Sensor(), Marker\+Of\+Arrow(), Marker\+Of\+Boundary(), Marker\+Of\+Circle(), Marker\+Of\+Eclipse(), Marker\+Of\+Lines(), Marker\+Of\+Points(), and Marker\+Of\+Text().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_af43089af8743ab1cfe32eb118ec74857}\label{ndt__visualizations_8cc_af43089af8743ab1cfe32eb118ec74857}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Array\+Of\+Arrow@{Marker\+Array\+Of\+Arrow}}
+\index{Marker\+Array\+Of\+Arrow@{Marker\+Array\+Of\+Arrow}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+Arrow()}{MarkerArrayOfArrow()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+Arrow (\begin{DoxyParamCaption}\item[{const Matrix\+Xd \&}]{start,  }\item[{const Matrix\+Xd \&}]{end,  }\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color,  }\item[{double}]{alpha }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_aa87e82e51555fe21628ccbd5f6a9a6b2}\label{ndt__visualizations_8cc_aa87e82e51555fe21628ccbd5f6a9a6b2}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Array\+Of\+Arrow@{Marker\+Array\+Of\+Arrow}}
+\index{Marker\+Array\+Of\+Arrow@{Marker\+Array\+Of\+Arrow}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+Arrow()}{MarkerArrayOfArrow()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+Arrow (\begin{DoxyParamCaption}\item[{const vector$<$ Vector2d $>$ \&}]{starts,  }\item[{const vector$<$ Vector2d $>$ \&}]{ends,  }\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color,  }\item[{double}]{alpha }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a761c92a2ec99c7177ab859f21c839d71}\label{ndt__visualizations_8cc_a761c92a2ec99c7177ab859f21c839d71}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Array\+Of\+Correspondences@{Marker\+Array\+Of\+Correspondences}}
+\index{Marker\+Array\+Of\+Correspondences@{Marker\+Array\+Of\+Correspondences}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+Correspondences()}{MarkerArrayOfCorrespondences()}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+Correspondences (\begin{DoxyParamCaption}\item[{const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$}]{source\+\_\+cell,  }\item[{const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$}]{target\+\_\+cell,  }\item[{string}]{text,  }\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color }\end{DoxyParamCaption})}
+
+
+
+Referenced by N\+D\+T\+Matcher\+::\+Ceres\+Match().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_af28b43b8a2657d3758929d4c03b2cd8f}\label{ndt__visualizations_8cc_af28b43b8a2657d3758929d4c03b2cd8f}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Array\+Of\+N\+D\+T\+Cell@{Marker\+Array\+Of\+N\+D\+T\+Cell}}
+\index{Marker\+Array\+Of\+N\+D\+T\+Cell@{Marker\+Array\+Of\+N\+D\+T\+Cell}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+N\+D\+T\+Cell()}{MarkerArrayOfNDTCell()}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+N\+D\+T\+Cell (\begin{DoxyParamCaption}\item[{const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$}]{cell }\end{DoxyParamCaption})}
+
+
+
+Referenced by main(), Marker\+Array\+Of\+Correspondences(), and Marker\+Array\+Of\+N\+D\+T\+Map().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a6d2ce829ee9105849a7987aa95851843}\label{ndt__visualizations_8cc_a6d2ce829ee9105849a7987aa95851843}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Array\+Of\+N\+D\+T\+Cell2@{Marker\+Array\+Of\+N\+D\+T\+Cell2}}
+\index{Marker\+Array\+Of\+N\+D\+T\+Cell2@{Marker\+Array\+Of\+N\+D\+T\+Cell2}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+N\+D\+T\+Cell2()}{MarkerArrayOfNDTCell2()}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+N\+D\+T\+Cell2 (\begin{DoxyParamCaption}\item[{const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$}]{cell }\end{DoxyParamCaption})}
+
+
+
+Referenced by main(), Marker\+Array\+Of\+Correspondences(), and Marker\+Array\+Of\+N\+D\+T\+Map().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_aeec578db25bc91aab6472af6e169abe0}\label{ndt__visualizations_8cc_aeec578db25bc91aab6472af6e169abe0}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Array\+Of\+N\+D\+T\+Map@{Marker\+Array\+Of\+N\+D\+T\+Map}}
+\index{Marker\+Array\+Of\+N\+D\+T\+Map@{Marker\+Array\+Of\+N\+D\+T\+Map}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+N\+D\+T\+Map()}{MarkerArrayOfNDTMap()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+N\+D\+T\+Map (\begin{DoxyParamCaption}\item[{const \hyperlink{classNDTMap}{N\+D\+T\+Map} \&}]{map,  }\item[{bool}]{is\+\_\+target\+\_\+color }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_aac0abdfabfdae7de225fb9e13fd60c4c}\label{ndt__visualizations_8cc_aac0abdfabfdae7de225fb9e13fd60c4c}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Array\+Of\+N\+D\+T\+Map@{Marker\+Array\+Of\+N\+D\+T\+Map}}
+\index{Marker\+Array\+Of\+N\+D\+T\+Map@{Marker\+Array\+Of\+N\+D\+T\+Map}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+N\+D\+T\+Map()}{MarkerArrayOfNDTMap()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+N\+D\+T\+Map (\begin{DoxyParamCaption}\item[{const vector$<$ shared\+\_\+ptr$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $>$$>$ \&}]{map,  }\item[{bool}]{is\+\_\+target\+\_\+color }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a95c1543f88d0601dcd3634a2c867ecb2}\label{ndt__visualizations_8cc_a95c1543f88d0601dcd3634a2c867ecb2}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Array\+Of\+Sensor@{Marker\+Array\+Of\+Sensor}}
+\index{Marker\+Array\+Of\+Sensor@{Marker\+Array\+Of\+Sensor}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+Sensor()}{MarkerArrayOfSensor()}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+Sensor (\begin{DoxyParamCaption}\item[{const vector$<$ Affine2d $>$ \&}]{affs }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a53c78c3f4aea0ef384f62f30c7ff8fd6}\label{ndt__visualizations_8cc_a53c78c3f4aea0ef384f62f30c7ff8fd6}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Of\+Arrow@{Marker\+Of\+Arrow}}
+\index{Marker\+Of\+Arrow@{Marker\+Of\+Arrow}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Arrow()}{MarkerOfArrow()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Arrow (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{start,  }\item[{const Vector2d \&}]{end,  }\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color,  }\item[{double}]{alpha }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a3178ed84cc05daedf8b048e0ba7d6cb3}\label{ndt__visualizations_8cc_a3178ed84cc05daedf8b048e0ba7d6cb3}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Of\+Boundary@{Marker\+Of\+Boundary}}
+\index{Marker\+Of\+Boundary@{Marker\+Of\+Boundary}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Boundary()}{MarkerOfBoundary()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Boundary (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{center,  }\item[{double}]{size,  }\item[{double}]{skew\+\_\+rad,  }\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color }\end{DoxyParamCaption})}
+
+
+
+Referenced by main(), Marker\+Array\+Of\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+N\+D\+T\+Cell2().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a82068f023a26dbeb005e8e8edffd1216}\label{ndt__visualizations_8cc_a82068f023a26dbeb005e8e8edffd1216}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Of\+Circle@{Marker\+Of\+Circle}}
+\index{Marker\+Of\+Circle@{Marker\+Of\+Circle}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Circle()}{MarkerOfCircle()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Circle (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{mean,  }\item[{double}]{radius,  }\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color,  }\item[{double}]{alpha }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a03c95b3dd0bc00daf598be0280f8ec82}\label{ndt__visualizations_8cc_a03c95b3dd0bc00daf598be0280f8ec82}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Of\+Eclipse@{Marker\+Of\+Eclipse}}
+\index{Marker\+Of\+Eclipse@{Marker\+Of\+Eclipse}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Eclipse()}{MarkerOfEclipse()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Eclipse (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{mean,  }\item[{const Matrix2d \&}]{covariance,  }\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color,  }\item[{double}]{alpha }\end{DoxyParamCaption})}
+
+Note\+: \char`\"{}pseudo\char`\"{} computes complex eigen value if no real solution However, covariance is always a real symmetric matrix, which means 1) it is Hermitia, all its eigenvalues are real 2) the decomposed matrix is an orthogonal matrix, i.\+e., rotaion matrix
+
+Referenced by main(), Marker\+Array\+Of\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+N\+D\+T\+Cell2().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a41030fe2ab81eb6b7e74351d03598134}\label{ndt__visualizations_8cc_a41030fe2ab81eb6b7e74351d03598134}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Of\+Lines@{Marker\+Of\+Lines}}
+\index{Marker\+Of\+Lines@{Marker\+Of\+Lines}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Lines()}{MarkerOfLines()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Lines (\begin{DoxyParamCaption}\item[{const vector$<$ Vector2d $>$ \&}]{points,  }\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color,  }\item[{double}]{alpha }\end{DoxyParamCaption})}
+
+
+
+Referenced by main(), Marker\+Array\+Of\+Correspondences(), Marker\+Array\+Of\+N\+D\+T\+Cell(), Marker\+Array\+Of\+N\+D\+T\+Cell2(), and Marker\+Of\+Lines\+By\+End\+Points().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a3412fb16a916b778d43dd3df74c891bb}\label{ndt__visualizations_8cc_a3412fb16a916b778d43dd3df74c891bb}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Of\+Lines\+By\+End\+Points@{Marker\+Of\+Lines\+By\+End\+Points}}
+\index{Marker\+Of\+Lines\+By\+End\+Points@{Marker\+Of\+Lines\+By\+End\+Points}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Lines\+By\+End\+Points()}{MarkerOfLinesByEndPoints()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Lines\+By\+End\+Points (\begin{DoxyParamCaption}\item[{const vector$<$ Vector2d $>$ \&}]{points,  }\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color,  }\item[{double}]{alpha }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_ac729e3afca037095183a443e1ba144a0}\label{ndt__visualizations_8cc_ac729e3afca037095183a443e1ba144a0}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Of\+Points@{Marker\+Of\+Points}}
+\index{Marker\+Of\+Points@{Marker\+Of\+Points}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Points()}{MarkerOfPoints()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Points (\begin{DoxyParamCaption}\item[{const vector$<$ Vector2d $>$ \&}]{points,  }\item[{double}]{size,  }\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color,  }\item[{double}]{alpha }\end{DoxyParamCaption})}
+
+
+
+Referenced by main(), Marker\+Of\+Points(), and The\+Points().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a533845c37375b4659df3a376e52a089f}\label{ndt__visualizations_8cc_a533845c37375b4659df3a376e52a089f}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Of\+Points@{Marker\+Of\+Points}}
+\index{Marker\+Of\+Points@{Marker\+Of\+Points}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Points()}{MarkerOfPoints()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Points (\begin{DoxyParamCaption}\item[{const Matrix\+Xd \&}]{points,  }\item[{double}]{size,  }\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color,  }\item[{double}]{alpha }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a672147a23f4cafc0730cbe7874814c65}\label{ndt__visualizations_8cc_a672147a23f4cafc0730cbe7874814c65}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Marker\+Of\+Text@{Marker\+Of\+Text}}
+\index{Marker\+Of\+Text@{Marker\+Of\+Text}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Text()}{MarkerOfText()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Text (\begin{DoxyParamCaption}\item[{string}]{text,  }\item[{const Vector2d \&}]{position,  }\item[{const \hyperlink{ndt__visualizations_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color,  }\item[{double}]{alpha }\end{DoxyParamCaption})}
+
+
+
+Referenced by Marker\+Array\+Of\+Correspondences().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a6da728a774f5a0840bcd2e3cb069b44f}\label{ndt__visualizations_8cc_a6da728a774f5a0840bcd2e3cb069b44f}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Points\+Of\+N\+D\+T\+Map@{Points\+Of\+N\+D\+T\+Map}}
+\index{Points\+Of\+N\+D\+T\+Map@{Points\+Of\+N\+D\+T\+Map}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Points\+Of\+N\+D\+T\+Map()}{PointsOfNDTMap()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily vector$<$Vector2d$>$ Points\+Of\+N\+D\+T\+Map (\begin{DoxyParamCaption}\item[{const \hyperlink{classNDTMap}{N\+D\+T\+Map} \&}]{map }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a2d4acee730392b885e4974f50cedd1eb}\label{ndt__visualizations_8cc_a2d4acee730392b885e4974f50cedd1eb}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Points\+Of\+N\+D\+T\+Map@{Points\+Of\+N\+D\+T\+Map}}
+\index{Points\+Of\+N\+D\+T\+Map@{Points\+Of\+N\+D\+T\+Map}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Points\+Of\+N\+D\+T\+Map()}{PointsOfNDTMap()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily vector$<$Vector2d$>$ Points\+Of\+N\+D\+T\+Map (\begin{DoxyParamCaption}\item[{const vector$<$ shared\+\_\+ptr$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $>$$>$ \&}]{map }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{ndt__visualizations_8cc_a13e8f62acb0067e34867cd55c94b0b9c}\label{ndt__visualizations_8cc_a13e8f62acb0067e34867cd55c94b0b9c}} 
+\index{ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}!Update\+Marker\+Array@{Update\+Marker\+Array}}
+\index{Update\+Marker\+Array@{Update\+Marker\+Array}!ndt\+\_\+visualizations.\+cc@{ndt\+\_\+visualizations.\+cc}}
+\subsubsection{\texorpdfstring{Update\+Marker\+Array()}{UpdateMarkerArray()}}
+{\footnotesize\ttfamily void Update\+Marker\+Array (\begin{DoxyParamCaption}\item[{Marker\+Array \&}]{markerarray,  }\item[{Marker}]{marker }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+

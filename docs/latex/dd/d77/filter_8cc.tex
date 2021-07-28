@@ -1,0 +1,77 @@
+\hypertarget{filter_8cc}{}\section{filter.\+cc File Reference}
+\label{filter_8cc}\index{filter.\+cc@{filter.\+cc}}
+{\ttfamily \#include \char`\"{}Tri\+Mesh.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Tri\+Mesh\+\_\+algo.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}lineqn.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$numeric$>$}\newline
+Include dependency graph for filter.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d6/d4b/filter_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetrimesh}{trimesh}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{filter_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}{dprintf}~Tri\+Mesh\+::dprintf
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespacetrimesh_aa066982422b3d01638abe8e043d85839}{trimesh\+::inflate} (Tri\+Mesh $\ast$mesh, float amount)
+\item 
+void \hyperlink{namespacetrimesh_a64437f39a2aa06bf645b8433091a65f2}{trimesh\+::apply\+\_\+xform} (Tri\+Mesh $\ast$mesh, const xform \&xf)
+\item 
+void \hyperlink{namespacetrimesh_ab21687effea4389b4cb46ae1bce1576b}{trimesh\+::trans} (Tri\+Mesh $\ast$mesh, const vec \&transvec)
+\item 
+void \hyperlink{namespacetrimesh_a56d92b6392bcb92a44c3fff9d26b7711}{trimesh\+::rot} (Tri\+Mesh $\ast$mesh, float r, const vec \&axis)
+\item 
+void \hyperlink{namespacetrimesh_a7ab42ca91e0f6e2913219091b098fc4b}{trimesh\+::scale} (Tri\+Mesh $\ast$mesh, float s)
+\item 
+void \hyperlink{namespacetrimesh_a9589dc160b5d9615c33a31cd6c68cd9d}{trimesh\+::scale} (Tri\+Mesh $\ast$mesh, float sx, float sy, float sz)
+\item 
+void \hyperlink{namespacetrimesh_acfb0b9b5e4ca98a5a9f3a8d41d86d2ee}{trimesh\+::scale} (Tri\+Mesh $\ast$mesh, float s, const vec \&d)
+\item 
+void \hyperlink{namespacetrimesh_ad8b9f09b6441080d7e0eb7161574c11b}{trimesh\+::clip} (Tri\+Mesh $\ast$mesh, const box \&b)
+\item 
+point \hyperlink{namespacetrimesh_af868103eab6d05c8f416a0ffaa8a0737}{trimesh\+::point\+\_\+center\+\_\+of\+\_\+mass} (const vector$<$ point $>$ \&pts)
+\item 
+point \hyperlink{namespacetrimesh_aba568e2df505cabcca614749e6569e40}{trimesh\+::mesh\+\_\+center\+\_\+of\+\_\+mass} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a86cb4656d1d912b5cf53f5d46ef96a0d}{trimesh\+::point\+\_\+covariance} (const vector$<$ point $>$ \&pts, float(\&C)\mbox{[}3\mbox{]}\mbox{[}3\mbox{]})
+\item 
+void \hyperlink{namespacetrimesh_ae859cdffd0660c404766403a241da53d}{trimesh\+::mesh\+\_\+covariance} (Tri\+Mesh $\ast$mesh, float(\&C)\mbox{[}3\mbox{]}\mbox{[}3\mbox{]})
+\item 
+void \hyperlink{namespacetrimesh_a936db9eacc51c469bf2200b49b078356}{trimesh\+::normalize\+\_\+variance} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a2a3669b47f05d87d8a8a13b80377f1a0}{trimesh\+::pca\+\_\+rotate} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a6b6c8d067ad921e0219c16f7872b267a}{trimesh\+::pca\+\_\+snap} (Tri\+Mesh $\ast$mesh)
+\item 
+static float \hyperlink{namespacetrimesh_a284b2c4f188919bba4e78de982c9826a}{trimesh\+::max\+\_\+x} (const Tri\+Mesh $\ast$mesh, int i)
+\item 
+void \hyperlink{namespacetrimesh_a4b96f265ec05951dc2447a641fbfcabf}{trimesh\+::orient} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_a8376ba0b1555d2d21aedd51e78b219fe}{trimesh\+::erode} (Tri\+Mesh $\ast$mesh)
+\item 
+void \hyperlink{namespacetrimesh_ad8abaeef03cff4b8d2b79fdce2ae88b1}{trimesh\+::noisify} (Tri\+Mesh $\ast$mesh, float amount)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{filter_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}\label{filter_8cc_a12a9e861369ba25e4dc67cc7880e2ae5}} 
+\index{filter.\+cc@{filter.\+cc}!dprintf@{dprintf}}
+\index{dprintf@{dprintf}!filter.\+cc@{filter.\+cc}}
+\subsubsection{\texorpdfstring{dprintf}{dprintf}}
+{\footnotesize\ttfamily \#define dprintf~Tri\+Mesh\+::dprintf}
+
+
+
+Referenced by trimesh\+::inflate(), and trimesh\+::orient().
+
