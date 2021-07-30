@@ -4,21 +4,25 @@
  * @brief run for whole data log24, log62, log62-2
  * @version 0.1
  * @date 2021-07-17
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
-#include <bits/stdc++.h>
-#include <sndt_exec/wrapper.hpp>
-#include <boost/program_options.hpp>
 #include <common/EgoPointClouds.h>
-#include <sndt/ndt_visualizations.h>
-#include <std_msgs/Int32.h>
+#include <common/common.h>
 #include <geometry_msgs/Vector3.h>
-#include <std_msgs/Float64MultiArray.h>
 #include <nav_msgs/Path.h>
+#include <ros/ros.h>
+#include <sndt/matcher.h>
+#include <sndt/visuals.h>
+#include <std_msgs/Float64MultiArray.h>
+#include <std_msgs/Int32.h>
+
+#include <boost/program_options.hpp>
+#include <sndt_exec/wrapper.hpp>
 
 using namespace std;
+using namespace Eigen;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
 
@@ -104,24 +108,24 @@ int main(int argc, char **argv) {
 
     auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
     auto mapt = MakeMap(datat, {rvar, tvar}, {cell_size, radius});
-    int tvc = count_if(mapt.begin(), mapt.end(), [](NDTCell *cell) { return cell->BothHasGaussian(); });
+    int tvc = count_if(mapt.begin(), mapt.end(), [](SNDTCell *cell) { return cell->HasGaussian(); });
 
     auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
     auto maps = MakeMap(datas, {rvar, tvar}, {cell_size, radius});
-    int svc = count_if(maps.begin(), maps.end(), [](NDTCell *cell) { return cell->BothHasGaussian(); });
+    int svc = count_if(maps.begin(), maps.end(), [](SNDTCell *cell) { return cell->HasGaussian(); });
 
-    NDTMatcher matcher;
-    matcher.verbose = false;
-    matcher.SetStrategy(NDTMatcher::kUSE_CELLS_GREATER_THAN_TWO_POINTS);
-    matcher.huber = huber;
-    auto T = matcher.CeresMatch(mapt, maps, Tio);
+    SNDTParameters params;
+    params.huber = huber;
+    // params.verbose = true;
+    cout << "start frame: " << i;
+    auto T = SNDTMatch(mapt, maps, params, Tio);
 
     cout << "Run Matching (" << i << "/" << n - 2 * f << "): "
          << common::XYTDegreeFromMatrix3d(Tio.matrix()).transpose()
-         << " -> " << common::XYTDegreeFromMatrix3d(T).transpose()
+         << " -> " << common::XYTDegreeFromMatrix3d(T.matrix()).transpose()
          << " (" << tvc << ", " << svc << ")" << endl;
 
-    Tr = Tr * common::Matrix4fFromMatrix3d(T);
+    Tr = Tr * common::Matrix4fFromMatrix3d(T.matrix());
     cout << "Position: " << Tr.block<2, 1>(0, 3).transpose() << endl;
     vp.push_back(MakePST(vepcs[i + f].stamp, Tr));
   } 

@@ -24,7 +24,6 @@ var searchData=
   ['distance2',['distance2',['../d4/daf/namespacetrimesh.html#a5de6b8e4e289110f54c69ce88d2304a2',1,'trimesh']]],
   ['dopclsicp',['DoPCLSICP',['../db/d7d/pclmatch_2include_2pclmatch_2wrapper_8hpp.html#af23a28e5b6695598a020f28f0cf77870',1,'wrapper.hpp']]],
   ['dosicp',['DoSICP',['../db/d7d/pclmatch_2include_2pclmatch_2wrapper_8hpp.html#aed3f3893566054d7edc176ad2c66d320',1,'wrapper.hpp']]],
-  ['dosndt',['DoSNDT',['../dc/d1e/sndt__exec_2include_2sndt__exec_2wrapper_8hpp.html#a065ed14171649ff6dc91209254295290',1,'wrapper.hpp']]],
   ['dot',['dot',['../db/de5/classtrimesh_1_1Vec.html#a5f6c502820bd708b213c6b2d25c9a8a5',1,'trimesh::Vec::dot()'],['../d4/daf/namespacetrimesh.html#a5d326e02a6fb5bd967f9c502d2bad5cc',1,'trimesh::dot()']]],
   ['dprintf',['dprintf',['../dc/d81/classtrimesh_1_1TriMesh.html#a772d07c46c272894e7feba9c1ba12e88',1,'trimesh::TriMesh::dprintf()'],['../d2/dcd/common__utils_8hpp.html#afa964691fb3b9e53224cc1afbfd3dc08',1,'dprintf():&#160;common_utils.hpp']]],
   ['draw_5fpoints',['draw_points',['../df/db2/classtrimesh_1_1GLManager.html#a15081215953b489d26b793bccbe6f20d',1,'trimesh::GLManager::draw_points(size_t start, size_t npoints)'],['../df/db2/classtrimesh_1_1GLManager.html#ab59da541e1fe9a831079f8f924a3a816',1,'trimesh::GLManager::draw_points(size_t npoints)']]],

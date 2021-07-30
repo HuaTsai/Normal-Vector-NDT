@@ -1,74 +1,61 @@
+/**
+ * @file ndt_cell.h
+ * @author HuaTsai (huatsai.eed07g@nctu.edu.tw)
+ * @brief Class Declaration of NDTCell
+ * @version 0.1
+ * @date 2021-07-29
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #pragma once
+#include <sndt/cell_interface.h>
 
-#include <bits/stdc++.h>
-#include <Eigen/Eigen>
-
-using namespace std;
-using namespace Eigen;
-
-class NDTCell {
-  enum CellType { kLACK_POINTS, kREGULAR, kRESCALE, kASSIGN };
+class NDTCell : public CellInterface {
  public:
+  /**
+   * @brief Cell types
+   */
+  enum CellType {
+    kNotInit,   /**< Covariance is not computed yet */
+    kRegular,   /**< Covariance is computed well */
+    kRescale,   /**< Covariance is rescaled */
+    kAssign,    /**< Covariance is assigned */
+    kNoPoints,  /**< Covariance is not computed because no points */
+    kInvalid    /**< Covariance has negative eigenvalues */
+  };
+
+  /**
+   * @brief Construct a new NDTCell object
+   */
   NDTCell();
 
-  // Compute Gaussians w/ Covariances
-  void ComputeGaussian();
-  void ComputePGaussian();
-  void ComputeNGaussian();
+  /**
+   * @brief Compute gaussian
+   *
+   * @pre The size of @c points and @c point_covs are the same
+   * @details This function updates mean and covariance of this cell, along with
+   * its cell type. Rescaling covariance is performed if necessary.
+   */
+  virtual void ComputeGaussian() override;
 
-  // Add Point and Normal
-  void AddPoint(const Vector2d &point);
-  void AddPointWithCovariance(const Vector2d &point, const Matrix2d &covariance);
-  void AddNormal(const Vector2d &normal);
+  /**
+   * @brief Check if the cell has a valid gaussian
+   */
+  virtual bool HasGaussian() const override;
+  
+  /**
+   * @brief Convert the information of this cell to a string
+   */
+  virtual std::string ToString() const override;
 
-  // MatrixXd Getter of Points and Normals
-  MatrixXd GetPointsMatrix() const;
-  MatrixXd GetNormalsMatrix() const;
-  string ToString();
+  CellType GetCellType() const { return celltype_; }
+  double GetRescaleRatio() const { return rescale_ratio_; }
 
-  // Defined Get Methods of Variables
-  int GetN() const { return n_; }
-  bool GetPHasGaussian() const { return phasgaussian_; }
-  bool GetNHasGaussian() const { return nhasgaussian_; }
-  bool BothHasGaussian() const { return phasgaussian_ && nhasgaussian_; }
-  double GetSkewRad() const { return skew_rad_; }
-  double GetSize() const { return size_; }
-  Vector2d GetCenter() const { return center_; }
-  Vector2d GetPointMean() const { return pmean_; }
-  Matrix2d GetPointCov() const { return pcov_; }
-  Vector2d GetPointEvals() const { return pevals_; }
-  Matrix2d GetPointEvecs() const { return pevecs_; }
-  Vector2d GetNormalMean() const { return nmean_; }
-  Matrix2d GetNormalCov() const { return ncov_; }
-  Vector2d GetNormalEvals() const { return nevals_; }
-  Matrix2d GetNormalEvecs() const { return nevecs_; }
-  vector<Vector2d> GetPoints() const { return points_; }
-  vector<Vector2d> GetNormals() const { return normals_; }
-
-  // Defined Set Methods of Variables
-  void SetN(int n) { n_ = n; }
-  void SetPHasGaussian(bool phasgaussian) { phasgaussian_ = phasgaussian; }
-  void SetNHasGaussian(bool nhasgaussian) { nhasgaussian_ = nhasgaussian; }
-  void SetSkewRad(double skew_rad) { skew_rad_ = skew_rad; }
-  void SetSize(double size) { size_ = size; }
-  void SetCenter(const Vector2d &center) { center_ = center; }
-  void SetPointMean(const Vector2d &mean) { pmean_ = mean; }
-  void SetPointCov(const Matrix2d &cov) { pcov_ = cov; }
-  void SetPointEvals(const Vector2d &evals) { pevals_ = evals; }
-  void SetPointEvecs(const Matrix2d &evecs) { pevecs_ = evecs; }
-  void SetNormalMean(const Vector2d &mean) { nmean_ = mean; }
-  void SetNormalCov(const Matrix2d &cov) { ncov_ = cov; }
-  void SetNormalEvals(const Vector2d &evals) { nevals_ = evals; }
-  void SetNormalEvecs(const Matrix2d &evecs) { nevecs_ = evecs; }
-  bool mark;
+  void SetCellType(CellType celltype) { celltype_ = celltype; }
+  void SetRescaleRatio(double rescale_ratio) { rescale_ratio_ = rescale_ratio; }
 
  private:
-  int n_;
-  bool phasgaussian_, nhasgaussian_; 
-  double skew_rad_, size_;
-  Vector2d center_;
-  Vector2d pmean_, pevals_, nmean_, nevals_;
-  Matrix2d pcov_, pevecs_, ncov_, nevecs_;
-  vector<Vector2d> points_, normals_;
-  vector<Matrix2d> point_covs_;
+  CellType celltype_;     /**< Cell type */
+  double rescale_ratio_;  /**< Rescale ratio */
 };

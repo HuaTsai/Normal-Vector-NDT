@@ -1,0 +1,271 @@
+\hypertarget{classMapInterface}{}\section{Map\+Interface Class Reference}
+\label{classMapInterface}\index{Map\+Interface@{Map\+Interface}}
+
+
+{\ttfamily \#include $<$map\+\_\+interface.\+h$>$}
+
+
+
+Inheritance diagram for Map\+Interface\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{da/d61/classMapInterface__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Map\+Interface\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=190pt]{db/d2d/classMapInterface__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classMapInterface_a5ecababed14b4918ba90b98eb6b8f6b7}{Map\+Interface} (double \hyperlink{test__match_8cc_a456553c1fc05d94c07e74c5fd45f6621}{cell\+\_\+size})
+\begin{DoxyCompactList}\small\item\em Construct a new \hyperlink{classMapInterface}{Map\+Interface} object. \end{DoxyCompactList}\item 
+virtual \hyperlink{classMapInterface_aede896827e92298d459e6d51a2095155}{$\sim$\+Map\+Interface} ()=default
+\item 
+Eigen\+::\+Vector2i \hyperlink{classMapInterface_abda1b7e35d6af9e42ca698c909ba976b}{Get\+Index\+For\+Point} (const Eigen\+::\+Vector2d \&point) const
+\begin{DoxyCompactList}\small\item\em Get the index by a given point. \end{DoxyCompactList}\item 
+virtual std\+::string \hyperlink{classMapInterface_a87b132e1a619eb21e0ac684fc25f8c74}{To\+String} () const =0
+\begin{DoxyCompactList}\small\item\em Convert the information of the \hyperlink{classMapInterface}{Map\+Interface} to a string. \end{DoxyCompactList}\item 
+double \hyperlink{classMapInterface_ade05de8aac815c4e54ffdbc82afa2cbc}{Get\+Cell\+Size} () const
+\item 
+Eigen\+::\+Vector2d \hyperlink{classMapInterface_acfbb86571ebd3fd0404eb238f5a4d52c}{Get\+Map\+Size} () const
+\item 
+Eigen\+::\+Vector2d \hyperlink{classMapInterface_ad2ab3f050d776762ff6a3b9d7a6a1bc6}{Get\+Map\+Center} () const
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classMapInterface_a37aaa1fd2a400cb1138100eeae9b566b}{Guess\+Map\+Size} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points)
+\begin{DoxyCompactList}\small\item\em Update mata information of \hyperlink{classMapInterface}{Map\+Interface} by points. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classMapInterface_a0bb41a6f4ca6e146b7c8a0e99e888169}{Initialize} ()=0
+\begin{DoxyCompactList}\small\item\em Initialize {\ttfamily cellptrs\+\_\+} by mata information of \hyperlink{classMapInterface}{Map\+Interface}. \end{DoxyCompactList}\item 
+bool \hyperlink{classMapInterface_a19f763b424405f5da2863660c5f0ccb3}{Is\+Valid\+Index} (const Eigen\+::\+Vector2i \&index) const
+\begin{DoxyCompactList}\small\item\em Check the validity of an index. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{classMapInterface_a9f323066b687763076c9fdca1e370e2a}{is\+\_\+loaded\+\_\+}
+\item 
+double \hyperlink{classMapInterface_a67c2db325b44e03954d845b5d626daf6}{cell\+\_\+size\+\_\+}
+\item 
+Eigen\+::\+Vector2d \hyperlink{classMapInterface_a83368917e03aaea6b1bcc4f8217426ef}{map\+\_\+size\+\_\+}
+\item 
+Eigen\+::\+Vector2d \hyperlink{classMapInterface_a4a93205a5de9eb328fae48138c0cbb4c}{map\+\_\+center\+\_\+}
+\item 
+Eigen\+::\+Vector2i \hyperlink{classMapInterface_acbc97db0c3d7bd68b143d1a933a87439}{map\+\_\+center\+\_\+index\+\_\+}
+\item 
+Eigen\+::\+Vector2i \hyperlink{classMapInterface_ae7400134de8e386c99823aa24f25c799}{cellptrs\+\_\+size\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMapInterface_a5ecababed14b4918ba90b98eb6b8f6b7}\label{classMapInterface_a5ecababed14b4918ba90b98eb6b8f6b7}} 
+\index{Map\+Interface@{Map\+Interface}!Map\+Interface@{Map\+Interface}}
+\index{Map\+Interface@{Map\+Interface}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{Map\+Interface()}{MapInterface()}}
+{\footnotesize\ttfamily Map\+Interface\+::\+Map\+Interface (\begin{DoxyParamCaption}\item[{double}]{cell\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Construct a new \hyperlink{classMapInterface}{Map\+Interface} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cell\+\_\+size} & Cell size of the \hyperlink{classMapInterface}{Map\+Interface} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classMapInterface_aede896827e92298d459e6d51a2095155}\label{classMapInterface_aede896827e92298d459e6d51a2095155}} 
+\index{Map\+Interface@{Map\+Interface}!````~Map\+Interface@{$\sim$\+Map\+Interface}}
+\index{````~Map\+Interface@{$\sim$\+Map\+Interface}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{$\sim$\+Map\+Interface()}{~MapInterface()}}
+{\footnotesize\ttfamily virtual Map\+Interface\+::$\sim$\+Map\+Interface (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+Referenced by Map\+Interface().
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classMapInterface_ade05de8aac815c4e54ffdbc82afa2cbc}\label{classMapInterface_ade05de8aac815c4e54ffdbc82afa2cbc}} 
+\index{Map\+Interface@{Map\+Interface}!Get\+Cell\+Size@{Get\+Cell\+Size}}
+\index{Get\+Cell\+Size@{Get\+Cell\+Size}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{Get\+Cell\+Size()}{GetCellSize()}}
+{\footnotesize\ttfamily double Map\+Interface\+::\+Get\+Cell\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classMapInterface_abda1b7e35d6af9e42ca698c909ba976b}\label{classMapInterface_abda1b7e35d6af9e42ca698c909ba976b}} 
+\index{Map\+Interface@{Map\+Interface}!Get\+Index\+For\+Point@{Get\+Index\+For\+Point}}
+\index{Get\+Index\+For\+Point@{Get\+Index\+For\+Point}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{Get\+Index\+For\+Point()}{GetIndexForPoint()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2i Map\+Interface\+::\+Get\+Index\+For\+Point (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector2d \&}]{point }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the index by a given point. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & Input point \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by N\+D\+T\+Map\+::\+Get\+Cell\+And\+Allocate(), S\+N\+D\+T\+Map\+::\+Get\+Cell\+And\+Allocate(), N\+D\+T\+Map\+::\+Get\+Cell\+For\+Point(), S\+N\+D\+T\+Map\+::\+Get\+Cell\+For\+Point(), N\+D\+T\+Map\+::\+To\+String(), and S\+N\+D\+T\+Map\+::\+To\+String().
+
+\mbox{\Hypertarget{classMapInterface_ad2ab3f050d776762ff6a3b9d7a6a1bc6}\label{classMapInterface_ad2ab3f050d776762ff6a3b9d7a6a1bc6}} 
+\index{Map\+Interface@{Map\+Interface}!Get\+Map\+Center@{Get\+Map\+Center}}
+\index{Get\+Map\+Center@{Get\+Map\+Center}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{Get\+Map\+Center()}{GetMapCenter()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2d Map\+Interface\+::\+Get\+Map\+Center (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classMapInterface_acfbb86571ebd3fd0404eb238f5a4d52c}\label{classMapInterface_acfbb86571ebd3fd0404eb238f5a4d52c}} 
+\index{Map\+Interface@{Map\+Interface}!Get\+Map\+Size@{Get\+Map\+Size}}
+\index{Get\+Map\+Size@{Get\+Map\+Size}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{Get\+Map\+Size()}{GetMapSize()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2d Map\+Interface\+::\+Get\+Map\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classMapInterface_a37aaa1fd2a400cb1138100eeae9b566b}\label{classMapInterface_a37aaa1fd2a400cb1138100eeae9b566b}} 
+\index{Map\+Interface@{Map\+Interface}!Guess\+Map\+Size@{Guess\+Map\+Size}}
+\index{Guess\+Map\+Size@{Guess\+Map\+Size}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{Guess\+Map\+Size()}{GuessMapSize()}}
+{\footnotesize\ttfamily void Map\+Interface\+::\+Guess\+Map\+Size (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Update mata information of \hyperlink{classMapInterface}{Map\+Interface} by points. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & Input points\\
+\hline
+\end{DoxyParams}
+This function updates {\ttfamily map\+\_\+size\+\_\+}, {\ttfamily map\+\_\+center\+\_\+}, {\ttfamily map\+\_\+center\+\_\+index}, and {\ttfamily cellptrs\+\_\+size} 
+
+Referenced by N\+D\+T\+Map\+::\+Load\+Points(), S\+N\+D\+T\+Map\+::\+Load\+Points\+And\+Normals(), N\+D\+T\+Map\+::\+Load\+Points\+With\+Covariances(), and S\+N\+D\+T\+Map\+::\+Load\+Points\+With\+Covariances\+And\+Normals().
+
+\mbox{\Hypertarget{classMapInterface_a0bb41a6f4ca6e146b7c8a0e99e888169}\label{classMapInterface_a0bb41a6f4ca6e146b7c8a0e99e888169}} 
+\index{Map\+Interface@{Map\+Interface}!Initialize@{Initialize}}
+\index{Initialize@{Initialize}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{Initialize()}{Initialize()}}
+{\footnotesize\ttfamily virtual void Map\+Interface\+::\+Initialize (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Initialize {\ttfamily cellptrs\+\_\+} by mata information of \hyperlink{classMapInterface}{Map\+Interface}. 
+
+
+
+Referenced by Guess\+Map\+Size().
+
+\mbox{\Hypertarget{classMapInterface_a19f763b424405f5da2863660c5f0ccb3}\label{classMapInterface_a19f763b424405f5da2863660c5f0ccb3}} 
+\index{Map\+Interface@{Map\+Interface}!Is\+Valid\+Index@{Is\+Valid\+Index}}
+\index{Is\+Valid\+Index@{Is\+Valid\+Index}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{Is\+Valid\+Index()}{IsValidIndex()}}
+{\footnotesize\ttfamily bool Map\+Interface\+::\+Is\+Valid\+Index (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector2i \&}]{index }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Check the validity of an index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & Input index \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by N\+D\+T\+Map\+::\+Get\+Cell\+And\+Allocate(), S\+N\+D\+T\+Map\+::\+Get\+Cell\+And\+Allocate(), N\+D\+T\+Map\+::\+Get\+Cell\+For\+Point(), and S\+N\+D\+T\+Map\+::\+Get\+Cell\+For\+Point().
+
+\mbox{\Hypertarget{classMapInterface_a87b132e1a619eb21e0ac684fc25f8c74}\label{classMapInterface_a87b132e1a619eb21e0ac684fc25f8c74}} 
+\index{Map\+Interface@{Map\+Interface}!To\+String@{To\+String}}
+\index{To\+String@{To\+String}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{To\+String()}{ToString()}}
+{\footnotesize\ttfamily virtual std\+::string Map\+Interface\+::\+To\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Convert the information of the \hyperlink{classMapInterface}{Map\+Interface} to a string. 
+
+
+
+Implemented in \hyperlink{classSNDTMap_a38be62c377da486f006e194e24e77212}{S\+N\+D\+T\+Map}, and \hyperlink{classNDTMap_a355a32d48208aa5bcc361b4be1d6320c}{N\+D\+T\+Map}.
+
+
+
+Referenced by Get\+Index\+For\+Point().
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classMapInterface_a67c2db325b44e03954d845b5d626daf6}\label{classMapInterface_a67c2db325b44e03954d845b5d626daf6}} 
+\index{Map\+Interface@{Map\+Interface}!cell\+\_\+size\+\_\+@{cell\+\_\+size\+\_\+}}
+\index{cell\+\_\+size\+\_\+@{cell\+\_\+size\+\_\+}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{cell\+\_\+size\+\_\+}{cell\_size\_}}
+{\footnotesize\ttfamily double Map\+Interface\+::cell\+\_\+size\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Referenced by N\+D\+T\+Map\+::\+Get\+Cell\+And\+Allocate(), S\+N\+D\+T\+Map\+::\+Get\+Cell\+And\+Allocate(), Get\+Cell\+Size(), Get\+Index\+For\+Point(), Guess\+Map\+Size(), Map\+Interface(), N\+D\+T\+Map\+::\+To\+String(), and S\+N\+D\+T\+Map\+::\+To\+String().
+
+\mbox{\Hypertarget{classMapInterface_ae7400134de8e386c99823aa24f25c799}\label{classMapInterface_ae7400134de8e386c99823aa24f25c799}} 
+\index{Map\+Interface@{Map\+Interface}!cellptrs\+\_\+size\+\_\+@{cellptrs\+\_\+size\+\_\+}}
+\index{cellptrs\+\_\+size\+\_\+@{cellptrs\+\_\+size\+\_\+}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{cellptrs\+\_\+size\+\_\+}{cellptrs\_size\_}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2i Map\+Interface\+::cellptrs\+\_\+size\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Referenced by S\+N\+D\+T\+Map\+::\+Get\+Normals(), N\+D\+T\+Map\+::\+Get\+Points(), Guess\+Map\+Size(), Is\+Valid\+Index(), N\+D\+T\+Map\+::\+Load\+Points(), S\+N\+D\+T\+Map\+::\+Load\+Points\+And\+Normals(), N\+D\+T\+Map\+::\+Load\+Points\+With\+Covariances(), S\+N\+D\+T\+Map\+::\+Load\+Points\+With\+Covariances\+And\+Normals(), Map\+Interface(), N\+D\+T\+Map\+::\+To\+String(), S\+N\+D\+T\+Map\+::\+To\+String(), N\+D\+T\+Map\+::$\sim$\+N\+D\+T\+Map(), and S\+N\+D\+T\+Map\+::$\sim$\+S\+N\+D\+T\+Map().
+
+\mbox{\Hypertarget{classMapInterface_a9f323066b687763076c9fdca1e370e2a}\label{classMapInterface_a9f323066b687763076c9fdca1e370e2a}} 
+\index{Map\+Interface@{Map\+Interface}!is\+\_\+loaded\+\_\+@{is\+\_\+loaded\+\_\+}}
+\index{is\+\_\+loaded\+\_\+@{is\+\_\+loaded\+\_\+}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{is\+\_\+loaded\+\_\+}{is\_loaded\_}}
+{\footnotesize\ttfamily bool Map\+Interface\+::is\+\_\+loaded\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Referenced by N\+D\+T\+Map\+::\+Get\+Cell\+For\+Point(), S\+N\+D\+T\+Map\+::\+Get\+Cell\+For\+Point(), N\+D\+T\+Map\+::\+Load\+Points(), S\+N\+D\+T\+Map\+::\+Load\+Points\+And\+Normals(), N\+D\+T\+Map\+::\+Load\+Points\+With\+Covariances(), S\+N\+D\+T\+Map\+::\+Load\+Points\+With\+Covariances\+And\+Normals(), Map\+Interface(), N\+D\+T\+Map\+::$\sim$\+N\+D\+T\+Map(), and S\+N\+D\+T\+Map\+::$\sim$\+S\+N\+D\+T\+Map().
+
+\mbox{\Hypertarget{classMapInterface_a4a93205a5de9eb328fae48138c0cbb4c}\label{classMapInterface_a4a93205a5de9eb328fae48138c0cbb4c}} 
+\index{Map\+Interface@{Map\+Interface}!map\+\_\+center\+\_\+@{map\+\_\+center\+\_\+}}
+\index{map\+\_\+center\+\_\+@{map\+\_\+center\+\_\+}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{map\+\_\+center\+\_\+}{map\_center\_}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2d Map\+Interface\+::map\+\_\+center\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Referenced by N\+D\+T\+Map\+::\+Get\+Cell\+And\+Allocate(), S\+N\+D\+T\+Map\+::\+Get\+Cell\+And\+Allocate(), Get\+Index\+For\+Point(), Get\+Map\+Center(), Guess\+Map\+Size(), Map\+Interface(), N\+D\+T\+Map\+::\+To\+String(), and S\+N\+D\+T\+Map\+::\+To\+String().
+
+\mbox{\Hypertarget{classMapInterface_acbc97db0c3d7bd68b143d1a933a87439}\label{classMapInterface_acbc97db0c3d7bd68b143d1a933a87439}} 
+\index{Map\+Interface@{Map\+Interface}!map\+\_\+center\+\_\+index\+\_\+@{map\+\_\+center\+\_\+index\+\_\+}}
+\index{map\+\_\+center\+\_\+index\+\_\+@{map\+\_\+center\+\_\+index\+\_\+}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{map\+\_\+center\+\_\+index\+\_\+}{map\_center\_index\_}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2i Map\+Interface\+::map\+\_\+center\+\_\+index\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Referenced by N\+D\+T\+Map\+::\+Get\+Cell\+And\+Allocate(), S\+N\+D\+T\+Map\+::\+Get\+Cell\+And\+Allocate(), Get\+Index\+For\+Point(), Guess\+Map\+Size(), Map\+Interface(), N\+D\+T\+Map\+::\+To\+String(), and S\+N\+D\+T\+Map\+::\+To\+String().
+
+\mbox{\Hypertarget{classMapInterface_a83368917e03aaea6b1bcc4f8217426ef}\label{classMapInterface_a83368917e03aaea6b1bcc4f8217426ef}} 
+\index{Map\+Interface@{Map\+Interface}!map\+\_\+size\+\_\+@{map\+\_\+size\+\_\+}}
+\index{map\+\_\+size\+\_\+@{map\+\_\+size\+\_\+}!Map\+Interface@{Map\+Interface}}
+\subsubsection{\texorpdfstring{map\+\_\+size\+\_\+}{map\_size\_}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2d Map\+Interface\+::map\+\_\+size\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Referenced by Get\+Map\+Size(), Guess\+Map\+Size(), Map\+Interface(), N\+D\+T\+Map\+::\+To\+String(), and S\+N\+D\+T\+Map\+::\+To\+String().
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{map__interface_8h}{map\+\_\+interface.\+h}\end{DoxyCompactItemize}

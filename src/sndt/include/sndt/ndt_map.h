@@ -1,96 +1,98 @@
+/**
+ * @file ndt_map.h
+ * @author HuaTsai (huatsai.eed07g@nctu.edu.tw)
+ * @brief Class Declaration of NDTMap
+ * @version 0.1
+ * @date 2021-07-29
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
 #pragma once
+#include <sndt/map_interface.h>
+#include <sndt/ndt_cell.h>
 
-#include <bits/stdc++.h>
-#include <pcl/point_types.h>
-#include <pcl/point_cloud.h>
-
-#include <Eigen/Dense>
-
-#include "sndt/ndt_grid.h"
-
-using namespace std;
-using namespace Eigen;
-
-typedef pcl::PointCloud<pcl::PointXYZ> PCXYZ;
-typedef pcl::PointCloud<pcl::PointXYZ>::Ptr PCXYZPtr;
-typedef pcl::PointCloud<pcl::PointXY> PCXY;
-typedef pcl::PointCloud<pcl::PointXY>::Ptr PCXYPtr;
-
-PCXYZPtr ComputeNormals(PCXYZPtr pc, double radius);
-
-MatrixXd ComputeNormals2(const MatrixXd &pc, double radius);
-
-class NDTMap {
+class NDTMap : public MapInterface {
  public:
+  /**
+   * @brief Construct a new NDTMap object
+   *
+   * @param cell_size Cell size of the NDTMap
+   */
   explicit NDTMap(double cell_size);
 
   ~NDTMap();
 
-  // Three main functions
-  void LoadPointCloud(PCXYZPtr pc, double radius, double range_limit = -1);
+  /**
+   * @brief Load points into the NDTMap
+   *
+   * @param points Points to load
+   * @param normals Normals to load
+   * @note @c points and @c normals should have the same size
+   */
+  void LoadPoints(const std::vector<Eigen::Vector2d> &points);
 
-  void LoadPointCloud(const PCXYZ &pc, const PCXYZ &normals,
-                      double range_limit = -1);
+  /**
+   * @brief Load points and point covariances into the NDTMap
+   *
+   * @param points Points to load
+   * @param point_covs Point covariances to load
+   * @param normals Normals to load
+   * @note @c points, @c point_covs, and @c normals should have the same size
+   */
+  void LoadPointsWithCovariances(
+      const std::vector<Eigen::Vector2d> &points,
+      const std::vector<Eigen::Matrix2d> &point_covs);
 
-  void LoadPointCloud(const PCXY &pc, const PCXY &normals,
-                      double range_limit = -1);
+  /**
+   * @brief Perform transformation to NDTMap
+   *
+   * @param T Transformation
+   * @param include_data Transform data as well (default false)
+   * @return Transformed cells
+   */
+  std::vector<std::shared_ptr<NDTCell>> PseudoTransformCells(
+      const Eigen::Affine2d &T, bool include_data = false) const;
 
-  // TODO
-  // each batch of points has the same sensor origin
-  // get r, theta -> compute cov by sensor origin
-  // then points, point_covs get
-  void LoadPointCloudWithCovariances(const MatrixXd &points,
-                                     const MatrixXd &normals,
-                                     const MatrixXd &point_covs,
-                                     double range_limit = -1);
+  /**
+   * @brief Get and allocate the cell by a given point
+   * 
+   * @param point Input point
+   */
+  NDTCell *GetCellAndAllocate(const Eigen::Vector2d &point);
 
-  vector<shared_ptr<NDTCell>> PseudoTransformCells(const Affine2d &T, bool include_data = false) const {
-    return PseudoTransformCells(T.matrix(), include_data);
-  }
+  /**
+   * @brief Get the cell by a given point
+   * 
+   * @param point Input point
+   */
+  const NDTCell *GetCellForPoint(const Eigen::Vector2d &point) const;
 
-  vector<shared_ptr<NDTCell>> PseudoTransformCells(const Matrix3d &T, bool include_data = false) const;
+  /**
+   * @brief Convert the information of the NDTMap to a string
+   */
+  virtual std::string ToString() const override;
 
-  // Inherited methods
-  NDTCell *GetCellForPoint(const Vector2d &point) {
-    return index_->GetCellForPoint(point);
-  }
+  /**
+   * @brief Get the Points object
+   * 
+   * @note The points are retrived from active_cells_, which does not
+   * necessarily equal to the original input
+   */
+  std::vector<Eigen::Vector2d> GetPoints() const;
 
-  NDTCell *GetClosestCellForPoint(const Vector2d &point, int maxdist_of_cells, bool include_locate = true) {
-    return index_->GetClosestCellForPoint(point, maxdist_of_cells, include_locate);
-  }
-
-  vector<NDTCell *> GetClosestCellsForPoint(const Vector2d &point, int maxdist_of_cells, bool include_locate = false) {
-    return index_->GetClosestCellsForPoint(point, maxdist_of_cells, include_locate);
-  }
-
-  vector<Vector2d> GetPoints();
-  vector<Vector2d> GetNormals();
-
-  string ToString() {
-    return index_->ToString();
-  }
-
-  // Size and Iterators
-  int size() { return index_->size(); }
-  vector<NDTCell *>::iterator begin() { return index_->begin(); }
-  vector<NDTCell *>::const_iterator begin() const { return index_->begin(); }
-  vector<NDTCell *>::iterator end() { return index_->end(); }
-  vector<NDTCell *>::const_iterator end() const { return index_->end(); } 
-
-  // Variables
-  NDTGrid *index() const { return index_; }
-  Vector2d map_size() const { return map_size_; }
-  Vector2d map_center() const { return map_center_; }
-  double cell_size() const { return cell_size_; }
+  size_t size() const { return active_cells_.size(); }
+  std::vector<NDTCell *>::iterator begin() { return active_cells_.begin(); }
+  std::vector<NDTCell *>::const_iterator begin() const { return active_cells_.begin(); }
+  std::vector<NDTCell *>::iterator end() { return active_cells_.end(); }
+  std::vector<NDTCell *>::const_iterator end() const { return active_cells_.end(); }
 
  private:
-  NDTGrid *index_;
-  bool is_initialized_;
-  bool guess_map_size_;
-  double cell_size_;
-  Vector2d map_size_;
-  Vector2d map_center_;
+  /**
+   * @brief Initialize @c cellptrs_ by mata information of NDTMap
+   */
+  virtual void Initialize() override;
 
-  void GuessMapSize(const PCXY &pc, double range_limit = -1);
-  void GuessMapSize(const MatrixXd &pc, double range_limit = -1);
+  std::vector<NDTCell *> active_cells_;
+  NDTCell ***cellptrs_;
 };

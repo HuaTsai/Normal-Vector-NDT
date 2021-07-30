@@ -1,3 +1,3 @@
 <map id="trimesh::KDtree::NodeStorageBlock" name="trimesh::KDtree::NodeStorageBlock">
-<area shape="rect" id="node2" href="$dd/dc3/structtrimesh_1_1KDtree_1_1Node.html" title="{trimesh::KDtree::Node\n|+ npts\l+ center\l+ r\l+ splitaxis\l+ node\l+ p\l+ leaf\l+ @36\l|+ build()\l+ find_closest_to_pt()\l+ find_closest_compat\l_to_pt()\l+ find_closest_to_ray()\l+ find_closest_compat\l_to_ray()\l+ find_k_closest_to_pt()\l+ find_k_closest_compat\l_to_pt()\l+ exists_pt()\l+ alloc()\l}" alt="" coords="21,5,189,347"/>
+<area shape="rect" id="node2" href="$dd/dc3/structtrimesh_1_1KDtree_1_1Node.html" title="{trimesh::KDtree::Node\n|+ npts\l+ center\l+ r\l+ splitaxis\l+ node\l+ p\l+ leaf\l+ @35\l|+ build()\l+ find_closest_to_pt()\l+ find_closest_compat\l_to_pt()\l+ find_closest_to_ray()\l+ find_closest_compat\l_to_ray()\l+ find_k_closest_to_pt()\l+ find_k_closest_compat\l_to_pt()\l+ exists_pt()\l+ alloc()\l}" alt="" coords="21,5,189,347"/>
 </map>

@@ -1,0 +1,104 @@
+\hypertarget{structSNDTCostFunctor}{}\section{S\+N\+D\+T\+Cost\+Functor Struct Reference}
+\label{structSNDTCostFunctor}\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
+
+
+Collaboration diagram for S\+N\+D\+T\+Cost\+Functor\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{d5/d38/structSNDTCostFunctor__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structSNDTCostFunctor_aad83537dc2e4a90d2a5c74f59c5d50e0}{S\+N\+D\+T\+Cost\+Functor} (const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$p\+\_\+, const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$q\+\_\+)
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \hyperlink{structSNDTCostFunctor_aa90d5ea666b39220dc48e0474172268b}{operator()} (const T $\ast$const x, const T $\ast$const y, const T $\ast$const yaw, T $\ast$e) const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\static Eigen\+::\+Matrix$<$ T, 2, 2 $>$ \hyperlink{structSNDTCostFunctor_ac3ec5d55425287082f5ce7f1788715c7}{Rotation\+Matrix2D} (T yaw)
+\item 
+static ceres\+::\+Cost\+Function $\ast$ \hyperlink{structSNDTCostFunctor_a22ee42d8807a659af32c15d144ed0c6b}{Create} (const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$cellp, const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$cellq)
+\item 
+static double \hyperlink{structSNDTCostFunctor_a24876e79d893ae4a8fc098f85c615c6b}{Score} (const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$\hyperlink{structSNDTCostFunctor_ac9abfd289124b6b30105e89266c062a0}{p}, const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$\hyperlink{structSNDTCostFunctor_a2e02683aa3af214e6d8bb7ca40b9f0b3}{q})
+\item 
+static std\+::vector$<$ double $>$ \hyperlink{structSNDTCostFunctor_aec08f243fe9582c59c73a0a93a2c0f81}{Mean\+And\+Cov} (const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$\hyperlink{structSNDTCostFunctor_ac9abfd289124b6b30105e89266c062a0}{p}, const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$\hyperlink{structSNDTCostFunctor_a2e02683aa3af214e6d8bb7ca40b9f0b3}{q})
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$ \hyperlink{structSNDTCostFunctor_ac9abfd289124b6b30105e89266c062a0}{p}
+\item 
+const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$ \hyperlink{structSNDTCostFunctor_a2e02683aa3af214e6d8bb7ca40b9f0b3}{q}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structSNDTCostFunctor_aad83537dc2e4a90d2a5c74f59c5d50e0}\label{structSNDTCostFunctor_aad83537dc2e4a90d2a5c74f59c5d50e0}} 
+\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}!S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
+\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}!S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
+\subsubsection{\texorpdfstring{S\+N\+D\+T\+Cost\+Functor()}{SNDTCostFunctor()}}
+{\footnotesize\ttfamily S\+N\+D\+T\+Cost\+Functor\+::\+S\+N\+D\+T\+Cost\+Functor (\begin{DoxyParamCaption}\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{p\+\_\+,  }\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{q\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{structSNDTCostFunctor_a22ee42d8807a659af32c15d144ed0c6b}\label{structSNDTCostFunctor_a22ee42d8807a659af32c15d144ed0c6b}} 
+\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}!Create@{Create}}
+\index{Create@{Create}!S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
+\subsubsection{\texorpdfstring{Create()}{Create()}}
+{\footnotesize\ttfamily static ceres\+::\+Cost\+Function$\ast$ S\+N\+D\+T\+Cost\+Functor\+::\+Create (\begin{DoxyParamCaption}\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{cellp,  }\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{cellq }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Referenced by S\+N\+D\+T\+Match().
+
+\mbox{\Hypertarget{structSNDTCostFunctor_aec08f243fe9582c59c73a0a93a2c0f81}\label{structSNDTCostFunctor_aec08f243fe9582c59c73a0a93a2c0f81}} 
+\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}!Mean\+And\+Cov@{Mean\+And\+Cov}}
+\index{Mean\+And\+Cov@{Mean\+And\+Cov}!S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
+\subsubsection{\texorpdfstring{Mean\+And\+Cov()}{MeanAndCov()}}
+{\footnotesize\ttfamily static std\+::vector$<$double$>$ S\+N\+D\+T\+Cost\+Functor\+::\+Mean\+And\+Cov (\begin{DoxyParamCaption}\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{p,  }\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{q }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\mbox{\Hypertarget{structSNDTCostFunctor_aa90d5ea666b39220dc48e0474172268b}\label{structSNDTCostFunctor_aa90d5ea666b39220dc48e0474172268b}} 
+\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}!operator()@{operator()}}
+\index{operator()@{operator()}!S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
+\subsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool S\+N\+D\+T\+Cost\+Functor\+::operator() (\begin{DoxyParamCaption}\item[{const T $\ast$const}]{x,  }\item[{const T $\ast$const}]{y,  }\item[{const T $\ast$const}]{yaw,  }\item[{T $\ast$}]{e }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{structSNDTCostFunctor_ac3ec5d55425287082f5ce7f1788715c7}\label{structSNDTCostFunctor_ac3ec5d55425287082f5ce7f1788715c7}} 
+\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}!Rotation\+Matrix2D@{Rotation\+Matrix2D}}
+\index{Rotation\+Matrix2D@{Rotation\+Matrix2D}!S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
+\subsubsection{\texorpdfstring{Rotation\+Matrix2\+D()}{RotationMatrix2D()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+static Eigen\+::\+Matrix$<$T, 2, 2$>$ S\+N\+D\+T\+Cost\+Functor\+::\+Rotation\+Matrix2D (\begin{DoxyParamCaption}\item[{T}]{yaw }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+\mbox{\Hypertarget{structSNDTCostFunctor_a24876e79d893ae4a8fc098f85c615c6b}\label{structSNDTCostFunctor_a24876e79d893ae4a8fc098f85c615c6b}} 
+\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}!Score@{Score}}
+\index{Score@{Score}!S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
+\subsubsection{\texorpdfstring{Score()}{Score()}}
+{\footnotesize\ttfamily static double S\+N\+D\+T\+Cost\+Functor\+::\+Score (\begin{DoxyParamCaption}\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{p,  }\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{q }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{structSNDTCostFunctor_ac9abfd289124b6b30105e89266c062a0}\label{structSNDTCostFunctor_ac9abfd289124b6b30105e89266c062a0}} 
+\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}!p@{p}}
+\index{p@{p}!S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
+\subsubsection{\texorpdfstring{p}{p}}
+{\footnotesize\ttfamily const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell}$\ast$ S\+N\+D\+T\+Cost\+Functor\+::p}
+
+\mbox{\Hypertarget{structSNDTCostFunctor_a2e02683aa3af214e6d8bb7ca40b9f0b3}\label{structSNDTCostFunctor_a2e02683aa3af214e6d8bb7ca40b9f0b3}} 
+\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}!q@{q}}
+\index{q@{q}!S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
+\subsubsection{\texorpdfstring{q}{q}}
+{\footnotesize\ttfamily const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$ S\+N\+D\+T\+Cost\+Functor\+::q}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{matcher_8cc}{matcher.\+cc}\end{DoxyCompactItemize}

@@ -24,7 +24,6 @@ def deserialize(file, cls):
 
 
 def serialize(file, cls):
-    # TODO: feat this
     pass
 
 

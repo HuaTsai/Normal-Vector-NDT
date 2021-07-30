@@ -7,5 +7,5 @@ var searchData=
   ['have_5ftexcoord',['have_texcoord',['../df/ddc/classtrimesh_1_1GLManager_1_1ShaderInfo.html#a17bc641438ea6274f09f431a3c1e9043',1,'trimesh::GLManager::ShaderInfo']]],
   ['have_5funiform',['have_uniform',['../df/ddc/classtrimesh_1_1GLManager_1_1ShaderInfo.html#af49ea2f4c844c265563a042cef631e6a',1,'trimesh::GLManager::ShaderInfo']]],
   ['have_5fvertex',['have_vertex',['../df/ddc/classtrimesh_1_1GLManager_1_1ShaderInfo.html#a10741bbbc291833622bd2694001d51ce',1,'trimesh::GLManager::ShaderInfo']]],
-  ['huber',['huber',['../dc/d08/classNDTMatcher.html#ab6fe33e97368b180642e80623e3a5d4d',1,'NDTMatcher::huber()'],['../d3/d57/test__match_8cc.html#ad556df891db2504a92174300e47bf8c0',1,'huber():&#160;test_match.cc']]]
+  ['huber',['huber',['../d0/dfb/structSNDTParameters.html#a8f73978e41a199c2c7204b61faa19bd1',1,'SNDTParameters::huber()'],['../d3/d57/test__match_8cc.html#ad556df891db2504a92174300e47bf8c0',1,'huber():&#160;test_match.cc']]]
 ];

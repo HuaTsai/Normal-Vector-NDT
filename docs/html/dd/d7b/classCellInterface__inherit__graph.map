@@ -1,0 +1,4 @@
+<map id="CellInterface" name="CellInterface">
+<area shape="rect" id="node2" href="$dc/d54/classNDTCell.html" title="{NDTCell\n||+ NDTCell()\l+ ComputeGaussian()\l+ HasGaussian()\l+ ToString()\l+ GetCellType()\l+ GetRescaleRatio()\l+ SetCellType()\l+ SetRescaleRatio()\l}" alt="" coords="5,446,156,626"/>
+<area shape="rect" id="node3" href="$da/d64/classSNDTCell.html" title="{SNDTCell\n||+ SNDTCell()\l+ ComputeGaussian()\l+ HasGaussian()\l+ ToString()\l+ AddNormal()\l+ GetPCellType()\l+ GetNCellType()\l+ GetRescaleRatio()\l+ GetNHasGaussian()\l+ GetNormalMean()\land 13 more...\l}" alt="" coords="181,424,333,648"/>
+</map>

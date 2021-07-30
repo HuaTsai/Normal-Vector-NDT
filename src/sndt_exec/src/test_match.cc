@@ -4,22 +4,26 @@
  * @brief Test Matching
  * @version 0.1
  * @date 2021-07-13
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
-#include <bits/stdc++.h>
-#include <sndt_exec/wrapper.hpp>
-#include <boost/program_options.hpp>
 #include <common/EgoPointClouds.h>
-#include <sndt/ndt_visualizations.h>
-#include <std_msgs/Int32.h>
+#include <common/common.h>
 #include <geometry_msgs/Vector3.h>
-#include <std_msgs/Float64MultiArray.h>
 #include <nav_msgs/Path.h>
+#include <ros/ros.h>
 #include <sensor_msgs/CompressedImage.h>
+#include <sndt/matcher.h>
+#include <sndt/visuals.h>
+#include <std_msgs/Float64MultiArray.h>
+#include <std_msgs/Int32.h>
+
+#include <boost/program_options.hpp>
+#include <sndt_exec/wrapper.hpp>
 
 using namespace std;
+using namespace Eigen;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
 
@@ -64,23 +68,6 @@ vector<pair<MatrixXd, Affine2d>> Augment(
   return ret;
 }
 
-Marker ThePoints(const vector<pair<MatrixXd, Affine2d>> &data, const Color &color) {
-  auto n = accumulate(data.begin(), data.end(), 0,
-                      [](auto a, auto b) { return a + (int)b.first.cols(); });
-  MatrixXd points(2, n);
-  int j = 0;
-  for (const auto &elem : data) {
-    auto pts = elem.first;
-    auto T = elem.second;
-    for (int i = 0; i < pts.cols(); ++i) {
-      Vector2d pt = pts.col(i);
-      points.col(j) = T * pt;
-      ++j;
-    }
-  }
-  return MarkerOfPoints(points, 0.5, color);
-}
-
 // i-f, ..., i-1 | i, i+1, ..., i+f-1 | i+f, ..., i+2f-1 | i+2f -> actual id
 // ..., ...,  m  | i, ..., ...,   n   |  o , ...,   p    |  q   -> symbol id
 // -- frames  -- | ----- target ----- | ---- source ---- |
@@ -95,22 +82,17 @@ void cb(const std_msgs::Int32 &num) {
   auto mapt = MakeMap(datat, {rvar, tvar}, {cell_size, radius});
   int assigned = 0, valid = 0;
   for (auto cell : mapt) {
-    if (cell->mark)
+    if (cell->GetNCellType() == SNDTCell::CellType::kAssign)
       ++assigned;
-    else if (cell->BothHasGaussian())
+    else if (cell->HasGaussian())
       ++valid;
   }
   cout << "total cells: " << mapt.size() << endl;
   cout << "assigned cells: " << assigned << endl;
   cout << "valid cells: " << valid << endl;
-  
-  // int tvc = count_if(mapt.begin(), mapt.end(), [](NDTCell *cell) { return cell->BothHasGaussian(); });
 
   auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
   auto maps = MakeMap(datas, {rvar, tvar}, {cell_size, radius});
-  // int svc = count_if(maps.begin(), maps.end(), [](NDTCell *cell) { return cell->BothHasGaussian(); });
-  // cout << "valid target cells: " << tvc << endl;
-  // cout << "valid source cells: " << svc << endl;
 
   /********* Compute Ground Truth *********/
   Affine3d To, Ti;
@@ -121,13 +103,11 @@ void cb(const std_msgs::Int32 &num) {
                    Rotation2Dd(gtTio3.rotation().block<2, 2>(0, 0));
   /********* Compute End Here     *********/
 
-  NDTMatcher matcher;
-  matcher.SetStrategy(NDTMatcher::kUSE_CELLS_GREATER_THAN_TWO_POINTS);
-  matcher.huber = huber;
+  SNDTParameters params;
+  params.huber = huber;
+  // params.verbose = true;
   cout << "start frame: " << i;
-  // matcher.verbose = true;
-  auto res = matcher.CeresMatch(mapt, maps, Tio);
-  vmas = matcher.vmas;
+  auto res = SNDTMatch(mapt, maps, params, Tio);
 
   // cout << "guess: " << common::XYTDegreeFromMatrix3d(Tio.matrix()).transpose() << endl;
   // cout << "result: " << common::XYTDegreeFromMatrix3d(res.matrix()).transpose() << endl;
@@ -137,16 +117,16 @@ void cb(const std_msgs::Int32 &num) {
   auto maps2 = maps.PseudoTransformCells(res, true);
   auto mapsg = maps.PseudoTransformCells(gtTio, true);
 
-  pub1.publish(MarkerArrayOfNDTMap(mapt, true));
-  pub2.publish(MarkerArrayOfNDTMap(maps));   // source map
-  pub3.publish(MarkerArrayOfNDTMap(maps2));  // source map after T0
-  pub4.publish(MarkerArrayOfNDTMap(mapsg));  // source map after Tgt
+  pub1.publish(MarkerArrayOfSNDTMap(mapt, true));
+  pub2.publish(MarkerArrayOfSNDTMap(maps));   // source map
+  pub3.publish(MarkerArrayOfSNDTMap(maps2));  // source map after T0
+  pub4.publish(MarkerArrayOfSNDTMap(mapsg));  // source map after Tgt
   auto starts = mapt.GetPoints();
   auto nms = mapt.GetNormals();
   vector<Vector2d> ends(starts.size());
   for (size_t i = 0; i < starts.size(); ++i)
     ends[i] = starts[i] + nms[i];
-  pub5.publish(MarkerArrayOfArrow(starts, ends));
+  pub5.publish(MarkerArrayOfArrows(starts, ends, Color::kRed));
   pub6.publish(vmas[0].first);
   pub7.publish(vmas[0].second);
   pb1.publish(imb[i * imb.size() / vepcs.size()]);
@@ -155,8 +135,8 @@ void cb(const std_msgs::Int32 &num) {
   pb4.publish(imf[i * imf.size() / vepcs.size()]);
   pb5.publish(imfl[i * imfl.size() / vepcs.size()]);
   pb6.publish(imfr[i * imfr.size() / vepcs.size()]);
-  pbs.publish(ThePoints(datas, Color::kLime));
-  pbt.publish(ThePoints(datat, Color::kRed));
+  pbs.publish(MarkerOfPoints(maps.GetPoints()));
+  pbt.publish(MarkerOfPoints(mapt.GetPoints(), 0.1, Color::kRed));
   geometry_msgs::Vector3 errmsg;
   errmsg.x = err(0), errmsg.y = err(1);
   pube.publish(errmsg);
@@ -227,12 +207,6 @@ int main(int argc, char **argv) {
   pb4 = nh.advertise<sensor_msgs::CompressedImage>("front/compressed", 0, true);
   pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0, true);
   pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed", 0, true);
-
-  // for (int i = 0; i < (int)vepcs.size() - 15; ++i) {
-  //   std_msgs::Int32 i32;
-  //   i32.data = i;
-  //   cb(i32);
-  // }
 
   ros::spin();
 }

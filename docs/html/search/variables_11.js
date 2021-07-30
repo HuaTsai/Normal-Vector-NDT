@@ -3,6 +3,8 @@ var searchData=
   ['s',['s',['../de/d3b/structtrimesh_1_1Vec__data_3_011_00_01T_01_4.html#a6a8decccb8228cb923364d343d139ba6',1,'trimesh::Vec_data&lt; 1, T &gt;::s()'],['../d7/d64/structtrimesh_1_1Vec__data_3_012_00_01T_01_4.html#ab8c0f16ab79d13d335654e65aecd03f9',1,'trimesh::Vec_data&lt; 2, T &gt;::s()'],['../da/db8/structtrimesh_1_1Vec__data_3_013_00_01T_01_4.html#ae827cf5eecc6f0895aa6134b7ec2cef5',1,'trimesh::Vec_data&lt; 3, T &gt;::s()'],['../d2/d4b/structtrimesh_1_1Vec__data_3_014_00_01T_01_4.html#a73c7011520f994dd7f2a40d8ab28cc06',1,'trimesh::Vec_data&lt; 4, T &gt;::s()'],['../de/d64/ego_8cc.html#abde73cd36321648268fb4543509b996a',1,'S():&#160;ego.cc']]],
   ['sensor_5forigins',['sensor_origins',['../de/d64/ego_8cc.html#ab40fdf1750f6e6c71b9a7280fba8b529',1,'ego.cc']]],
   ['sensor_5ftfs',['sensor_tfs',['../de/d64/ego_8cc.html#a50502c81d168b3a70aab90497468f6d3',1,'ego.cc']]],
+  ['size_5f',['size_',['../d2/da4/classCellInterface.html#a02bccbc4587ef6fd1a31c03a464676c4',1,'CellInterface']]],
+  ['skew_5frad_5f',['skew_rad_',['../d2/da4/classCellInterface.html#a5de34cbe7e4988e4f46560ee234f6e8c',1,'CellInterface']]],
   ['snub_5fcube_5ffaces',['snub_cube_faces',['../d4/daf/namespacetrimesh.html#a4c96aacc9c374918727214fbb25fc151',1,'trimesh']]],
   ['snub_5fcube_5fverts',['snub_cube_verts',['../d4/daf/namespacetrimesh.html#ad23260703fa36d0adee643160aaff2af',1,'trimesh']]],
   ['snub_5fdodecahedron_5ffaces',['snub_dodecahedron_faces',['../d4/daf/namespacetrimesh.html#a62df14bff286d385532806a7330a55d8',1,'trimesh']]],

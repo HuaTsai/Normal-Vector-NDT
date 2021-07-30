@@ -6,62 +6,54 @@
 
 
 
+Inheritance diagram for N\+D\+T\+Map\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=235pt]{da/dc7/classNDTMap__inherit__graph}
+\end{center}
+\end{figure}
+
+
 Collaboration diagram for N\+D\+T\+Map\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=256pt]{d0/d07/classNDTMap__coll__graph}
+\includegraphics[width=235pt]{d0/d07/classNDTMap__coll__graph}
 \end{center}
 \end{figure}
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hyperlink{classNDTMap_aec578016c17abfe085d0d4cf1dca1828}{N\+D\+T\+Map} (double \hyperlink{classNDTMap_a3395ccebb28846b416550ba71b5da174}{cell\+\_\+size})
-\item 
+\hyperlink{classNDTMap_aec578016c17abfe085d0d4cf1dca1828}{N\+D\+T\+Map} (double \hyperlink{test__match_8cc_a456553c1fc05d94c07e74c5fd45f6621}{cell\+\_\+size})
+\begin{DoxyCompactList}\small\item\em Construct a new \hyperlink{classNDTMap}{N\+D\+T\+Map} object. \end{DoxyCompactList}\item 
 \hyperlink{classNDTMap_af6e42f0f13a33e6027e14635631e1312}{$\sim$\+N\+D\+T\+Map} ()
 \item 
-void \hyperlink{classNDTMap_a7a6596502043035b352cb470f869f79c}{Load\+Point\+Cloud} (\hyperlink{ndt__map_8h_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr} pc, double \hyperlink{test__match_8cc_a3f67c53b80389c5f53961936edba04c9}{radius}, double range\+\_\+limit=-\/1)
+void \hyperlink{classNDTMap_ab22791d0b328ae9639799bc5d31d8b49}{Load\+Points} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points)
+\begin{DoxyCompactList}\small\item\em Load points into the \hyperlink{classNDTMap}{N\+D\+T\+Map}. \end{DoxyCompactList}\item 
+void \hyperlink{classNDTMap_a00f9fe19e50c264cb4cf1de68f0c05e3}{Load\+Points\+With\+Covariances} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points, const std\+::vector$<$ Eigen\+::\+Matrix2d $>$ \&point\+\_\+covs)
+\begin{DoxyCompactList}\small\item\em Load points and point covariances into the \hyperlink{classNDTMap}{N\+D\+T\+Map}. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $>$ $>$ \hyperlink{classNDTMap_a3d16c1f716de28d6c5a6572346c45ee6}{Pseudo\+Transform\+Cells} (const Eigen\+::\+Affine2d \&T, bool include\+\_\+data=false) const
+\begin{DoxyCompactList}\small\item\em Perform transformation to \hyperlink{classNDTMap}{N\+D\+T\+Map}. \end{DoxyCompactList}\item 
+\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ \hyperlink{classNDTMap_ab37c2e140bf7b138be3cd0b4d5104dfc}{Get\+Cell\+And\+Allocate} (const Eigen\+::\+Vector2d \&point)
+\begin{DoxyCompactList}\small\item\em Get and allocate the cell by a given point. \end{DoxyCompactList}\item 
+const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ \hyperlink{classNDTMap_aa8c796e4bf0512e4d640887d228b2404}{Get\+Cell\+For\+Point} (const Eigen\+::\+Vector2d \&point) const
+\begin{DoxyCompactList}\small\item\em Get the cell by a given point. \end{DoxyCompactList}\item 
+virtual std\+::string \hyperlink{classNDTMap_a355a32d48208aa5bcc361b4be1d6320c}{To\+String} () const override
+\begin{DoxyCompactList}\small\item\em Convert the information of the \hyperlink{classNDTMap}{N\+D\+T\+Map} to a string. \end{DoxyCompactList}\item 
+std\+::vector$<$ Eigen\+::\+Vector2d $>$ \hyperlink{classNDTMap_a2b44ded259db4af8c4abffed0553e6c0}{Get\+Points} () const
+\begin{DoxyCompactList}\small\item\em Get the Points object. \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{classNDTMap_aa9e3541e2f4c56ea43d598aef43e5503}{size} () const
 \item 
-void \hyperlink{classNDTMap_a1a724122f19f58baa09c0e24b67ca697}{Load\+Point\+Cloud} (const \hyperlink{ndt__map_8h_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ} \&pc, const \hyperlink{ndt__map_8h_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ} \&normals, double range\+\_\+limit=-\/1)
+std\+::vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$\+::iterator \hyperlink{classNDTMap_a94a3a8740a68aafca85872153ef68a40}{begin} ()
 \item 
-void \hyperlink{classNDTMap_abb9af807d3928dc11bf734c961fc5662}{Load\+Point\+Cloud} (const \hyperlink{ndt__map_8h_ae39e6a39986574e0b1dd694a8a8c2a39}{P\+C\+XY} \&pc, const \hyperlink{ndt__map_8h_ae39e6a39986574e0b1dd694a8a8c2a39}{P\+C\+XY} \&normals, double range\+\_\+limit=-\/1)
+std\+::vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$\+::const\+\_\+iterator \hyperlink{classNDTMap_ad35b977c2c8e568da37787a529ae6df5}{begin} () const
 \item 
-void \hyperlink{classNDTMap_a9d74f6496cf555cbe0c41139a59a0e44}{Load\+Point\+Cloud\+With\+Covariances} (const Matrix\+Xd \&points, const Matrix\+Xd \&normals, const Matrix\+Xd \&point\+\_\+covs, double range\+\_\+limit=-\/1)
+std\+::vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$\+::iterator \hyperlink{classNDTMap_a10cc94926e3fc5ac31fa50f166eb3025}{end} ()
 \item 
-vector$<$ shared\+\_\+ptr$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $>$ $>$ \hyperlink{classNDTMap_a9203c659af7f7da483d4533885a332f8}{Pseudo\+Transform\+Cells} (const Affine2d \&T, bool include\+\_\+data=false) const
-\item 
-vector$<$ shared\+\_\+ptr$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $>$ $>$ \hyperlink{classNDTMap_aae233bcc01ec9e8af59fb45bd235736b}{Pseudo\+Transform\+Cells} (const Matrix3d \&T, bool include\+\_\+data=false) const
-\item 
-\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ \hyperlink{classNDTMap_a4d4dad624af3df75327d0e279be3d477}{Get\+Cell\+For\+Point} (const Vector2d \&point)
-\item 
-\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ \hyperlink{classNDTMap_a304a9fa19f39944b49d0ab3d84bf5aae}{Get\+Closest\+Cell\+For\+Point} (const Vector2d \&point, int maxdist\+\_\+of\+\_\+cells, bool include\+\_\+locate=true)
-\item 
-vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$ \hyperlink{classNDTMap_a0a4879ae61a1e3e8d634cbca02bfd9ce}{Get\+Closest\+Cells\+For\+Point} (const Vector2d \&point, int maxdist\+\_\+of\+\_\+cells, bool include\+\_\+locate=false)
-\item 
-vector$<$ Vector2d $>$ \hyperlink{classNDTMap_afbeaa3c223cb78b970601c31eebb8b8d}{Get\+Points} ()
-\item 
-vector$<$ Vector2d $>$ \hyperlink{classNDTMap_a81de728bee39e48fefcb92a893f53611}{Get\+Normals} ()
-\item 
-string \hyperlink{classNDTMap_ab08b05e7708a1c28d6c9c0f27287a1c8}{To\+String} ()
-\item 
-int \hyperlink{classNDTMap_a72afff09b746b402d277945231af5d60}{size} ()
-\item 
-vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$\+::iterator \hyperlink{classNDTMap_adf9226d12395621fad8f75d94e9f8cc7}{begin} ()
-\item 
-vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$\+::const\+\_\+iterator \hyperlink{classNDTMap_a696381901e5f856af6c4ecec37770e1f}{begin} () const
-\item 
-vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$\+::iterator \hyperlink{classNDTMap_a001f919cb4e5b0a784b9b69ba95cb035}{end} ()
-\item 
-vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$\+::const\+\_\+iterator \hyperlink{classNDTMap_a96f1e8b110d1a542f06792945e240cb3}{end} () const
-\item 
-\hyperlink{classNDTGrid}{N\+D\+T\+Grid} $\ast$ \hyperlink{classNDTMap_ad319bbb8860c6f2214a30bb7d64525e5}{index} () const
-\item 
-Vector2d \hyperlink{classNDTMap_aa737ee61fd3b732c7d0fe3cdae4b42d2}{map\+\_\+size} () const
-\item 
-Vector2d \hyperlink{classNDTMap_a5bc1d0a7b7949886670afb4f3c271a37}{map\+\_\+center} () const
-\item 
-double \hyperlink{classNDTMap_a3395ccebb28846b416550ba71b5da174}{cell\+\_\+size} () const
+std\+::vector$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ $>$\+::const\+\_\+iterator \hyperlink{classNDTMap_a248b578e22a0e8a0b3211df280fbe0a5}{end} () const
 \end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
 
 
 \subsection{Constructor \& Destructor Documentation}
@@ -71,6 +63,15 @@ double \hyperlink{classNDTMap_a3395ccebb28846b416550ba71b5da174}{cell\+\_\+size}
 \subsubsection{\texorpdfstring{N\+D\+T\+Map()}{NDTMap()}}
 {\footnotesize\ttfamily N\+D\+T\+Map\+::\+N\+D\+T\+Map (\begin{DoxyParamCaption}\item[{double}]{cell\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
 
+
+
+Construct a new \hyperlink{classNDTMap}{N\+D\+T\+Map} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cell\+\_\+size} & Cell size of the \hyperlink{classNDTMap}{N\+D\+T\+Map} \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classNDTMap_af6e42f0f13a33e6027e14635631e1312}\label{classNDTMap_af6e42f0f13a33e6027e14635631e1312}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!````~N\+D\+T\+Map@{$\sim$\+N\+D\+T\+Map}}
 \index{````~N\+D\+T\+Map@{$\sim$\+N\+D\+T\+Map}!N\+D\+T\+Map@{N\+D\+T\+Map}}
@@ -80,163 +81,166 @@ double \hyperlink{classNDTMap_a3395ccebb28846b416550ba71b5da174}{cell\+\_\+size}
 
 
 \subsection{Member Function Documentation}
-\mbox{\Hypertarget{classNDTMap_adf9226d12395621fad8f75d94e9f8cc7}\label{classNDTMap_adf9226d12395621fad8f75d94e9f8cc7}} 
+\mbox{\Hypertarget{classNDTMap_a94a3a8740a68aafca85872153ef68a40}\label{classNDTMap_a94a3a8740a68aafca85872153ef68a40}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!begin@{begin}}
 \index{begin@{begin}!N\+D\+T\+Map@{N\+D\+T\+Map}}
 \subsubsection{\texorpdfstring{begin()}{begin()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$\+::iterator N\+D\+T\+Map\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily std\+::vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$\+::iterator N\+D\+T\+Map\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
-Referenced by Info\+Of\+N\+D\+T\+Map().
+Referenced by Get\+Points(), and Pseudo\+Transform\+Cells().
 
-\mbox{\Hypertarget{classNDTMap_a696381901e5f856af6c4ecec37770e1f}\label{classNDTMap_a696381901e5f856af6c4ecec37770e1f}} 
+\mbox{\Hypertarget{classNDTMap_ad35b977c2c8e568da37787a529ae6df5}\label{classNDTMap_ad35b977c2c8e568da37787a529ae6df5}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!begin@{begin}}
 \index{begin@{begin}!N\+D\+T\+Map@{N\+D\+T\+Map}}
 \subsubsection{\texorpdfstring{begin()}{begin()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$\+::const\+\_\+iterator N\+D\+T\+Map\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily std\+::vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$\+::const\+\_\+iterator N\+D\+T\+Map\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{classNDTMap_a3395ccebb28846b416550ba71b5da174}\label{classNDTMap_a3395ccebb28846b416550ba71b5da174}} 
-\index{N\+D\+T\+Map@{N\+D\+T\+Map}!cell\+\_\+size@{cell\+\_\+size}}
-\index{cell\+\_\+size@{cell\+\_\+size}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{cell\+\_\+size()}{cell\_size()}}
-{\footnotesize\ttfamily double N\+D\+T\+Map\+::cell\+\_\+size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{classNDTMap_a001f919cb4e5b0a784b9b69ba95cb035}\label{classNDTMap_a001f919cb4e5b0a784b9b69ba95cb035}} 
+\mbox{\Hypertarget{classNDTMap_a10cc94926e3fc5ac31fa50f166eb3025}\label{classNDTMap_a10cc94926e3fc5ac31fa50f166eb3025}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!end@{end}}
 \index{end@{end}!N\+D\+T\+Map@{N\+D\+T\+Map}}
 \subsubsection{\texorpdfstring{end()}{end()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$\+::iterator N\+D\+T\+Map\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily std\+::vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$\+::iterator N\+D\+T\+Map\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
-Referenced by Info\+Of\+N\+D\+T\+Map().
+Referenced by Get\+Points(), and Pseudo\+Transform\+Cells().
 
-\mbox{\Hypertarget{classNDTMap_a96f1e8b110d1a542f06792945e240cb3}\label{classNDTMap_a96f1e8b110d1a542f06792945e240cb3}} 
+\mbox{\Hypertarget{classNDTMap_a248b578e22a0e8a0b3211df280fbe0a5}\label{classNDTMap_a248b578e22a0e8a0b3211df280fbe0a5}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!end@{end}}
 \index{end@{end}!N\+D\+T\+Map@{N\+D\+T\+Map}}
 \subsubsection{\texorpdfstring{end()}{end()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$\+::const\+\_\+iterator N\+D\+T\+Map\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily std\+::vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$\+::const\+\_\+iterator N\+D\+T\+Map\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{classNDTMap_a4d4dad624af3df75327d0e279be3d477}\label{classNDTMap_a4d4dad624af3df75327d0e279be3d477}} 
+\mbox{\Hypertarget{classNDTMap_ab37c2e140bf7b138be3cd0b4d5104dfc}\label{classNDTMap_ab37c2e140bf7b138be3cd0b4d5104dfc}} 
+\index{N\+D\+T\+Map@{N\+D\+T\+Map}!Get\+Cell\+And\+Allocate@{Get\+Cell\+And\+Allocate}}
+\index{Get\+Cell\+And\+Allocate@{Get\+Cell\+And\+Allocate}!N\+D\+T\+Map@{N\+D\+T\+Map}}
+\subsubsection{\texorpdfstring{Get\+Cell\+And\+Allocate()}{GetCellAndAllocate()}}
+{\footnotesize\ttfamily \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ N\+D\+T\+Map\+::\+Get\+Cell\+And\+Allocate (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector2d \&}]{point }\end{DoxyParamCaption})}
+
+
+
+Get and allocate the cell by a given point. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point} & Input point \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by Load\+Points(), and Load\+Points\+With\+Covariances().
+
+\mbox{\Hypertarget{classNDTMap_aa8c796e4bf0512e4d640887d228b2404}\label{classNDTMap_aa8c796e4bf0512e4d640887d228b2404}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!Get\+Cell\+For\+Point@{Get\+Cell\+For\+Point}}
 \index{Get\+Cell\+For\+Point@{Get\+Cell\+For\+Point}!N\+D\+T\+Map@{N\+D\+T\+Map}}
 \subsubsection{\texorpdfstring{Get\+Cell\+For\+Point()}{GetCellForPoint()}}
-{\footnotesize\ttfamily \hyperlink{classNDTCell}{N\+D\+T\+Cell}$\ast$ N\+D\+T\+Map\+::\+Get\+Cell\+For\+Point (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$ N\+D\+T\+Map\+::\+Get\+Cell\+For\+Point (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector2d \&}]{point }\end{DoxyParamCaption}) const}
 
 
 
-Referenced by N\+D\+T\+Matcher\+::\+Ceres\+Match().
+Get the cell by a given point. 
 
-\mbox{\Hypertarget{classNDTMap_a304a9fa19f39944b49d0ab3d84bf5aae}\label{classNDTMap_a304a9fa19f39944b49d0ab3d84bf5aae}} 
-\index{N\+D\+T\+Map@{N\+D\+T\+Map}!Get\+Closest\+Cell\+For\+Point@{Get\+Closest\+Cell\+For\+Point}}
-\index{Get\+Closest\+Cell\+For\+Point@{Get\+Closest\+Cell\+For\+Point}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{Get\+Closest\+Cell\+For\+Point()}{GetClosestCellForPoint()}}
-{\footnotesize\ttfamily \hyperlink{classNDTCell}{N\+D\+T\+Cell}$\ast$ N\+D\+T\+Map\+::\+Get\+Closest\+Cell\+For\+Point (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point,  }\item[{int}]{maxdist\+\_\+of\+\_\+cells,  }\item[{bool}]{include\+\_\+locate = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{classNDTMap_a0a4879ae61a1e3e8d634cbca02bfd9ce}\label{classNDTMap_a0a4879ae61a1e3e8d634cbca02bfd9ce}} 
-\index{N\+D\+T\+Map@{N\+D\+T\+Map}!Get\+Closest\+Cells\+For\+Point@{Get\+Closest\+Cells\+For\+Point}}
-\index{Get\+Closest\+Cells\+For\+Point@{Get\+Closest\+Cells\+For\+Point}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{Get\+Closest\+Cells\+For\+Point()}{GetClosestCellsForPoint()}}
-{\footnotesize\ttfamily vector$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$$>$ N\+D\+T\+Map\+::\+Get\+Closest\+Cells\+For\+Point (\begin{DoxyParamCaption}\item[{const Vector2d \&}]{point,  }\item[{int}]{maxdist\+\_\+of\+\_\+cells,  }\item[{bool}]{include\+\_\+locate = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{classNDTMap_a81de728bee39e48fefcb92a893f53611}\label{classNDTMap_a81de728bee39e48fefcb92a893f53611}} 
-\index{N\+D\+T\+Map@{N\+D\+T\+Map}!Get\+Normals@{Get\+Normals}}
-\index{Get\+Normals@{Get\+Normals}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{Get\+Normals()}{GetNormals()}}
-{\footnotesize\ttfamily vector$<$ Vector2d $>$ N\+D\+T\+Map\+::\+Get\+Normals (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{classNDTMap_afbeaa3c223cb78b970601c31eebb8b8d}\label{classNDTMap_afbeaa3c223cb78b970601c31eebb8b8d}} 
+\begin{DoxyParams}{Parameters}
+{\em point} & Input point \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classNDTMap_a2b44ded259db4af8c4abffed0553e6c0}\label{classNDTMap_a2b44ded259db4af8c4abffed0553e6c0}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!Get\+Points@{Get\+Points}}
 \index{Get\+Points@{Get\+Points}!N\+D\+T\+Map@{N\+D\+T\+Map}}
 \subsubsection{\texorpdfstring{Get\+Points()}{GetPoints()}}
-{\footnotesize\ttfamily vector$<$ Vector2d $>$ N\+D\+T\+Map\+::\+Get\+Points (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{classNDTMap_ad319bbb8860c6f2214a30bb7d64525e5}\label{classNDTMap_ad319bbb8860c6f2214a30bb7d64525e5}} 
-\index{N\+D\+T\+Map@{N\+D\+T\+Map}!index@{index}}
-\index{index@{index}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{index()}{index()}}
-{\footnotesize\ttfamily \hyperlink{classNDTGrid}{N\+D\+T\+Grid}$\ast$ N\+D\+T\+Map\+::index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{classNDTMap_a7a6596502043035b352cb470f869f79c}\label{classNDTMap_a7a6596502043035b352cb470f869f79c}} 
-\index{N\+D\+T\+Map@{N\+D\+T\+Map}!Load\+Point\+Cloud@{Load\+Point\+Cloud}}
-\index{Load\+Point\+Cloud@{Load\+Point\+Cloud}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{Load\+Point\+Cloud()}{LoadPointCloud()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
-{\footnotesize\ttfamily void N\+D\+T\+Map\+::\+Load\+Point\+Cloud (\begin{DoxyParamCaption}\item[{\hyperlink{ndt__map_8h_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr}}]{pc,  }\item[{double}]{radius,  }\item[{double}]{range\+\_\+limit = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily std\+::vector$<$ Eigen\+::\+Vector2d $>$ N\+D\+T\+Map\+::\+Get\+Points (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
 
 
 
-Referenced by Do\+S\+N\+D\+T().
+Get the Points object. 
 
-\mbox{\Hypertarget{classNDTMap_a1a724122f19f58baa09c0e24b67ca697}\label{classNDTMap_a1a724122f19f58baa09c0e24b67ca697}} 
-\index{N\+D\+T\+Map@{N\+D\+T\+Map}!Load\+Point\+Cloud@{Load\+Point\+Cloud}}
-\index{Load\+Point\+Cloud@{Load\+Point\+Cloud}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{Load\+Point\+Cloud()}{LoadPointCloud()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
-{\footnotesize\ttfamily void N\+D\+T\+Map\+::\+Load\+Point\+Cloud (\begin{DoxyParamCaption}\item[{const \hyperlink{ndt__map_8h_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ} \&}]{pc,  }\item[{const \hyperlink{ndt__map_8h_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ} \&}]{normals,  }\item[{double}]{range\+\_\+limit = {\ttfamily -\/1} }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{classNDTMap_abb9af807d3928dc11bf734c961fc5662}\label{classNDTMap_abb9af807d3928dc11bf734c961fc5662}} 
-\index{N\+D\+T\+Map@{N\+D\+T\+Map}!Load\+Point\+Cloud@{Load\+Point\+Cloud}}
-\index{Load\+Point\+Cloud@{Load\+Point\+Cloud}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{Load\+Point\+Cloud()}{LoadPointCloud()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
-{\footnotesize\ttfamily void N\+D\+T\+Map\+::\+Load\+Point\+Cloud (\begin{DoxyParamCaption}\item[{const \hyperlink{ndt__map_8h_ae39e6a39986574e0b1dd694a8a8c2a39}{P\+C\+XY} \&}]{pc,  }\item[{const \hyperlink{ndt__map_8h_ae39e6a39986574e0b1dd694a8a8c2a39}{P\+C\+XY} \&}]{normals,  }\item[{double}]{range\+\_\+limit = {\ttfamily -\/1} }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{classNDTMap_a9d74f6496cf555cbe0c41139a59a0e44}\label{classNDTMap_a9d74f6496cf555cbe0c41139a59a0e44}} 
-\index{N\+D\+T\+Map@{N\+D\+T\+Map}!Load\+Point\+Cloud\+With\+Covariances@{Load\+Point\+Cloud\+With\+Covariances}}
-\index{Load\+Point\+Cloud\+With\+Covariances@{Load\+Point\+Cloud\+With\+Covariances}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{Load\+Point\+Cloud\+With\+Covariances()}{LoadPointCloudWithCovariances()}}
-{\footnotesize\ttfamily void N\+D\+T\+Map\+::\+Load\+Point\+Cloud\+With\+Covariances (\begin{DoxyParamCaption}\item[{const Matrix\+Xd \&}]{points,  }\item[{const Matrix\+Xd \&}]{normals,  }\item[{const Matrix\+Xd \&}]{point\+\_\+covs,  }\item[{double}]{range\+\_\+limit = {\ttfamily -\/1} }\end{DoxyParamCaption})}
+\begin{DoxyNote}{Note}
+The points are retrived from active\+\_\+cells\+\_\+, which does not necessarily equal to the original input 
+\end{DoxyNote}
+\mbox{\Hypertarget{classNDTMap_ab22791d0b328ae9639799bc5d31d8b49}\label{classNDTMap_ab22791d0b328ae9639799bc5d31d8b49}} 
+\index{N\+D\+T\+Map@{N\+D\+T\+Map}!Load\+Points@{Load\+Points}}
+\index{Load\+Points@{Load\+Points}!N\+D\+T\+Map@{N\+D\+T\+Map}}
+\subsubsection{\texorpdfstring{Load\+Points()}{LoadPoints()}}
+{\footnotesize\ttfamily void N\+D\+T\+Map\+::\+Load\+Points (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points }\end{DoxyParamCaption})}
 
 
 
-Referenced by Make\+Map().
+Load points into the \hyperlink{classNDTMap}{N\+D\+T\+Map}. 
 
-\mbox{\Hypertarget{classNDTMap_a5bc1d0a7b7949886670afb4f3c271a37}\label{classNDTMap_a5bc1d0a7b7949886670afb4f3c271a37}} 
-\index{N\+D\+T\+Map@{N\+D\+T\+Map}!map\+\_\+center@{map\+\_\+center}}
-\index{map\+\_\+center@{map\+\_\+center}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{map\+\_\+center()}{map\_center()}}
-{\footnotesize\ttfamily Vector2d N\+D\+T\+Map\+::map\+\_\+center (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{classNDTMap_aa737ee61fd3b732c7d0fe3cdae4b42d2}\label{classNDTMap_aa737ee61fd3b732c7d0fe3cdae4b42d2}} 
-\index{N\+D\+T\+Map@{N\+D\+T\+Map}!map\+\_\+size@{map\+\_\+size}}
-\index{map\+\_\+size@{map\+\_\+size}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{map\+\_\+size()}{map\_size()}}
-{\footnotesize\ttfamily Vector2d N\+D\+T\+Map\+::map\+\_\+size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+\begin{DoxyParams}{Parameters}
+{\em points} & Points to load \\
+\hline
+{\em normals} & Normals to load \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+{\ttfamily points} and {\ttfamily normals} should have the same size 
+\end{DoxyNote}
+\mbox{\Hypertarget{classNDTMap_a00f9fe19e50c264cb4cf1de68f0c05e3}\label{classNDTMap_a00f9fe19e50c264cb4cf1de68f0c05e3}} 
+\index{N\+D\+T\+Map@{N\+D\+T\+Map}!Load\+Points\+With\+Covariances@{Load\+Points\+With\+Covariances}}
+\index{Load\+Points\+With\+Covariances@{Load\+Points\+With\+Covariances}!N\+D\+T\+Map@{N\+D\+T\+Map}}
+\subsubsection{\texorpdfstring{Load\+Points\+With\+Covariances()}{LoadPointsWithCovariances()}}
+{\footnotesize\ttfamily void N\+D\+T\+Map\+::\+Load\+Points\+With\+Covariances (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points,  }\item[{const std\+::vector$<$ Eigen\+::\+Matrix2d $>$ \&}]{point\+\_\+covs }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{classNDTMap_a9203c659af7f7da483d4533885a332f8}\label{classNDTMap_a9203c659af7f7da483d4533885a332f8}} 
+
+
+Load points and point covariances into the \hyperlink{classNDTMap}{N\+D\+T\+Map}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & Points to load \\
+\hline
+{\em point\+\_\+covs} & Point covariances to load \\
+\hline
+{\em normals} & Normals to load \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+{\ttfamily points}, {\ttfamily point\+\_\+covs}, and {\ttfamily normals} should have the same size 
+\end{DoxyNote}
+\mbox{\Hypertarget{classNDTMap_a3d16c1f716de28d6c5a6572346c45ee6}\label{classNDTMap_a3d16c1f716de28d6c5a6572346c45ee6}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!Pseudo\+Transform\+Cells@{Pseudo\+Transform\+Cells}}
 \index{Pseudo\+Transform\+Cells@{Pseudo\+Transform\+Cells}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{Pseudo\+Transform\+Cells()}{PseudoTransformCells()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily vector$<$shared\+\_\+ptr$<$\hyperlink{classNDTCell}{N\+D\+T\+Cell}$>$ $>$ N\+D\+T\+Map\+::\+Pseudo\+Transform\+Cells (\begin{DoxyParamCaption}\item[{const Affine2d \&}]{T,  }\item[{bool}]{include\+\_\+data = {\ttfamily false} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+\subsubsection{\texorpdfstring{Pseudo\+Transform\+Cells()}{PseudoTransformCells()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $>$ $>$ N\+D\+T\+Map\+::\+Pseudo\+Transform\+Cells (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Affine2d \&}]{T,  }\item[{bool}]{include\+\_\+data = {\ttfamily false} }\end{DoxyParamCaption}) const}
 
 
 
-Referenced by N\+D\+T\+Matcher\+::\+Ceres\+Match().
+Perform transformation to \hyperlink{classNDTMap}{N\+D\+T\+Map}. 
 
-\mbox{\Hypertarget{classNDTMap_aae233bcc01ec9e8af59fb45bd235736b}\label{classNDTMap_aae233bcc01ec9e8af59fb45bd235736b}} 
-\index{N\+D\+T\+Map@{N\+D\+T\+Map}!Pseudo\+Transform\+Cells@{Pseudo\+Transform\+Cells}}
-\index{Pseudo\+Transform\+Cells@{Pseudo\+Transform\+Cells}!N\+D\+T\+Map@{N\+D\+T\+Map}}
-\subsubsection{\texorpdfstring{Pseudo\+Transform\+Cells()}{PseudoTransformCells()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily vector$<$ shared\+\_\+ptr$<$ \hyperlink{classNDTCell}{N\+D\+T\+Cell} $>$ $>$ N\+D\+T\+Map\+::\+Pseudo\+Transform\+Cells (\begin{DoxyParamCaption}\item[{const Matrix3d \&}]{T,  }\item[{bool}]{include\+\_\+data = {\ttfamily false} }\end{DoxyParamCaption}) const}
 
-\mbox{\Hypertarget{classNDTMap_a72afff09b746b402d277945231af5d60}\label{classNDTMap_a72afff09b746b402d277945231af5d60}} 
+\begin{DoxyParams}{Parameters}
+{\em T} & Transformation \\
+\hline
+{\em include\+\_\+data} & Transform data as well (default false) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Transformed cells 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classNDTMap_aa9e3541e2f4c56ea43d598aef43e5503}\label{classNDTMap_aa9e3541e2f4c56ea43d598aef43e5503}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!size@{size}}
 \index{size@{size}!N\+D\+T\+Map@{N\+D\+T\+Map}}
 \subsubsection{\texorpdfstring{size()}{size()}}
-{\footnotesize\ttfamily int N\+D\+T\+Map\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily size\+\_\+t N\+D\+T\+Map\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-
-
-Referenced by cb().
-
-\mbox{\Hypertarget{classNDTMap_ab08b05e7708a1c28d6c9c0f27287a1c8}\label{classNDTMap_ab08b05e7708a1c28d6c9c0f27287a1c8}} 
+\mbox{\Hypertarget{classNDTMap_a355a32d48208aa5bcc361b4be1d6320c}\label{classNDTMap_a355a32d48208aa5bcc361b4be1d6320c}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!To\+String@{To\+String}}
 \index{To\+String@{To\+String}!N\+D\+T\+Map@{N\+D\+T\+Map}}
 \subsubsection{\texorpdfstring{To\+String()}{ToString()}}
-{\footnotesize\ttfamily string N\+D\+T\+Map\+::\+To\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily std\+::string N\+D\+T\+Map\+::\+To\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 
 
-Referenced by main().
+Convert the information of the \hyperlink{classNDTMap}{N\+D\+T\+Map} to a string. 
+
+
+
+Implements \hyperlink{classMapInterface_a87b132e1a619eb21e0ac684fc25f8c74}{Map\+Interface}.
 
 
 

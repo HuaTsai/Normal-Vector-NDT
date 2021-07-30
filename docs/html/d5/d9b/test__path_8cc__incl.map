@@ -1,16 +1,21 @@
 <map id="test_path.cc" name="test_path.cc">
-<area shape="rect" id="node3" href="$dc/d1e/sndt__exec_2include_2sndt__exec_2wrapper_8hpp.html" title="sndt_exec/wrapper.hpp" alt="" coords="2439,80,2597,107"/>
-<area shape="rect" id="node28" href="$d6/d52/ndt__visualizations_8h.html" title="sndt/ndt_visualizations.h" alt="" coords="2359,229,2525,256"/>
-<area shape="rect" id="node7" href="$dc/d54/common_8h.html" title="common/common.h" alt="" coords="879,304,1016,331"/>
-<area shape="rect" id="node24" href="$d1/dcb/ndt__matcher_8h.html" title="sndt/ndt_matcher.h" alt="" coords="2759,155,2893,181"/>
-<area shape="rect" id="node34" href="$dd/dc5/Normal2dEstimation_8h.html" title="normal2d/Normal2dEstimation.h" alt="" coords="1859,229,2067,256"/>
-<area shape="rect" id="node8" href="$d2/dcd/common__utils_8hpp.html" title="common/common_utils.hpp" alt="" coords="1188,386,1371,413"/>
-<area shape="rect" id="node10" href="$d0/d2b/eigen__utils_8hpp.html" title="common/eigen_utils.hpp" alt="" coords="505,386,667,413"/>
-<area shape="rect" id="node17" href="$dd/d4f/geometry__utils_8hpp.html" title="common/geometry_utils.hpp" alt="" coords="294,386,481,413"/>
-<area shape="rect" id="node18" href="$d3/df7/match__utils_8hpp.html" title="common/match_utils.hpp" alt="" coords="771,386,939,413"/>
-<area shape="rect" id="node22" href="$d3/d24/visualization__utils_8hpp.html" title="common/visualization\l_utils.hpp" alt="" coords="964,379,1112,420"/>
-<area shape="rect" id="node30" href="$d8/d0c/ndt__map_8h.html" title="sndt/ndt_map.h" alt="" coords="2373,304,2485,331"/>
-<area shape="rect" id="node32" href="$d9/dfe/ndt__grid_8h.html" title="sndt/ndt_grid.h" alt="" coords="2396,386,2504,413"/>
-<area shape="rect" id="node33" href="$d0/d8c/ndt__cell_8h.html" title="sndt/ndt_cell.h" alt="" coords="2297,475,2403,502"/>
-<area shape="rect" id="node41" href="$d6/d21/PCA2D_8h.html" title="./PCA2D.h" alt="" coords="1787,304,1873,331"/>
+<area shape="rect" id="node3" href="$dc/d54/common_8h.html" title="common/common.h" alt="" coords="743,229,881,256"/>
+<area shape="rect" id="node23" href="$d5/d4e/matcher_8h.html" title="Declaration of Matching Algorithms. " alt="" coords="1197,80,1307,107"/>
+<area shape="rect" id="node31" href="$d0/d6a/visuals_8h.html" title="Declaration of Visual Utilities. " alt="" coords="1331,80,1434,107"/>
+<area shape="rect" id="node34" href="$dc/d1e/sndt__exec_2include_2sndt__exec_2wrapper_8hpp.html" title="sndt_exec/wrapper.hpp" alt="" coords="1808,80,1965,107"/>
+<area shape="rect" id="node4" href="$d2/dcd/common__utils_8hpp.html" title="common/common_utils.hpp" alt="" coords="313,311,495,338"/>
+<area shape="rect" id="node7" href="$d0/d2b/eigen__utils_8hpp.html" title="common/eigen_utils.hpp" alt="" coords="731,311,893,338"/>
+<area shape="rect" id="node14" href="$dd/d4f/geometry__utils_8hpp.html" title="common/geometry_utils.hpp" alt="" coords="520,311,707,338"/>
+<area shape="rect" id="node15" href="$d3/df7/match__utils_8hpp.html" title="common/match_utils.hpp" alt="" coords="917,311,1085,338"/>
+<area shape="rect" id="node19" href="$d3/d24/visualization__utils_8hpp.html" title="common/visualization\l_utils.hpp" alt="" coords="1585,304,1733,345"/>
+<area shape="rect" id="node24" href="$d8/d0c/ndt__map_8h.html" title="Class Declaration of NDTMap. " alt="" coords="1381,155,1493,181"/>
+<area shape="rect" id="node29" href="$d6/d70/sndt__map_8h.html" title="Class Declaration of SNDTMap. " alt="" coords="1239,155,1358,181"/>
+<area shape="rect" id="node25" href="$d2/d83/map__interface_8h.html" title="Class of MapInterface. " alt="" coords="1227,229,1371,256"/>
+<area shape="rect" id="node27" href="$d0/d8c/ndt__cell_8h.html" title="Class Declaration of NDTCell. " alt="" coords="1533,229,1640,256"/>
+<area shape="rect" id="node26" href="$df/dd1/eigen__utils_8h.html" title="Eigen Utilities. " alt="" coords="1251,311,1375,338"/>
+<area shape="rect" id="node28" href="$da/de6/cell__interface_8h.html" title="Class of CellInterface. " alt="" coords="1405,311,1544,338"/>
+<area shape="rect" id="node30" href="$d2/dc5/sndt__cell_8h.html" title="Class Declaration of SNDTCell. " alt="" coords="1395,229,1509,256"/>
+<area shape="rect" id="node35" href="$d4/d37/pcl__utils_8h.html" title="PCL Utilities. " alt="" coords="1855,155,1966,181"/>
+<area shape="rect" id="node36" href="$dd/dc5/Normal2dEstimation_8h.html" title="normal2d/Normal2dEstimation.h" alt="" coords="2308,229,2516,256"/>
+<area shape="rect" id="node45" href="$d6/d21/PCA2D_8h.html" title="./PCA2D.h" alt="" coords="2069,311,2155,338"/>
 </map>

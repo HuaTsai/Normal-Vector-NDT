@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$db/d05/structstd_1_1conditional_3_01false_00_01T_00_01F_01_4.html" title="std::conditional\&lt; false,\l T, F \&gt;" alt="" coords="5,5,160,47"/>
+<area shape="rect" id="node1" href="$da/dcf/structstd_1_1integral__constant.html" title="std::integral_constant\l\&lt; bool, ::std::numeric\l_limits\&lt; T \&gt;::is_integer \&gt;" alt="" coords="5,5,173,61"/>
+<area shape="rect" id="node2" href="$de/d6a/structstd_1_1is__integral.html" title="std::is_integral\&lt; T \&gt;" alt="" coords="221,20,360,47"/>
+<area shape="rect" id="node3" href="$d6/dd2/structstd_1_1is__integral_3_01const_01T_01_4.html" title="std::is_integral\&lt; const T \&gt;" alt="" coords="408,20,583,47"/>
 </map>

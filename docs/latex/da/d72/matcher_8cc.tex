@@ -1,0 +1,60 @@
+\hypertarget{matcher_8cc}{}\section{matcher.\+cc File Reference}
+\label{matcher_8cc}\index{matcher.\+cc@{matcher.\+cc}}
+
+
+Definition of Matching Algorithm.  
+
+
+{\ttfamily \#include $<$ceres/ceres.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/matcher.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/pcl\+\_\+utils.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/visuals.\+h$>$}\newline
+Include dependency graph for matcher.\+cc\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{dc/df8/matcher_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classAngleLocalParameterization}{Angle\+Local\+Parameterization}
+\item 
+struct \hyperlink{structSNDTCostFunctor}{S\+N\+D\+T\+Cost\+Functor}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Affine2d \hyperlink{matcher_8cc_a3e38f8536ae2a6c848c11730c1287144}{S\+N\+D\+T\+Match} (const \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map} \&target\+\_\+map, const \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map} \&source\+\_\+map, const \hyperlink{structSNDTParameters}{S\+N\+D\+T\+Parameters} \&params, const Eigen\+::\+Affine2d \&guess\+\_\+tf)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Definition of Matching Algorithm. 
+
+\begin{DoxyAuthor}{Author}
+Hua\+Tsai (\href{mailto:huatsai.eed07g@nctu.edu.tw}{\tt huatsai.\+eed07g@nctu.\+edu.\+tw}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/07-\/29
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021 
+\end{DoxyCopyright}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{matcher_8cc_a3e38f8536ae2a6c848c11730c1287144}\label{matcher_8cc_a3e38f8536ae2a6c848c11730c1287144}} 
+\index{matcher.\+cc@{matcher.\+cc}!S\+N\+D\+T\+Match@{S\+N\+D\+T\+Match}}
+\index{S\+N\+D\+T\+Match@{S\+N\+D\+T\+Match}!matcher.\+cc@{matcher.\+cc}}
+\subsubsection{\texorpdfstring{S\+N\+D\+T\+Match()}{SNDTMatch()}}
+{\footnotesize\ttfamily Eigen\+::\+Affine2d S\+N\+D\+T\+Match (\begin{DoxyParamCaption}\item[{const \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map} \&}]{target\+\_\+map,  }\item[{const \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map} \&}]{source\+\_\+map,  }\item[{const \hyperlink{structSNDTParameters}{S\+N\+D\+T\+Parameters} \&}]{params,  }\item[{const Eigen\+::\+Affine2d \&}]{guess\+\_\+tf }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb(), and main().
+

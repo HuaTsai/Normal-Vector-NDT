@@ -39,10 +39,11 @@ include_directories(
 
 set (${PROJECT_NAME}_LIB_SRCS
   src/ndt_cell.cc
-  src/ndt_grid.cc
   src/ndt_map.cc
-  src/ndt_matcher.cc
-  src/ndt_visualizations.cc
+  src/sndt_cell.cc
+  src/sndt_map.cc
+  src/matcher.cc
+  src/visuals.cc
 )
 
 set(ALLLIBS ${catkin_LIBRARIES} ${CERES_LIBRARIES})

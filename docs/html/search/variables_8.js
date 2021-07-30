@@ -12,6 +12,7 @@ var searchData=
   ['imfr',['imfr',['../d3/d57/test__match_8cc.html#a1ebb671bb4254879909df0304c0efc3a',1,'test_match.cc']]],
   ['ind',['ind',['../d0/d68/classtrimesh_1_1GLManager_1_1BufferInfo.html#a4a2777aeb5cdeada97a07db8eb4356ca',1,'trimesh::GLManager::BufferInfo']]],
   ['inner',['inner',['../d3/d25/structdbg_1_1print__formatted.html#a080056e4f7af0c86ed46bc2ecb9c6f1e',1,'dbg::print_formatted']]],
+  ['is_5floaded_5f',['is_loaded_',['../d7/d23/classMapInterface.html#a9f323066b687763076c9fdca1e370e2a',1,'MapInterface']]],
   ['iscompat',['iscompat',['../dc/dbc/structtrimesh_1_1KDtree_1_1Node_1_1Traversal__Info.html#a844446012602379d373dcd82dcd8a71c',1,'trimesh::KDtree::Node::Traversal_Info']]],
   ['iters',['iters',['../d8/d5f/structcommon_1_1MatchPackage.html#a4c44c43d7f9ce0667d925d618d4940f4',1,'common::MatchPackage::iters()'],['../d9/d8a/ICP_8h.html#a7460ff431235790129d5ae74dfd7111a',1,'iters():&#160;ICP.cc'],['../da/d5b/ICP_8cc.html#a7460ff431235790129d5ae74dfd7111a',1,'iters():&#160;ICP.cc']]]
 ];

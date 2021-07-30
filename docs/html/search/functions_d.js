@@ -1,9 +1,7 @@
 var searchData=
 [
   ['ndtcell',['NDTCell',['../dc/d54/classNDTCell.html#acfc90537523f63170f002f74d7db1bd5',1,'NDTCell']]],
-  ['ndtgrid',['NDTGrid',['../dd/d6e/classNDTGrid.html#a3b06177c67f897a783b74b07bf520772',1,'NDTGrid']]],
   ['ndtmap',['NDTMap',['../d2/d35/classNDTMap.html#aec578016c17abfe085d0d4cf1dca1828',1,'NDTMap']]],
-  ['ndtmatcher',['NDTMatcher',['../dc/d08/classNDTMatcher.html#aa66b5b0cf92b94ef3163c976b0548d76',1,'NDTMatcher']]],
   ['need_5facross_5fedge',['need_across_edge',['../dc/d81/classtrimesh_1_1TriMesh.html#a06c7c2c7a16638317d97ecce6dc0e920',1,'trimesh::TriMesh']]],
   ['need_5fadjacentfaces',['need_adjacentfaces',['../dc/d81/classtrimesh_1_1TriMesh.html#a6ee26a07e489c66a6969ee66e98929b0',1,'trimesh::TriMesh']]],
   ['need_5fbbox',['need_bbox',['../dc/d81/classtrimesh_1_1TriMesh.html#a5cbc69a7bab72cfeba6f4812187e4dae',1,'trimesh::TriMesh']]],
@@ -16,7 +14,6 @@ var searchData=
   ['need_5fpointareas',['need_pointareas',['../dc/d81/classtrimesh_1_1TriMesh.html#a1b233589a2daa141c52e89019ca7c9f7',1,'trimesh::TriMesh']]],
   ['need_5ftstrips',['need_tstrips',['../dc/d81/classtrimesh_1_1TriMesh.html#ad9735acb2764a2ab28b50368a86d5609',1,'trimesh::TriMesh']]],
   ['new_5floop_5fedge',['new_loop_edge',['../d4/daf/namespacetrimesh.html#a036862d2143f0fc0bc638b1858a241d9',1,'trimesh']]],
-  ['newmeanandcov',['NewMeanAndCov',['../d4/d16/structCostFunctions.html#ad62402cf996ea9c0812a6d584325ab25',1,'CostFunctions']]],
   ['nodestorageblock',['NodeStorageBlock',['../df/db0/structtrimesh_1_1KDtree_1_1NodeStorageBlock.html#aa55acd82ca99ee62cb9cba7d2ab388f0',1,'trimesh::KDtree::NodeStorageBlock']]],
   ['noise3d',['Noise3D',['../de/d78/classtrimesh_1_1Noise3D.html#ab5baf8c523393a13e6b01af47263bbba',1,'trimesh::Noise3D']]],
   ['noisify',['noisify',['../d4/daf/namespacetrimesh.html#ad8abaeef03cff4b8d2b79fdce2ae88b1',1,'trimesh']]],

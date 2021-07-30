@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['scalar_5fnormal_5fdist_5fop',['scalar_normal_dist_op',['../d8/dab/structEigen_1_1internal_1_1scalar__normal__dist__op.html',1,'Eigen::internal']]],
-  ['shaderdefine',['ShaderDefine',['../da/d47/classtrimesh_1_1GLManager_1_1ShaderDefine.html',1,'trimesh::GLManager']]],
-  ['shaderinfo',['ShaderInfo',['../df/ddc/classtrimesh_1_1GLManager_1_1ShaderInfo.html',1,'trimesh::GLManager']]],
-  ['static_5fassertion_5ffailure',['STATIC_ASSERTION_FAILURE',['../d8/d48/structtrimesh_1_1STATIC__ASSERTION__FAILURE.html',1,'trimesh']]],
-  ['static_5fassertion_5ffailure_3c_20true_20_3e',['STATIC_ASSERTION_FAILURE&lt; true &gt;',['../d8/d85/structtrimesh_1_1STATIC__ASSERTION__FAILURE_3_01true_01_4.html',1,'trimesh']]]
+  ['time',['time',['../df/d1e/structdbg_1_1time.html',1,'dbg']]],
+  ['traversal_5finfo',['Traversal_Info',['../dc/dbc/structtrimesh_1_1KDtree_1_1Node_1_1Traversal__Info.html',1,'trimesh::KDtree::Node']]],
+  ['trimesh',['TriMesh',['../dc/d81/classtrimesh_1_1TriMesh.html',1,'trimesh']]],
+  ['type_5ftag',['type_tag',['../d7/dd6/structdbg_1_1type__tag.html',1,'dbg']]]
 ];

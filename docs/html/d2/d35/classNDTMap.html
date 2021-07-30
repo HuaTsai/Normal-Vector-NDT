@@ -68,59 +68,98 @@ $(function() {
 
 <p><code>#include &lt;<a class="el" href="../../d8/d0c/ndt__map_8h_source.html">ndt_map.h</a>&gt;</code></p>
 <div class="dynheader">
+Inheritance diagram for NDTMap:</div>
+<div class="dyncontent">
+<div class="center"><img src="../../da/dc7/classNDTMap__inherit__graph.png" border="0" usemap="#NDTMap_inherit__map" alt="Inheritance graph"/></div>
+<map name="NDTMap_inherit__map" id="NDTMap_inherit__map">
+<area shape="rect" id="node2" href="../../d7/d23/classMapInterface.html" title="{MapInterface\n|# is_loaded_\l# cell_size_\l# map_size_\l# map_center_\l# map_center_index_\l# cellptrs_size_\l|+ MapInterface()\l+ ~MapInterface()\l+ GetIndexForPoint()\l+ ToString()\l+ GetCellSize()\l+ GetMapSize()\l+ GetMapCenter()\l# GuessMapSize()\l# Initialize()\l# IsValidIndex()\l}" alt="" coords="35,5,182,288"/>
+</map>
+</div>
+<div class="dynheader">
 Collaboration diagram for NDTMap:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d0/d07/classNDTMap__coll__graph.png" border="0" usemap="#NDTMap_coll__map" alt="Collaboration graph"/></div>
+<map name="NDTMap_coll__map" id="NDTMap_coll__map">
+<area shape="rect" id="node2" href="../../d7/d23/classMapInterface.html" title="{MapInterface\n|# is_loaded_\l# cell_size_\l# map_size_\l# map_center_\l# map_center_index_\l# cellptrs_size_\l|+ MapInterface()\l+ ~MapInterface()\l+ GetIndexForPoint()\l+ ToString()\l+ GetCellSize()\l+ GetMapSize()\l+ GetMapCenter()\l# GuessMapSize()\l# Initialize()\l# IsValidIndex()\l}" alt="" coords="35,5,182,288"/>
+</map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aec578016c17abfe085d0d4cf1dca1828"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#aec578016c17abfe085d0d4cf1dca1828">NDTMap</a> (double <a class="el" href="../../d2/d35/classNDTMap.html#a3395ccebb28846b416550ba71b5da174">cell_size</a>)</td></tr>
+<tr class="memitem:aec578016c17abfe085d0d4cf1dca1828"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#aec578016c17abfe085d0d4cf1dca1828">NDTMap</a> (double <a class="el" href="../../d3/d57/test__match_8cc.html#a456553c1fc05d94c07e74c5fd45f6621">cell_size</a>)</td></tr>
+<tr class="memdesc:aec578016c17abfe085d0d4cf1dca1828"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="../../d2/d35/classNDTMap.html">NDTMap</a> object.  <a href="#aec578016c17abfe085d0d4cf1dca1828">More...</a><br /></td></tr>
 <tr class="separator:aec578016c17abfe085d0d4cf1dca1828"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6e42f0f13a33e6027e14635631e1312"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#af6e42f0f13a33e6027e14635631e1312">~NDTMap</a> ()</td></tr>
 <tr class="separator:af6e42f0f13a33e6027e14635631e1312"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a6596502043035b352cb470f869f79c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a7a6596502043035b352cb470f869f79c">LoadPointCloud</a> (<a class="el" href="../../d8/d0c/ndt__map_8h.html#a467e4d48ef8154e4fd6d76d355cae2da">PCXYZPtr</a> pc, double <a class="el" href="../../d3/d57/test__match_8cc.html#a3f67c53b80389c5f53961936edba04c9">radius</a>, double range_limit=-1)</td></tr>
-<tr class="separator:a7a6596502043035b352cb470f869f79c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a724122f19f58baa09c0e24b67ca697"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a1a724122f19f58baa09c0e24b67ca697">LoadPointCloud</a> (const <a class="el" href="../../d8/d0c/ndt__map_8h.html#a20282c1dd3c86f9bc25e124768cdbe3d">PCXYZ</a> &amp;pc, const <a class="el" href="../../d8/d0c/ndt__map_8h.html#a20282c1dd3c86f9bc25e124768cdbe3d">PCXYZ</a> &amp;normals, double range_limit=-1)</td></tr>
-<tr class="separator:a1a724122f19f58baa09c0e24b67ca697"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb9af807d3928dc11bf734c961fc5662"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#abb9af807d3928dc11bf734c961fc5662">LoadPointCloud</a> (const <a class="el" href="../../d8/d0c/ndt__map_8h.html#ae39e6a39986574e0b1dd694a8a8c2a39">PCXY</a> &amp;pc, const <a class="el" href="../../d8/d0c/ndt__map_8h.html#ae39e6a39986574e0b1dd694a8a8c2a39">PCXY</a> &amp;normals, double range_limit=-1)</td></tr>
-<tr class="separator:abb9af807d3928dc11bf734c961fc5662"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d74f6496cf555cbe0c41139a59a0e44"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a9d74f6496cf555cbe0c41139a59a0e44">LoadPointCloudWithCovariances</a> (const MatrixXd &amp;points, const MatrixXd &amp;normals, const MatrixXd &amp;point_covs, double range_limit=-1)</td></tr>
-<tr class="separator:a9d74f6496cf555cbe0c41139a59a0e44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9203c659af7f7da483d4533885a332f8"><td class="memItemLeft" align="right" valign="top">vector&lt; shared_ptr&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a9203c659af7f7da483d4533885a332f8">PseudoTransformCells</a> (const Affine2d &amp;T, bool include_data=false) const</td></tr>
-<tr class="separator:a9203c659af7f7da483d4533885a332f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae233bcc01ec9e8af59fb45bd235736b"><td class="memItemLeft" align="right" valign="top">vector&lt; shared_ptr&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#aae233bcc01ec9e8af59fb45bd235736b">PseudoTransformCells</a> (const Matrix3d &amp;T, bool include_data=false) const</td></tr>
-<tr class="separator:aae233bcc01ec9e8af59fb45bd235736b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d4dad624af3df75327d0e279be3d477"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a4d4dad624af3df75327d0e279be3d477">GetCellForPoint</a> (const Vector2d &amp;point)</td></tr>
-<tr class="separator:a4d4dad624af3df75327d0e279be3d477"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a304a9fa19f39944b49d0ab3d84bf5aae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a304a9fa19f39944b49d0ab3d84bf5aae">GetClosestCellForPoint</a> (const Vector2d &amp;point, int maxdist_of_cells, bool include_locate=true)</td></tr>
-<tr class="separator:a304a9fa19f39944b49d0ab3d84bf5aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a4879ae61a1e3e8d634cbca02bfd9ce"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a0a4879ae61a1e3e8d634cbca02bfd9ce">GetClosestCellsForPoint</a> (const Vector2d &amp;point, int maxdist_of_cells, bool include_locate=false)</td></tr>
-<tr class="separator:a0a4879ae61a1e3e8d634cbca02bfd9ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afbeaa3c223cb78b970601c31eebb8b8d"><td class="memItemLeft" align="right" valign="top">vector&lt; Vector2d &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#afbeaa3c223cb78b970601c31eebb8b8d">GetPoints</a> ()</td></tr>
-<tr class="separator:afbeaa3c223cb78b970601c31eebb8b8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81de728bee39e48fefcb92a893f53611"><td class="memItemLeft" align="right" valign="top">vector&lt; Vector2d &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a81de728bee39e48fefcb92a893f53611">GetNormals</a> ()</td></tr>
-<tr class="separator:a81de728bee39e48fefcb92a893f53611"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab08b05e7708a1c28d6c9c0f27287a1c8"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#ab08b05e7708a1c28d6c9c0f27287a1c8">ToString</a> ()</td></tr>
-<tr class="separator:ab08b05e7708a1c28d6c9c0f27287a1c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72afff09b746b402d277945231af5d60"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a72afff09b746b402d277945231af5d60">size</a> ()</td></tr>
-<tr class="separator:a72afff09b746b402d277945231af5d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf9226d12395621fad8f75d94e9f8cc7"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> * &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#adf9226d12395621fad8f75d94e9f8cc7">begin</a> ()</td></tr>
-<tr class="separator:adf9226d12395621fad8f75d94e9f8cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a696381901e5f856af6c4ecec37770e1f"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> * &gt;::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a696381901e5f856af6c4ecec37770e1f">begin</a> () const</td></tr>
-<tr class="separator:a696381901e5f856af6c4ecec37770e1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a001f919cb4e5b0a784b9b69ba95cb035"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> * &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a001f919cb4e5b0a784b9b69ba95cb035">end</a> ()</td></tr>
-<tr class="separator:a001f919cb4e5b0a784b9b69ba95cb035"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96f1e8b110d1a542f06792945e240cb3"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> * &gt;::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a96f1e8b110d1a542f06792945e240cb3">end</a> () const</td></tr>
-<tr class="separator:a96f1e8b110d1a542f06792945e240cb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad319bbb8860c6f2214a30bb7d64525e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/d6e/classNDTGrid.html">NDTGrid</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#ad319bbb8860c6f2214a30bb7d64525e5">index</a> () const</td></tr>
-<tr class="separator:ad319bbb8860c6f2214a30bb7d64525e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa737ee61fd3b732c7d0fe3cdae4b42d2"><td class="memItemLeft" align="right" valign="top">Vector2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#aa737ee61fd3b732c7d0fe3cdae4b42d2">map_size</a> () const</td></tr>
-<tr class="separator:aa737ee61fd3b732c7d0fe3cdae4b42d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bc1d0a7b7949886670afb4f3c271a37"><td class="memItemLeft" align="right" valign="top">Vector2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a5bc1d0a7b7949886670afb4f3c271a37">map_center</a> () const</td></tr>
-<tr class="separator:a5bc1d0a7b7949886670afb4f3c271a37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3395ccebb28846b416550ba71b5da174"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a3395ccebb28846b416550ba71b5da174">cell_size</a> () const</td></tr>
-<tr class="separator:a3395ccebb28846b416550ba71b5da174"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab22791d0b328ae9639799bc5d31d8b49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#ab22791d0b328ae9639799bc5d31d8b49">LoadPoints</a> (const std::vector&lt; Eigen::Vector2d &gt; &amp;points)</td></tr>
+<tr class="memdesc:ab22791d0b328ae9639799bc5d31d8b49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load points into the <a class="el" href="../../d2/d35/classNDTMap.html">NDTMap</a>.  <a href="#ab22791d0b328ae9639799bc5d31d8b49">More...</a><br /></td></tr>
+<tr class="separator:ab22791d0b328ae9639799bc5d31d8b49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00f9fe19e50c264cb4cf1de68f0c05e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a00f9fe19e50c264cb4cf1de68f0c05e3">LoadPointsWithCovariances</a> (const std::vector&lt; Eigen::Vector2d &gt; &amp;points, const std::vector&lt; Eigen::Matrix2d &gt; &amp;point_covs)</td></tr>
+<tr class="memdesc:a00f9fe19e50c264cb4cf1de68f0c05e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load points and point covariances into the <a class="el" href="../../d2/d35/classNDTMap.html">NDTMap</a>.  <a href="#a00f9fe19e50c264cb4cf1de68f0c05e3">More...</a><br /></td></tr>
+<tr class="separator:a00f9fe19e50c264cb4cf1de68f0c05e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d16c1f716de28d6c5a6572346c45ee6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a3d16c1f716de28d6c5a6572346c45ee6">PseudoTransformCells</a> (const Eigen::Affine2d &amp;T, bool include_data=false) const</td></tr>
+<tr class="memdesc:a3d16c1f716de28d6c5a6572346c45ee6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform transformation to <a class="el" href="../../d2/d35/classNDTMap.html">NDTMap</a>.  <a href="#a3d16c1f716de28d6c5a6572346c45ee6">More...</a><br /></td></tr>
+<tr class="separator:a3d16c1f716de28d6c5a6572346c45ee6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab37c2e140bf7b138be3cd0b4d5104dfc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#ab37c2e140bf7b138be3cd0b4d5104dfc">GetCellAndAllocate</a> (const Eigen::Vector2d &amp;point)</td></tr>
+<tr class="memdesc:ab37c2e140bf7b138be3cd0b4d5104dfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get and allocate the cell by a given point.  <a href="#ab37c2e140bf7b138be3cd0b4d5104dfc">More...</a><br /></td></tr>
+<tr class="separator:ab37c2e140bf7b138be3cd0b4d5104dfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8c796e4bf0512e4d640887d228b2404"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#aa8c796e4bf0512e4d640887d228b2404">GetCellForPoint</a> (const Eigen::Vector2d &amp;point) const</td></tr>
+<tr class="memdesc:aa8c796e4bf0512e4d640887d228b2404"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the cell by a given point.  <a href="#aa8c796e4bf0512e4d640887d228b2404">More...</a><br /></td></tr>
+<tr class="separator:aa8c796e4bf0512e4d640887d228b2404"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a355a32d48208aa5bcc361b4be1d6320c"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a355a32d48208aa5bcc361b4be1d6320c">ToString</a> () const override</td></tr>
+<tr class="memdesc:a355a32d48208aa5bcc361b4be1d6320c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the information of the <a class="el" href="../../d2/d35/classNDTMap.html">NDTMap</a> to a string.  <a href="#a355a32d48208aa5bcc361b4be1d6320c">More...</a><br /></td></tr>
+<tr class="separator:a355a32d48208aa5bcc361b4be1d6320c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b44ded259db4af8c4abffed0553e6c0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Eigen::Vector2d &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a2b44ded259db4af8c4abffed0553e6c0">GetPoints</a> () const</td></tr>
+<tr class="memdesc:a2b44ded259db4af8c4abffed0553e6c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Points object.  <a href="#a2b44ded259db4af8c4abffed0553e6c0">More...</a><br /></td></tr>
+<tr class="separator:a2b44ded259db4af8c4abffed0553e6c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9e3541e2f4c56ea43d598aef43e5503"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#aa9e3541e2f4c56ea43d598aef43e5503">size</a> () const</td></tr>
+<tr class="separator:aa9e3541e2f4c56ea43d598aef43e5503"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94a3a8740a68aafca85872153ef68a40"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> * &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a94a3a8740a68aafca85872153ef68a40">begin</a> ()</td></tr>
+<tr class="separator:a94a3a8740a68aafca85872153ef68a40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad35b977c2c8e568da37787a529ae6df5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> * &gt;::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#ad35b977c2c8e568da37787a529ae6df5">begin</a> () const</td></tr>
+<tr class="separator:ad35b977c2c8e568da37787a529ae6df5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10cc94926e3fc5ac31fa50f166eb3025"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> * &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a10cc94926e3fc5ac31fa50f166eb3025">end</a> ()</td></tr>
+<tr class="separator:a10cc94926e3fc5ac31fa50f166eb3025"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a248b578e22a0e8a0b3211df280fbe0a5"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> * &gt;::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d35/classNDTMap.html#a248b578e22a0e8a0b3211df280fbe0a5">end</a> () const</td></tr>
+<tr class="separator:a248b578e22a0e8a0b3211df280fbe0a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classMapInterface"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classMapInterface')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d7/d23/classMapInterface.html">MapInterface</a></td></tr>
+<tr class="memitem:a5ecababed14b4918ba90b98eb6b8f6b7 inherit pub_methods_classMapInterface"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#a5ecababed14b4918ba90b98eb6b8f6b7">MapInterface</a> (double <a class="el" href="../../d3/d57/test__match_8cc.html#a456553c1fc05d94c07e74c5fd45f6621">cell_size</a>)</td></tr>
+<tr class="memdesc:a5ecababed14b4918ba90b98eb6b8f6b7 inherit pub_methods_classMapInterface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="../../d7/d23/classMapInterface.html">MapInterface</a> object.  <a href="../../d7/d23/classMapInterface.html#a5ecababed14b4918ba90b98eb6b8f6b7">More...</a><br /></td></tr>
+<tr class="separator:a5ecababed14b4918ba90b98eb6b8f6b7 inherit pub_methods_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aede896827e92298d459e6d51a2095155 inherit pub_methods_classMapInterface"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#aede896827e92298d459e6d51a2095155">~MapInterface</a> ()=default</td></tr>
+<tr class="separator:aede896827e92298d459e6d51a2095155 inherit pub_methods_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abda1b7e35d6af9e42ca698c909ba976b inherit pub_methods_classMapInterface"><td class="memItemLeft" align="right" valign="top">Eigen::Vector2i&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#abda1b7e35d6af9e42ca698c909ba976b">GetIndexForPoint</a> (const Eigen::Vector2d &amp;point) const</td></tr>
+<tr class="memdesc:abda1b7e35d6af9e42ca698c909ba976b inherit pub_methods_classMapInterface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the index by a given point.  <a href="../../d7/d23/classMapInterface.html#abda1b7e35d6af9e42ca698c909ba976b">More...</a><br /></td></tr>
+<tr class="separator:abda1b7e35d6af9e42ca698c909ba976b inherit pub_methods_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade05de8aac815c4e54ffdbc82afa2cbc inherit pub_methods_classMapInterface"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#ade05de8aac815c4e54ffdbc82afa2cbc">GetCellSize</a> () const</td></tr>
+<tr class="separator:ade05de8aac815c4e54ffdbc82afa2cbc inherit pub_methods_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfbb86571ebd3fd0404eb238f5a4d52c inherit pub_methods_classMapInterface"><td class="memItemLeft" align="right" valign="top">Eigen::Vector2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#acfbb86571ebd3fd0404eb238f5a4d52c">GetMapSize</a> () const</td></tr>
+<tr class="separator:acfbb86571ebd3fd0404eb238f5a4d52c inherit pub_methods_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2ab3f050d776762ff6a3b9d7a6a1bc6 inherit pub_methods_classMapInterface"><td class="memItemLeft" align="right" valign="top">Eigen::Vector2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#ad2ab3f050d776762ff6a3b9d7a6a1bc6">GetMapCenter</a> () const</td></tr>
+<tr class="separator:ad2ab3f050d776762ff6a3b9d7a6a1bc6 inherit pub_methods_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_methods_classMapInterface"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classMapInterface')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d7/d23/classMapInterface.html">MapInterface</a></td></tr>
+<tr class="memitem:a37aaa1fd2a400cb1138100eeae9b566b inherit pro_methods_classMapInterface"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#a37aaa1fd2a400cb1138100eeae9b566b">GuessMapSize</a> (const std::vector&lt; Eigen::Vector2d &gt; &amp;points)</td></tr>
+<tr class="memdesc:a37aaa1fd2a400cb1138100eeae9b566b inherit pro_methods_classMapInterface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update mata information of <a class="el" href="../../d7/d23/classMapInterface.html">MapInterface</a> by points.  <a href="../../d7/d23/classMapInterface.html#a37aaa1fd2a400cb1138100eeae9b566b">More...</a><br /></td></tr>
+<tr class="separator:a37aaa1fd2a400cb1138100eeae9b566b inherit pro_methods_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19f763b424405f5da2863660c5f0ccb3 inherit pro_methods_classMapInterface"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#a19f763b424405f5da2863660c5f0ccb3">IsValidIndex</a> (const Eigen::Vector2i &amp;index) const</td></tr>
+<tr class="memdesc:a19f763b424405f5da2863660c5f0ccb3 inherit pro_methods_classMapInterface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check the validity of an index.  <a href="../../d7/d23/classMapInterface.html#a19f763b424405f5da2863660c5f0ccb3">More...</a><br /></td></tr>
+<tr class="separator:a19f763b424405f5da2863660c5f0ccb3 inherit pro_methods_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classMapInterface"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classMapInterface')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d7/d23/classMapInterface.html">MapInterface</a></td></tr>
+<tr class="memitem:a9f323066b687763076c9fdca1e370e2a inherit pro_attribs_classMapInterface"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#a9f323066b687763076c9fdca1e370e2a">is_loaded_</a></td></tr>
+<tr class="separator:a9f323066b687763076c9fdca1e370e2a inherit pro_attribs_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67c2db325b44e03954d845b5d626daf6 inherit pro_attribs_classMapInterface"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#a67c2db325b44e03954d845b5d626daf6">cell_size_</a></td></tr>
+<tr class="separator:a67c2db325b44e03954d845b5d626daf6 inherit pro_attribs_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83368917e03aaea6b1bcc4f8217426ef inherit pro_attribs_classMapInterface"><td class="memItemLeft" align="right" valign="top">Eigen::Vector2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#a83368917e03aaea6b1bcc4f8217426ef">map_size_</a></td></tr>
+<tr class="separator:a83368917e03aaea6b1bcc4f8217426ef inherit pro_attribs_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a93205a5de9eb328fae48138c0cbb4c inherit pro_attribs_classMapInterface"><td class="memItemLeft" align="right" valign="top">Eigen::Vector2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#a4a93205a5de9eb328fae48138c0cbb4c">map_center_</a></td></tr>
+<tr class="separator:a4a93205a5de9eb328fae48138c0cbb4c inherit pro_attribs_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbc97db0c3d7bd68b143d1a933a87439 inherit pro_attribs_classMapInterface"><td class="memItemLeft" align="right" valign="top">Eigen::Vector2i&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#acbc97db0c3d7bd68b143d1a933a87439">map_center_index_</a></td></tr>
+<tr class="separator:acbc97db0c3d7bd68b143d1a933a87439 inherit pro_attribs_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7400134de8e386c99823aa24f25c799 inherit pro_attribs_classMapInterface"><td class="memItemLeft" align="right" valign="top">Eigen::Vector2i&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d23/classMapInterface.html#ae7400134de8e386c99823aa24f25c799">cellptrs_size_</a></td></tr>
+<tr class="separator:ae7400134de8e386c99823aa24f25c799 inherit pro_attribs_classMapInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aec578016c17abfe085d0d4cf1dca1828"></a>
@@ -147,6 +186,14 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Construct a new <a class="el" href="../../d2/d35/classNDTMap.html">NDTMap</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cell_size</td><td>Cell size of the <a class="el" href="../../d2/d35/classNDTMap.html">NDTMap</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="af6e42f0f13a33e6027e14635631e1312"></a>
@@ -167,8 +214,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="adf9226d12395621fad8f75d94e9f8cc7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf9226d12395621fad8f75d94e9f8cc7">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
+<a id="a94a3a8740a68aafca85872153ef68a40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94a3a8740a68aafca85872153ef68a40">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -177,7 +224,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt;<a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&gt;::iterator NDTMap::begin </td>
+          <td class="memname">std::vector&lt;<a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&gt;::iterator NDTMap::begin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -190,12 +237,12 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="../../d6/d1c/sndt__exec_2src_2test__0dis_8cc.html#a0716cb3cd0a7af4eccacdfecb8bed949">InfoOfNDTMap()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d2/d35/classNDTMap.html#a2b44ded259db4af8c4abffed0553e6c0">GetPoints()</a>, and <a class="el" href="../../d2/d35/classNDTMap.html#a3d16c1f716de28d6c5a6572346c45ee6">PseudoTransformCells()</a>.</p>
 
 </div>
 </div>
-<a id="a696381901e5f856af6c4ecec37770e1f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a696381901e5f856af6c4ecec37770e1f">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
+<a id="ad35b977c2c8e568da37787a529ae6df5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad35b977c2c8e568da37787a529ae6df5">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -204,7 +251,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt;<a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&gt;::const_iterator NDTMap::begin </td>
+          <td class="memname">std::vector&lt;<a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&gt;::const_iterator NDTMap::begin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -219,8 +266,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a3395ccebb28846b416550ba71b5da174"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3395ccebb28846b416550ba71b5da174">&#9670;&nbsp;</a></span>cell_size()</h2>
+<a id="a10cc94926e3fc5ac31fa50f166eb3025"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10cc94926e3fc5ac31fa50f166eb3025">&#9670;&nbsp;</a></span>end() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -229,32 +276,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double NDTMap::cell_size </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a001f919cb4e5b0a784b9b69ba95cb035"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a001f919cb4e5b0a784b9b69ba95cb035">&#9670;&nbsp;</a></span>end() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">vector&lt;<a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&gt;::iterator NDTMap::end </td>
+          <td class="memname">std::vector&lt;<a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&gt;::iterator NDTMap::end </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -267,12 +289,12 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="../../d6/d1c/sndt__exec_2src_2test__0dis_8cc.html#a0716cb3cd0a7af4eccacdfecb8bed949">InfoOfNDTMap()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d2/d35/classNDTMap.html#a2b44ded259db4af8c4abffed0553e6c0">GetPoints()</a>, and <a class="el" href="../../d2/d35/classNDTMap.html#a3d16c1f716de28d6c5a6572346c45ee6">PseudoTransformCells()</a>.</p>
 
 </div>
 </div>
-<a id="a96f1e8b110d1a542f06792945e240cb3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96f1e8b110d1a542f06792945e240cb3">&#9670;&nbsp;</a></span>end() <span class="overload">[2/2]</span></h2>
+<a id="a248b578e22a0e8a0b3211df280fbe0a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a248b578e22a0e8a0b3211df280fbe0a5">&#9670;&nbsp;</a></span>end() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -281,7 +303,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt;<a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&gt;::const_iterator NDTMap::end </td>
+          <td class="memname">std::vector&lt;<a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&gt;::const_iterator NDTMap::end </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -296,310 +318,125 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4d4dad624af3df75327d0e279be3d477"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d4dad624af3df75327d0e279be3d477">&#9670;&nbsp;</a></span>GetCellForPoint()</h2>
+<a id="ab37c2e140bf7b138be3cd0b4d5104dfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab37c2e140bf7b138be3cd0b4d5104dfc">&#9670;&nbsp;</a></span>GetCellAndAllocate()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a>* NDTMap::GetCellForPoint </td>
+          <td class="memname"><a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> * NDTMap::GetCellAndAllocate </td>
           <td>(</td>
-          <td class="paramtype">const Vector2d &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Vector2d &amp;&#160;</td>
           <td class="paramname"><em>point</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="../../dc/d08/classNDTMatcher.html#ac55488eff673a57c3d7f3ab6a59c99a1">NDTMatcher::CeresMatch()</a>.</p>
+<p>Get and allocate the cell by a given point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point</td><td>Input point </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/d35/classNDTMap.html#ab22791d0b328ae9639799bc5d31d8b49">LoadPoints()</a>, and <a class="el" href="../../d2/d35/classNDTMap.html#a00f9fe19e50c264cb4cf1de68f0c05e3">LoadPointsWithCovariances()</a>.</p>
 
 </div>
 </div>
-<a id="a304a9fa19f39944b49d0ab3d84bf5aae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a304a9fa19f39944b49d0ab3d84bf5aae">&#9670;&nbsp;</a></span>GetClosestCellForPoint()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a>* NDTMap::GetClosestCellForPoint </td>
-          <td>(</td>
-          <td class="paramtype">const Vector2d &amp;&#160;</td>
-          <td class="paramname"><em>point</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>maxdist_of_cells</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>include_locate</em> = <code>true</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0a4879ae61a1e3e8d634cbca02bfd9ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a4879ae61a1e3e8d634cbca02bfd9ce">&#9670;&nbsp;</a></span>GetClosestCellsForPoint()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">vector&lt;<a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> *&gt; NDTMap::GetClosestCellsForPoint </td>
-          <td>(</td>
-          <td class="paramtype">const Vector2d &amp;&#160;</td>
-          <td class="paramname"><em>point</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>maxdist_of_cells</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>include_locate</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a81de728bee39e48fefcb92a893f53611"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a81de728bee39e48fefcb92a893f53611">&#9670;&nbsp;</a></span>GetNormals()</h2>
+<a id="aa8c796e4bf0512e4d640887d228b2404"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8c796e4bf0512e4d640887d228b2404">&#9670;&nbsp;</a></span>GetCellForPoint()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt; Vector2d &gt; NDTMap::GetNormals </td>
+          <td class="memname">const <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> * NDTMap::GetCellForPoint </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td class="paramtype">const Eigen::Vector2d &amp;&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
+<p>Get the cell by a given point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point</td><td>Input point </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a id="afbeaa3c223cb78b970601c31eebb8b8d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afbeaa3c223cb78b970601c31eebb8b8d">&#9670;&nbsp;</a></span>GetPoints()</h2>
+<a id="a2b44ded259db4af8c4abffed0553e6c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b44ded259db4af8c4abffed0553e6c0">&#9670;&nbsp;</a></span>GetPoints()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt; Vector2d &gt; NDTMap::GetPoints </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad319bbb8860c6f2214a30bb7d64525e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad319bbb8860c6f2214a30bb7d64525e5">&#9670;&nbsp;</a></span>index()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../dd/d6e/classNDTGrid.html">NDTGrid</a>* NDTMap::index </td>
+          <td class="memname">std::vector&lt; Eigen::Vector2d &gt; NDTMap::GetPoints </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+
+<p>Get the Points object. </p>
+<dl class="section note"><dt>Note</dt><dd>The points are retrived from active_cells_, which does not necessarily equal to the original input </dd></dl>
 
 </div>
 </div>
-<a id="a7a6596502043035b352cb470f869f79c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a6596502043035b352cb470f869f79c">&#9670;&nbsp;</a></span>LoadPointCloud() <span class="overload">[1/3]</span></h2>
+<a id="ab22791d0b328ae9639799bc5d31d8b49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab22791d0b328ae9639799bc5d31d8b49">&#9670;&nbsp;</a></span>LoadPoints()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void NDTMap::LoadPointCloud </td>
+          <td class="memname">void NDTMap::LoadPoints </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d8/d0c/ndt__map_8h.html#a467e4d48ef8154e4fd6d76d355cae2da">PCXYZPtr</a>&#160;</td>
-          <td class="paramname"><em>pc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">const std::vector&lt; Eigen::Vector2d &gt; &amp;&#160;</td>
+          <td class="paramname"><em>points</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>radius</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>range_limit</em> = <code>-1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="../../dc/d1e/sndt__exec_2include_2sndt__exec_2wrapper_8hpp.html#a065ed14171649ff6dc91209254295290">DoSNDT()</a>.</p>
+<p>Load points into the <a class="el" href="../../d2/d35/classNDTMap.html">NDTMap</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">points</td><td>Points to load </td></tr>
+    <tr><td class="paramname">normals</td><td>Normals to load </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd><code>points</code> and <code>normals</code> should have the same size </dd></dl>
 
 </div>
 </div>
-<a id="a1a724122f19f58baa09c0e24b67ca697"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a724122f19f58baa09c0e24b67ca697">&#9670;&nbsp;</a></span>LoadPointCloud() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void NDTMap::LoadPointCloud </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="../../d8/d0c/ndt__map_8h.html#a20282c1dd3c86f9bc25e124768cdbe3d">PCXYZ</a> &amp;&#160;</td>
-          <td class="paramname"><em>pc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="../../d8/d0c/ndt__map_8h.html#a20282c1dd3c86f9bc25e124768cdbe3d">PCXYZ</a> &amp;&#160;</td>
-          <td class="paramname"><em>normals</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>range_limit</em> = <code>-1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abb9af807d3928dc11bf734c961fc5662"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb9af807d3928dc11bf734c961fc5662">&#9670;&nbsp;</a></span>LoadPointCloud() <span class="overload">[3/3]</span></h2>
+<a id="a00f9fe19e50c264cb4cf1de68f0c05e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00f9fe19e50c264cb4cf1de68f0c05e3">&#9670;&nbsp;</a></span>LoadPointsWithCovariances()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void NDTMap::LoadPointCloud </td>
+          <td class="memname">void NDTMap::LoadPointsWithCovariances </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="../../d8/d0c/ndt__map_8h.html#ae39e6a39986574e0b1dd694a8a8c2a39">PCXY</a> &amp;&#160;</td>
-          <td class="paramname"><em>pc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="../../d8/d0c/ndt__map_8h.html#ae39e6a39986574e0b1dd694a8a8c2a39">PCXY</a> &amp;&#160;</td>
-          <td class="paramname"><em>normals</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>range_limit</em> = <code>-1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a9d74f6496cf555cbe0c41139a59a0e44"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d74f6496cf555cbe0c41139a59a0e44">&#9670;&nbsp;</a></span>LoadPointCloudWithCovariances()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void NDTMap::LoadPointCloudWithCovariances </td>
-          <td>(</td>
-          <td class="paramtype">const MatrixXd &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; Eigen::Vector2d &gt; &amp;&#160;</td>
           <td class="paramname"><em>points</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const MatrixXd &amp;&#160;</td>
-          <td class="paramname"><em>normals</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const MatrixXd &amp;&#160;</td>
-          <td class="paramname"><em>point_covs</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>range_limit</em> = <code>-1</code>&#160;</td>
+          <td class="paramtype">const std::vector&lt; Eigen::Matrix2d &gt; &amp;&#160;</td>
+          <td class="paramname"><em>point_covs</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -609,108 +446,29 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="../../dc/d1e/sndt__exec_2include_2sndt__exec_2wrapper_8hpp.html#a15c688d74ac6178ac759eb8c105c55db">MakeMap()</a>.</p>
+<p>Load points and point covariances into the <a class="el" href="../../d2/d35/classNDTMap.html">NDTMap</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">points</td><td>Points to load </td></tr>
+    <tr><td class="paramname">point_covs</td><td>Point covariances to load </td></tr>
+    <tr><td class="paramname">normals</td><td>Normals to load </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd><code>points</code>, <code>point_covs</code>, and <code>normals</code> should have the same size </dd></dl>
 
 </div>
 </div>
-<a id="a5bc1d0a7b7949886670afb4f3c271a37"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5bc1d0a7b7949886670afb4f3c271a37">&#9670;&nbsp;</a></span>map_center()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Vector2d NDTMap::map_center </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa737ee61fd3b732c7d0fe3cdae4b42d2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa737ee61fd3b732c7d0fe3cdae4b42d2">&#9670;&nbsp;</a></span>map_size()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Vector2d NDTMap::map_size </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a9203c659af7f7da483d4533885a332f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9203c659af7f7da483d4533885a332f8">&#9670;&nbsp;</a></span>PseudoTransformCells() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">vector&lt;shared_ptr&lt;<a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a>&gt; &gt; NDTMap::PseudoTransformCells </td>
-          <td>(</td>
-          <td class="paramtype">const Affine2d &amp;&#160;</td>
-          <td class="paramname"><em>T</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>include_data</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="reference">Referenced by <a class="el" href="../../dc/d08/classNDTMatcher.html#ac55488eff673a57c3d7f3ab6a59c99a1">NDTMatcher::CeresMatch()</a>.</p>
-
-</div>
-</div>
-<a id="aae233bcc01ec9e8af59fb45bd235736b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aae233bcc01ec9e8af59fb45bd235736b">&#9670;&nbsp;</a></span>PseudoTransformCells() <span class="overload">[2/2]</span></h2>
+<a id="a3d16c1f716de28d6c5a6572346c45ee6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d16c1f716de28d6c5a6572346c45ee6">&#9670;&nbsp;</a></span>PseudoTransformCells()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt; shared_ptr&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> &gt; &gt; NDTMap::PseudoTransformCells </td>
+          <td class="memname">std::vector&lt; std::shared_ptr&lt; <a class="el" href="../../dc/d54/classNDTCell.html">NDTCell</a> &gt; &gt; NDTMap::PseudoTransformCells </td>
           <td>(</td>
-          <td class="paramtype">const Matrix3d &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Affine2d &amp;&#160;</td>
           <td class="paramname"><em>T</em>, </td>
         </tr>
         <tr>
@@ -727,10 +485,20 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Perform transformation to <a class="el" href="../../d2/d35/classNDTMap.html">NDTMap</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T</td><td>Transformation </td></tr>
+    <tr><td class="paramname">include_data</td><td>Transform data as well (default false) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Transformed cells </dd></dl>
+
 </div>
 </div>
-<a id="a72afff09b746b402d277945231af5d60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72afff09b746b402d277945231af5d60">&#9670;&nbsp;</a></span>size()</h2>
+<a id="aa9e3541e2f4c56ea43d598aef43e5503"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9e3541e2f4c56ea43d598aef43e5503">&#9670;&nbsp;</a></span>size()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -739,10 +507,10 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int NDTMap::size </td>
+          <td class="memname">size_t NDTMap::size </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -752,12 +520,10 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="../../d3/d57/test__match_8cc.html#abf7613499686c6bb646f6244258a331b">cb()</a>.</p>
-
 </div>
 </div>
-<a id="ab08b05e7708a1c28d6c9c0f27287a1c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab08b05e7708a1c28d6c9c0f27287a1c8">&#9670;&nbsp;</a></span>ToString()</h2>
+<a id="a355a32d48208aa5bcc361b4be1d6320c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a355a32d48208aa5bcc361b4be1d6320c">&#9670;&nbsp;</a></span>ToString()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -766,20 +532,22 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">string NDTMap::ToString </td>
+          <td class="memname">std::string NDTMap::ToString </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="../../d5/d41/test__covmap_8cc.html#a3c04138a5bfe5d72780bb7e82a18e627">main()</a>.</p>
+<p>Convert the information of the <a class="el" href="../../d2/d35/classNDTMap.html">NDTMap</a> to a string. </p>
+
+<p>Implements <a class="el" href="../../d7/d23/classMapInterface.html#a87b132e1a619eb21e0ac684fc25f8c74">MapInterface</a>.</p>
 
 </div>
 </div>

@@ -40,8 +40,6 @@ var searchData=
   ['remove_5fsliver_5ffaces',['remove_sliver_faces',['../d4/daf/namespacetrimesh.html#afe82003e1666436750d8920cc5f8aa1c',1,'trimesh']]],
   ['remove_5funused_5fvertices',['remove_unused_vertices',['../d4/daf/namespacetrimesh.html#a0930a3eeaa4d0e80fbccb6b1baf71525',1,'trimesh']]],
   ['remove_5fvertices',['remove_vertices',['../d4/daf/namespacetrimesh.html#a0fcaeb83417f32b5128881cb1076e7de',1,'trimesh::remove_vertices(TriMesh *mesh, const ::std::vector&lt; bool &gt; &amp;toremove)'],['../d4/daf/namespacetrimesh.html#a84aeaf44b09ef93b6d49140b9d307ee8',1,'trimesh::remove_vertices(TriMesh *mesh, const vector&lt; bool &gt; &amp;toremove)']]],
-  ['removeduplicates',['RemoveDuplicates',['../d2/d03/ndt__cell_8cc.html#abb544925c2f95b760a1fbb741789bb61',1,'ndt_cell.cc']]],
-  ['removeinfinitecolumn',['RemoveInfiniteColumn',['../d5/d41/test__covmap_8cc.html#a84f375440ecafd5fb52a618c2dfa4c6c',1,'test_covmap.cc']]],
   ['removenan',['RemoveNaN',['../db/d7d/pclmatch_2include_2pclmatch_2wrapper_8hpp.html#a84fb9dd82bf989b4212d942058105b32',1,'wrapper.hpp']]],
   ['removenanandinf',['RemoveNaNAndInf',['../db/d7d/pclmatch_2include_2pclmatch_2wrapper_8hpp.html#a820424e40fbcc2c77c453d78cd377ced',1,'wrapper.hpp']]],
   ['rend',['rend',['../db/de5/classtrimesh_1_1Vec.html#acac7354cecf1d803c5d168ca0acfea57',1,'trimesh::Vec::rend()'],['../db/de5/classtrimesh_1_1Vec.html#aa5fa2f2e3aaf736dacaa6b715b6338cb',1,'trimesh::Vec::rend() const'],['../de/dd2/classtrimesh_1_1XForm.html#aa8654437cbc439236d94346f20fe34f8',1,'trimesh::XForm::rend()'],['../de/dd2/classtrimesh_1_1XForm.html#aec0170f12d76cc1462363060b6a3a35a',1,'trimesh::XForm::rend() const']]],
@@ -64,12 +62,11 @@ var searchData=
   ['rhombicuboctahedron_5ffaces',['rhombicuboctahedron_faces',['../d4/daf/namespacetrimesh.html#a26d7caf0c24cadc73cd49b78177bff8e',1,'trimesh']]],
   ['rhombicuboctahedron_5fverts',['rhombicuboctahedron_verts',['../d4/daf/namespacetrimesh.html#a36509c074cecc86d1087c3ecdffb1ff4',1,'trimesh']]],
   ['rms',['rms',['../db/de5/classtrimesh_1_1Vec.html#a83f1fd079bd1abde144fd2279d10c41b',1,'trimesh::Vec']]],
-  ['rng',['rng',['../d8/dab/structEigen_1_1internal_1_1scalar__normal__dist__op.html#aa088a6e6b0b17b44a1e409fd8e024969',1,'Eigen::internal::scalar_normal_dist_op']]],
   ['rot',['rot',['../de/dd2/classtrimesh_1_1XForm.html#a522678b276348f5bf91553a1e5f88972',1,'trimesh::XForm::rot(const T &amp;angle, const T &amp;rx, const T &amp;ry, const T &amp;rz)'],['../de/dd2/classtrimesh_1_1XForm.html#a5980fc1b56390c0b23f3ffb966c4e54e',1,'trimesh::XForm::rot(const T &amp;angle, const S &amp;axis)'],['../d4/daf/namespacetrimesh.html#a56d92b6392bcb92a44c3fff9d26b7711',1,'trimesh::rot()']]],
   ['rot_5fcoord_5fsys',['rot_coord_sys',['../d4/daf/namespacetrimesh.html#a5c50deca29e801cb60ebe1c595599ce6',1,'trimesh']]],
   ['rot_5finto',['rot_into',['../de/dd2/classtrimesh_1_1XForm.html#adacede8698b599dd1d2f65af91754fb4',1,'trimesh::XForm::rot_into(T d1x, T d1y, T d1z, T d2x, T d2y, T d2z)'],['../de/dd2/classtrimesh_1_1XForm.html#a5d47aa49e7b78517fbef529f8909c62b',1,'trimesh::XForm::rot_into(const S &amp;d1, const S &amp;d2)']]],
   ['rot_5fonly',['rot_only',['../d4/daf/namespacetrimesh.html#a1ae6e55c3005878fc1338a2b0c60e746',1,'trimesh']]],
   ['rotate',['ROTATE',['../db/db5/namespacetrimesh_1_1Mouse.html#a0b9f7f2e8a91299850fa63a8c995b02aa6a926efd1152b48129469a24c113003b',1,'trimesh::Mouse']]],
-  ['rotationmatrix2d',['RotationMatrix2D',['../d9/d5e/structCostFunctor.html#ae0785d2abc318696cb6dc01fac237881',1,'CostFunctor']]],
+  ['rotationmatrix2d',['RotationMatrix2D',['../d2/dc3/structSNDTCostFunctor.html#ac3ec5d55425287082f5ce7f1788715c7',1,'SNDTCostFunctor']]],
   ['rvar',['rvar',['../d3/d57/test__match_8cc.html#a09ff184b5f358f6069434df0167479a7',1,'test_match.cc']]]
 ];

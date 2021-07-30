@@ -1,104 +1,32 @@
 \hypertarget{ndt__map_8cc}{}\section{ndt\+\_\+map.\+cc File Reference}
 \label{ndt__map_8cc}\index{ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}}
-{\ttfamily \#include \char`\"{}sndt/ndt\+\_\+map.\+h\char`\"{}}\newline
-{\ttfamily \#include $<$bits/stdc++.\+h$>$}\newline
-{\ttfamily \#include $<$pcl/point\+\_\+types.\+h$>$}\newline
-{\ttfamily \#include $<$pcl/search/kdtree.\+h$>$}\newline
-{\ttfamily \#include $<$Eigen/\+Dense$>$}\newline
-{\ttfamily \#include $<$gsl/gsl$>$}\newline
-{\ttfamily \#include \char`\"{}normal2d/\+Normal2d\+Estimation.\+h\char`\"{}}\newline
+
+
+Class Definition of \hyperlink{classNDTMap}{N\+D\+T\+Map}.  
+
+
+{\ttfamily \#include $<$sndt/ndt\+\_\+map.\+h$>$}\newline
 Include dependency graph for ndt\+\_\+map.\+cc\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=350pt]{dc/d60/ndt__map_8cc__incl}
+\includegraphics[width=325pt]{dc/d60/ndt__map_8cc__incl}
 \end{center}
 \end{figure}
-\subsection*{Typedefs}
-\begin{DoxyCompactItemize}
-\item 
-typedef \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$ \hyperlink{ndt__map_8cc_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ}
-\item 
-typedef \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+X\+YZ $>$\+::Ptr \hyperlink{ndt__map_8cc_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr}
-\item 
-typedef \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+XY $>$ \hyperlink{ndt__map_8cc_ae39e6a39986574e0b1dd694a8a8c2a39}{P\+C\+XY}
-\item 
-typedef \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Point\+XY $>$\+::Ptr \hyperlink{ndt__map_8cc_a6c8183469bbd0685b18b6e55e34014c4}{P\+C\+X\+Y\+Ptr}
-\end{DoxyCompactItemize}
-\subsection*{Functions}
-\begin{DoxyCompactItemize}
-\item 
-\hyperlink{ndt__map_8h_ae39e6a39986574e0b1dd694a8a8c2a39}{P\+C\+XY} \hyperlink{ndt__map_8cc_ab4ff1a060c879966557fa755b8cac387}{To\+P\+C\+L\+XY} (const \hyperlink{ndt__map_8h_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ} \&pc)
-\item 
-\hyperlink{ndt__map_8h_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ} \hyperlink{ndt__map_8cc_a2f5c8e8896e0a50f440727fb305af37a}{To\+P\+C\+L\+X\+YZ} (const \hyperlink{ndt__map_8h_ae39e6a39986574e0b1dd694a8a8c2a39}{P\+C\+XY} \&pc)
-\item 
-\hyperlink{ndt__map_8h_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr} \hyperlink{ndt__map_8cc_a974c1769c731e547a5cefe67bdee076c}{Compute\+Normals} (\hyperlink{ndt__map_8h_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr} pc, double \hyperlink{test__match_8cc_a3f67c53b80389c5f53961936edba04c9}{radius})
-\item 
-Matrix\+Xd \hyperlink{ndt__map_8cc_a20664028adfbf03d1ad481e92a29800d}{Compute\+Normals2} (const Matrix\+Xd \&pc, double \hyperlink{test__match_8cc_a3f67c53b80389c5f53961936edba04c9}{radius})
-\end{DoxyCompactItemize}
 
 
-\subsection{Typedef Documentation}
-\mbox{\Hypertarget{ndt__map_8cc_ae39e6a39986574e0b1dd694a8a8c2a39}\label{ndt__map_8cc_ae39e6a39986574e0b1dd694a8a8c2a39}} 
-\index{ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}!P\+C\+XY@{P\+C\+XY}}
-\index{P\+C\+XY@{P\+C\+XY}!ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}}
-\subsubsection{\texorpdfstring{P\+C\+XY}{PCXY}}
-{\footnotesize\ttfamily typedef \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$pcl\+::\+Point\+XY$>$ \hyperlink{ndt__map_8h_ae39e6a39986574e0b1dd694a8a8c2a39}{P\+C\+XY}}
+\subsection{Detailed Description}
+Class Definition of \hyperlink{classNDTMap}{N\+D\+T\+Map}. 
 
-\mbox{\Hypertarget{ndt__map_8cc_a6c8183469bbd0685b18b6e55e34014c4}\label{ndt__map_8cc_a6c8183469bbd0685b18b6e55e34014c4}} 
-\index{ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}!P\+C\+X\+Y\+Ptr@{P\+C\+X\+Y\+Ptr}}
-\index{P\+C\+X\+Y\+Ptr@{P\+C\+X\+Y\+Ptr}!ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}}
-\subsubsection{\texorpdfstring{P\+C\+X\+Y\+Ptr}{PCXYPtr}}
-{\footnotesize\ttfamily typedef \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$pcl\+::\+Point\+XY$>$\+::Ptr \hyperlink{ndt__map_8h_a6c8183469bbd0685b18b6e55e34014c4}{P\+C\+X\+Y\+Ptr}}
-
-\mbox{\Hypertarget{ndt__map_8cc_a20282c1dd3c86f9bc25e124768cdbe3d}\label{ndt__map_8cc_a20282c1dd3c86f9bc25e124768cdbe3d}} 
-\index{ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}!P\+C\+X\+YZ@{P\+C\+X\+YZ}}
-\index{P\+C\+X\+YZ@{P\+C\+X\+YZ}!ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}}
-\subsubsection{\texorpdfstring{P\+C\+X\+YZ}{PCXYZ}}
-{\footnotesize\ttfamily typedef \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$pcl\+::\+Point\+X\+YZ$>$ \hyperlink{ndt__map_8h_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ}}
-
-\mbox{\Hypertarget{ndt__map_8cc_a467e4d48ef8154e4fd6d76d355cae2da}\label{ndt__map_8cc_a467e4d48ef8154e4fd6d76d355cae2da}} 
-\index{ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}!P\+C\+X\+Y\+Z\+Ptr@{P\+C\+X\+Y\+Z\+Ptr}}
-\index{P\+C\+X\+Y\+Z\+Ptr@{P\+C\+X\+Y\+Z\+Ptr}!ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}}
-\subsubsection{\texorpdfstring{P\+C\+X\+Y\+Z\+Ptr}{PCXYZPtr}}
-{\footnotesize\ttfamily typedef \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$pcl\+::\+Point\+X\+YZ$>$\+::Ptr \hyperlink{ndt__map_8h_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr}}
-
-
-
-\subsection{Function Documentation}
-\mbox{\Hypertarget{ndt__map_8cc_a974c1769c731e547a5cefe67bdee076c}\label{ndt__map_8cc_a974c1769c731e547a5cefe67bdee076c}} 
-\index{ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}!Compute\+Normals@{Compute\+Normals}}
-\index{Compute\+Normals@{Compute\+Normals}!ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}}
-\subsubsection{\texorpdfstring{Compute\+Normals()}{ComputeNormals()}}
-{\footnotesize\ttfamily \hyperlink{ndt__map_8h_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr} Compute\+Normals (\begin{DoxyParamCaption}\item[{\hyperlink{ndt__map_8h_a467e4d48ef8154e4fd6d76d355cae2da}{P\+C\+X\+Y\+Z\+Ptr}}]{pc,  }\item[{double}]{radius }\end{DoxyParamCaption})}
-
-
-
-Referenced by N\+D\+T\+Map\+::\+Load\+Point\+Cloud().
-
-\mbox{\Hypertarget{ndt__map_8cc_a20664028adfbf03d1ad481e92a29800d}\label{ndt__map_8cc_a20664028adfbf03d1ad481e92a29800d}} 
-\index{ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}!Compute\+Normals2@{Compute\+Normals2}}
-\index{Compute\+Normals2@{Compute\+Normals2}!ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}}
-\subsubsection{\texorpdfstring{Compute\+Normals2()}{ComputeNormals2()}}
-{\footnotesize\ttfamily Matrix\+Xd Compute\+Normals2 (\begin{DoxyParamCaption}\item[{const Matrix\+Xd \&}]{pc,  }\item[{double}]{radius }\end{DoxyParamCaption})}
-
-
-
-Referenced by Make\+Map().
-
-\mbox{\Hypertarget{ndt__map_8cc_ab4ff1a060c879966557fa755b8cac387}\label{ndt__map_8cc_ab4ff1a060c879966557fa755b8cac387}} 
-\index{ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}!To\+P\+C\+L\+XY@{To\+P\+C\+L\+XY}}
-\index{To\+P\+C\+L\+XY@{To\+P\+C\+L\+XY}!ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}}
-\subsubsection{\texorpdfstring{To\+P\+C\+L\+X\+Y()}{ToPCLXY()}}
-{\footnotesize\ttfamily \hyperlink{ndt__map_8h_ae39e6a39986574e0b1dd694a8a8c2a39}{P\+C\+XY} To\+P\+C\+L\+XY (\begin{DoxyParamCaption}\item[{const \hyperlink{ndt__map_8h_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ} \&}]{pc }\end{DoxyParamCaption})}
-
-
-
-Referenced by N\+D\+T\+Map\+::\+Load\+Point\+Cloud().
-
-\mbox{\Hypertarget{ndt__map_8cc_a2f5c8e8896e0a50f440727fb305af37a}\label{ndt__map_8cc_a2f5c8e8896e0a50f440727fb305af37a}} 
-\index{ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}!To\+P\+C\+L\+X\+YZ@{To\+P\+C\+L\+X\+YZ}}
-\index{To\+P\+C\+L\+X\+YZ@{To\+P\+C\+L\+X\+YZ}!ndt\+\_\+map.\+cc@{ndt\+\_\+map.\+cc}}
-\subsubsection{\texorpdfstring{To\+P\+C\+L\+X\+Y\+Z()}{ToPCLXYZ()}}
-{\footnotesize\ttfamily \hyperlink{ndt__map_8h_a20282c1dd3c86f9bc25e124768cdbe3d}{P\+C\+X\+YZ} To\+P\+C\+L\+X\+YZ (\begin{DoxyParamCaption}\item[{const \hyperlink{ndt__map_8h_ae39e6a39986574e0b1dd694a8a8c2a39}{P\+C\+XY} \&}]{pc }\end{DoxyParamCaption})}
-
+\begin{DoxyAuthor}{Author}
+Hua\+Tsai (\href{mailto:huatsai.eed07g@nctu.edu.tw}{\tt huatsai.\+eed07g@nctu.\+edu.\+tw}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/07-\/29
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021 
+\end{DoxyCopyright}

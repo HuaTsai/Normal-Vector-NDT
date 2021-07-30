@@ -1,0 +1,654 @@
+\hypertarget{visuals_8h}{}\section{visuals.\+h File Reference}
+\label{visuals_8h}\index{visuals.\+h@{visuals.\+h}}
+
+
+Declaration of Visual Utilities.  
+
+
+{\ttfamily \#include $<$visualization\+\_\+msgs/\+Marker\+Array.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/ndt\+\_\+map.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/sndt\+\_\+map.\+h$>$}\newline
+Include dependency graph for visuals.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{df/df2/visuals_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d7/d8d/visuals_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \{ \newline
+\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cafb0136b923af8c04b31a9d1b5e989acf}{Color\+::k\+Red}, 
+\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, 
+\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1ca8d069917ec494cc042c27acaad671f52}{Color\+::k\+Blue}, 
+\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cad368dbde55a733c6dde5a20566d50736}{Color\+::k\+White}, 
+\newline
+\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cac5157738e8808c557e6cac46c034a2db}{Color\+::k\+Black}, 
+\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1ca5d82e39ac78ae57980c4156efef59c16}{Color\+::k\+Gray}, 
+\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1ca4c6c30a3642462190739bb7f13af9c7b}{Color\+::k\+Yellow}, 
+\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1ca82c602e70d64cffd84b9662ebeb4435d}{Color\+::k\+Aqua}, 
+\newline
+\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cabead6bc4d4eca2252128b312324b19e2}{Color\+::k\+Fuchsia}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+\_\+msgs\+::\+Color\+R\+G\+BA \hyperlink{visuals_8h_ab97e7041dcb22256c900611b5142f2c3}{Make\+Color\+R\+G\+BA} (const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha=1.)
+\begin{DoxyCompactList}\small\item\em Factory method for making {\ttfamily std\+\_\+msgs\+::\+Color\+R\+G\+BA}. \end{DoxyCompactList}\item 
+std\+::vector$<$ Eigen\+::\+Vector2d $>$ \hyperlink{visuals_8h_ac0a158d9764ebc01fe20b15ab56823b6}{Find\+Tangent\+Points} (const Marker \&ellipse, const Eigen\+::\+Vector2d \&point)
+\begin{DoxyCompactList}\small\item\em Given an ellipse and an external point, find the tangent points. \end{DoxyCompactList}\item 
+Marker\+Array \hyperlink{visuals_8h_a18206cff75f5db4b5ac17a10e2a07eb4}{Join\+Markers} (const std\+::vector$<$ Marker $>$ \&markers)
+\begin{DoxyCompactList}\small\item\em Join markers by assigning different id. \end{DoxyCompactList}\item 
+Marker\+Array \hyperlink{visuals_8h_a23de7b431d7bb8ae8fc3d5049c0d4cdf}{Join\+Marker\+Arrays} (const std\+::vector$<$ Marker\+Array $>$ \&markerarrays)
+\begin{DoxyCompactList}\small\item\em Join markerarrays by assigning different id. \end{DoxyCompactList}\item 
+Marker\+Array \hyperlink{visuals_8h_acfe970a87296542244960cef1c8d3b74}{Join\+Marker\+Arrays\+And\+Markers} (const std\+::vector$<$ Marker\+Array $>$ \&markerarrays, const std\+::vector$<$ Marker $>$ \&markers)
+\begin{DoxyCompactList}\small\item\em Join markerarrays and markers by assigning different id. \end{DoxyCompactList}\item 
+Marker \hyperlink{visuals_8h_a0e885667c7fbf9c82b305c8ab99ed380}{Marker\+Of\+Boundary} (const Eigen\+::\+Vector2d \&center, double size, double skew\+\_\+rad=0, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cac5157738e8808c557e6cac46c034a2db}{Color\+::k\+Black}, double alpha=1.\+0)
+\begin{DoxyCompactList}\small\item\em Marker of the cell boundary. \end{DoxyCompactList}\item 
+Marker \hyperlink{visuals_8h_aff4ba82c7215248e03d7efe43138a100}{Marker\+Of\+Ellipse} (const Eigen\+::\+Vector2d \&mean, const Eigen\+::\+Matrix2d \&covariance, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, double alpha=0.\+6)
+\begin{DoxyCompactList}\small\item\em Marker of the cell covariance. \end{DoxyCompactList}\item 
+Marker \hyperlink{visuals_8h_ac2e1fa77fe7b62e6847bf9d4db90511e}{Marker\+Of\+Circle} (const Eigen\+::\+Vector2d \&center, double size, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, double alpha=0.\+6)
+\begin{DoxyCompactList}\small\item\em Marker of the circle. \end{DoxyCompactList}\item 
+Marker \hyperlink{visuals_8h_ac49382099269c152bf69330248d5351a}{Marker\+Of\+Lines} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, double alpha=1.\+0)
+\begin{DoxyCompactList}\small\item\em Marker of the lines. \end{DoxyCompactList}\item 
+Marker \hyperlink{visuals_8h_a787c16cc6ee94b52d4d1220764eaaecd}{Marker\+Of\+Lines\+By\+Middle\+Points} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, double alpha=1.\+0)
+\begin{DoxyCompactList}\small\item\em Marker of the lines by middle points. \end{DoxyCompactList}\item 
+Marker \hyperlink{visuals_8h_ae02be2cffab8fc0456c6ff02372620b6}{Marker\+Of\+Points} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points, double size=0.\+1, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, double alpha=1.\+0)
+\begin{DoxyCompactList}\small\item\em Marker of the points. \end{DoxyCompactList}\item 
+Marker \hyperlink{visuals_8h_a2c2bda7c4b818c8ff0d5da2b87e1a012}{Marker\+Of\+Arrow} (const Eigen\+::\+Vector2d \&start, const Eigen\+::\+Vector2d \&end, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, double alpha=1.\+0)
+\begin{DoxyCompactList}\small\item\em Marker of the arrows. \end{DoxyCompactList}\item 
+Marker \hyperlink{visuals_8h_a966ec2adfe2c1f790ddb5887747e87bc}{Marker\+Of\+Text} (std\+::string text, const Eigen\+::\+Vector2d \&position, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cac5157738e8808c557e6cac46c034a2db}{Color\+::k\+Black}, double alpha=1.\+0)
+\begin{DoxyCompactList}\small\item\em Marker of the text. \end{DoxyCompactList}\item 
+Marker\+Array \hyperlink{visuals_8h_a59429f2c288b5265bfd681ecdc9ce537}{Marker\+Array\+Of\+Arrows} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&starts, const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&ends, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, double alpha=1.\+0)
+\begin{DoxyCompactList}\small\item\em Marker\+Array of the arrows. \end{DoxyCompactList}\item 
+Marker\+Array \hyperlink{visuals_8h_a3e3b82234c4a8298809ad5d3a1299909}{Marker\+Array\+Of\+S\+N\+D\+T\+Cell} (const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$cell)
+\begin{DoxyCompactList}\small\item\em General Marker\+Array of \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell}. \end{DoxyCompactList}\item 
+Marker\+Array \hyperlink{visuals_8h_aeeeefef42e4c8cdfd81daf5394c39ccf}{Marker\+Array\+Of\+S\+N\+D\+T\+Cell2} (const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$cell)
+\begin{DoxyCompactList}\small\item\em Special Marker\+Array of \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell}. \end{DoxyCompactList}\item 
+Marker\+Array \hyperlink{visuals_8h_a30fedeb3d041e14c2f5f75bccb397220}{Marker\+Array\+Of\+S\+N\+D\+T\+Map} (const \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map} \&map, bool use\+\_\+target\+\_\+color=false)
+\begin{DoxyCompactList}\small\item\em Marker\+Array of \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map}. \end{DoxyCompactList}\item 
+Marker\+Array \hyperlink{visuals_8h_ae3e8245c83d65d9f260bb7dea3f89195}{Marker\+Array\+Of\+S\+N\+D\+T\+Map} (const std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $>$$>$ \&map, bool use\+\_\+target\+\_\+color=false)
+\begin{DoxyCompactList}\small\item\em Marker\+Array of \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map}. \end{DoxyCompactList}\item 
+Marker\+Array \hyperlink{visuals_8h_aa789a15d30bf7b74c1d8325d1331d17d}{Marker\+Array\+Of\+Correspondences} (const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$source\+\_\+cell, const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$target\+\_\+cell, std\+::string text, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cac5157738e8808c557e6cac46c034a2db}{Color\+::k\+Black})
+\begin{DoxyCompactList}\small\item\em Marker\+Array of correspondences. \end{DoxyCompactList}\item 
+Marker\+Array \hyperlink{visuals_8h_a205bbe0ce4884e72159640ecfda80cb7}{Marker\+Array\+Of\+Sensor} (const std\+::vector$<$ Eigen\+::\+Affine2d $>$ \&affs)
+\begin{DoxyCompactList}\small\item\em Marker\+Array of the sensors. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Declaration of Visual Utilities. 
+
+\begin{DoxyAuthor}{Author}
+Hua\+Tsai (\href{mailto:huatsai.eed07g@nctu.edu.tw}{\tt huatsai.\+eed07g@nctu.\+edu.\+tw}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/07-\/30
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021 
+\end{DoxyCopyright}
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}\label{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}} 
+\index{visuals.\+h@{visuals.\+h}!Color@{Color}}
+\index{Color@{Color}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Color}{Color}}
+{\footnotesize\ttfamily enum \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Red@{k\+Red}!visuals.\+h@{visuals.\+h}}\index{visuals.\+h@{visuals.\+h}!k\+Red@{k\+Red}}}\mbox{\Hypertarget{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cafb0136b923af8c04b31a9d1b5e989acf}\label{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cafb0136b923af8c04b31a9d1b5e989acf}} 
+k\+Red&(R, G, B) = (1.\+0, 0.\+0, 0.\+0) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Lime@{k\+Lime}!visuals.\+h@{visuals.\+h}}\index{visuals.\+h@{visuals.\+h}!k\+Lime@{k\+Lime}}}\mbox{\Hypertarget{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}\label{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}} 
+k\+Lime&(R, G, B) = (0.\+0, 1.\+0, 0.\+0) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Blue@{k\+Blue}!visuals.\+h@{visuals.\+h}}\index{visuals.\+h@{visuals.\+h}!k\+Blue@{k\+Blue}}}\mbox{\Hypertarget{visuals_8h_ab87bacfdad76e61b9412d7124be44c1ca8d069917ec494cc042c27acaad671f52}\label{visuals_8h_ab87bacfdad76e61b9412d7124be44c1ca8d069917ec494cc042c27acaad671f52}} 
+k\+Blue&(R, G, B) = (0.\+0, 0.\+0, 1.\+0) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+White@{k\+White}!visuals.\+h@{visuals.\+h}}\index{visuals.\+h@{visuals.\+h}!k\+White@{k\+White}}}\mbox{\Hypertarget{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cad368dbde55a733c6dde5a20566d50736}\label{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cad368dbde55a733c6dde5a20566d50736}} 
+k\+White&(R, G, B, A) = (x, x, x, 0.\+0) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Black@{k\+Black}!visuals.\+h@{visuals.\+h}}\index{visuals.\+h@{visuals.\+h}!k\+Black@{k\+Black}}}\mbox{\Hypertarget{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cac5157738e8808c557e6cac46c034a2db}\label{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cac5157738e8808c557e6cac46c034a2db}} 
+k\+Black&(R, G, B) = (0.\+0, 0.\+0, 0.\+0) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Gray@{k\+Gray}!visuals.\+h@{visuals.\+h}}\index{visuals.\+h@{visuals.\+h}!k\+Gray@{k\+Gray}}}\mbox{\Hypertarget{visuals_8h_ab87bacfdad76e61b9412d7124be44c1ca5d82e39ac78ae57980c4156efef59c16}\label{visuals_8h_ab87bacfdad76e61b9412d7124be44c1ca5d82e39ac78ae57980c4156efef59c16}} 
+k\+Gray&(R, G, B) = (0.\+5, 0.\+5, 0.\+5) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Yellow@{k\+Yellow}!visuals.\+h@{visuals.\+h}}\index{visuals.\+h@{visuals.\+h}!k\+Yellow@{k\+Yellow}}}\mbox{\Hypertarget{visuals_8h_ab87bacfdad76e61b9412d7124be44c1ca4c6c30a3642462190739bb7f13af9c7b}\label{visuals_8h_ab87bacfdad76e61b9412d7124be44c1ca4c6c30a3642462190739bb7f13af9c7b}} 
+k\+Yellow&(R, G, B) = (1.\+0, 1.\+0, 0.\+0) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Aqua@{k\+Aqua}!visuals.\+h@{visuals.\+h}}\index{visuals.\+h@{visuals.\+h}!k\+Aqua@{k\+Aqua}}}\mbox{\Hypertarget{visuals_8h_ab87bacfdad76e61b9412d7124be44c1ca82c602e70d64cffd84b9662ebeb4435d}\label{visuals_8h_ab87bacfdad76e61b9412d7124be44c1ca82c602e70d64cffd84b9662ebeb4435d}} 
+k\+Aqua&(R, G, B) = (0.\+0, 1.\+0, 1.\+0) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Fuchsia@{k\+Fuchsia}!visuals.\+h@{visuals.\+h}}\index{visuals.\+h@{visuals.\+h}!k\+Fuchsia@{k\+Fuchsia}}}\mbox{\Hypertarget{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cabead6bc4d4eca2252128b312324b19e2}\label{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cabead6bc4d4eca2252128b312324b19e2}} 
+k\+Fuchsia&(R, G, B) = (1.\+0, 0.\+0, 1.\+0) \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{visuals_8h_ac0a158d9764ebc01fe20b15ab56823b6}\label{visuals_8h_ac0a158d9764ebc01fe20b15ab56823b6}} 
+\index{visuals.\+h@{visuals.\+h}!Find\+Tangent\+Points@{Find\+Tangent\+Points}}
+\index{Find\+Tangent\+Points@{Find\+Tangent\+Points}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Find\+Tangent\+Points()}{FindTangentPoints()}}
+{\footnotesize\ttfamily std\+::vector$<$Eigen\+::\+Vector2d$>$ Find\+Tangent\+Points (\begin{DoxyParamCaption}\item[{const Marker \&}]{ellipse,  }\item[{const Eigen\+::\+Vector2d \&}]{point }\end{DoxyParamCaption})}
+
+
+
+Given an ellipse and an external point, find the tangent points. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ellipse} & Input ellipse \\
+\hline
+{\em point} & Input external point \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Two tangent points 
+\end{DoxyReturn}
+
+
+Referenced by Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
+
+\mbox{\Hypertarget{visuals_8h_a23de7b431d7bb8ae8fc3d5049c0d4cdf}\label{visuals_8h_a23de7b431d7bb8ae8fc3d5049c0d4cdf}} 
+\index{visuals.\+h@{visuals.\+h}!Join\+Marker\+Arrays@{Join\+Marker\+Arrays}}
+\index{Join\+Marker\+Arrays@{Join\+Marker\+Arrays}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Join\+Marker\+Arrays()}{JoinMarkerArrays()}}
+{\footnotesize\ttfamily Marker\+Array Join\+Marker\+Arrays (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Marker\+Array $>$ \&}]{markerarrays }\end{DoxyParamCaption})}
+
+
+
+Join markerarrays by assigning different id. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em markerarrays} & Input markerarrays \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Joined markerarray 
+\end{DoxyReturn}
+
+
+Referenced by Marker\+Array\+Of\+S\+N\+D\+T\+Map().
+
+\mbox{\Hypertarget{visuals_8h_acfe970a87296542244960cef1c8d3b74}\label{visuals_8h_acfe970a87296542244960cef1c8d3b74}} 
+\index{visuals.\+h@{visuals.\+h}!Join\+Marker\+Arrays\+And\+Markers@{Join\+Marker\+Arrays\+And\+Markers}}
+\index{Join\+Marker\+Arrays\+And\+Markers@{Join\+Marker\+Arrays\+And\+Markers}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Join\+Marker\+Arrays\+And\+Markers()}{JoinMarkerArraysAndMarkers()}}
+{\footnotesize\ttfamily Marker\+Array Join\+Marker\+Arrays\+And\+Markers (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Marker\+Array $>$ \&}]{markerarrays,  }\item[{const std\+::vector$<$ Marker $>$ \&}]{markers }\end{DoxyParamCaption})}
+
+
+
+Join markerarrays and markers by assigning different id. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em markerarrays} & Input markerarrays \\
+\hline
+{\em markers} & Input markers \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Joined markerarray 
+\end{DoxyReturn}
+
+
+Referenced by Marker\+Array\+Of\+Correspondences().
+
+\mbox{\Hypertarget{visuals_8h_a18206cff75f5db4b5ac17a10e2a07eb4}\label{visuals_8h_a18206cff75f5db4b5ac17a10e2a07eb4}} 
+\index{visuals.\+h@{visuals.\+h}!Join\+Markers@{Join\+Markers}}
+\index{Join\+Markers@{Join\+Markers}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Join\+Markers()}{JoinMarkers()}}
+{\footnotesize\ttfamily Marker\+Array Join\+Markers (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Marker $>$ \&}]{markers }\end{DoxyParamCaption})}
+
+
+
+Join markers by assigning different id. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em markers} & Input markers \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Joined markerarray 
+\end{DoxyReturn}
+
+
+Referenced by Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
+
+\mbox{\Hypertarget{visuals_8h_ab97e7041dcb22256c900611b5142f2c3}\label{visuals_8h_ab97e7041dcb22256c900611b5142f2c3}} 
+\index{visuals.\+h@{visuals.\+h}!Make\+Color\+R\+G\+BA@{Make\+Color\+R\+G\+BA}}
+\index{Make\+Color\+R\+G\+BA@{Make\+Color\+R\+G\+BA}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Make\+Color\+R\+G\+B\+A()}{MakeColorRGBA()}}
+{\footnotesize\ttfamily std\+\_\+msgs\+::\+Color\+R\+G\+BA Make\+Color\+R\+G\+BA (\begin{DoxyParamCaption}\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color,  }\item[{double}]{alpha = {\ttfamily 1.} }\end{DoxyParamCaption})}
+
+
+
+Factory method for making {\ttfamily std\+\_\+msgs\+::\+Color\+R\+G\+BA}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em color} & Input color defined in enum {\ttfamily Color} \\
+\hline
+{\em alpha} & Alpha, 0 represents transparent while 1 represents opaque \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} 
+\end{DoxySeeAlso}
+
+
+Referenced by Marker\+Array\+Of\+Arrows(), Marker\+Array\+Of\+Sensor(), Marker\+Of\+Arrow(), Marker\+Of\+Boundary(), Marker\+Of\+Circle(), Marker\+Of\+Ellipse(), Marker\+Of\+Lines(), Marker\+Of\+Points(), and Marker\+Of\+Text().
+
+\mbox{\Hypertarget{visuals_8h_a59429f2c288b5265bfd681ecdc9ce537}\label{visuals_8h_a59429f2c288b5265bfd681ecdc9ce537}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Array\+Of\+Arrows@{Marker\+Array\+Of\+Arrows}}
+\index{Marker\+Array\+Of\+Arrows@{Marker\+Array\+Of\+Arrows}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+Arrows()}{MarkerArrayOfArrows()}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+Arrows (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{starts,  }\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{ends,  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}},  }\item[{double}]{alpha = {\ttfamily 1.0} }\end{DoxyParamCaption})}
+
+
+
+Marker\+Array of the arrows. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em starts} & Starts of the arrows \\
+\hline
+{\em ends} & Ends of the arrows \\
+\hline
+{\em color} & Arrows color (default k\+Lime) \\
+\hline
+{\em alpha} & Alpha (default 1.\+0) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+The size of {\ttfamily starts} and {\ttfamily ends} should be the same 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+Marker\+Array of arrows 
+\end{DoxyReturn}
+
+
+Referenced by cb().
+
+\mbox{\Hypertarget{visuals_8h_aa789a15d30bf7b74c1d8325d1331d17d}\label{visuals_8h_aa789a15d30bf7b74c1d8325d1331d17d}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Array\+Of\+Correspondences@{Marker\+Array\+Of\+Correspondences}}
+\index{Marker\+Array\+Of\+Correspondences@{Marker\+Array\+Of\+Correspondences}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+Correspondences()}{MarkerArrayOfCorrespondences()}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+Correspondences (\begin{DoxyParamCaption}\item[{const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$}]{source\+\_\+cell,  }\item[{const \hyperlink{classNDTCell}{N\+D\+T\+Cell} $\ast$}]{target\+\_\+cell,  }\item[{std\+::string}]{text,  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cac5157738e8808c557e6cac46c034a2db}{Color\+::k\+Black}} }\end{DoxyParamCaption})}
+
+
+
+Marker\+Array of correspondences. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source\+\_\+cell} & Source cell \\
+\hline
+{\em target\+\_\+cell} & Target cell \\
+\hline
+{\em text} & Text of the cost value \\
+\hline
+{\em color} & Text color (default black) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Marker\+Array of correspondences 
+\end{DoxyReturn}
+\mbox{\Hypertarget{visuals_8h_a205bbe0ce4884e72159640ecfda80cb7}\label{visuals_8h_a205bbe0ce4884e72159640ecfda80cb7}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Array\+Of\+Sensor@{Marker\+Array\+Of\+Sensor}}
+\index{Marker\+Array\+Of\+Sensor@{Marker\+Array\+Of\+Sensor}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+Sensor()}{MarkerArrayOfSensor()}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+Sensor (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Affine2d $>$ \&}]{affs }\end{DoxyParamCaption})}
+
+
+
+Marker\+Array of the sensors. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em affs} & Poses of the sensors \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Marker\+Array of the sensors 
+\end{DoxyReturn}
+\mbox{\Hypertarget{visuals_8h_a3e3b82234c4a8298809ad5d3a1299909}\label{visuals_8h_a3e3b82234c4a8298809ad5d3a1299909}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Array\+Of\+S\+N\+D\+T\+Cell@{Marker\+Array\+Of\+S\+N\+D\+T\+Cell}}
+\index{Marker\+Array\+Of\+S\+N\+D\+T\+Cell@{Marker\+Array\+Of\+S\+N\+D\+T\+Cell}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+S\+N\+D\+T\+Cell()}{MarkerArrayOfSNDTCell()}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+S\+N\+D\+T\+Cell (\begin{DoxyParamCaption}\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{cell }\end{DoxyParamCaption})}
+
+
+
+General Marker\+Array of \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cell} & Input cell pointer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+General Marker\+Array of \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell}
+\end{DoxyReturn}
+Boundary, point covariance, (normal covariance, and tangent lines) are drawed. 
+
+Referenced by Marker\+Array\+Of\+Correspondences(), and Marker\+Array\+Of\+S\+N\+D\+T\+Map().
+
+\mbox{\Hypertarget{visuals_8h_aeeeefef42e4c8cdfd81daf5394c39ccf}\label{visuals_8h_aeeeefef42e4c8cdfd81daf5394c39ccf}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Array\+Of\+S\+N\+D\+T\+Cell2@{Marker\+Array\+Of\+S\+N\+D\+T\+Cell2}}
+\index{Marker\+Array\+Of\+S\+N\+D\+T\+Cell2@{Marker\+Array\+Of\+S\+N\+D\+T\+Cell2}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+S\+N\+D\+T\+Cell2()}{MarkerArrayOfSNDTCell2()}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+S\+N\+D\+T\+Cell2 (\begin{DoxyParamCaption}\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{cell }\end{DoxyParamCaption})}
+
+
+
+Special Marker\+Array of \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cell} & Input cell pointer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Special Marker\+Array of \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Boundary, point covariance, (normal covariance, and tangent lines) are drawed. The only difference is that the covariance color and the boundary color are red. 
+\end{DoxyNote}
+
+
+Referenced by Marker\+Array\+Of\+Correspondences(), and Marker\+Array\+Of\+S\+N\+D\+T\+Map().
+
+\mbox{\Hypertarget{visuals_8h_a30fedeb3d041e14c2f5f75bccb397220}\label{visuals_8h_a30fedeb3d041e14c2f5f75bccb397220}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Array\+Of\+S\+N\+D\+T\+Map@{Marker\+Array\+Of\+S\+N\+D\+T\+Map}}
+\index{Marker\+Array\+Of\+S\+N\+D\+T\+Map@{Marker\+Array\+Of\+S\+N\+D\+T\+Map}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+S\+N\+D\+T\+Map()}{MarkerArrayOfSNDTMap()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+S\+N\+D\+T\+Map (\begin{DoxyParamCaption}\item[{const \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map} \&}]{map,  }\item[{bool}]{use\+\_\+target\+\_\+color = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+
+Marker\+Array of \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & Input \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map} \\
+\hline
+{\em use\+\_\+target\+\_\+color} & Use target color (default false) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Marker\+Array of \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map} 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This function omits those Has\+Gaussian() is false 
+\end{DoxyNote}
+
+
+Referenced by cb().
+
+\mbox{\Hypertarget{visuals_8h_ae3e8245c83d65d9f260bb7dea3f89195}\label{visuals_8h_ae3e8245c83d65d9f260bb7dea3f89195}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Array\+Of\+S\+N\+D\+T\+Map@{Marker\+Array\+Of\+S\+N\+D\+T\+Map}}
+\index{Marker\+Array\+Of\+S\+N\+D\+T\+Map@{Marker\+Array\+Of\+S\+N\+D\+T\+Map}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Array\+Of\+S\+N\+D\+T\+Map()}{MarkerArrayOfSNDTMap()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Marker\+Array Marker\+Array\+Of\+S\+N\+D\+T\+Map (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $>$$>$ \&}]{map,  }\item[{bool}]{use\+\_\+target\+\_\+color = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+
+Marker\+Array of \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & Input \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map} \\
+\hline
+{\em use\+\_\+target\+\_\+color} & Use target color (default false) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Marker\+Array of \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map} 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This function omits those Has\+Gaussian() is false 
+\end{DoxyNote}
+\mbox{\Hypertarget{visuals_8h_a2c2bda7c4b818c8ff0d5da2b87e1a012}\label{visuals_8h_a2c2bda7c4b818c8ff0d5da2b87e1a012}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Of\+Arrow@{Marker\+Of\+Arrow}}
+\index{Marker\+Of\+Arrow@{Marker\+Of\+Arrow}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Arrow()}{MarkerOfArrow()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Arrow (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector2d \&}]{start,  }\item[{const Eigen\+::\+Vector2d \&}]{end,  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}},  }\item[{double}]{alpha = {\ttfamily 1.0} }\end{DoxyParamCaption})}
+
+
+
+Marker of the arrows. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start} & Input arrow start \\
+\hline
+{\em end} & Input arrow end \\
+\hline
+{\em color} & Arrow color (default k\+Lime) \\
+\hline
+{\em alpha} & Alpha (default 1.\+0) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Marker of type {\ttfamily A\+R\+R\+OW} of the arrow 
+\end{DoxyReturn}
+\mbox{\Hypertarget{visuals_8h_a0e885667c7fbf9c82b305c8ab99ed380}\label{visuals_8h_a0e885667c7fbf9c82b305c8ab99ed380}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Of\+Boundary@{Marker\+Of\+Boundary}}
+\index{Marker\+Of\+Boundary@{Marker\+Of\+Boundary}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Boundary()}{MarkerOfBoundary()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Boundary (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector2d \&}]{center,  }\item[{double}]{size,  }\item[{double}]{skew\+\_\+rad = {\ttfamily 0},  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cac5157738e8808c557e6cac46c034a2db}{Color\+::k\+Black}},  }\item[{double}]{alpha = {\ttfamily 1.0} }\end{DoxyParamCaption})}
+
+
+
+Marker of the cell boundary. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em center} & Cell center \\
+\hline
+{\em size} & Cell size \\
+\hline
+{\em skew\+\_\+rad} & Cell skew radian (default 0) \\
+\hline
+{\em color} & Boundary Color (default k\+Black) \\
+\hline
+{\em alpha} & Alpha (default 1.\+0) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Marker of type {\ttfamily L\+I\+N\+E\+\_\+\+L\+I\+ST} of the cell boundary 
+\end{DoxyReturn}
+
+
+Referenced by Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
+
+\mbox{\Hypertarget{visuals_8h_ac2e1fa77fe7b62e6847bf9d4db90511e}\label{visuals_8h_ac2e1fa77fe7b62e6847bf9d4db90511e}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Of\+Circle@{Marker\+Of\+Circle}}
+\index{Marker\+Of\+Circle@{Marker\+Of\+Circle}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Circle()}{MarkerOfCircle()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Circle (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector2d \&}]{center,  }\item[{double}]{size,  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}},  }\item[{double}]{alpha = {\ttfamily 0.6} }\end{DoxyParamCaption})}
+
+
+
+Marker of the circle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em center} & Circle center \\
+\hline
+{\em size} & Circle size \\
+\hline
+{\em color} & Circle color (default k\+Lime) \\
+\hline
+{\em alpha} & Alpha (default 0.\+6) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Marker of type {\ttfamily S\+P\+H\+E\+RE} of the circle 
+\end{DoxyReturn}
+\mbox{\Hypertarget{visuals_8h_aff4ba82c7215248e03d7efe43138a100}\label{visuals_8h_aff4ba82c7215248e03d7efe43138a100}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Of\+Ellipse@{Marker\+Of\+Ellipse}}
+\index{Marker\+Of\+Ellipse@{Marker\+Of\+Ellipse}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Ellipse()}{MarkerOfEllipse()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Ellipse (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector2d \&}]{mean,  }\item[{const Eigen\+::\+Matrix2d \&}]{covariance,  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}},  }\item[{double}]{alpha = {\ttfamily 0.6} }\end{DoxyParamCaption})}
+
+
+
+Marker of the cell covariance. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mean} & Ellipse center \\
+\hline
+{\em covariance} & Ellipse axes and length \\
+\hline
+{\em color} & Ellipse color (default k\+Lime) \\
+\hline
+{\em alpha} & Alpha (default 0.\+6) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Marker of type {\ttfamily S\+P\+H\+E\+RE} the cell covariance 
+\end{DoxyReturn}
+Note\+: \char`\"{}pseudo\char`\"{} computes complex eigen value if no real solution However, covariance is always a real symmetric matrix, which means 1) it is Hermitia, all its eigenvalues are real 2) the decomposed matrix is an orthogonal matrix, i.\+e., rotaion matrix
+
+Referenced by Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
+
+\mbox{\Hypertarget{visuals_8h_ac49382099269c152bf69330248d5351a}\label{visuals_8h_ac49382099269c152bf69330248d5351a}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Of\+Lines@{Marker\+Of\+Lines}}
+\index{Marker\+Of\+Lines@{Marker\+Of\+Lines}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Lines()}{MarkerOfLines()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Lines (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points,  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}},  }\item[{double}]{alpha = {\ttfamily 1.0} }\end{DoxyParamCaption})}
+
+
+
+Marker of the lines. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & Points that form lines \\
+\hline
+{\em color} & Lines color \\
+\hline
+{\em alpha} & Alpha (default 1.\+0) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Marker of type {\ttfamily L\+I\+N\+E\+\_\+\+L\+I\+ST} of the lines 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+The size of {\ttfamily points} should be even
+\end{DoxyPrecond}
+Points 0-\/1 forms line 0, points 2-\/3 forms line 1, etc. 
+
+Referenced by Marker\+Array\+Of\+Correspondences(), and Marker\+Of\+Lines\+By\+Middle\+Points().
+
+\mbox{\Hypertarget{visuals_8h_a787c16cc6ee94b52d4d1220764eaaecd}\label{visuals_8h_a787c16cc6ee94b52d4d1220764eaaecd}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Of\+Lines\+By\+Middle\+Points@{Marker\+Of\+Lines\+By\+Middle\+Points}}
+\index{Marker\+Of\+Lines\+By\+Middle\+Points@{Marker\+Of\+Lines\+By\+Middle\+Points}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Lines\+By\+Middle\+Points()}{MarkerOfLinesByMiddlePoints()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Lines\+By\+Middle\+Points (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points,  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}},  }\item[{double}]{alpha = {\ttfamily 1.0} }\end{DoxyParamCaption})}
+
+
+
+Marker of the lines by middle points. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & Points that form lines \\
+\hline
+{\em color} & Lines color (default k\+Lime) \\
+\hline
+{\em alpha} & Alpha (default 1.\+0) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Marker of type {\ttfamily L\+I\+N\+E\+\_\+\+L\+I\+ST} of the lines
+\end{DoxyReturn}
+Points 0-\/1 forms line 0, points 1-\/2 forms line 1, etc. 
+
+Referenced by Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
+
+\mbox{\Hypertarget{visuals_8h_ae02be2cffab8fc0456c6ff02372620b6}\label{visuals_8h_ae02be2cffab8fc0456c6ff02372620b6}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Of\+Points@{Marker\+Of\+Points}}
+\index{Marker\+Of\+Points@{Marker\+Of\+Points}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Points()}{MarkerOfPoints()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Points (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points,  }\item[{double}]{size = {\ttfamily 0.1},  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}},  }\item[{double}]{alpha = {\ttfamily 1.0} }\end{DoxyParamCaption})}
+
+
+
+Marker of the points. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & Input points \\
+\hline
+{\em size} & Input point size \\
+\hline
+{\em color} & Points color (default k\+Lime) \\
+\hline
+{\em alpha} & Alpha (default 1.\+0) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Marker of type {\ttfamily S\+P\+H\+E\+R\+E\+\_\+\+L\+I\+ST} of the points 
+\end{DoxyReturn}
+
+
+Referenced by cb().
+
+\mbox{\Hypertarget{visuals_8h_a966ec2adfe2c1f790ddb5887747e87bc}\label{visuals_8h_a966ec2adfe2c1f790ddb5887747e87bc}} 
+\index{visuals.\+h@{visuals.\+h}!Marker\+Of\+Text@{Marker\+Of\+Text}}
+\index{Marker\+Of\+Text@{Marker\+Of\+Text}!visuals.\+h@{visuals.\+h}}
+\subsubsection{\texorpdfstring{Marker\+Of\+Text()}{MarkerOfText()}}
+{\footnotesize\ttfamily Marker Marker\+Of\+Text (\begin{DoxyParamCaption}\item[{std\+::string}]{text,  }\item[{const Eigen\+::\+Vector2d \&}]{position,  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cac5157738e8808c557e6cac46c034a2db}{Color\+::k\+Black}},  }\item[{double}]{alpha = {\ttfamily 1.0} }\end{DoxyParamCaption})}
+
+
+
+Marker of the text. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em text} & Input text \\
+\hline
+{\em position} & Text position \\
+\hline
+{\em color} & Text color (default k\+Black) \\
+\hline
+{\em alpha} & Alpha (default 1.\+0) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Marker of type {\ttfamily T\+E\+X\+T\+\_\+\+V\+I\+E\+W\+\_\+\+F\+A\+C\+I\+NG} of the text 
+\end{DoxyReturn}
+
+
+Referenced by Marker\+Array\+Of\+Correspondences().
+
