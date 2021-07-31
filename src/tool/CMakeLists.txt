@@ -22,9 +22,6 @@ include_directories(
 add_executable(bagtoply src/bagtoply.cc)
 target_link_libraries(bagtoply ${catkin_LIBRARIES})
 
-add_executable(showpath src/showpath.cc)
-target_link_libraries(showpath ${catkin_LIBRARIES})
-
 add_executable(pathtotext src/pathtotext.cc)
 target_link_libraries(pathtotext ${catkin_LIBRARIES})
 

@@ -12,9 +12,7 @@ and adaptive outlier rejection.
 #include "TriMesh.h"
 #include "XForm.h"
 #include "KDtree.h"
-#include "common/match_utils.hpp"
 
-extern common::MatchInternal mit;
 extern int iters;
 
 namespace trimesh {

@@ -11,9 +11,8 @@ adaptive outlier rejection, and symmetric point-to-plane minimization.
 #include "KDtree.h"
 #include "timestamp.h"
 #include "lineqn.h"
-#include "common/match_utils.hpp"
 #include <angles/angles.h>
-#include "common/common.h"
+#include <common/common.h>
 
 
 using namespace std;
@@ -38,7 +37,6 @@ using namespace std;
 #define ANGLE_THRESH_MAX 1.0f
 #define dprintf TriMesh::dprintf
 
-common::MatchInternal mit;
 int iters;
 
 namespace trimesh {
@@ -454,7 +452,6 @@ static float ICP_iter(TriMesh *mesh1, TriMesh *mesh2,
 	// mesh1: target, mesh2: source
 	selectall_and_match(mesh1, mesh2, xf2, kd1, maxdist, angle_thresh, pairs);
 
-	common::Correspondences cp;
 	cerr << "Correspondences: " << pairs.size() << endl;
 	int i = 0;
 	vector<int> cnt(18);
@@ -463,7 +460,6 @@ static float ICP_iter(TriMesh *mesh1, TriMesh *mesh2,
 		Eigen::Vector3d np(pair.n2.x, pair.n2.y, pair.n2.z);
 		Eigen::Vector3d q(pair.p1.x, pair.p1.y, pair.p1.z);
 		Eigen::Vector3d nq(pair.n1.x, pair.n1.y, pair.n1.z);
-		cp.PushBack(p, q, (p - q).dot(np + nq));
 		// double val = (p - q).dot(np + nq);
 		Eigen::Vector2d pq((p - q)(0), (p - q)(1));
 		Eigen::Vector2d npq((np + nq)(0), (np + nq)(1));
@@ -472,7 +468,6 @@ static float ICP_iter(TriMesh *mesh1, TriMesh *mesh2,
 		cout << "  #" << i++ << ": " << ang << endl;
 	}
 	copy(cnt.begin(), cnt.end(), ostream_iterator<int>(cout, ", "));
-	// mit.PushBack(cp, XYTDegreeFromXForm(xf2));
 
 	timestamp t2 = now();
 	size_t npairs = pairs.size();
@@ -713,8 +708,6 @@ float ICP(TriMesh *mesh1, TriMesh *mesh2,
           float maxdist /* = 0.0f */, int verbose /* = 0 */,
           ICP_xform_type xform_type /* = ICP_RIGID */ )
 {
-	mit.ClearResults();
-	mit.set_has_data(true);
 	Eigen::MatrixXd source(3, mesh2->vertices.size());
 	Eigen::MatrixXd target(3, mesh1->vertices.size());
 	for (size_t i = 0; i < mesh2->vertices.size(); ++i) {
@@ -727,8 +720,6 @@ float ICP(TriMesh *mesh1, TriMesh *mesh2,
 		target(1, i) = mesh1->vertices.at(i).y;
 		target(2, i) = mesh1->vertices.at(i).z;
 	}
-	mit.set_source(source);
-	mit.set_target(target);
 
 	timestamp t_start = now();
 

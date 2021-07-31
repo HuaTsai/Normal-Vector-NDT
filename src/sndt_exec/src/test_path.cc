@@ -66,7 +66,7 @@ geometry_msgs::PoseStamped MakePST(const ros::Time &time, const Matrix4f &mtx) {
 
 int main(int argc, char **argv) {
   double huber;
-  int frames;
+  int frames, method;
   double cell_size, radius, rvar, tvar;
   string infile, outfile;
   po::options_description desc("Allowed options");
@@ -74,6 +74,7 @@ int main(int argc, char **argv) {
       ("help,h", "Produce help message")
       ("infile,i", po::value<string>(&infile)->required(), "Input data path")
       ("outfile,o", po::value<string>(&outfile)->required(), "Output file path")
+      ("method,m", po::value<int>(&method)->default_value(0), "Output file path")
       ("frames,f", po::value<int>(&frames)->default_value(5), "Frames")
       ("rvar", po::value<double>(&rvar)->default_value(0.0625), "Intrinsic radius variance")
       ("tvar", po::value<double>(&tvar)->default_value(0.0001), "Intrinsic theta variance")
@@ -91,7 +92,7 @@ int main(int argc, char **argv) {
   ros::init(argc, argv, "test_path");
   ros::NodeHandle nh;
   vector<common::EgoPointClouds> vepcs;
-  common::SerializationInput(infile, vepcs);
+  SerializationInput(infile, vepcs);
   int n = vepcs.size() / frames * frames;
   Matrix4f Tr = Matrix4f::Identity();
   vector<geometry_msgs::PoseStamped> vp;
@@ -106,26 +107,52 @@ int main(int argc, char **argv) {
     Affine2d Tio, Toq;
     vector<Affine2d> Tios, Toqs;
 
-    auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
-    auto mapt = MakeMap(datat, {rvar, tvar}, {cell_size, radius});
-    int tvc = count_if(mapt.begin(), mapt.end(), [](SNDTCell *cell) { return cell->HasGaussian(); });
+    if (method == 0) {
+      // SNDT Method
+      auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
+      auto mapt = MakeSNDTMap(datat, {rvar, tvar}, {cell_size, radius});
+      int tvc = count_if(mapt.begin(), mapt.end(), [](SNDTCell *cell) { return cell->HasGaussian(); });
 
-    auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
-    auto maps = MakeMap(datas, {rvar, tvar}, {cell_size, radius});
-    int svc = count_if(maps.begin(), maps.end(), [](SNDTCell *cell) { return cell->HasGaussian(); });
+      auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
+      auto maps = MakeSNDTMap(datas, {rvar, tvar}, {cell_size, radius});
+      int svc = count_if(maps.begin(), maps.end(), [](SNDTCell *cell) { return cell->HasGaussian(); });
 
-    SNDTParameters params;
-    params.huber = huber;
-    // params.verbose = true;
-    cout << "start frame: " << i;
-    auto T = SNDTMatch(mapt, maps, params, Tio);
+      SNDTParameters params;
+      params.huber = huber;
+      // params.verbose = true;
+      cout << "start frame: " << i;
+      auto T = SNDTMatch(mapt, maps, params, Tio);
 
-    cout << "Run Matching (" << i << "/" << n - 2 * f << "): "
-         << common::XYTDegreeFromMatrix3d(Tio.matrix()).transpose()
-         << " -> " << common::XYTDegreeFromMatrix3d(T.matrix()).transpose()
-         << " (" << tvc << ", " << svc << ")" << endl;
+      cout << "Run Matching (" << i << "/" << n - 2 * f << "): "
+          << common::XYTDegreeFromMatrix3d(Tio.matrix()).transpose()
+          << " -> " << common::XYTDegreeFromMatrix3d(T.matrix()).transpose()
+          << " (" << tvc << ", " << svc << ")" << endl;
 
-    Tr = Tr * common::Matrix4fFromMatrix3d(T.matrix());
+      Tr = Tr * common::Matrix4fFromMatrix3d(T.matrix());
+    } else if (method == 1) {
+      // NDTD2D method
+      auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
+      auto mapt = MakeNDTMap(datat, {rvar, tvar}, {cell_size});
+      int tvc = count_if(mapt.begin(), mapt.end(), [](NDTCell *cell) { return cell->HasGaussian(); });
+
+      auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
+      auto maps = MakeNDTMap(datas, {rvar, tvar}, {cell_size});
+      int svc = count_if(maps.begin(), maps.end(), [](NDTCell *cell) { return cell->HasGaussian(); });
+
+      NDTD2DParameters params;
+      params.huber = huber;
+      // params.verbose = true;
+      cout << "start frame: " << i;
+      auto T = NDTD2DMatch(mapt, maps, params, Tio);
+
+      cout << "Run Matching (" << i << "/" << n - 2 * f << "): "
+          << common::XYTDegreeFromMatrix3d(Tio.matrix()).transpose()
+          << " -> " << common::XYTDegreeFromMatrix3d(T.matrix()).transpose()
+          << " (" << tvc << ", " << svc << ")" << endl;
+
+      Tr = Tr * common::Matrix4fFromMatrix3d(T.matrix());
+    }
+
     cout << "Position: " << Tr.block<2, 1>(0, 3).transpose() << endl;
     vp.push_back(MakePST(vepcs[i + f].stamp, Tr));
   } 
@@ -134,5 +161,5 @@ int main(int argc, char **argv) {
   path.header.frame_id = "map";
   path.header.stamp = vp[0].header.stamp;
   path.poses = vp;
-  common::SerializationOutput(outfile, path);
+  SerializationOutput(outfile, path);
 }

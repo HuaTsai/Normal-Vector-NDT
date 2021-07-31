@@ -79,7 +79,7 @@ void cb(const std_msgs::Int32 &num) {
   Affine2d Tio, Toq;
   vector<Affine2d> Tios, Toqs;
   auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
-  auto mapt = MakeMap(datat, {rvar, tvar}, {cell_size, radius});
+  auto mapt = MakeSNDTMap(datat, {rvar, tvar}, {cell_size, radius});
   int assigned = 0, valid = 0;
   for (auto cell : mapt) {
     if (cell->GetNCellType() == SNDTCell::CellType::kAssign)
@@ -92,7 +92,7 @@ void cb(const std_msgs::Int32 &num) {
   cout << "valid cells: " << valid << endl;
 
   auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
-  auto maps = MakeMap(datas, {rvar, tvar}, {cell_size, radius});
+  auto maps = MakeSNDTMap(datas, {rvar, tvar}, {cell_size, radius});
 
   /********* Compute Ground Truth *********/
   Affine3d To, Ti;
@@ -152,14 +152,14 @@ void cb2(const std_msgs::Int32 &num) {
 
 void GetFiles(string data) {
   string base = "/home/ee904/Desktop/HuaTsai/NormalNDT/Analysis/1Data/" + data;
-  common::SerializationInput(base + "/vepcs.ser", vepcs);
-  common::SerializationInput(base + "/gt.ser", gtpath);
-  common::SerializationInput(base + "/back.ser", imb);
-  common::SerializationInput(base + "/back_left.ser", imbl);
-  common::SerializationInput(base + "/back_right.ser", imbr);
-  common::SerializationInput(base + "/front.ser", imf);
-  common::SerializationInput(base + "/front_left.ser", imfl);
-  common::SerializationInput(base + "/front_right.ser", imfr);
+  SerializationInput(base + "/vepcs.ser", vepcs);
+  SerializationInput(base + "/gt.ser", gtpath);
+  SerializationInput(base + "/back.ser", imb);
+  SerializationInput(base + "/back_left.ser", imbl);
+  SerializationInput(base + "/back_right.ser", imbr);
+  SerializationInput(base + "/front.ser", imf);
+  SerializationInput(base + "/front_left.ser", imfl);
+  SerializationInput(base + "/front_right.ser", imfr);
 }
 
 int main(int argc, char **argv) {

@@ -13,6 +13,15 @@
 #include <sndt/pcl_utils.h>
 #include <sndt/visuals.h>
 
+template <typename T>
+Eigen::Matrix<T, 2, 2> RotationMatrix2D(T yaw) {
+  T cos_yaw = ceres::cos(yaw);
+  T sin_yaw = ceres::sin(yaw);
+  Eigen::Matrix<T, 2, 2> ret;
+  ret << cos_yaw, -sin_yaw, sin_yaw, cos_yaw;
+  return ret;
+}
+
 class AngleLocalParameterization {
  public:
   template <typename T>
@@ -26,6 +35,93 @@ class AngleLocalParameterization {
     return new ceres::AutoDiffLocalParameterization<AngleLocalParameterization, 1, 1>;
   }
 };
+
+struct NDTD2DCostFunctor {
+  const NDTCell *p, *q;
+  NDTD2DCostFunctor(const NDTCell *p_, const NDTCell *q_) : p(p_), q(q_) {}
+  template <typename T>
+  bool operator()(const T *const x, const T *const y, const T *const yaw,
+                  T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(*yaw);
+    Eigen::Matrix<T, 2, 1> t(*x, *y);
+
+    Eigen::Matrix<T, 2, 1> up = R * p->GetPointMean().cast<T>() + t;
+    Eigen::Matrix<T, 2, 2> cp = R * p->GetPointCov().cast<T>() * R.transpose();
+
+    Eigen::Matrix<T, 2, 1> uq = q->GetPointMean().cast<T>();
+    Eigen::Matrix<T, 2, 2> cq = q->GetPointCov().cast<T>();
+
+    Eigen::Matrix<T, 2, 1> m = up - uq;
+    Eigen::Matrix<T, 2, 2> c = cp + cq;
+
+    *e = sqrt((m.transpose() * c.inverse() * m)[0]);
+    return true;
+  }
+
+  static ceres::CostFunction *Create(const NDTCell *cellp,
+                                     const NDTCell *cellq) {
+    return new ceres::AutoDiffCostFunction<NDTD2DCostFunctor, 1, 1, 1, 1>(
+        new NDTD2DCostFunctor(cellp, cellq));
+  }
+};
+
+Eigen::Affine2d NDTD2DMatch(
+    const NDTMap &target_map, const NDTMap &source_map,
+    const NDTD2DParameters &params,
+    const Eigen::Affine2d &guess_tf) {
+  auto kd = MakeKDTree(target_map.GetPoints());
+  bool converge = false;
+  int iteration = 0;
+  auto cur_tf = guess_tf;
+
+  while (!converge) {
+    double x = 0, y = 0, t = 0;
+    auto next_map = source_map.PseudoTransformCells(cur_tf);
+    ceres::Problem problem;
+
+    for (size_t i = 0; i < next_map.size(); ++i) {
+      auto cellp = next_map[i];
+      if (!cellp->HasGaussian()) continue;
+      pcl::PointXY pt;
+      pt.x = cellp->GetPointMean()(0), pt.y = cellp->GetPointMean()(1);
+      std::vector<int> idx{0};
+      std::vector<float> dist2{0};
+      int found = kd.nearestKSearch(pt, 1, idx, dist2);
+      if (!found) continue;
+      auto cellq = target_map.GetCellForPoint(Eigen::Vector2d(
+          kd.getInputCloud()->at(idx[0]).x, kd.getInputCloud()->at(idx[0]).y));
+      if (!cellq || !cellq->HasGaussian()) continue;
+
+      if (params.huber != 0) {
+        ceres::LossFunction *loss(new ceres::HuberLoss(params.huber));
+        problem.AddResidualBlock(NDTD2DCostFunctor::Create(cellp.get(), cellq),
+                                 loss, &x, &y, &t);
+      } else {
+        problem.AddResidualBlock(NDTD2DCostFunctor::Create(cellp.get(), cellq),
+                                 nullptr, &x, &y, &t);
+      }
+    }
+
+    problem.SetParameterization(&t, AngleLocalParameterization::Create());
+
+    ceres::Solver::Options options;
+    if (params.verbose) options.minimizer_progress_to_stdout = true;
+    options.linear_solver_type = ceres::DENSE_QR;
+    options.max_num_iterations = params.max_iterations;
+    ceres::Solver::Summary summary;
+    ceres::Solve(options, &problem, &summary);
+    cur_tf = Eigen::Rotation2Dd(t) * Eigen::Translation2d(x, y) * cur_tf;
+
+    if (params.verbose) {
+      std::cout << "Iteration " << iteration << ": " << std::endl;
+      std::cout << summary.BriefReport() << std::endl;
+    }
+
+    converge = true;
+    ++iteration;
+  }
+  return cur_tf;
+}
 
 struct SNDTCostFunctor {
   const SNDTCell *p, *q;
@@ -136,7 +232,7 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
     ceres::Solver::Options options;
     if (params.verbose) options.minimizer_progress_to_stdout = true;
     options.linear_solver_type = ceres::DENSE_QR;
-    options.max_num_iterations = 100;
+    options.max_num_iterations = params.max_iterations;
     ceres::Solver::Summary summary;
     ceres::Solve(options, &problem, &summary);
     cur_tf = Eigen::Rotation2Dd(t) * Eigen::Translation2d(x, y) * cur_tf;
@@ -146,7 +242,7 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
       std::cout << summary.BriefReport() << std::endl;
     }
 
-    // FIXME: converge strategy
+    // XXX: converge strategy
     // if (min_cost < summary.final_cost) {
     //   ++consec_min_ctr;
     // } else {
@@ -158,7 +254,6 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
     //             (Eigen::Vector2d(x, y).norm() < threshold_) ||
     //             (iteration_ > max_iterations_);
 
-    // FIXME: remove!
     converge = true;
     ++iteration;
   }

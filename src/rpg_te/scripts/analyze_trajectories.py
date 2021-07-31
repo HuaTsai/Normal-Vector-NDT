@@ -17,11 +17,11 @@ rc('text', usetex=True)
 
 FORMAT = '.pdf'
 
-ALGORITHM_CONFIGS = ['sndt', 'sicp']
+# HACK: modify ALGORITHM_CONFIGS and PLOT_LABELS
+ALGORITHM_CONFIGS = ['sndt', 'sicp', 'ndtd2d']
 
 # These are the labels that will be displayed for items in ALGORITHM_CONFIGS
-PLOT_LABELS = {'sndt': 'sndt',
-               'sicp': 'sicp'}
+PLOT_LABELS = {'sndt': 'sndt', 'sicp': 'sicp', 'ndtd2d': 'ndtd2d'}
 
 # assgin colors to different configurations
 # make use you have more colors in the pallete!
@@ -131,7 +131,7 @@ def plot_odometry_error_per_dataset(dataset_rel_err, dataset_names, out_dir):
         fig = plt.figure(figsize=(6, 2.5))
         ax = fig.add_subplot(
             111, xlabel='Distance traveled [m]',
-            ylabel='Translation error [\%]')
+            ylabel='Translation error [%]')
         pu.boxplot_compare(ax, distances, rel_err['trans_err_perc'].values(),
                            config_labels, config_colors)
         fig.tight_layout()
@@ -318,7 +318,7 @@ def plot_overall_odometry_errors(overall_err, output_dir):
     # relative error
     fig = plt.figure(figsize=(6, 2.5))
     ax = fig.add_subplot(
-        111, xlabel='Distance traveled [m]', ylabel='Translation error [\%]')
+        111, xlabel='Distance traveled [m]', ylabel='Translation error [%]')
     pu.boxplot_compare(ax, overall_err['distances'],
                        overall_err['trans_err_perc'].values(),
                        config_labels, config_colors)

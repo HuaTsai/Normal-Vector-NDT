@@ -3,23 +3,22 @@
 #include <bits/stdc++.h>
 #include <ros/ros.h>
 
-#define APATH(name) "/home/ee904/Desktop/HuaTsai/NormalNDT/Analysis/"#name
+#define APATH "/home/ee904/Desktop/HuaTsai/NormalNDT/Analysis"
 
-void dprintf(const char *format, ...) {
-  va_list ap;
-  va_start(ap, format);
-  size_t required = 1 + vsnprintf(NULL, 0, format, ap);
-  va_end(ap);
-  char *buf = new char[required];
-  va_start(ap, format);
-  vsnprintf(buf, required, format, ap);
-  va_end(ap);
-  fprintf(stderr, "%s", buf);
-  fflush(stderr);
-  delete[] buf;
+std::string JoinPath() {
+  return "";
 }
 
-namespace common {
+template <typename... Args>
+std::string JoinPath(std::string s1, Args... args) {
+  std::string s2 = JoinPath(args...);
+  if (s1.size() && s1.back() == '/') s1.pop_back();
+  if (!s1.size()) return s2;
+  if (s2.size() && s2[0] == '/') s2.erase(s2.begin());
+  if (!s2.size()) return s1;
+  return s1 + "/" + s2;
+}
+
 template <typename T>
 void SerializationInput(const std::string &filepath, T &msg) {
   std::ifstream ifs(filepath, std::ios::in | std::ios::binary);
@@ -46,33 +45,29 @@ void SerializationOutput(const std::string &filepath, const T &msg) {
   ofs.close();
 }
 
-std::vector<std::string> GetDataPath(std::string data) {
+std::string GetDataPath(std::string data) {
+  return JoinPath(APATH, "1Data");
+}
+
+std::vector<std::string> GetBagsPath(std::string data) {
   std::vector<std::string> ret;
   if (data == "log24") {
     ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log24_1535729278446231_scene-0299.bag");
     ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log24_1535729298446271_scene-0300.bag");
     ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log24_1535729318549677_scene-0301.bag");
+  } else if (data == "log62-1") {
+    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193241547892_scene-0997.bag");
+    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193261546825_scene-0998.bag");
+    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193281648047_scene-0999.bag");
+    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193301547950_scene-1000.bag");
+  } else if (data == "log62-2") {
+    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193461547574_scene-1004.bag");
+    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193481898177_scene-1005.bag");
+    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193501549291_scene-1006.bag");
+    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193521798725_scene-1007.bag");
+  } else {
+    std::cerr << "No specified data " << data << std::endl;
+    exit(-1);
   }
   return ret;
 }
-
-// void WriteToFile(std::string filepath, const std::vector<double> &data) {
-//   std::ofstream ofs(filepath, std::ios::out);
-//   for (const auto &elem : data) {
-//     ofs << elem << " ";
-//   }
-//   ofs << std::endl;
-//   ofs.close();
-// }
-
-// std::vector<double> ReadFromFile(std::string filepath) {
-//   std::ifstream ifs(filepath, std::ios::in);
-//   std::vector<double> ret;
-//   double num;
-//   while (ifs >> num) {
-//     ret.push_back(num);
-//   }
-//   ifs.close();
-//   return ret;
-// }
-}  // namespace common

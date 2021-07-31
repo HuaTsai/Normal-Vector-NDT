@@ -40,7 +40,7 @@ by Frank Kung 2019 Dec
 #include <tf2_eigen/tf2_eigen.h>
 #include <boost/program_options.hpp>
 #include "common/EgoPointClouds.h"
-#include "common/common.h"
+#include <common/common.h>
 
 using namespace std;
 using namespace literals::chrono_literals;
@@ -358,7 +358,7 @@ void Callback(const conti_radar::MeasurementConstPtr& f_input,
 
 void savecb(const std_msgs::Empty::ConstPtr &msg) {
   // rostopic pub /savepc std_msgs/Empty -1
-  common::SerializationOutput(outpath, vepcs);
+  SerializationOutput(outpath, vepcs);
   ROS_INFO("Saving... Done");
   vepcs.clear();
 }

@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 #include <nav_msgs/Path.h>
-#include "common/common.h"
+#include <common/common.h>
 #include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
@@ -55,9 +55,9 @@ int main(int argc, char **argv) {
   }
 
   nav_msgs::Path estpath, gtpath;
-  common::SerializationInput(estpathfile, estpath);
-  common::SerializationInput(gtpathfile, gtpath);
+  SerializationInput(estpathfile, estpath);
+  SerializationInput(gtpathfile, gtpath);
   MakeGtLocal(gtpath, estpath.poses[0].header.stamp);
-  WriteToFile(estpath, outfolder + "/" + "stamped_traj_estimate.txt");
-  WriteToFile(gtpath, outfolder + "/" + "stamped_groundtruth.txt");
+  WriteToFile(estpath, JoinPath(outfolder, "stamped_traj_estimate.txt"));
+  WriteToFile(gtpath, JoinPath(outfolder, "stamped_groundtruth.txt"));
 }
