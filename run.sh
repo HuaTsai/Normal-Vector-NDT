@@ -1,13 +1,13 @@
 # method: 0->sndt, 1->ndtd2d, 2->sicp
 # SNDT
 devel/lib/sndt_exec/test_path -i ../Analysis/1Data/log24/vepcs.ser -o /tmp/path.ser -u 1 -m 0
-devel/lib/tool/pathtotext -e /tmp/path.ser -g ../Analysis/1Data/log24/gt.ser -o ../Analysis/20210802/results/pc/ndtd2d/pc_ndtd2d_log24
+devel/lib/tool/pathtotext -e /tmp/path.ser -g ../Analysis/1Data/log24/gt.ser -o ../Analysis/20210802/results/pc/sndt/pc_sndt_log24
 
 devel/lib/sndt_exec/test_path -i ../Analysis/1Data/log62-1/vepcs.ser -o /tmp/path2.ser -u 1 -m 0
-devel/lib/tool/pathtotext -e /tmp/path2.ser -g ../Analysis/1Data/log62-1/gt.ser -o ../Analysis/20210802/results/pc/ndtd2d/pc_ndtd2d_log62-1
+devel/lib/tool/pathtotext -e /tmp/path2.ser -g ../Analysis/1Data/log62-1/gt.ser -o ../Analysis/20210802/results/pc/sndt/pc_sndt_log62-1
 
 devel/lib/sndt_exec/test_path -i ../Analysis/1Data/log62-2/vepcs.ser -o /tmp/path3.ser -u 1 -m 0
-devel/lib/tool/pathtotext -e /tmp/path3.ser -g ../Analysis/1Data/log62-2/gt.ser -o ../Analysis/20210802/results/pc/ndtd2d/pc_ndtd2d_log62-2
+devel/lib/tool/pathtotext -e /tmp/path3.ser -g ../Analysis/1Data/log62-2/gt.ser -o ../Analysis/20210802/results/pc/sndt/pc_sndt_log62-2
 
 # NDT-D2D
 devel/lib/sndt_exec/test_path -i ../Analysis/1Data/log24/vepcs.ser -o /tmp/path.ser -u 1 -m 1
