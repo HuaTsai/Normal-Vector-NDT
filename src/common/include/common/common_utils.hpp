@@ -5,6 +5,15 @@
 
 #define APATH "/home/ee904/Desktop/HuaTsai/NormalNDT/Analysis"
 
+inline std::chrono::steady_clock::time_point GetTime() {
+  return std::chrono::steady_clock::now();
+}
+
+inline int GetDiffTime(std::chrono::steady_clock::time_point t1,
+                       std::chrono::steady_clock::time_point t2) {
+  return std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+}
+
 std::string JoinPath() {
   return "";
 }

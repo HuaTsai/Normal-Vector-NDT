@@ -16,7 +16,20 @@ struct ICPParameters { };
 
 struct GICPParameters { };
 
-struct SICPParameters { };
+struct SICPParameters {
+  SICPParameters() {
+    radius = 1.5;
+    max_iterations = 100;
+    threshold = 0.01;
+    huber = 0;
+    verbose = false;
+  }
+  double radius;
+  int max_iterations;
+  double threshold;
+  double huber;
+  bool verbose;
+};
 
 struct NDTP2DParameters { };
 
@@ -46,7 +59,6 @@ struct SNDTParameters {
   bool verbose;
 };
 
-
 // TODO: ICPMatch
 // Eigen::Affine2d ICPMatch(
 //     const std::vector<Eigen::Vector2d> &target_points,
@@ -61,12 +73,11 @@ struct SNDTParameters {
 //     const GICPParameters &params,
 //     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
-// TODO: SICPMatch
-// Eigen::Affine2d SICPMatch(
-//     const std::vector<Eigen::Vector2d> &target_points,
-//     const std::vector<Eigen::Vector2d> &source_points,
-//     const SICPParameters &params,
-//     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
+Eigen::Affine2d SICPMatch(
+    const std::vector<Eigen::Vector2d> &target_points,
+    const std::vector<Eigen::Vector2d> &source_points,
+    const SICPParameters &params,
+    const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 // TODO: NDTP2DMatch
 // Eigen::Affine2d NDTP2DMatch(

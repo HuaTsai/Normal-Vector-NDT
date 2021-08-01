@@ -43,6 +43,7 @@ if __name__ == '__main__':
     if args.recalculate_errors:
         Trajectory.remove_cached_error(args.result_dir)
     if args.png:
+        rc('text', usetex=False)
         FORMAT = '.png'
 
     print("Going to analyze the results in {0}.".format(args.result_dir))
@@ -106,6 +107,7 @@ if __name__ == '__main__':
     fig.savefig(plots_dir+'/rotation_error'+'_'+traj.align_str + FORMAT,
                 bbox_inches='tight')
 
+    """
     fig = plt.figure(figsize=(8, 2.5))
     ax = fig.add_subplot(
         111, xlabel='Distance [m]', ylabel='Scale Drift [%]',
@@ -118,6 +120,7 @@ if __name__ == '__main__':
     fig.tight_layout()
     fig.savefig(plots_dir+'/scale_error'+'_'+traj.align_str+FORMAT,
                 bbox_inches='tight')
+    """
 
     print(">>> Plotting relative (odometry) error...")
     distances = traj.preset_boxplot_distances

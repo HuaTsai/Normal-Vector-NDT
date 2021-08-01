@@ -36,6 +36,118 @@ class AngleLocalParameterization {
   }
 };
 
+struct SICPCostFunctor {
+  const Eigen::Vector2d p, np, q, nq;
+  SICPCostFunctor(const Eigen::Vector2d &p_, const Eigen::Vector2d &np_,
+                  const Eigen::Vector2d &q_, const Eigen::Vector2d &nq_)
+      : p(p_), np(np_), q(q_), nq(nq_) {}
+  template <typename T>
+  bool operator()(const T *const x, const T *const y, const T *const yaw,
+                  T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(*yaw);
+    Eigen::Matrix<T, 2, 1> t(*x, *y);
+
+    Eigen::Matrix<T, 2, 1> p2 = R * p.cast<T>() + t;
+    Eigen::Matrix<T, 2, 1> np2 = R * np.cast<T>();
+
+    Eigen::Matrix<T, 2, 1> q2 = q.cast<T>();
+    Eigen::Matrix<T, 2, 1> nq2 = nq.cast<T>();
+
+    *e = abs((p2 - q2).dot(np2 + nq2));
+    return true;
+  }
+
+  static ceres::CostFunction *Create(const Eigen::Vector2d &p,
+                                     const Eigen::Vector2d &np,
+                                     const Eigen::Vector2d &q,
+                                     const Eigen::Vector2d &nq) {
+    return new ceres::AutoDiffCostFunction<SICPCostFunctor, 1, 1, 1, 1>(
+        new SICPCostFunctor(p, np, q, nq));
+  }
+};
+
+Eigen::Affine2d SICPMatch(
+    const std::vector<Eigen::Vector2d> &target_points,
+    const std::vector<Eigen::Vector2d> &source_points,
+    const SICPParameters &params,
+    const Eigen::Affine2d &guess_tf) {
+  auto tpts = ExcludeNaNInf(target_points);
+  auto spts = ExcludeNaNInf(source_points);
+  auto kd = MakeKDTree(tpts);
+  auto tnms = ComputeNormals(tpts, params.radius);
+  auto snms = ComputeNormals(spts, params.radius);
+  bool converge = false;
+  int iteration = 0;
+  auto cur_tf = guess_tf;
+  int n = source_points.size();
+  int min_ctr = 0;
+  double min_cost = std::numeric_limits<double>::max();
+
+  while (!converge) {
+    double x = 0, y = 0, t = 0;
+    std::vector<Eigen::Vector2d> next_pts(n);
+    std::vector<Eigen::Vector2d> next_nms(n);
+    std::transform(spts.begin(), spts.end(), next_pts.begin(), [&cur_tf](auto p) { return cur_tf * p; });
+    std::transform(snms.begin(), snms.end(), next_nms.begin(), [&cur_tf](auto p) { return cur_tf.rotation() * p; });
+
+    ceres::Problem problem;
+    for (int i = 0; i < n; ++i) {
+      auto p = next_pts[i];
+      auto np = next_nms[i];
+      if (!p.allFinite() || !np.allFinite()) continue;
+      pcl::PointXY pt;
+      pt.x = p(0), pt.y = p(1);
+      std::vector<int> idx{0};
+      std::vector<float> dist2{0};
+      int found = kd.nearestKSearch(pt, 1, idx, dist2);
+      if (!found) continue;
+
+      auto q = tpts[idx[0]];
+      auto nq = tnms[idx[0]];
+      if (!nq.allFinite()) continue;
+
+      if (params.huber != 0) {
+        ceres::LossFunction *loss(new ceres::HuberLoss(params.huber));
+        problem.AddResidualBlock(SICPCostFunctor::Create(p, np, q, nq), loss,
+                                 &x, &y, &t);
+      } else {
+        problem.AddResidualBlock(SICPCostFunctor::Create(p, np, q, nq), nullptr,
+                                 &x, &y, &t);
+      }
+    }
+
+    problem.SetParameterization(&t, AngleLocalParameterization::Create());
+
+    ceres::Solver::Options options;
+    if (params.verbose) options.minimizer_progress_to_stdout = true;
+    options.linear_solver_type = ceres::DENSE_QR;
+    options.max_num_iterations = params.max_iterations;
+    ceres::Solver::Summary summary;
+    ceres::Solve(options, &problem, &summary);
+    cur_tf = Eigen::Rotation2Dd(t) * Eigen::Translation2d(x, y) * cur_tf;
+
+    if (params.verbose) {
+      std::cout << "Iteration " << iteration << ": " << std::endl;
+      std::cout << summary.BriefReport() << std::endl;
+    }
+
+    if (min_cost < summary.final_cost) {
+      ++min_ctr;
+    } else {
+      min_ctr = 0;
+      min_cost = summary.final_cost;
+    }
+
+    converge = (min_ctr == 5) ||
+               (Eigen::Vector2d(x, y).norm() < params.threshold) ||
+               (iteration > params.max_iterations);
+
+    // converge = true;
+    ++iteration;
+  }
+  return cur_tf;
+}
+
 struct NDTD2DCostFunctor {
   const NDTCell *p, *q;
   NDTD2DCostFunctor(const NDTCell *p_, const NDTCell *q_) : p(p_), q(q_) {}
@@ -73,6 +185,8 @@ Eigen::Affine2d NDTD2DMatch(
   bool converge = false;
   int iteration = 0;
   auto cur_tf = guess_tf;
+  int min_ctr = 0;
+  double min_cost = std::numeric_limits<double>::max();
 
   while (!converge) {
     double x = 0, y = 0, t = 0;
@@ -117,7 +231,17 @@ Eigen::Affine2d NDTD2DMatch(
       std::cout << summary.BriefReport() << std::endl;
     }
 
-    converge = true;
+    if (min_cost < summary.final_cost) {
+      ++min_ctr;
+    } else {
+      min_ctr = 0;
+      min_cost = summary.final_cost;
+    }
+    converge = (min_ctr == 5) ||
+               (Eigen::Vector2d(x, y).norm() < params.threshold) ||
+               (iteration > params.max_iterations);
+
+    // converge = true;
     ++iteration;
   }
   return cur_tf;
@@ -198,6 +322,8 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
   bool converge = false;
   int iteration = 0;
   auto cur_tf = guess_tf;
+  int min_ctr = 0;
+  double min_cost = std::numeric_limits<double>::max();
 
   while (!converge) {
     double x = 0, y = 0, t = 0;
@@ -243,18 +369,17 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
     }
 
     // XXX: converge strategy
-    // if (min_cost < summary.final_cost) {
-    //   ++consec_min_ctr;
-    // } else {
-    //   consec_min_ctr = 0;
-    //   min_cost = summary.final_cost;
-    // }
+    if (min_cost < summary.final_cost) {
+      ++min_ctr;
+    } else {
+      min_ctr = 0;
+      min_cost = summary.final_cost;
+    }
+    converge = (min_ctr == 5) ||
+               (Eigen::Vector2d(x, y).norm() < params.threshold) ||
+               (iteration > params.max_iterations);
 
-    // converge = (consec_min_ctr == 10) ||
-    //             (Eigen::Vector2d(x, y).norm() < threshold_) ||
-    //             (iteration_ > max_iterations_);
-
-    converge = true;
+    // converge = true;
     ++iteration;
   }
   return cur_tf;

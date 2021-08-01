@@ -119,14 +119,9 @@ int main(int argc, char **argv) {
 
       SNDTParameters params;
       params.huber = huber;
-      // params.verbose = true;
-      cout << "start frame: " << i;
       auto T = SNDTMatch(mapt, maps, params, Tio);
 
-      cout << "Run Matching (" << i << "/" << n - 2 * f << "): "
-          << common::XYTDegreeFromMatrix3d(Tio.matrix()).transpose()
-          << " -> " << common::XYTDegreeFromMatrix3d(T.matrix()).transpose()
-          << " (" << tvc << ", " << svc << ")" << endl;
+      cout << "Run SNDT Matching (" << i << "/" << n - 2 * f << ")" << endl;
 
       Tr = Tr * common::Matrix4fFromMatrix3d(T.matrix());
     } else if (method == 1) {
@@ -141,14 +136,34 @@ int main(int argc, char **argv) {
 
       NDTD2DParameters params;
       params.huber = huber;
-      // params.verbose = true;
-      cout << "start frame: " << i;
       auto T = NDTD2DMatch(mapt, maps, params, Tio);
 
-      cout << "Run Matching (" << i << "/" << n - 2 * f << "): "
-          << common::XYTDegreeFromMatrix3d(Tio.matrix()).transpose()
-          << " -> " << common::XYTDegreeFromMatrix3d(T.matrix()).transpose()
-          << " (" << tvc << ", " << svc << ")" << endl;
+      cout << "Run NDTD2D Matching (" << i << "/" << n - 2 * f << ")" << endl;
+
+      Tr = Tr * common::Matrix4fFromMatrix3d(T.matrix());
+    } else if (method == 2) {
+      // SICP method
+      auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
+      vector<Vector2d> tgt;
+      for (auto &data : datat) {
+        auto aff = data.second;
+        for (int i = 0; i < data.first.cols(); ++i)
+          tgt.push_back(aff * data.first.block<2, 1>(0, i));
+      }
+
+      auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
+      vector<Vector2d> src;
+      for (auto &data : datas) {
+        auto aff = data.second;
+        for (int i = 0; i < data.first.cols(); ++i)
+          src.push_back(aff * data.first.block<2, 1>(0, i));
+      }
+
+      SICPParameters params;
+      params.huber = huber;
+      auto T = SICPMatch(tgt, src, params, Tio);
+
+      cout << "Run SICP Matching (" << i << "/" << n - 2 * f << ")" << endl;
 
       Tr = Tr * common::Matrix4fFromMatrix3d(T.matrix());
     }

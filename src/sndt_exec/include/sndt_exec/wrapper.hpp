@@ -81,3 +81,14 @@ SNDTMap MakeSNDTMap(
   ret.LoadPointsWithCovariancesAndNormals(points, point_covs, normals);
   return ret;
 }
+
+std::vector<Eigen::Vector2d> MakeMatrix(
+    const std::vector<std::pair<Eigen::MatrixXd, Eigen::Affine2d>> &datas) {
+  std::vector<Eigen::Vector2d> ret;
+  for (auto &data : datas) {
+    auto aff = data.second;
+    for (int i = 0; i < data.first.cols(); ++i)
+      ret.push_back(aff * data.first.block<2, 1>(0, i));
+  }
+  return ret;
+}
