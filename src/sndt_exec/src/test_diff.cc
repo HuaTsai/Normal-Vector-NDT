@@ -40,8 +40,7 @@ pair<int, double> FindMax(double a, double b, double c) {
     return {0, a};
   if (b > a && b > c)
     return {1, b};
-  if (c > a && c > b)
-    return {2, c};
+  return {2, c};
 }
 
 pair<int, double> FindMin(double a, double b, double c) {
@@ -49,8 +48,7 @@ pair<int, double> FindMin(double a, double b, double c) {
     return {0, a};
   if (b < a && b < c)
     return {1, b};
-  if (c < a && c < b)
-    return {2, c};
+  return {2, c};
 }
 
 // start, ..., end, end+1
@@ -99,25 +97,40 @@ void cb(const std_msgs::Int32 &num) {
   auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
 
   // Matching by SICP
+  auto t1 = GetTime();
   auto tgt = MakeMatrix(datat);
   auto src = MakeMatrix(datas);
   SICPParameters sicpparams;
   sicpparams.huber = huber;
   auto sicpT = SICPMatch(tgt, src, sicpparams, Tio);
+  auto t2 = GetTime();
+  auto t12 = GetDiffTime(t1, t2);
+  std::printf("sicp -> optimize: %d ms(%d%%), total: %d ms\n",
+              sicpparams.usedtime.optimize, sicpparams.usedtime.optimize * 100 / t12, t12);
 
   // Matching by NDTD2D
+  auto t3 = GetTime();
   auto mapt = MakeNDTMap(datat, {rvar, tvar}, {cell_size});
   auto maps = MakeNDTMap(datas, {rvar, tvar}, {cell_size});
   NDTD2DParameters ndtparams;
   ndtparams.huber = huber;
   auto ndtT = NDTD2DMatch(mapt, maps, ndtparams, Tio);
+  auto t4 = GetTime();
+  auto t34 = GetDiffTime(t3, t4);
+  std::printf("ndt -> optimize: %d ms(%d%%), total: %d ms\n",
+              ndtparams.usedtime.optimize, ndtparams.usedtime.optimize * 100 / t34, t34);
 
   // Matching by SNDT
+  auto t5 = GetTime();
   auto smapt = MakeSNDTMap(datat, {rvar, tvar}, {cell_size, radius});
   auto smaps = MakeSNDTMap(datas, {rvar, tvar}, {cell_size, radius});
   SNDTParameters sndtparams;
   sndtparams.huber = huber;
   auto sndtT = SNDTMatch(smapt, smaps, sndtparams, Tio);
+  auto t6 = GetTime();
+  auto t56 = GetDiffTime(t5, t6);
+  std::printf("sndt -> optimize: %d ms(%d%%), total: %d ms\n",
+              sndtparams.usedtime.optimize, sndtparams.usedtime.optimize * 100 / t56, t56);
 
   // Compute Ground Truth
   Affine3d To, Ti;
@@ -143,9 +156,9 @@ void cb(const std_msgs::Int32 &num) {
   auto tmax = FindMax(err0(1), err1(1), err2(1));
   auto tmin = FindMin(err0(1), err1(1), err2(1));
 
-  std::printf("%d:\n"
-              "r %.2f, %.2f, %.2f -> best: %d, diff, %.2f\n"
-              "t %.2f, %.2f, %.2f -> best: %d, diff, %.2f\n\n", i,
+  std::printf("%d   sicp   ndt  sndt:\n"
+              "rerr %.2f, %.2f, %.2f -> best: %d, diff, %.2f\n"
+              "terr %.2f, %.2f, %.2f -> best: %d, diff, %.2f\n\n", i,
               err0(0), err1(0), err2(0), rmin.first, rmax.second - rmin.second,
               err0(1), err1(1), err2(1), tmin.first, tmax.second - tmin.second);
   std::fflush(stdout);
@@ -206,7 +219,7 @@ int main(int argc, char **argv) {
   pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0, true);
   pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed", 0, true);
 
-  for (int i = 0; i < vepcs.size() - 15; i += 5) {
+  for (int i = 0; i < (int)vepcs.size() - 15; i += 5) {
     std_msgs::Int32 num;
     num.data = i;
     cb(num);

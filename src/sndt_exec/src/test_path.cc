@@ -111,11 +111,9 @@ int main(int argc, char **argv) {
       // SNDT Method
       auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
       auto mapt = MakeSNDTMap(datat, {rvar, tvar}, {cell_size, radius});
-      int tvc = count_if(mapt.begin(), mapt.end(), [](SNDTCell *cell) { return cell->HasGaussian(); });
 
       auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
       auto maps = MakeSNDTMap(datas, {rvar, tvar}, {cell_size, radius});
-      int svc = count_if(maps.begin(), maps.end(), [](SNDTCell *cell) { return cell->HasGaussian(); });
 
       SNDTParameters params;
       params.huber = huber;
@@ -128,11 +126,9 @@ int main(int argc, char **argv) {
       // NDTD2D method
       auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
       auto mapt = MakeNDTMap(datat, {rvar, tvar}, {cell_size});
-      int tvc = count_if(mapt.begin(), mapt.end(), [](NDTCell *cell) { return cell->HasGaussian(); });
 
       auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
       auto maps = MakeNDTMap(datas, {rvar, tvar}, {cell_size});
-      int svc = count_if(maps.begin(), maps.end(), [](NDTCell *cell) { return cell->HasGaussian(); });
 
       NDTD2DParameters params;
       params.huber = huber;
@@ -168,7 +164,6 @@ int main(int argc, char **argv) {
       Tr = Tr * common::Matrix4fFromMatrix3d(T.matrix());
     }
 
-    cout << "Position: " << Tr.block<2, 1>(0, 3).transpose() << endl;
     vp.push_back(MakePST(vepcs[i + f].stamp, Tr));
   } 
 

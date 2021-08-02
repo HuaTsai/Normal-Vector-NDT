@@ -30,4 +30,4 @@ devel/lib/tool/pathtotext -e /tmp/path2.ser -g ../Analysis/1Data/log62-1/gt.ser 
 devel/lib/sndt_exec/test_path -i ../Analysis/1Data/log62-2/vepcs.ser -o /tmp/path3.ser -u 1 -m 2
 devel/lib/tool/pathtotext -e /tmp/path3.ser -g ../Analysis/1Data/log62-2/gt.ser -o ../Analysis/20210802/results/pc/sicp/pc_sicp_log62-2
 
-src/rpg_te/scripts/analyze_trajectories.py --results_dir ../Analysis/20210802/results --output_dir ../Analysis/20210802/results/withcvg --dataset log24,log62-1,log62-2 --odometry_error_per_dataset --overall_odometry_error --plot_trajectories --rmse_table --png --recalculate_errors
+src/rpg_te/scripts/analyze_trajectories.py --results_dir ../Analysis/20210802/results --output_dir ../Analysis/20210802/results --dataset log24,log62-1,log62-2 --odometry_error_per_dataset --overall_odometry_error --plot_trajectories --rmse_table --png --recalculate_errors
