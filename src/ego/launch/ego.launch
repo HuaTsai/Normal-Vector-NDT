@@ -1,19 +1,28 @@
 <launch>
     <param name="use_sim_time" value="true" />
-    <node pkg="ego" type="ego" name="ego" output="screen" />
+    <node pkg="ego" type="ego" name="ego" output="screen" args="--outpath /home/ee904/Desktop/HuaTsai/NormalNDT/Analysis/1Data/log35-1/vepcs.ser" />
     <!-- node pkg="rosbag" type="play" name="playbag" output="screen" args="-clock -r0.5
       /home/ee904/Desktop/Dataset/nuScenes/log24_1535729278446231_scene-0299.bag
       /home/ee904/Desktop/Dataset/nuScenes/log24_1535729298446271_scene-0300.bag
       /home/ee904/Desktop/Dataset/nuScenes/log24_1535729318549677_scene-0301.bag" /-->
+    <node pkg="rosbag" type="play" name="playbag" output="screen" args="--clock -r0.5
+      /home/ee904/Desktop/Dataset/nuScenes/log35_1538985150297491_scene-0420.bag
+      /home/ee904/Desktop/Dataset/nuScenes/log35_1538985170297464_scene-0421.bag
+      /home/ee904/Desktop/Dataset/nuScenes/log35_1538985190298034_scene-0422.bag
+      /home/ee904/Desktop/Dataset/nuScenes/log35_1538985210297489_scene-0423.bag
+      /home/ee904/Desktop/Dataset/nuScenes/log35_1538985230298065_scene-0424.bag
+      /home/ee904/Desktop/Dataset/nuScenes/log35_1538985250297526_scene-0425.bag
+      /home/ee904/Desktop/Dataset/nuScenes/log35_1538985270298113_scene-0426.bag
+      /home/ee904/Desktop/Dataset/nuScenes/log35_1538985290297603_scene-0427.bag" />
     <!-- node pkg="rosbag" type="play" name="playbag" output="screen" args="-clock -r0.5
       /home/ee904/Desktop/Dataset/nuScenes/log62_1542193241547892_scene-0997.bag
       /home/ee904/Desktop/Dataset/nuScenes/log62_1542193261546825_scene-0998.bag
       /home/ee904/Desktop/Dataset/nuScenes/log62_1542193281648047_scene-0999.bag
       /home/ee904/Desktop/Dataset/nuScenes/log62_1542193301547950_scene-1000.bag" /-->
-    <node pkg="rosbag" type="play" name="playbag" output="screen" args="--clock -r0.5
+    <!-- <node pkg="rosbag" type="play" name="playbag" output="screen" args="-clock -r0.5
       /home/ee904/Desktop/Dataset/nuScenes/log62_1542193461547574_scene-1004.bag
       /home/ee904/Desktop/Dataset/nuScenes/log62_1542193481898177_scene-1005.bag
       /home/ee904/Desktop/Dataset/nuScenes/log62_1542193501549291_scene-1006.bag
-      /home/ee904/Desktop/Dataset/nuScenes/log62_1542193521798725_scene-1007.bag" />
+      /home/ee904/Desktop/Dataset/nuScenes/log62_1542193521798725_scene-1007.bag" /> -->
     <!-- <node pkg="rviz" type="rviz" name="rviz" args="-d /home/ee904/.rviz/ego.rviz" /> -->
 </launch>

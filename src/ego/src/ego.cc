@@ -5,20 +5,39 @@ paper "Instantaneous Ego-Motion Estimation using Multiple Doppler Radars", in
 1592-1597.
 -------------------------------
 INPUT Topic: (conti_radar::Measurement)
-        /radar_front  /radar_front_right  /radar_front_left  /radar_back_right
-/radar_back_left
+  /radar_front
+  /radar_front_right
+  /radar_front_left
+  /radar_back_right
+  /radar_back_left
 -------------------------------
 OUTPUT Topic:
   Velocity: (nav_msgs::Odometry)
-                /vel
+    /vel
   Inliers: (conti_radar::Measurement)
-                /radar_front_inlier  /radar_front_right_inlier
-/radar_front_left_inlier  /radar_back_right_inlier  /radar_back_left_inlier
+    /radar_front_inlier
+    /radar_front_right_inlier
+    /radar_front_left_inlier
+    /radar_back_right_inlier
+    /radar_back_left_inlier
   Outliers: (conti_radar::Measurement)
-                /radar_front_outlier  /radar_front_right_outlier
-/radar_front_left_outlier  /radar_back_right_outlier  /radar_back_left_outlier
+    /radar_front_outlier
+    /radar_front_right_outlier
+    /radar_front_left_outlier
+    /radar_back_right_outlier
+    /radar_back_left_outlier
 -------------------------------
 by Frank Kung 2019 Dec
+-------------------------------
+This implemntation is futher refactored and modified for storing results.
+New INPUT Topic:
+  Save std::vector<common::EgoPointClouds> to outpath: (std_msgs::Empty)
+    /savepc (usage: rostopic pub /savepc std_msgs/Empty -1)
+New OUTPUT Topic:
+  Augment point cloud: (sensor_msgs::PointCloud2)
+    /merge_pc
+-------------------------------
+by Adam Huang 2021 August
 *********************************************************/
 #include <bits/stdc++.h>
 #include <conti_radar/Measurement.h>
@@ -39,7 +58,7 @@ by Frank Kung 2019 Dec
 #include <sensor_msgs/PointCloud2.h>
 #include <tf2_eigen/tf2_eigen.h>
 #include <boost/program_options.hpp>
-#include "common/EgoPointClouds.h"
+#include <common/EgoPointClouds.h>
 #include <common/common.h>
 
 using namespace std;
@@ -63,7 +82,7 @@ ros::Publisher bl_inlier_pub;
 vector<common::EgoPointClouds> vepcs;
 string outpath;
 
-unordered_map<string, shared_ptr<ros::Publisher>> publishers;
+unordered_map<string, ros::Publisher> publishers;
 unordered_map<string, Vector3d> sensor_origins;
 unordered_map<string, Matrix4d> sensor_tfs;
 unordered_map<string, Matrix<double, 2, 3>> S;
@@ -74,16 +93,15 @@ typedef message_filters::sync_policies::ApproximateTime<
     conti_radar::Measurement>
     NoCloudSyncPolicy;
 
-sensor_msgs::PointCloud2 conti_to_rospc(const conti_radar::Measurement &msg, int label) {
+sensor_msgs::PointCloud2 conti_to_rospc(const conti_radar::Measurement &msg) {
   sensor_msgs::PointCloud2 ret;
-  pcl::PointCloud<pcl::PointXYZL>::Ptr pc(new pcl::PointCloud<pcl::PointXYZL>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
   for (size_t i = 0; i < msg.points.size(); ++i) {
-    pcl::PointXYZL point;
+    pcl::PointXYZ point;
     if (msg.points.at(i).invalid_state == 0x00) {
       point.x = msg.points.at(i).longitude_dist;
       point.y = msg.points.at(i).lateral_dist;
       point.z = 0;
-      point.label = label;
       // point.intensity = msg.points.at(i).rcs;
       pc->points.push_back(point);
     }
@@ -315,23 +333,23 @@ void Callback(const conti_radar::MeasurementConstPtr& f_input,
   Matrix4d tf_td;
   
   tf_td = GetTransform(vxyt * (f_t - min_t)) * sensor_tfs["f"];
-  auto pcsr_f = MakePointCloudSensor("front", tf_td, conti_to_rospc(f_in, 0), augpc);
+  auto pcsr_f = MakePointCloudSensor("front", tf_td, conti_to_rospc(f_in), augpc);
   epcs.pcs.push_back(pcsr_f);
 
   tf_td = GetTransform(vxyt * (fr_t - min_t)) * sensor_tfs["fr"];
-  auto pcsr_fr = MakePointCloudSensor("front right", tf_td, conti_to_rospc(fr_in, 1), augpc);
+  auto pcsr_fr = MakePointCloudSensor("front right", tf_td, conti_to_rospc(fr_in), augpc);
   epcs.pcs.push_back(pcsr_fr);
 
   tf_td = GetTransform(vxyt * (fl_t - min_t)) * sensor_tfs["fl"];
-  auto pcsr_fl = MakePointCloudSensor("front left", tf_td, conti_to_rospc(fl_in, 2), augpc);
+  auto pcsr_fl = MakePointCloudSensor("front left", tf_td, conti_to_rospc(fl_in), augpc);
   epcs.pcs.push_back(pcsr_fl);
 
   tf_td = GetTransform(vxyt * (br_t - min_t)) * sensor_tfs["br"];
-  auto pcsr_br = MakePointCloudSensor("back right", tf_td, conti_to_rospc(br_in, 3), augpc);
+  auto pcsr_br = MakePointCloudSensor("back right", tf_td, conti_to_rospc(br_in), augpc);
   epcs.pcs.push_back(pcsr_br);
 
   tf_td = GetTransform(vxyt * (bl_t - min_t)) * sensor_tfs["bl"];
-  auto pcsr_bl = MakePointCloudSensor("back left", tf_td, conti_to_rospc(bl_in, 4), augpc);
+  auto pcsr_bl = MakePointCloudSensor("back left", tf_td, conti_to_rospc(bl_in), augpc);
   epcs.pcs.push_back(pcsr_bl);
 
   epcs.augpc = ToGeometryMsgs(augpc);
@@ -340,24 +358,23 @@ void Callback(const conti_radar::MeasurementConstPtr& f_input,
   augpc.header.stamp = ros::Time(min_t);
   augpc.header.frame_id = "/car";
 
-  publishers["f_out"]->publish(f_out);
-  publishers["fr_out"]->publish(fr_out);
-  publishers["fl_out"]->publish(fl_out);
-  publishers["br_out"]->publish(br_out);
-  publishers["bl_out"]->publish(bl_out);
+  publishers["f_out"].publish(f_out);
+  publishers["fr_out"].publish(fr_out);
+  publishers["fl_out"].publish(fl_out);
+  publishers["br_out"].publish(br_out);
+  publishers["bl_out"].publish(bl_out);
 
-  publishers["f_in"]->publish(f_in);
-  publishers["fr_in"]->publish(fr_in);
-  publishers["fl_in"]->publish(fl_in);
-  publishers["br_in"]->publish(br_in);
-  publishers["bl_in"]->publish(bl_in);
+  publishers["f_in"].publish(f_in);
+  publishers["fr_in"].publish(fr_in);
+  publishers["fl_in"].publish(fl_in);
+  publishers["br_in"].publish(br_in);
+  publishers["bl_in"].publish(bl_in);
 
   pub.publish(odom);
   pub_pc.publish(augpc);
 }
 
 void savecb(const std_msgs::Empty::ConstPtr &msg) {
-  // rostopic pub /savepc std_msgs/Empty -1
   SerializationOutput(outpath, vepcs);
   ROS_INFO("Saving... Done");
   vepcs.clear();
@@ -412,17 +429,17 @@ int main(int argc, char** argv) {
   pub = nh.advertise<nav_msgs::Odometry>("vel", 1);
   pub_pc = nh.advertise<sensor_msgs::PointCloud2>("merge_pc", 1);
 
-  *publishers["f_out"] = nh.advertise<conti_radar::Measurement>("radar_front_outlier", 1);
-  *publishers["fr_out"] = nh.advertise<conti_radar::Measurement>("radar_front_right_outlier", 1);
-  *publishers["fl_out"] = nh.advertise<conti_radar::Measurement>("radar_front_left_outlier", 1);
-  *publishers["br_out"] = nh.advertise<conti_radar::Measurement>("radar_back_right_outlier", 1);
-  *publishers["bl_out"] = nh.advertise<conti_radar::Measurement>("radar_back_left_outlier", 1);
+  publishers["f_out"] = nh.advertise<conti_radar::Measurement>("radar_front_outlier", 1);
+  publishers["fr_out"] = nh.advertise<conti_radar::Measurement>("radar_front_right_outlier", 1);
+  publishers["fl_out"] = nh.advertise<conti_radar::Measurement>("radar_front_left_outlier", 1);
+  publishers["br_out"] = nh.advertise<conti_radar::Measurement>("radar_back_right_outlier", 1);
+  publishers["bl_out"] = nh.advertise<conti_radar::Measurement>("radar_back_left_outlier", 1);
 
-  *publishers["f_in"] = nh.advertise<conti_radar::Measurement>("radar_front_inlier", 1);
-  *publishers["f_in"] = nh.advertise<conti_radar::Measurement>("radar_front_right_inlier", 1);
-  *publishers["f_in"] = nh.advertise<conti_radar::Measurement>("radar_front_left_inlier", 1);
-  *publishers["f_in"] = nh.advertise<conti_radar::Measurement>("radar_back_right_inlier", 1);
-  *publishers["f_in"] = nh.advertise<conti_radar::Measurement>("radar_back_left_inlier", 1);
+  publishers["f_in"] = nh.advertise<conti_radar::Measurement>("radar_front_inlier", 1);
+  publishers["fr_in"] = nh.advertise<conti_radar::Measurement>("radar_front_right_inlier", 1);
+  publishers["fl_in"] = nh.advertise<conti_radar::Measurement>("radar_front_left_inlier", 1);
+  publishers["br_in"] = nh.advertise<conti_radar::Measurement>("radar_back_right_inlier", 1);
+  publishers["bl_in"] = nh.advertise<conti_radar::Measurement>("radar_back_left_inlier", 1);
 
   ros::spin();
 }
