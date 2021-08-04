@@ -38,36 +38,6 @@ double cell_size, radius, rvar, tvar;
 double huber;
 nav_msgs::Path gtpath;
 
-// start, ..., end, end+1
-// <<------- T -------->>
-vector<pair<MatrixXd, Affine2d>> Augment(
-    const vector<common::EgoPointClouds> &vepcs, int start, int end,
-    Affine2d &T, vector<Affine2d> &allT) {
-  vector<pair<MatrixXd, Affine2d>> ret;
-  double dx = 0, dy = 0, dth = 0;
-  for (int i = start; i <= end; ++i) {
-    Affine2d T0i = Rotation2Dd(dth) * Translation2d(dx, dy);
-    allT.push_back(T0i);
-    for (const auto &pc : vepcs[i].pcs) {
-      MatrixXd fi(2, pc.points.size());
-      for (int i = 0; i < fi.cols(); ++i)
-        fi.col(i) = Vector2d(pc.points[i].x, pc.points[i].y);
-      Affine3d aff;
-      tf2::fromMsg(pc.origin, aff);
-      Matrix3d mtx = Matrix3d::Identity();
-      mtx.block<2, 2>(0, 0) = aff.matrix().block<2, 2>(0, 0);
-      mtx.block<2, 1>(0, 2) = aff.matrix().block<2, 1>(0, 3);
-      ret.push_back({fi, T0i * Affine2d(mtx)});
-    }
-    double dt = (vepcs[i + 1].stamp - vepcs[i].stamp).toSec();
-    dx += vepcs[i].vxyt[0] * dt;
-    dy += vepcs[i].vxyt[1] * dt;
-    dth += vepcs[i].vxyt[2] * dt;
-  }
-  T = Rotation2Dd(dth) * Translation2d(dx, dy);
-  return ret;
-}
-
 // i-f, ..., i-1 | i, i+1, ..., i+f-1 | i+f, ..., i+2f-1 | i+2f -> actual id
 // ..., ...,  m  | i, ..., ...,   n   |  o , ...,   p    |  q   -> symbol id
 // -- frames  -- | ----- target ----- | ---- source ---- |
@@ -76,23 +46,14 @@ vector<pair<MatrixXd, Affine2d>> Augment(
 void cb(const std_msgs::Int32 &num) {
   int i = num.data;
   int f = frames;
+  SNDTParameters params;
   Affine2d Tio, Toq;
   vector<Affine2d> Tios, Toqs;
   auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
-  auto mapt = MakeSNDTMap(datat, {rvar, tvar}, {cell_size, radius});
-  int assigned = 0, valid = 0;
-  for (auto cell : mapt) {
-    if (cell->GetNCellType() == SNDTCell::CellType::kAssign)
-      ++assigned;
-    else if (cell->HasGaussian())
-      ++valid;
-  }
-  cout << "total cells: " << mapt.size() << endl;
-  cout << "assigned cells: " << assigned << endl;
-  cout << "valid cells: " << valid << endl;
+  auto mapt = MakeSNDTMap(datat, params);
 
   auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
-  auto maps = MakeSNDTMap(datas, {rvar, tvar}, {cell_size, radius});
+  auto maps = MakeSNDTMap(datas, params);
 
   /********* Compute Ground Truth *********/
   Affine3d To, Ti;
@@ -103,7 +64,6 @@ void cb(const std_msgs::Int32 &num) {
                    Rotation2Dd(gtTio3.rotation().block<2, 2>(0, 0));
   /********* Compute End Here     *********/
 
-  SNDTParameters params;
   params.huber = huber;
   // params.verbose = true;
   cout << "start frame: " << i;

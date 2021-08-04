@@ -51,36 +51,6 @@ pair<int, double> FindMin(double a, double b, double c) {
   return {2, c};
 }
 
-// start, ..., end, end+1
-// <<------- T -------->>
-vector<pair<MatrixXd, Affine2d>> Augment(
-    const vector<common::EgoPointClouds> &vepcs, int start, int end,
-    Affine2d &T, vector<Affine2d> &allT) {
-  vector<pair<MatrixXd, Affine2d>> ret;
-  double dx = 0, dy = 0, dth = 0;
-  for (int i = start; i <= end; ++i) {
-    Affine2d T0i = Rotation2Dd(dth) * Translation2d(dx, dy);
-    allT.push_back(T0i);
-    for (const auto &pc : vepcs[i].pcs) {
-      MatrixXd fi(2, pc.points.size());
-      for (int i = 0; i < fi.cols(); ++i)
-        fi.col(i) = Vector2d(pc.points[i].x, pc.points[i].y);
-      Affine3d aff;
-      tf2::fromMsg(pc.origin, aff);
-      Matrix3d mtx = Matrix3d::Identity();
-      mtx.block<2, 2>(0, 0) = aff.matrix().block<2, 2>(0, 0);
-      mtx.block<2, 1>(0, 2) = aff.matrix().block<2, 1>(0, 3);
-      ret.push_back({fi, T0i * Affine2d(mtx)});
-    }
-    double dt = (vepcs[i + 1].stamp - vepcs[i].stamp).toSec();
-    dx += vepcs[i].vxyt[0] * dt;
-    dy += vepcs[i].vxyt[1] * dt;
-    dth += vepcs[i].vxyt[2] * dt;
-  }
-  T = Rotation2Dd(dth) * Translation2d(dx, dy);
-  return ret;
-}
-
 // i-f, ..., i-1 | i, i+1, ..., i+f-1 | i+f, ..., i+2f-1 | i+2f -> actual id
 // ..., ...,  m  | i, ..., ...,   n   |  o , ...,   p    |  q   -> symbol id
 // -- frames  -- | ----- target ----- | ---- source ---- |
@@ -93,44 +63,44 @@ void cb(const std_msgs::Int32 &num) {
   Affine2d Tio, Toq;
   vector<Affine2d> Tios, Toqs;
 
-  auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
-  auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
-
   // Matching by SICP
   auto t1 = GetTime();
-  auto tgt = MakeMatrix(datat);
-  auto src = MakeMatrix(datas);
   SICPParameters sicpparams;
+  auto tgt = AugmentPoints(vepcs, i, i + f - 1, Tio, Tios);
+  auto src = AugmentPoints(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
   sicpparams.huber = huber;
   auto sicpT = SICPMatch(tgt, src, sicpparams, Tio);
   auto t2 = GetTime();
   auto t12 = GetDiffTime(t1, t2);
   std::printf("sicp -> optimize: %d ms(%d%%), total: %d ms\n",
-              sicpparams.usedtime.optimize, sicpparams.usedtime.optimize * 100 / t12, t12);
+              sicpparams._usedtime.optimize, sicpparams._usedtime.optimize * 100 / t12, t12);
 
   // Matching by NDTD2D
   auto t3 = GetTime();
-  auto mapt = MakeNDTMap(datat, {rvar, tvar}, {cell_size});
-  auto maps = MakeNDTMap(datas, {rvar, tvar}, {cell_size});
   NDTD2DParameters ndtparams;
+  auto datat0 = Augment(vepcs, i, i + f - 1, Tio, Tios);
+  auto datas0 = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
+  auto mapt = MakeNDTMap(datat0, ndtparams);
+  auto maps = MakeNDTMap(datas0, ndtparams);
   ndtparams.huber = huber;
   auto ndtT = NDTD2DMatch(mapt, maps, ndtparams, Tio);
   auto t4 = GetTime();
   auto t34 = GetDiffTime(t3, t4);
   std::printf("ndt -> optimize: %d ms(%d%%), total: %d ms\n",
-              ndtparams.usedtime.optimize, ndtparams.usedtime.optimize * 100 / t34, t34);
+              ndtparams._usedtime.optimize, ndtparams._usedtime.optimize * 100 / t34, t34);
 
   // Matching by SNDT
   auto t5 = GetTime();
-  auto smapt = MakeSNDTMap(datat, {rvar, tvar}, {cell_size, radius});
-  auto smaps = MakeSNDTMap(datas, {rvar, tvar}, {cell_size, radius});
   SNDTParameters sndtparams;
-  sndtparams.huber = huber;
+  auto datat1 = Augment(vepcs, i, i + f - 1, Tio, Tios);
+  auto datas1 = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
+  auto smapt = MakeSNDTMap(datat1, sndtparams);
+  auto smaps = MakeSNDTMap(datas1, sndtparams);
   auto sndtT = SNDTMatch(smapt, smaps, sndtparams, Tio);
   auto t6 = GetTime();
   auto t56 = GetDiffTime(t5, t6);
   std::printf("sndt -> optimize: %d ms(%d%%), total: %d ms\n",
-              sndtparams.usedtime.optimize, sndtparams.usedtime.optimize * 100 / t56, t56);
+              sndtparams._usedtime.optimize, sndtparams._usedtime.optimize * 100 / t56, t56);
 
   // Compute Ground Truth
   Affine3d To, Ti;

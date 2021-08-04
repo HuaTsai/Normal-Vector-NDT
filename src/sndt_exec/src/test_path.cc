@@ -26,36 +26,6 @@ using namespace Eigen;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
 
-// start, ..., end, end+1
-// <<------- T -------->>
-vector<pair<MatrixXd, Affine2d>> Augment(
-    const vector<common::EgoPointClouds> &vepcs, int start, int end,
-    Affine2d &T, vector<Affine2d> &allT) {
-  vector<pair<MatrixXd, Affine2d>> ret;
-  double dx = 0, dy = 0, dth = 0;
-  for (int i = start; i <= end; ++i) {
-    Affine2d T0i = Rotation2Dd(dth) * Translation2d(dx, dy);
-    allT.push_back(T0i);
-    for (const auto &pc : vepcs[i].pcs) {
-      MatrixXd fi(2, pc.points.size());
-      for (int i = 0; i < fi.cols(); ++i)
-        fi.col(i) = Vector2d(pc.points[i].x, pc.points[i].y);
-      Affine3d aff;
-      tf2::fromMsg(pc.origin, aff);
-      Matrix3d mtx = Matrix3d::Identity();
-      mtx.block<2, 2>(0, 0) = aff.matrix().block<2, 2>(0, 0);
-      mtx.block<2, 1>(0, 2) = aff.matrix().block<2, 1>(0, 3);
-      ret.push_back(make_pair(fi, T0i * Affine2d(mtx)));
-    }
-    double dt = (vepcs[i + 1].stamp - vepcs[i].stamp).toSec();
-    dx += vepcs[i].vxyt[0] * dt;
-    dy += vepcs[i].vxyt[1] * dt;
-    dth += vepcs[i].vxyt[2] * dt;
-  }
-  T = Rotation2Dd(dth) * Translation2d(dx, dy);
-  return ret;
-}
-
 geometry_msgs::PoseStamped MakePST(const ros::Time &time, const Matrix4f &mtx) {
   geometry_msgs::PoseStamped ret;
   ret.header.frame_id = "map";
@@ -109,14 +79,13 @@ int main(int argc, char **argv) {
 
     if (method == 0) {
       // SNDT Method
+      SNDTParameters params;
       auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
-      auto mapt = MakeSNDTMap(datat, {rvar, tvar}, {cell_size, radius});
+      auto mapt = MakeSNDTMap(datat, params);
 
       auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
-      auto maps = MakeSNDTMap(datas, {rvar, tvar}, {cell_size, radius});
+      auto maps = MakeSNDTMap(datas, params);
 
-      SNDTParameters params;
-      params.huber = huber;
       auto T = SNDTMatch(mapt, maps, params, Tio);
 
       cout << "Run SNDT Matching (" << i << "/" << n - 2 * f << ")" << endl;
@@ -124,14 +93,13 @@ int main(int argc, char **argv) {
       Tr = Tr * common::Matrix4fFromMatrix3d(T.matrix());
     } else if (method == 1) {
       // NDTD2D method
+      NDTD2DParameters params;
       auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
-      auto mapt = MakeNDTMap(datat, {rvar, tvar}, {cell_size});
+      auto mapt = MakeNDTMap(datat, params);
 
       auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
-      auto maps = MakeNDTMap(datas, {rvar, tvar}, {cell_size});
+      auto maps = MakeNDTMap(datas, params);
 
-      NDTD2DParameters params;
-      params.huber = huber;
       auto T = NDTD2DMatch(mapt, maps, params, Tio);
 
       cout << "Run NDTD2D Matching (" << i << "/" << n - 2 * f << ")" << endl;
@@ -139,24 +107,10 @@ int main(int argc, char **argv) {
       Tr = Tr * common::Matrix4fFromMatrix3d(T.matrix());
     } else if (method == 2) {
       // SICP method
-      auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
-      vector<Vector2d> tgt;
-      for (auto &data : datat) {
-        auto aff = data.second;
-        for (int i = 0; i < data.first.cols(); ++i)
-          tgt.push_back(aff * data.first.block<2, 1>(0, i));
-      }
-
-      auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
-      vector<Vector2d> src;
-      for (auto &data : datas) {
-        auto aff = data.second;
-        for (int i = 0; i < data.first.cols(); ++i)
-          src.push_back(aff * data.first.block<2, 1>(0, i));
-      }
+      vector<Vector2d> tgt = AugmentPoints(vepcs, i, i + f - 1, Tio, Tios);
+      vector<Vector2d> src = AugmentPoints(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
 
       SICPParameters params;
-      params.huber = huber;
       auto T = SICPMatch(tgt, src, params, Tio);
 
       cout << "Run SICP Matching (" << i << "/" << n - 2 * f << ")" << endl;

@@ -127,18 +127,18 @@ def plot_odometry_error_per_dataset(dataset_rel_err, dataset_names, out_dir):
                     '_translation_error'+FORMAT, bbox_inches="tight")
         plt.close(fig)
 
-        # relative error
-        fig = plt.figure(figsize=(6, 2.5))
-        ax = fig.add_subplot(
-            111, xlabel='Distance traveled [m]',
-            ylabel='Translation error [%]')
-        pu.boxplot_compare(ax, distances, rel_err['trans_err_perc'].values(),
-                           config_labels, config_colors)
-        fig.tight_layout()
-        fig.savefig(output_dir+'/'+dataset_nm +
-                    '_translation_error_percentage'+FORMAT,
-                    bbox_inches="tight")
-        plt.close(fig)
+        # relative error percentage
+        # fig = plt.figure(figsize=(6, 2.5))
+        # ax = fig.add_subplot(
+        #     111, xlabel='Distance traveled [m]',
+        #     ylabel='Translation error [%]')
+        # pu.boxplot_compare(ax, distances, rel_err['trans_err_perc'].values(),
+        #                    config_labels, config_colors)
+        # fig.tight_layout()
+        # fig.savefig(output_dir+'/'+dataset_nm +
+        #             '_translation_error_percentage'+FORMAT,
+        #             bbox_inches="tight")
+        # plt.close(fig)
 
         # yaw orientation error
         fig = plt.figure(figsize=(6, 2.5))
@@ -279,11 +279,11 @@ def write_overall_odometry_errors_table(overall_err_tables, output_dir):
                                overall_err_tables['trans_err']['cols'],
                                os.path.join(output_dir,
                                             'overall_rel_trans_err.txt'))
-    res_writer.write_tex_table(overall_err_tables['trans_err_perc']['values'],
-                               overall_err_tables['trans_err_perc']['rows'],
-                               overall_err_tables['trans_err_perc']['cols'],
-                               os.path.join(output_dir,
-                                            'overall_rel_trans_err_perc.txt'))
+    # res_writer.write_tex_table(overall_err_tables['trans_err_perc']['values'],
+    #                            overall_err_tables['trans_err_perc']['rows'],
+    #                            overall_err_tables['trans_err_perc']['cols'],
+    #                            os.path.join(output_dir,
+    #                                         'overall_rel_trans_err_perc.txt'))
     res_writer.write_tex_table(overall_err_tables['yaw_err']['values'],
                                overall_err_tables['yaw_err']['rows'],
                                overall_err_tables['yaw_err']['cols'],
@@ -303,7 +303,7 @@ def plot_overall_odometry_errors(overall_err, output_dir):
         config_labels.append(PLOT_LABELS[v])
         config_colors.append(COLORS[v])
 
-    # absolute error
+    # relative error
     fig = plt.figure(figsize=(6, 2.5))
     ax = fig.add_subplot(
         111, xlabel='Distance traveled [m]', ylabel='Translation error [m]')
@@ -315,17 +315,17 @@ def plot_overall_odometry_errors(overall_err, output_dir):
                 FORMAT, bbox_inches="tight")
     plt.close(fig)
 
-    # relative error
-    fig = plt.figure(figsize=(6, 2.5))
-    ax = fig.add_subplot(
-        111, xlabel='Distance traveled [m]', ylabel='Translation error [%]')
-    pu.boxplot_compare(ax, overall_err['distances'],
-                       overall_err['trans_err_perc'].values(),
-                       config_labels, config_colors)
-    fig.tight_layout()
-    fig.savefig(output_dir+'/overall_rel_translation_error_percentage' +
-                FORMAT, bbox_inches="tight")
-    plt.close(fig)
+    # relative error percentage
+    # fig = plt.figure(figsize=(6, 2.5))
+    # ax = fig.add_subplot(
+    #     111, xlabel='Distance traveled [m]', ylabel='Translation error [%]')
+    # pu.boxplot_compare(ax, overall_err['distances'],
+    #                    overall_err['trans_err_perc'].values(),
+    #                    config_labels, config_colors)
+    # fig.tight_layout()
+    # fig.savefig(output_dir+'/overall_rel_translation_error_percentage' +
+    #             FORMAT, bbox_inches="tight")
+    # plt.close(fig)
 
     # yaw orientation error
     fig = plt.figure(figsize=(6, 2.5))

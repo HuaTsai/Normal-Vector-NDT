@@ -11,8 +11,9 @@
 #pragma once
 #include <sndt/ndt_map.h>
 #include <sndt/sndt_map.h>
+#include <ceres/types.h>
 
-enum Converge {
+enum class Converge {
   kNotConverge,
   kThreshold,
   kMaxIterations,
@@ -21,25 +22,51 @@ enum Converge {
 
 struct UsedTime {
   UsedTime() {
-    others = search = optimize = 0;
+    Initialize();
   }
-  int others;
-  int search;
+  void Initialize() { total = optimize = others; }
+  int total;
   int optimize;
+  int others;
 };
 
+// Variables started with "_" are output parameters
 struct CommonParameters {
   CommonParameters() {
+    InitializeInput();
+    InitializeOutput();
+  }
+  void InitializeInput() {
     max_iterations = 100;
+    max_min_ctr = 5;
     threshold = 0.01;
-    huber = 0;
+    huber = 1;
     verbose = false;
+    solver = ceres::DENSE_QR;
+  }
+  void InitializeOutput() {
+    _iteration = 0;
+    _min_ctr = 0;
+    _min_cost = std::numeric_limits<double>::max();
+    _converge = Converge::kNotConverge;
+    _costs.clear();
+    _corres.clear();
+    _usedtime.Initialize();
   }
   int max_iterations;
+  int max_min_ctr;
   double threshold;
   double huber;
   bool verbose;
-  UsedTime usedtime;
+  ceres::LinearSolverType solver;
+
+  int _iteration;
+  int _min_ctr;
+  double _min_cost;
+  Converge _converge;
+  std::vector<double> _costs;
+  std::vector<int> _corres;
+  UsedTime _usedtime;
 };
 
 // struct ICPParameters : CommonParameters { };
@@ -56,11 +83,27 @@ struct SICPParameters : CommonParameters {
 // struct NDTP2DParameters { };
 
 struct NDTD2DParameters : CommonParameters {
-  NDTD2DParameters() {}
+  NDTD2DParameters() {
+    cell_size = 1.5;
+    r_variance = 0.0625;
+    t_variance = 0.0001;
+  }
+  double cell_size;
+  double r_variance;  /**< radius variance, i.e., +-r -> (r / 3)^2 */
+  double t_variance;  /**< angle variance, i.e., +-t -> (t / 3)^2 */
 };
 
 struct SNDTParameters : CommonParameters {
-  SNDTParameters() {}
+  SNDTParameters() {
+    cell_size = 1.5;
+    radius = 1.5;
+    r_variance = 0.0625;
+    t_variance = 0.0001;
+  }
+  double cell_size;
+  double radius;
+  double r_variance;  /**< radius variance, i.e., +-r -> (r / 3)^2 */
+  double t_variance;  /**< angle variance, i.e., +-t -> (t / 3)^2 */
 };
 
 // TODO: ICPMatch

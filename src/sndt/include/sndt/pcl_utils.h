@@ -42,3 +42,5 @@ std::vector<Eigen::Vector2d> ComputeNormals(
     ret.push_back(Eigen::Vector2d((*normals)[i].x, (*normals)[i].y));
   return ret;
 }
+
+// TODO: implement ComputeNormals
