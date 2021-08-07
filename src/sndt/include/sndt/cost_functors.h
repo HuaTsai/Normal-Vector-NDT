@@ -129,26 +129,6 @@ struct SNDTCostFunctor {
     return new ceres::AutoDiffCostFunction<SNDTCostFunctor, 1, 1, 1, 1>(
         new SNDTCostFunctor(cellp, cellq));
   }
-
-  static double Score(const SNDTCell *p, const SNDTCell *q) {
-    Eigen::Vector2d up = p->GetPointMean(), uq = q->GetPointMean();
-    Eigen::Vector2d unp = p->GetNormalMean(), unq = q->GetNormalMean();
-    Eigen::Matrix2d cp = p->GetPointCov(), cq = q->GetPointCov();
-    Eigen::Matrix2d cnp = p->GetNormalCov(), cnq = q->GetNormalCov();
-    Eigen::Vector2d m1 = up - uq, m2 = unp + unq;
-    Eigen::Matrix2d c1 = cp + cq, c2 = cnp + cnq;
-    double num = m1.dot(m2);
-    double den = sqrt(m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace());
-    return num / den;
-  }
-
-  static std::vector<double> MeanAndCov(const SNDTCell *p, const SNDTCell *q) {
-    Eigen::Vector2d up = p->GetPointMean(), uq = q->GetPointMean();
-    Eigen::Vector2d unp = p->GetNormalMean(), unq = q->GetNormalMean();
-    Eigen::Matrix2d cp = p->GetPointCov(), cq = q->GetPointCov();
-    Eigen::Matrix2d cnp = p->GetNormalCov(), cnq = q->GetNormalCov();
-    Eigen::Vector2d m1 = up - uq, m2 = unp + unq;
-    Eigen::Matrix2d c1 = cp + cq, c2 = cnp + cnq;
-    return {m1.dot(m2), m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace()};
-  }
 };
+
+

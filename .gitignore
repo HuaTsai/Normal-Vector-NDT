@@ -8,3 +8,4 @@ src/rpg_te/results
 src/rpg_te/doc
 *.pyc
 *.info
+debug*

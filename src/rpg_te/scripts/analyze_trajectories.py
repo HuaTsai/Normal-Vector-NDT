@@ -15,7 +15,7 @@ import results_writer as res_writer
 rc('font', **{'family': 'serif', 'serif': ['Cardo']})
 rc('text', usetex=True)
 
-FORMAT = '.pdf'
+FORMAT = '.png'
 
 # HACK: modify ALGORITHM_CONFIGS and PLOT_LABELS
 ALGORITHM_CONFIGS = ['sndt', 'sicp', 'ndtd2d']
@@ -50,7 +50,7 @@ MAX_TRAJ_LENGTHS = {'MH_01': 80.6,
                     'V2_02': 83.2,
                     'V2_03': 86.1}
 # boxplot distances that will be used for all datasets for overall errors
-OVERALL_BOXPLOT_DISTANCES = [35.0, 70.0, 105.0, 140.0]
+OVERALL_BOXPLOT_DISTANCES = [35, 60, 90, 120, 150]
 
 
 def compute_odometry_error_per_dataset(dataset_trajectories_dict,
@@ -72,8 +72,10 @@ def compute_odometry_error_per_dataset(dataset_trajectories_dict,
             for x in dataset_trajs:
                 traj_length = max([x.traj_length, traj_length])
         print('Max trajectory length of all configurations: '+str(traj_length))
+        # HACK: modify sample method
         distances = [np.floor(x*traj_length)
                      for x in [0.1, 0.2, 0.3, 0.4, 0.5]]
+        distances = [30, 60, 90, 120, 150]
         cur_res['subtraj_len'] = distances
         print("Using distances {0} for relative error.".format(distances))
 

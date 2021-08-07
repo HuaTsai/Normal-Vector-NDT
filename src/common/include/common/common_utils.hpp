@@ -3,6 +3,8 @@
 #include <bits/stdc++.h>
 #include <ros/ros.h>
 
+// HACK: Change paths
+#define DPATH "/home/ee904/Desktop/Dataset/nuScenes"
 #define APATH "/home/ee904/Desktop/HuaTsai/NormalNDT/Analysis"
 
 inline std::chrono::steady_clock::time_point GetTime() {
@@ -59,24 +61,45 @@ std::string GetDataPath(std::string data) {
 }
 
 std::vector<std::string> GetBagsPath(std::string data) {
-  std::vector<std::string> ret;
   if (data == "log24") {
-    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log24_1535729278446231_scene-0299.bag");
-    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log24_1535729298446271_scene-0300.bag");
-    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log24_1535729318549677_scene-0301.bag");
+    return {JoinPath(DPATH, "log24_1535729278446231_scene-0299.bag"),
+            JoinPath(DPATH, "log24_1535729298446271_scene-0300.bag"),
+            JoinPath(DPATH, "log24_1535729318549677_scene-0301.bag")};
+  } else if (data == "log35-1") {
+    return {JoinPath(DPATH, "log35_1538985150297491_scene-0420.bag"),
+            JoinPath(DPATH, "log35_1538985170297464_scene-0421.bag"),
+            JoinPath(DPATH, "log35_1538985190298034_scene-0422.bag"),
+            JoinPath(DPATH, "log35_1538985210297489_scene-0423.bag"),
+            JoinPath(DPATH, "log35_1538985230298065_scene-0424.bag"),
+            JoinPath(DPATH, "log35_1538985250297526_scene-0425.bag"),
+            JoinPath(DPATH, "log35_1538985270298113_scene-0426.bag"),
+            JoinPath(DPATH, "log35_1538985290297603_scene-0427.bag")};
+  } else if (data == "log35-2") {
+    return {JoinPath(DPATH, "log35_1538985420297980_scene-0428.bag"),
+            JoinPath(DPATH, "log35_1538985440646955_scene-0429.bag"),
+            JoinPath(DPATH, "log35_1538985460298586_scene-0430.bag"),
+            JoinPath(DPATH, "log35_1538985480297488_scene-0431.bag"),
+            JoinPath(DPATH, "log35_1538985500297521_scene-0432.bag"),
+            JoinPath(DPATH, "log35_1538985520296978_scene-0433.bag"),
+            JoinPath(DPATH, "log35_1538985540297552_scene-0434.bag"),
+            JoinPath(DPATH, "log35_1538985560396558_scene-0435.bag"),
+            JoinPath(DPATH, "log35_1538985589297594_scene-0436.bag")};
+  } else if (data == "log35-3") {
+    return {JoinPath(DPATH, "log35_1538985679448351_scene-0437.bag"),
+            JoinPath(DPATH, "log35_1538985699297420_scene-0438.bag"),
+            JoinPath(DPATH, "log35_1538985719298546_scene-0439.bag")};
   } else if (data == "log62-1") {
-    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193241547892_scene-0997.bag");
-    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193261546825_scene-0998.bag");
-    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193281648047_scene-0999.bag");
-    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193301547950_scene-1000.bag");
+    return {JoinPath(DPATH, "log62_1542193241547892_scene-0997.bag"),
+            JoinPath(DPATH, "log62_1542193261546825_scene-0998.bag"),
+            JoinPath(DPATH, "log62_1542193281648047_scene-0999.bag"),
+            JoinPath(DPATH, "log62_1542193301547950_scene-1000.bag")};
   } else if (data == "log62-2") {
-    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193461547574_scene-1004.bag");
-    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193481898177_scene-1005.bag");
-    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193501549291_scene-1006.bag");
-    ret.push_back("/home/ee904/Desktop/Dataset/nuScenes/log62_1542193521798725_scene-1007.bag");
-  } else {
-    std::cerr << "No specified data " << data << std::endl;
-    exit(-1);
+    return {JoinPath(DPATH, "log62_1542193461547574_scene-1004.bag"),
+            JoinPath(DPATH, "log62_1542193481898177_scene-1005.bag"),
+            JoinPath(DPATH, "log62_1542193501549291_scene-1006.bag"),
+            JoinPath(DPATH, "log62_1542193521798725_scene-1007.bag")};
   }
-  return ret;
+  std::cerr << "No specified data " << data << std::endl;
+  std::exit(-1);
+  return {};
 }

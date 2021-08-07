@@ -38,7 +38,6 @@ Eigen::Affine2d SICPMatch(
   auto tnms = ComputeNormals(tpts, params.radius);
   auto snms = ComputeNormals(spts, params.radius);
   auto cur_tf = guess_tf;
-  Eigen::Affine2d best = cur_tf;
 
   while (params._converge == Converge::kNotConverge) {
     ++params._iteration;
@@ -51,6 +50,7 @@ Eigen::Affine2d SICPMatch(
                    [&cur_tf](auto p) { return cur_tf.rotation() * p; });
 
     ceres::Problem problem;
+    int blks = 0;
     for (size_t i = 0; i < source_points.size(); ++i) {
       Eigen::Vector2d p = next_pts[i], np = next_nms[i];
       if (!p.allFinite() || !np.allFinite()) continue;
@@ -62,7 +62,9 @@ Eigen::Affine2d SICPMatch(
       if (params.huber != 0)
         loss = new ceres::HuberLoss(params.huber);
       problem.AddResidualBlock(SICPCostFunctor::Create(p, np, q, nq), loss, &x, &y, &t);
+      ++blks;
     }
+    params._corres.push_back(blks);
 
     ceres::Solver::Options options;
     if (params.verbose) options.minimizer_progress_to_stdout = true;
@@ -77,21 +79,10 @@ Eigen::Affine2d SICPMatch(
 
     cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
 
-    // XXX: minimum cost?
-    if (summary.final_cost > params._min_cost) {
-      ++params._min_ctr;
-      if (params._min_ctr == 5)
-        params._converge = Converge::kConsecutiveMinimum;
-    } else {
-      params._min_cost = summary.final_cost;
-      params._min_ctr = 0;
-      best = cur_tf;
-    }
-
-    // if (Eigen::Vector2d(x, y).norm() < params.threshold)
-    //   params._converge = Converge::kThreshold;
+    if (Eigen::Vector2d(x, y).norm() < params.threshold)
+      params._converge = Converge::kThreshold;
     if (params._iteration > params.max_iterations &&
-        params._converge != Converge::kMaxIterations)
+        params._converge != Converge::kThreshold)
       params._converge = Converge::kMaxIterations;
   }
   return cur_tf;
@@ -105,14 +96,14 @@ Eigen::Affine2d NDTD2DMatch(
   params.InitializeOutput();
   auto kd = MakeKDTree(target_map.GetPoints());
   auto cur_tf = guess_tf;
-  Eigen::Affine2d best = cur_tf;
 
   while (params._converge == Converge::kNotConverge) {
     ++params._iteration;
     double x = 0, y = 0, t = 0;
     auto next_map = source_map.PseudoTransformCells(cur_tf);
-    ceres::Problem problem;
 
+    ceres::Problem problem;
+    int blks = 0;
     for (size_t i = 0; i < next_map.size(); ++i) {
       auto cellp = next_map[i];
       if (!cellp->HasGaussian()) continue;
@@ -126,7 +117,9 @@ Eigen::Affine2d NDTD2DMatch(
       if (params.huber != 0)
         loss = new ceres::HuberLoss(params.huber);
       problem.AddResidualBlock(NDTD2DCostFunctor::Create(cellp.get(), cellq), loss, &x, &y, &t);
+      ++blks;
     }
+    params._corres.push_back(blks);
 
     ceres::Solver::Options options;
     if (params.verbose) options.minimizer_progress_to_stdout = true;
@@ -141,25 +134,13 @@ Eigen::Affine2d NDTD2DMatch(
 
     cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
 
-    // XXX: minimum cost?
-    if (summary.final_cost > params._min_cost) {
-      ++params._min_ctr;
-      if (params._min_ctr == 5)
-        params._converge = Converge::kConsecutiveMinimum;
-    } else {
-      params._min_cost = summary.final_cost;
-      params._min_ctr = 0;
-      best = cur_tf;
-    }
-
-    // if (Eigen::Vector2d(x, y).norm() < params.threshold)
-    //   params._converge = Converge::kThreshold;
+    if (Eigen::Vector2d(x, y).norm() < params.threshold)
+      params._converge = Converge::kThreshold;
     if (params._iteration > params.max_iterations &&
-        params._converge != Converge::kMaxIterations)
+        params._converge != Converge::kThreshold)
       params._converge = Converge::kMaxIterations;
   }
-  return best;
-  // return cur_tf;
+  return cur_tf;
 }
 
 Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
@@ -168,14 +149,14 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
   params.InitializeOutput();
   auto kd = MakeKDTree(target_map.GetPoints());
   auto cur_tf = guess_tf;
-  Eigen::Affine2d best = cur_tf;
 
   while (params._converge == Converge::kNotConverge) {
     ++params._iteration;
     double x = 0, y = 0, t = 0;
     auto next_map = source_map.PseudoTransformCells(cur_tf);
-    ceres::Problem problem;
 
+    ceres::Problem problem;
+    int blks = 0;
     for (size_t i = 0; i < next_map.size(); ++i) {
       auto cellp = next_map[i];
       if (!cellp->HasGaussian()) continue;
@@ -189,7 +170,9 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
       if (params.huber != 0)
         loss = new ceres::HuberLoss(params.huber);
       problem.AddResidualBlock(SNDTCostFunctor::Create(cellp.get(), cellq), loss, &x, &y, &t);
+      ++blks;
     }
+    params._corres.push_back(blks);
 
     ceres::Solver::Options options;
     if (params.verbose) options.minimizer_progress_to_stdout = true;
@@ -204,23 +187,11 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
 
     cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
 
-    // XXX: minimum cost?
-    if (summary.final_cost > params._min_cost) {
-      ++params._min_ctr;
-      if (params._min_ctr == 5)
-        params._converge = Converge::kConsecutiveMinimum;
-    } else {
-      params._min_cost = summary.final_cost;
-      params._min_ctr = 0;
-      best = cur_tf;
-    }
-
-    // if (Eigen::Vector2d(x, y).norm() < params.threshold)
-    //   params._converge = Converge::kThreshold;
+    if (Eigen::Vector2d(x, y).norm() < params.threshold)
+      params._converge = Converge::kThreshold;
     if (params._iteration > params.max_iterations &&
-        params._converge != Converge::kMaxIterations)
+        params._converge != Converge::kThreshold)
       params._converge = Converge::kMaxIterations;
   }
-  return best;
-  // return cur_tf;
+  return cur_tf;
 }

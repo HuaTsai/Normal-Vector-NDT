@@ -147,7 +147,7 @@ Marker MarkerOfLinesByMiddlePoints(const std::vector<Eigen::Vector2d> &points,
  * @param alpha Alpha (default 1.0)
  * @return Marker of type @c SPHERE_LIST of the points
  */
-Marker MarkerOfPoints(const std::vector<Eigen::Vector2d> &points, double size = 0.1,
+Marker MarkerOfPoints(const std::vector<Eigen::Vector2d> &points, double size = 0.5,
                       const Color &color = Color::kLime, double alpha = 1.0);
 
 /**

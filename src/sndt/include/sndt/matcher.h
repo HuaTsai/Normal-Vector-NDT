@@ -24,7 +24,7 @@ struct UsedTime {
   UsedTime() {
     Initialize();
   }
-  void Initialize() { total = optimize = others; }
+  void Initialize() { total = optimize = others = 0; }
   int total;
   int optimize;
   int others;

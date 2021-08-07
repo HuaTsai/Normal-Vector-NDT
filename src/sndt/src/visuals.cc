@@ -191,7 +191,7 @@ Marker MarkerOfEllipse(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covar
   Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
   R.block<2, 2>(0, 0) = evec;
   Eigen::Quaterniond q(R);
-  ret.scale.x = 3 * eval(0, 0);
+  ret.scale.x = 3 * eval(0, 0);  // 1.5 sigma
   ret.scale.y = 3 * eval(1, 1);
   ret.scale.z = 0.1;
   ret.pose.position.x = mean(0);

@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
   po::options_description desc("Allowed options");
   desc.add_options()
       ("help,h", "Produce help message")
-      ("data,i", po::value<string>(&data)->required(), "Data Path")
+      ("data,i", po::value<string>(&data)->required(), "Data (log24, log35-1, log62-1, log62-2)")
       ("outfolder,o", po::value<string>(&outfolder)->required(), "Output folder");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -45,10 +45,10 @@ int main(int argc, char **argv) {
     }
     bag.close();
   }
-  SerializationOutput(outfolder + "/" + "back.ser", imb);
-  SerializationOutput(outfolder + "/" + "back_left.ser", imbl);
-  SerializationOutput(outfolder + "/" + "back_right.ser", imbr);
-  SerializationOutput(outfolder + "/" + "front.ser", imf);
-  SerializationOutput(outfolder + "/" + "front_left.ser", imfl);
-  SerializationOutput(outfolder + "/" + "front_right.ser", imfr);
+  SerializationOutput(JoinPath(outfolder, "back.ser"), imb);
+  SerializationOutput(JoinPath(outfolder, "back_left.ser"), imbl);
+  SerializationOutput(JoinPath(outfolder, "back_right.ser"), imbr);
+  SerializationOutput(JoinPath(outfolder, "front.ser"), imf);
+  SerializationOutput(JoinPath(outfolder, "front_left.ser"), imfl);
+  SerializationOutput(JoinPath(outfolder, "front_right.ser"), imfr);
 }

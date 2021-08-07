@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
   po::options_description desc("Allowed options");
   desc.add_options()
       ("help,h", "Produce help message")
-      ("data,d", po::value<string>(&data)->required(), "Data (log24, log62-1, log62-2)")
+      ("data,d", po::value<string>(&data)->required(), "Data (log24, log35-1, log62-1, log62-2)")
       ("outfolder,o", po::value<string>(&outfolder)->required(), "Output folder path");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -62,5 +62,5 @@ int main(int argc, char **argv) {
   nav_msgs::Path path;
   path.header.frame_id = "map";
   path.poses = vp;
-  SerializationOutput(outfolder + "/gt_" + data + ".ser", path);
+  SerializationOutput(JoinPath(outfolder, "gt.ser"), path);
 }

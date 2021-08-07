@@ -37,7 +37,9 @@ def boxplot_compare(ax, xlabels,
         widths = [w for pos in np.arange(n_xlabel)]
         positions = [pos - 0.5 + 1.5 * w + idx * w
                      for pos in np.arange(n_xlabel)]
-        bp = ax.boxplot(d, 0, '', positions=positions, widths=widths)
+        # HACK: remove fliers or not
+        # bp = ax.boxplot(d, 0, '', positions=positions, widths=widths)
+        bp = ax.boxplot(d, 0, positions=positions, widths=widths)
         color_box(bp, data_colors[idx])
         tmp, = plt.plot([1, 1], data_colors[idx])
         leg_handles.append(tmp)

@@ -34,6 +34,7 @@ double cell_size, radius, rvar, tvar;
 double huber;
 nav_msgs::Path gtpath;
 std_msgs::Float64MultiArray errs;
+vector<int> corr0, corr1, corr2, opt0, opt1, opt2;
 
 pair<int, double> FindMax(double a, double b, double c) {
   if (a > b && a > c)
@@ -68,10 +69,11 @@ void cb(const std_msgs::Int32 &num) {
   SICPParameters sicpparams;
   auto tgt = AugmentPoints(vepcs, i, i + f - 1, Tio, Tios);
   auto src = AugmentPoints(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
-  sicpparams.huber = huber;
   auto sicpT = SICPMatch(tgt, src, sicpparams, Tio);
+  corr0.push_back(sicpparams._corres[0]);
   auto t2 = GetTime();
   auto t12 = GetDiffTime(t1, t2);
+  opt0.push_back(t12);
   std::printf("sicp -> optimize: %d ms(%d%%), total: %d ms\n",
               sicpparams._usedtime.optimize, sicpparams._usedtime.optimize * 100 / t12, t12);
 
@@ -82,10 +84,11 @@ void cb(const std_msgs::Int32 &num) {
   auto datas0 = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
   auto mapt = MakeNDTMap(datat0, ndtparams);
   auto maps = MakeNDTMap(datas0, ndtparams);
-  ndtparams.huber = huber;
   auto ndtT = NDTD2DMatch(mapt, maps, ndtparams, Tio);
+  corr1.push_back(ndtparams._corres[0]);
   auto t4 = GetTime();
   auto t34 = GetDiffTime(t3, t4);
+  opt1.push_back(t34);
   std::printf("ndt -> optimize: %d ms(%d%%), total: %d ms\n",
               ndtparams._usedtime.optimize, ndtparams._usedtime.optimize * 100 / t34, t34);
 
@@ -97,8 +100,10 @@ void cb(const std_msgs::Int32 &num) {
   auto smapt = MakeSNDTMap(datat1, sndtparams);
   auto smaps = MakeSNDTMap(datas1, sndtparams);
   auto sndtT = SNDTMatch(smapt, smaps, sndtparams, Tio);
+  corr2.push_back(sndtparams._corres[0]);
   auto t6 = GetTime();
   auto t56 = GetDiffTime(t5, t6);
+  opt2.push_back(t56);
   std::printf("sndt -> optimize: %d ms(%d%%), total: %d ms\n",
               sndtparams._usedtime.optimize, sndtparams._usedtime.optimize * 100 / t56, t56);
 
@@ -132,6 +137,84 @@ void cb(const std_msgs::Int32 &num) {
               err0(0), err1(0), err2(0), rmin.first, rmax.second - rmin.second,
               err0(1), err1(1), err2(1), tmin.first, tmax.second - tmin.second);
   std::fflush(stdout);
+
+  /******* Publishers *******/
+  pub1.publish(JoinMarkers({MarkerOfPoints(tgt, 0.5, Color::kRed)}));
+
+  vector<Eigen::Vector2d> gue;
+  transform(src.begin(), src.end(), back_inserter(gue),
+                 [&Tio](auto p) { return Tio * p; });
+  pub2.publish(JoinMarkers({MarkerOfPoints(gue)}));
+
+  vector<Eigen::Vector2d> res;
+  transform(src.begin(), src.end(), back_inserter(res),
+                 [&sicpT](auto p) { return sicpT * p; });
+  pub3.publish(JoinMarkers({MarkerOfPoints(res)}));
+
+  // NDTD2D
+  vector<Marker> m4;
+  vector<Vector2d> m4pts;
+  for (const auto &cell : mapt) {
+    if (cell->HasGaussian())
+      m4.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
+                                    cell->GetSkewRad(), Color::kRed, 0.5));
+    for (auto pt : cell->GetPoints())
+      m4pts.push_back(pt);
+  }
+  m4.push_back(MarkerOfPoints(m4pts, 0.5, Color::kRed));
+  pub4.publish(JoinMarkers(m4));
+
+  auto nexts = maps.PseudoTransformCells(ndtT, true);
+  vector<Marker> m5;
+  vector<Vector2d> m5pts;
+  for (const auto &cell : nexts) {
+    if (cell->HasGaussian())
+      m5.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
+                                    cell->GetSkewRad(), Color::kFuchsia, 0.5));
+    for (auto pt : cell->GetPoints())
+      m5pts.push_back(pt);
+  }
+  m5.push_back(MarkerOfPoints(m5pts, 0.5, Color::kFuchsia));
+  pub5.publish(JoinMarkers(m5));
+
+  // SNDT
+  vector<Marker> m6;
+  vector<Vector2d> m6pts;
+  for (const auto &cell : smapt) {
+    if (cell->HasGaussian())
+      m6.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
+                                    cell->GetSkewRad(), Color::kRed, 0.5));
+    for (auto pt : cell->GetPoints())
+      m6pts.push_back(pt);
+  }
+  m6.push_back(MarkerOfPoints(m6pts, 0.5, Color::kRed));
+  pub6.publish(JoinMarkers(m6));
+
+  vector<Marker> m7;
+  vector<Vector2d> m7pts;
+  auto snexts = smaps.PseudoTransformCells(sndtT, true);
+  for (const auto &cell : snexts) {
+    if (cell->HasGaussian()) {
+      m7.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
+                                     cell->GetSkewRad(), Color::kBlue));
+    }
+    for (auto pt : cell->GetPoints())
+      m7pts.push_back(pt);
+  }
+  m7.push_back(MarkerOfPoints(m7pts, 0.5, Color::kBlue));
+  pub7.publish(JoinMarkers(m7));
+  pub8.publish(MarkerArrayOfSNDTMap(snexts));
+
+  auto stmp = vepcs[i].stamp;
+  auto cmp = [](sensor_msgs::CompressedImage a, ros::Time b) {
+    return a.header.stamp < b;
+  };
+  pb1.publish(*lower_bound(imb.begin(), imb.end(), stmp, cmp));
+  pb2.publish(*lower_bound(imbl.begin(), imbl.end(), stmp, cmp));
+  pb3.publish(*lower_bound(imbr.begin(), imbr.end(), stmp, cmp));
+  pb4.publish(*lower_bound(imf.begin(), imf.end(), stmp, cmp));
+  pb5.publish(*lower_bound(imfl.begin(), imfl.end(), stmp, cmp));
+  pb6.publish(*lower_bound(imfr.begin(), imfr.end(), stmp, cmp));
 }
 
 void GetFiles(string data) {
@@ -147,17 +230,19 @@ void GetFiles(string data) {
 }
 
 int main(int argc, char **argv) {
+  bool run;
   string data;
   po::options_description desc("Allowed options");
   desc.add_options()
       ("help,h", "Produce help message")
-      ("data,d", po::value<string>(&data)->required(), "Data Path")
+      ("data,d", po::value<string>(&data)->required(), "Data (log24, log35-1, log62-1, log62-2)")
       ("frames,f", po::value<int>(&frames)->default_value(5), "Frames")
       ("rvar", po::value<double>(&rvar)->default_value(0.0625), "Intrinsic radius variance")
       ("tvar", po::value<double>(&tvar)->default_value(0.0001), "Intrinsic theta variance")
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
-      ("huber,u", po::value<double>(&huber)->default_value(0), "Huber");
+      ("huber,u", po::value<double>(&huber)->default_value(1), "Huber")
+      ("run", po::value<bool>(&run)->default_value(false)->implicit_value(true), "Run");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
@@ -175,9 +260,9 @@ int main(int argc, char **argv) {
 
   pub1 = nh.advertise<MarkerArray>("markers1", 0, true);  // target
   pub2 = nh.advertise<MarkerArray>("markers2", 0, true);  // source
-  pub3 = nh.advertise<MarkerArray>("markers3", 0, true);  // aligned source
-  pub4 = nh.advertise<MarkerArray>("markers4", 0, true);
-  pub5 = nh.advertise<MarkerArray>("markers5", 0, true);
+  pub3 = nh.advertise<MarkerArray>("markers3", 0, true);  // sicp
+  pub4 = nh.advertise<MarkerArray>("markers4", 0, true);  // ndtd2d
+  pub5 = nh.advertise<MarkerArray>("markers5", 0, true);  // sndt
   pub6 = nh.advertise<MarkerArray>("markers6", 0, true);
   pub7 = nh.advertise<MarkerArray>("markers7", 0, true);
   pub8 = nh.advertise<MarkerArray>("markers8", 0, true);
@@ -189,10 +274,29 @@ int main(int argc, char **argv) {
   pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0, true);
   pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed", 0, true);
 
-  for (int i = 0; i < (int)vepcs.size() - 15; i += 5) {
-    std_msgs::Int32 num;
-    num.data = i;
-    cb(num);
+  if (run) {
+    int n = vepcs.size() / 5 * 5;
+    for (int i = 0; i < n - 5; i += 5) {
+      cout << "(" << i << "/" << n - 10 << ")" << endl;
+      std_msgs::Int32 num;
+      num.data = i;
+      cb(num);
+    }
   }
+  cout << "SICP corres:\n";
+  copy(corr0.begin(), corr0.end(), ostream_iterator<int>(cout, ", "));
+  cout << "\nNDTD2D corres:\n";
+  copy(corr1.begin(), corr1.end(), ostream_iterator<int>(cout, ", "));
+  cout << "\nSNDT corres:\n";
+  copy(corr2.begin(), corr2.end(), ostream_iterator<int>(cout, ", "));
+
+  cout << "\n\nSICP time:\n";
+  copy(opt0.begin(), opt0.end(), ostream_iterator<int>(cout, ", "));
+  cout << "\nNDTD2D time:\n";
+  copy(opt1.begin(), opt1.end(), ostream_iterator<int>(cout, ", "));
+  cout << "\nSNDT time:\n";
+  copy(opt2.begin(), opt2.end(), ostream_iterator<int>(cout, ", "));
+
+  cout << "\n\nReady" << endl;
   ros::spin();
 }
