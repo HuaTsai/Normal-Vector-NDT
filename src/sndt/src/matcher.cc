@@ -12,8 +12,10 @@
 #include <sndt/matcher.h>
 #include <sndt/pcl_utils.h>
 #include <sndt/visuals.h>
-#include <common/common_utils.hpp>
+#include <common/other_utils.h>
 #include <sndt/cost_functors.h>
+
+#define thrds 4
 
 int FindNearestNeighborIndex(const Eigen::Vector2d &query,
                              const pcl::KdTreeFLANN<pcl::PointXY> &kd) {
@@ -46,12 +48,17 @@ Eigen::Affine2d SICPMatch(
     std::vector<Eigen::Vector2d> next_nms;
     std::transform(spts.begin(), spts.end(), std::back_inserter(next_pts),
                    [&cur_tf](auto p) { return cur_tf * p; });
-    std::transform(snms.begin(), snms.end(), std::back_inserter(next_nms),
-                   [&cur_tf](auto p) { return cur_tf.rotation() * p; });
+    // The return type of cur_tf * p is const Eigen::Matrix<double, 2, 1>.
+    // However, The return type of cur_tf.rotation() * p is const
+    // Eigen::Product<Eigen::Matrix<double, 2, 2>, Eigen::Matrix<double, 2, 1>,
+    // 0>, so that we need to use ctor of Eigen::Vector2d to avoid bug.
+    std::transform(
+        snms.begin(), snms.end(), std::back_inserter(next_nms),
+        [&cur_tf](auto p) { return Eigen::Vector2d(cur_tf.rotation() * p); });
 
     ceres::Problem problem;
     int blks = 0;
-    for (size_t i = 0; i < source_points.size(); ++i) {
+    for (size_t i = 0; i < next_pts.size(); ++i) {
       Eigen::Vector2d p = next_pts[i], np = next_nms[i];
       if (!p.allFinite() || !np.allFinite()) continue;
       auto idx = FindNearestNeighborIndex(p, kd);
@@ -70,11 +77,13 @@ Eigen::Affine2d SICPMatch(
     if (params.verbose) options.minimizer_progress_to_stdout = true;
     options.linear_solver_type = params.solver;
     options.max_num_iterations = params.max_iterations;
+    options.num_threads = params.threads;
 
     ceres::Solver::Summary summary;
     auto t1 = GetTime();
     ceres::Solve(options, &problem, &summary);
     auto t2 = GetTime();
+    if (params.verbose) std::cout << summary.FullReport() << std::endl;
     params._usedtime.optimize += GetDiffTime(t1, t2);
 
     cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
@@ -87,7 +96,6 @@ Eigen::Affine2d SICPMatch(
   }
   return cur_tf;
 }
-
 
 Eigen::Affine2d NDTD2DMatch(
     const NDTMap &target_map, const NDTMap &source_map,
@@ -119,17 +127,20 @@ Eigen::Affine2d NDTD2DMatch(
       problem.AddResidualBlock(NDTD2DCostFunctor::Create(cellp.get(), cellq), loss, &x, &y, &t);
       ++blks;
     }
+    std::cout << "D2D BLKS: " << blks << std::endl;
     params._corres.push_back(blks);
 
     ceres::Solver::Options options;
     if (params.verbose) options.minimizer_progress_to_stdout = true;
     options.linear_solver_type = params.solver;
     options.max_num_iterations = params.max_iterations;
+    options.num_threads = params.threads;
 
     ceres::Solver::Summary summary;
     auto t1 = GetTime();
     ceres::Solve(options, &problem, &summary);
     auto t2 = GetTime();
+    if (params.verbose) std::cout << summary.FullReport() << std::endl;
     params._usedtime.optimize += GetDiffTime(t1, t2);
 
     cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
@@ -178,11 +189,13 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
     if (params.verbose) options.minimizer_progress_to_stdout = true;
     options.linear_solver_type = params.solver;
     options.max_num_iterations = params.max_iterations;
+    options.num_threads = params.threads;
 
     ceres::Solver::Summary summary;
     auto t1 = GetTime();
     ceres::Solve(options, &problem, &summary);
     auto t2 = GetTime();
+    if (params.verbose) std::cout << summary.FullReport() << std::endl;
     params._usedtime.optimize += GetDiffTime(t1, t2);
 
     cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;

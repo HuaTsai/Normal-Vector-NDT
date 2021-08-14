@@ -18,10 +18,10 @@ rc('text', usetex=True)
 FORMAT = '.png'
 
 # HACK: modify ALGORITHM_CONFIGS and PLOT_LABELS
-ALGORITHM_CONFIGS = ['sndt', 'sicp', 'ndtd2d']
+ALGORITHM_CONFIGS = ['sndt', 'sicp', 'ndt']
 
 # These are the labels that will be displayed for items in ALGORITHM_CONFIGS
-PLOT_LABELS = {'sndt': 'sndt', 'sicp': 'sicp', 'ndtd2d': 'ndtd2d'}
+PLOT_LABELS = {'sndt': 'sndt', 'sicp': 'sicp', 'ndt': 'ndt'}
 
 # assgin colors to different configurations
 # make use you have more colors in the pallete!

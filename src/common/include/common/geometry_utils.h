@@ -1,10 +1,8 @@
 #pragma once
-
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
 #include <gsl/gsl>
 
-namespace common {
 geometry_msgs::Pose PoseInterpolate(const geometry_msgs::PoseStamped &p1,
                                     const geometry_msgs::PoseStamped &p2,
                                     const ros::Time &time) {
@@ -24,18 +22,13 @@ geometry_msgs::Pose PoseInterpolate(const geometry_msgs::PoseStamped &p1,
   return ret;
 }
 
-template <typename T>
-geometry_msgs::Pose GetPose(const T &poses, const ros::Time &time) {
-  static_assert(
-      std::is_same<std::vector<geometry_msgs::PoseStamped>, T>::value ||
-          std::is_same<std::deque<geometry_msgs::PoseStamped>, T>::value,
-      "wrong type");
-  if (poses.front().header.stamp == time) {
+geometry_msgs::Pose GetPose(
+    const std::vector<geometry_msgs::PoseStamped> &poses,
+    const ros::Time &time) {
+  if (poses.front().header.stamp == time)
     return poses.front().pose;
-  }
-  if (poses.back().header.stamp == time) {
+  if (poses.back().header.stamp == time)
     return poses.back().pose;
-  }
   auto end =
       std::lower_bound(poses.begin(), poses.end(), time,
                        [](const geometry_msgs::PoseStamped &a,
@@ -44,4 +37,3 @@ geometry_msgs::Pose GetPose(const T &poses, const ros::Time &time) {
   const auto start = std::prev(end);
   return PoseInterpolate(*start, *end, time);
 }
-}  // namespace common

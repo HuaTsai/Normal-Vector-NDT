@@ -7,7 +7,7 @@ namespace po = boost::program_options;
 using namespace std;
 
 void MakeGtLocal(nav_msgs::Path &path, ros::Time start) {
-  auto startpose = common::GetPose(path.poses, start);
+  auto startpose = GetPose(path.poses, start);
   Eigen::Affine3d preT;
   tf2::fromMsg(startpose, preT);
   preT = preT.inverse();
@@ -16,7 +16,7 @@ void MakeGtLocal(nav_msgs::Path &path, ros::Time start) {
     Eigen::Affine3d T;
     tf2::fromMsg(path.poses[i].pose, T);
     Eigen::Affine3d newT = preT * T;
-    newT = common::Conserve2DFromAffine3d(newT);
+    newT = Conserve2DFromAffine3d(newT);
     path.poses[i].pose = tf2::toMsg(newT);
   }
 }

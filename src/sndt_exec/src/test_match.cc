@@ -57,9 +57,9 @@ void cb(const std_msgs::Int32 &num) {
 
   /********* Compute Ground Truth *********/
   Affine3d To, Ti;
-  tf2::fromMsg(common::GetPose(gtpath.poses, vepcs[i + f].stamp), To);
-  tf2::fromMsg(common::GetPose(gtpath.poses, vepcs[i].stamp), Ti);
-  Affine3d gtTio3 = common::Conserve2DFromAffine3d(Ti.inverse() * To);
+  tf2::fromMsg(GetPose(gtpath.poses, vepcs[i + f].stamp), To);
+  tf2::fromMsg(GetPose(gtpath.poses, vepcs[i].stamp), Ti);
+  Affine3d gtTio3 = Conserve2DFromAffine3d(Ti.inverse() * To);
   Affine2d gtTio = Translation2d(gtTio3.translation()(0), gtTio3.translation()(1)) *
                    Rotation2Dd(gtTio3.rotation().block<2, 2>(0, 0));
   /********* Compute End Here     *********/
@@ -69,10 +69,10 @@ void cb(const std_msgs::Int32 &num) {
   cout << "start frame: " << i;
   auto res = SNDTMatch(mapt, maps, params, Tio);
 
-  // cout << "guess: " << common::XYTDegreeFromMatrix3d(Tio.matrix()).transpose() << endl;
-  // cout << "result: " << common::XYTDegreeFromMatrix3d(res.matrix()).transpose() << endl;
-  // cout << "grount truth: " << common::XYTDegreeFromMatrix3d(gtTio.matrix()).transpose() << endl;
-  auto err = common::TransNormRotDegAbsFromMatrix3d(res.inverse() * gtTio.matrix());
+  // cout << "guess: " << XYTDegreeFromMatrix3d(Tio.matrix()).transpose() << endl;
+  // cout << "result: " << XYTDegreeFromMatrix3d(res.matrix()).transpose() << endl;
+  // cout << "grount truth: " << XYTDegreeFromMatrix3d(gtTio.matrix()).transpose() << endl;
+  auto err = TransNormRotDegAbsFromMatrix3d(res.inverse() * gtTio.matrix());
   cout << "err: " << err.transpose() << endl;
   auto maps2 = maps.PseudoTransformCells(res, true);
   auto mapsg = maps.PseudoTransformCells(gtTio, true);

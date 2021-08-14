@@ -19,17 +19,20 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(bagtoply src/bagtoply.cc)
-target_link_libraries(bagtoply ${catkin_LIBRARIES})
-
 add_executable(pathtotext src/pathtotext.cc)
 target_link_libraries(pathtotext ${catkin_LIBRARIES})
 
-add_executable(gtpath src/gtpath.cc)
-target_link_libraries(gtpath ${catkin_LIBRARIES})
-
-add_executable(gtdis src/gtdis.cc)
-target_link_libraries(gtdis ${catkin_LIBRARIES})
+add_executable(getgtpath src/getgtpath.cc)
+target_link_libraries(getgtpath ${catkin_LIBRARIES})
 
 add_executable(getimages src/getimages.cc)
 target_link_libraries(getimages ${catkin_LIBRARIES})
+
+add_executable(getlidars src/getlidars.cc)
+target_link_libraries(getlidars ${catkin_LIBRARIES})
+
+add_executable(seetfs src/seetfs.cc)
+target_link_libraries(seetfs ${catkin_LIBRARIES})
+
+add_executable(seelidar src/seelidar.cc)
+target_link_libraries(seelidar ${catkin_LIBRARIES})

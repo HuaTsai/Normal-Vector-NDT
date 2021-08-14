@@ -109,16 +109,16 @@ void cb(const std_msgs::Int32 &num) {
 
   // Compute Ground Truth
   Affine3d To, Ti;
-  tf2::fromMsg(common::GetPose(gtpath.poses, vepcs[i + f].stamp), To);
-  tf2::fromMsg(common::GetPose(gtpath.poses, vepcs[i].stamp), Ti);
-  Affine3d gtTio3 = common::Conserve2DFromAffine3d(Ti.inverse() * To);
+  tf2::fromMsg(GetPose(gtpath.poses, vepcs[i + f].stamp), To);
+  tf2::fromMsg(GetPose(gtpath.poses, vepcs[i].stamp), Ti);
+  Affine3d gtTio3 = Conserve2DFromAffine3d(Ti.inverse() * To);
   Affine2d gtTio = Translation2d(gtTio3.translation()(0), gtTio3.translation()(1)) *
                    Rotation2Dd(gtTio3.rotation().block<2, 2>(0, 0));
 
   // Compute error
-  auto err0 = common::TransNormRotDegAbsFromMatrix3d((sicpT * gtTio.inverse()).matrix());
-  auto err1 = common::TransNormRotDegAbsFromMatrix3d((ndtT * gtTio.inverse()).matrix());
-  auto err2 = common::TransNormRotDegAbsFromMatrix3d((sndtT * gtTio.inverse()).matrix());
+  auto err0 = TransNormRotDegAbsFromMatrix3d((sicpT * gtTio.inverse()).matrix());
+  auto err1 = TransNormRotDegAbsFromMatrix3d((ndtT * gtTio.inverse()).matrix());
+  auto err2 = TransNormRotDegAbsFromMatrix3d((sndtT * gtTio.inverse()).matrix());
 
   errs.data.push_back(err0(1));
   errs.data.push_back(err1(1));

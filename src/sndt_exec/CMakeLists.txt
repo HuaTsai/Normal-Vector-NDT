@@ -3,7 +3,8 @@ project(sndt_exec)
 
 set(CMAKE_CXX_FLAGS "-Wall --coverage")
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_BUILD_TYPE Debug)
+# set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 
 find_package(catkin REQUIRED
   COMPONENTS

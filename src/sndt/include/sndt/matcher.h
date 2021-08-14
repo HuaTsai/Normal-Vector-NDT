@@ -39,6 +39,7 @@ struct CommonParameters {
   void InitializeInput() {
     max_iterations = 100;
     max_min_ctr = 5;
+    threads = 8;
     threshold = 0.01;
     huber = 1;
     verbose = false;
@@ -55,6 +56,7 @@ struct CommonParameters {
   }
   int max_iterations;
   int max_min_ctr;
+  int threads;
   double threshold;
   double huber;
   bool verbose;

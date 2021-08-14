@@ -11,12 +11,16 @@
 #pragma once
 #include <sndt/pcl_utils.h>
 #include <sndt/matcher.h>
+#include <common/EgoPointClouds.h>
+#include <common/common.h>
+#include <nav_msgs/Path.h>
 
 // start, ..., end, end+1
 // <<------- T -------->>
 std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> Augment(
     const std::vector<common::EgoPointClouds> &vepcs, int start, int end,
     Eigen::Affine2d &T, std::vector<Eigen::Affine2d> &allT) {
+  allT.clear();
   std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> ret;
   double dx = 0, dy = 0, dth = 0;
   for (int i = start; i <= end; ++i) {
@@ -132,4 +136,36 @@ SNDTMap MakeSNDTMap(
   SNDTMap ret(cell_size);
   ret.LoadPointsWithCovariancesAndNormals(points, point_covs, normals);
   return ret;
+}
+
+void MakeGtLocal(nav_msgs::Path &path, const ros::Time &start) {
+  auto startpose = GetPose(path.poses, start);
+  Eigen::Affine3d preT;
+  tf2::fromMsg(startpose, preT);
+  preT = preT.inverse();
+  path.poses[0].pose = tf2::toMsg(Eigen::Affine3d::Identity());
+  for (size_t i = 1; i < path.poses.size(); ++i) {
+    Eigen::Affine3d T;
+    tf2::fromMsg(path.poses[i].pose, T);
+    Eigen::Affine3d newT = preT * T;
+    newT = Conserve2DFromAffine3d(newT);
+    path.poses[i].pose = tf2::toMsg(newT);
+  }
+}
+
+void WriteToFile(const nav_msgs::Path &path, std::string filename) {
+  auto fp = fopen(filename.c_str(), "w");
+  fprintf(fp, "# time x y z qx qy qz qw\n");
+  for (auto &p : path.poses) {
+    auto t = p.header.stamp.toSec();
+    auto x = p.pose.position.x;
+    auto y = p.pose.position.y;
+    auto z = p.pose.position.z;
+    auto qx = p.pose.orientation.x;
+    auto qy = p.pose.orientation.y;
+    auto qz = p.pose.orientation.z;
+    auto qw = p.pose.orientation.w;
+    fprintf(fp, "%f %f %f %f %f %f %f %f\n", t, x, y, z, qx, qy, qz, qw);
+  }
+  fclose(fp);
 }

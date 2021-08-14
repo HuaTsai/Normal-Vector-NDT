@@ -1,5 +1,5 @@
 /**
- * @file gtpath.cc
+ * @file getgtpath.cc
  * @author HuaTsai (huatsai.eed07g@nctu.edu.tw)
  * @brief Read tf in bag files and write to gtpath.ser
  * @version 0.1

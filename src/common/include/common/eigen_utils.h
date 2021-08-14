@@ -1,14 +1,10 @@
 #pragma once
-
 #include <angles/angles.h>
 #include <std_msgs/Float64MultiArray.h>
 #include <tf2_eigen/tf2_eigen.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
 #include <Eigen/Dense>
-#include <gsl/gsl>
-
-namespace common {
 
 // Affine3d
 Eigen::Affine3d Affine3dFromXYZRPY(const Eigen::Vector3d &xyz,
@@ -31,8 +27,7 @@ Eigen::Affine3d Affine3dFromMatrix3d(const Eigen::Matrix3d &mtx) {
 }
 
 Eigen::Affine3d Affine3dFromMatrix4f(const Eigen::Matrix4f &mtx) {
-  Eigen::Affine3d ret(mtx.cast<double>());
-  return ret;
+  return Eigen::Affine3d(mtx.cast<double>());
 }
 
 // XYZRPY, XYTRadian, XYTDegree
@@ -94,7 +89,7 @@ Eigen::Matrix4f Matrix4fFromMatrix3d(const Eigen::Matrix3d &mtx) {
 }
 
 Eigen::Matrix4f Matrix4fFromXYTRadian(const Eigen::Vector3d &xyt) {
-  return common::Matrix4fFromMatrix3d(common::Matrix3dFromXYTRadian(xyt));
+  return Matrix4fFromMatrix3d(Matrix3dFromXYTRadian(xyt));
 }
 
 geometry_msgs::TransformStamped TstFromAffine3d(
@@ -124,9 +119,16 @@ Eigen::Affine3d Conserve2DFromAffine3d(const Eigen::Affine3d &T) {
 
 Eigen::Vector2d TransNormRotDegAbsFromMatrix3d(const Eigen::Matrix3d &mtx) {
   Eigen::Vector2d ret;
-  auto xyt = common::XYTDegreeFromMatrix3d(mtx);
+  auto xyt = XYTDegreeFromMatrix3d(mtx);
   ret(0) = xyt.block<2, 1>(0, 0).norm();
   ret(1) = abs(xyt(2));
   return ret;
 }
-}  // namespace common
+
+geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time, const Eigen::Matrix4f &mtx) {
+  geometry_msgs::PoseStamped ret;
+  ret.header.frame_id = "map";
+  ret.header.stamp = time;
+  ret.pose = tf2::toMsg(Affine3dFromMatrix4f(mtx));
+  return ret;
+}
