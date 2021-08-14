@@ -6,11 +6,20 @@
 
 
 
+Inheritance diagram for S\+N\+D\+T\+Parameters\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=202pt]{d0/d99/structSNDTParameters__inherit__graph}
+\end{center}
+\end{figure}
+
+
 Collaboration diagram for S\+N\+D\+T\+Parameters\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=190pt]{d1/df7/structSNDTParameters__coll__graph}
+\includegraphics[height=550pt]{d1/df7/structSNDTParameters__coll__graph}
 \end{center}
 \end{figure}
 \subsection*{Public Member Functions}
@@ -21,13 +30,13 @@ Collaboration diagram for S\+N\+D\+T\+Parameters\+:\nopagebreak
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-int \hyperlink{structSNDTParameters_a1ea1564f2e7f99ec34f3beb4108dfe8d}{max\+\_\+iterations}
+double \hyperlink{structSNDTParameters_aa59f6c2fc54ecfcc8c5168840e26d198}{cell\+\_\+size}
 \item 
-double \hyperlink{structSNDTParameters_a5ce655fe4db2495af244c60a643a936f}{threshold}
+double \hyperlink{structSNDTParameters_a031a9440acf67e6b3d9dad08c8af2562}{radius}
 \item 
-double \hyperlink{structSNDTParameters_a8f73978e41a199c2c7204b61faa19bd1}{huber}
+double \hyperlink{structSNDTParameters_a3d9f72a08ba03884c82e5143c5fd24eb}{r\+\_\+variance}
 \item 
-bool \hyperlink{structSNDTParameters_adadc231fb2773527b03959a2c8d39b25}{verbose}
+double \hyperlink{structSNDTParameters_aa138682632a0ad7d1ccf8cfe0b1f5b0b}{t\+\_\+variance}
 \end{DoxyCompactItemize}
 
 
@@ -41,45 +50,45 @@ bool \hyperlink{structSNDTParameters_adadc231fb2773527b03959a2c8d39b25}{verbose}
 
 
 \subsection{Member Data Documentation}
-\mbox{\Hypertarget{structSNDTParameters_a8f73978e41a199c2c7204b61faa19bd1}\label{structSNDTParameters_a8f73978e41a199c2c7204b61faa19bd1}} 
-\index{S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}!huber@{huber}}
-\index{huber@{huber}!S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}}
-\subsubsection{\texorpdfstring{huber}{huber}}
-{\footnotesize\ttfamily double S\+N\+D\+T\+Parameters\+::huber}
+\mbox{\Hypertarget{structSNDTParameters_aa59f6c2fc54ecfcc8c5168840e26d198}\label{structSNDTParameters_aa59f6c2fc54ecfcc8c5168840e26d198}} 
+\index{S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}!cell\+\_\+size@{cell\+\_\+size}}
+\index{cell\+\_\+size@{cell\+\_\+size}!S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}}
+\subsubsection{\texorpdfstring{cell\+\_\+size}{cell\_size}}
+{\footnotesize\ttfamily double S\+N\+D\+T\+Parameters\+::cell\+\_\+size}
 
 
 
-Referenced by cb(), S\+N\+D\+T\+Match(), and S\+N\+D\+T\+Parameters().
+Referenced by Make\+S\+N\+D\+T\+Map().
 
-\mbox{\Hypertarget{structSNDTParameters_a1ea1564f2e7f99ec34f3beb4108dfe8d}\label{structSNDTParameters_a1ea1564f2e7f99ec34f3beb4108dfe8d}} 
-\index{S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}!max\+\_\+iterations@{max\+\_\+iterations}}
-\index{max\+\_\+iterations@{max\+\_\+iterations}!S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}}
-\subsubsection{\texorpdfstring{max\+\_\+iterations}{max\_iterations}}
-{\footnotesize\ttfamily int S\+N\+D\+T\+Parameters\+::max\+\_\+iterations}
+\mbox{\Hypertarget{structSNDTParameters_a3d9f72a08ba03884c82e5143c5fd24eb}\label{structSNDTParameters_a3d9f72a08ba03884c82e5143c5fd24eb}} 
+\index{S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}!r\+\_\+variance@{r\+\_\+variance}}
+\index{r\+\_\+variance@{r\+\_\+variance}!S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}}
+\subsubsection{\texorpdfstring{r\+\_\+variance}{r\_variance}}
+{\footnotesize\ttfamily double S\+N\+D\+T\+Parameters\+::r\+\_\+variance}
 
+radius variance, i.\+e., +-\/r -\/$>$ (r / 3)$^\wedge$2 
 
+Referenced by cb(), main(), and Make\+S\+N\+D\+T\+Map().
 
-Referenced by S\+N\+D\+T\+Parameters().
-
-\mbox{\Hypertarget{structSNDTParameters_a5ce655fe4db2495af244c60a643a936f}\label{structSNDTParameters_a5ce655fe4db2495af244c60a643a936f}} 
-\index{S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}!threshold@{threshold}}
-\index{threshold@{threshold}!S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}}
-\subsubsection{\texorpdfstring{threshold}{threshold}}
-{\footnotesize\ttfamily double S\+N\+D\+T\+Parameters\+::threshold}
-
-
-
-Referenced by S\+N\+D\+T\+Parameters().
-
-\mbox{\Hypertarget{structSNDTParameters_adadc231fb2773527b03959a2c8d39b25}\label{structSNDTParameters_adadc231fb2773527b03959a2c8d39b25}} 
-\index{S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}!verbose@{verbose}}
-\index{verbose@{verbose}!S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}}
-\subsubsection{\texorpdfstring{verbose}{verbose}}
-{\footnotesize\ttfamily bool S\+N\+D\+T\+Parameters\+::verbose}
+\mbox{\Hypertarget{structSNDTParameters_a031a9440acf67e6b3d9dad08c8af2562}\label{structSNDTParameters_a031a9440acf67e6b3d9dad08c8af2562}} 
+\index{S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}!radius@{radius}}
+\index{radius@{radius}!S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}}
+\subsubsection{\texorpdfstring{radius}{radius}}
+{\footnotesize\ttfamily double S\+N\+D\+T\+Parameters\+::radius}
 
 
 
-Referenced by S\+N\+D\+T\+Match(), and S\+N\+D\+T\+Parameters().
+Referenced by Make\+S\+N\+D\+T\+Map().
+
+\mbox{\Hypertarget{structSNDTParameters_aa138682632a0ad7d1ccf8cfe0b1f5b0b}\label{structSNDTParameters_aa138682632a0ad7d1ccf8cfe0b1f5b0b}} 
+\index{S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}!t\+\_\+variance@{t\+\_\+variance}}
+\index{t\+\_\+variance@{t\+\_\+variance}!S\+N\+D\+T\+Parameters@{S\+N\+D\+T\+Parameters}}
+\subsubsection{\texorpdfstring{t\+\_\+variance}{t\_variance}}
+{\footnotesize\ttfamily double S\+N\+D\+T\+Parameters\+::t\+\_\+variance}
+
+angle variance, i.\+e., +-\/t -\/$>$ (t / 3)$^\wedge$2 
+
+Referenced by cb(), main(), and Make\+S\+N\+D\+T\+Map().
 
 
 

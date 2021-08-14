@@ -1,0 +1,115 @@
+\hypertarget{wrapper_8hpp}{}\section{wrapper.\+hpp File Reference}
+\label{wrapper_8hpp}\index{wrapper.\+hpp@{wrapper.\+hpp}}
+{\ttfamily \#include $<$sndt/pcl\+\_\+utils.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/matcher.\+h$>$}\newline
+{\ttfamily \#include $<$common/\+Ego\+Point\+Clouds.\+h$>$}\newline
+{\ttfamily \#include $<$common/common.\+h$>$}\newline
+{\ttfamily \#include $<$nav\+\_\+msgs/\+Path.\+h$>$}\newline
+Include dependency graph for wrapper.\+hpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{df/df5/wrapper_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d4/da5/wrapper_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ std\+::pair$<$ std\+::vector$<$ Eigen\+::\+Vector2d $>$, Eigen\+::\+Affine2d $>$ $>$ \hyperlink{wrapper_8hpp_af35517d6c1318ed0b56dc0872c969fc1}{Augment} (const std\+::vector$<$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \&\hyperlink{testl__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}, int start, int end, Eigen\+::\+Affine2d \&T, std\+::vector$<$ Eigen\+::\+Affine2d $>$ \&allT)
+\item 
+std\+::vector$<$ Eigen\+::\+Vector2d $>$ \hyperlink{wrapper_8hpp_a4bb7f7d30632c0afcc34c2927aa4e906}{Augment\+Points} (const std\+::vector$<$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \&\hyperlink{testl__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}, int start, int end, Eigen\+::\+Affine2d \&T, std\+::vector$<$ Eigen\+::\+Affine2d $>$ \&allT)
+\item 
+\hyperlink{classNDTMap}{N\+D\+T\+Map} \hyperlink{wrapper_8hpp_a82f3e831cf6ebd202d0a43091d83b222}{Make\+N\+D\+T\+Map} (const std\+::vector$<$ std\+::pair$<$ std\+::vector$<$ Eigen\+::\+Vector2d $>$, Eigen\+::\+Affine2d $>$$>$ \&data, const \hyperlink{structNDTD2DParameters}{N\+D\+T\+D2\+D\+Parameters} \&params)
+\item 
+\hyperlink{classSNDTMap}{S\+N\+D\+T\+Map} \hyperlink{wrapper_8hpp_a4bf4cb20611034b3886e7f13fd55847d}{Make\+S\+N\+D\+T\+Map} (const std\+::vector$<$ std\+::pair$<$ std\+::vector$<$ Eigen\+::\+Vector2d $>$, Eigen\+::\+Affine2d $>$$>$ \&data, const \hyperlink{structSNDTParameters}{S\+N\+D\+T\+Parameters} \&params)
+\item 
+void \hyperlink{wrapper_8hpp_a5c07aea2166fed419540249de32b2e7a}{Make\+Gt\+Local} (nav\+\_\+msgs\+::\+Path \&path, const ros\+::\+Time \&start)
+\item 
+void \hyperlink{wrapper_8hpp_a30b7de8d628545cc2d222c53c13badd0}{Write\+To\+File} (const nav\+\_\+msgs\+::\+Path \&path, std\+::string filename)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Hua\+Tsai (\href{mailto:huatsai.eed07g@nctu.edu.tw}{\tt huatsai.\+eed07g@nctu.\+edu.\+tw}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/07-\/30
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021 
+\end{DoxyCopyright}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{wrapper_8hpp_af35517d6c1318ed0b56dc0872c969fc1}\label{wrapper_8hpp_af35517d6c1318ed0b56dc0872c969fc1}} 
+\index{wrapper.\+hpp@{wrapper.\+hpp}!Augment@{Augment}}
+\index{Augment@{Augment}!wrapper.\+hpp@{wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Augment()}{Augment()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::pair$<$std\+::vector$<$Eigen\+::\+Vector2d$>$, Eigen\+::\+Affine2d$>$ $>$ Augment (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \&}]{vepcs,  }\item[{int}]{start,  }\item[{int}]{end,  }\item[{Eigen\+::\+Affine2d \&}]{T,  }\item[{std\+::vector$<$ Eigen\+::\+Affine2d $>$ \&}]{allT }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{wrapper_8hpp_a4bb7f7d30632c0afcc34c2927aa4e906}\label{wrapper_8hpp_a4bb7f7d30632c0afcc34c2927aa4e906}} 
+\index{wrapper.\+hpp@{wrapper.\+hpp}!Augment\+Points@{Augment\+Points}}
+\index{Augment\+Points@{Augment\+Points}!wrapper.\+hpp@{wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Augment\+Points()}{AugmentPoints()}}
+{\footnotesize\ttfamily std\+::vector$<$Eigen\+::\+Vector2d$>$ Augment\+Points (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \&}]{vepcs,  }\item[{int}]{start,  }\item[{int}]{end,  }\item[{Eigen\+::\+Affine2d \&}]{T,  }\item[{std\+::vector$<$ Eigen\+::\+Affine2d $>$ \&}]{allT }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{wrapper_8hpp_a5c07aea2166fed419540249de32b2e7a}\label{wrapper_8hpp_a5c07aea2166fed419540249de32b2e7a}} 
+\index{wrapper.\+hpp@{wrapper.\+hpp}!Make\+Gt\+Local@{Make\+Gt\+Local}}
+\index{Make\+Gt\+Local@{Make\+Gt\+Local}!wrapper.\+hpp@{wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Make\+Gt\+Local()}{MakeGtLocal()}}
+{\footnotesize\ttfamily void Make\+Gt\+Local (\begin{DoxyParamCaption}\item[{nav\+\_\+msgs\+::\+Path \&}]{path,  }\item[{const ros\+::\+Time \&}]{start }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{wrapper_8hpp_a82f3e831cf6ebd202d0a43091d83b222}\label{wrapper_8hpp_a82f3e831cf6ebd202d0a43091d83b222}} 
+\index{wrapper.\+hpp@{wrapper.\+hpp}!Make\+N\+D\+T\+Map@{Make\+N\+D\+T\+Map}}
+\index{Make\+N\+D\+T\+Map@{Make\+N\+D\+T\+Map}!wrapper.\+hpp@{wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Make\+N\+D\+T\+Map()}{MakeNDTMap()}}
+{\footnotesize\ttfamily \hyperlink{classNDTMap}{N\+D\+T\+Map} Make\+N\+D\+T\+Map (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::pair$<$ std\+::vector$<$ Eigen\+::\+Vector2d $>$, Eigen\+::\+Affine2d $>$$>$ \&}]{data,  }\item[{const \hyperlink{structNDTD2DParameters}{N\+D\+T\+D2\+D\+Parameters} \&}]{params }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{wrapper_8hpp_a4bf4cb20611034b3886e7f13fd55847d}\label{wrapper_8hpp_a4bf4cb20611034b3886e7f13fd55847d}} 
+\index{wrapper.\+hpp@{wrapper.\+hpp}!Make\+S\+N\+D\+T\+Map@{Make\+S\+N\+D\+T\+Map}}
+\index{Make\+S\+N\+D\+T\+Map@{Make\+S\+N\+D\+T\+Map}!wrapper.\+hpp@{wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Make\+S\+N\+D\+T\+Map()}{MakeSNDTMap()}}
+{\footnotesize\ttfamily \hyperlink{classSNDTMap}{S\+N\+D\+T\+Map} Make\+S\+N\+D\+T\+Map (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::pair$<$ std\+::vector$<$ Eigen\+::\+Vector2d $>$, Eigen\+::\+Affine2d $>$$>$ \&}]{data,  }\item[{const \hyperlink{structSNDTParameters}{S\+N\+D\+T\+Parameters} \&}]{params }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{wrapper_8hpp_a30b7de8d628545cc2d222c53c13badd0}\label{wrapper_8hpp_a30b7de8d628545cc2d222c53c13badd0}} 
+\index{wrapper.\+hpp@{wrapper.\+hpp}!Write\+To\+File@{Write\+To\+File}}
+\index{Write\+To\+File@{Write\+To\+File}!wrapper.\+hpp@{wrapper.\+hpp}}
+\subsubsection{\texorpdfstring{Write\+To\+File()}{WriteToFile()}}
+{\footnotesize\ttfamily void Write\+To\+File (\begin{DoxyParamCaption}\item[{const nav\+\_\+msgs\+::\+Path \&}]{path,  }\item[{std\+::string}]{filename }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+

@@ -1,0 +1,65 @@
+\hypertarget{testl__path_8cc}{}\section{testl\+\_\+path.\+cc File Reference}
+\label{testl__path_8cc}\index{testl\+\_\+path.\+cc@{testl\+\_\+path.\+cc}}
+{\ttfamily \#include $<$ros/ros.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/matcher.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/visuals.\+h$>$}\newline
+{\ttfamily \#include $<$sensor\+\_\+msgs/\+Compressed\+Image.\+h$>$}\newline
+{\ttfamily \#include $<$boost/program\+\_\+options.\+hpp$>$}\newline
+{\ttfamily \#include $<$sndt\+\_\+exec/wrapper.\+hpp$>$}\newline
+{\ttfamily \#include $<$pcl\+\_\+ros/point\+\_\+cloud.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/filters/voxel\+\_\+grid.\+h$>$}\newline
+{\ttfamily \#include $<$rosbag/bag.\+h$>$}\newline
+Include dependency graph for testl\+\_\+path.\+cc\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d7/dee/testl__path_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ Vector2d $>$ \hyperlink{testl__path_8cc_ac8d8dd8b8085d38e153ef2eb5a208414}{P\+C\+Msg\+To2D} (const sensor\+\_\+msgs\+::\+Point\+Cloud2 \&msg)
+\item 
+sensor\+\_\+msgs\+::\+Point\+Cloud2 \hyperlink{testl__path_8cc_a7066d8adcda958adf177d2fcc739b341}{Eigen\+To\+PC} (const vector$<$ Vector2d $>$ \&pts, const ros\+::\+Time \&time)
+\item 
+Affine2d \hyperlink{testl__path_8cc_a98c917a625ecff5dc303c35a35f1e073}{Get\+DiffT} (const vector$<$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \&\hyperlink{testl__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}, const ros\+::\+Time \&t1, const ros\+::\+Time \&t2)
+\item 
+int \hyperlink{testl__path_8cc_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{testl__path_8cc_a7066d8adcda958adf177d2fcc739b341}\label{testl__path_8cc_a7066d8adcda958adf177d2fcc739b341}} 
+\index{testl\+\_\+path.\+cc@{testl\+\_\+path.\+cc}!Eigen\+To\+PC@{Eigen\+To\+PC}}
+\index{Eigen\+To\+PC@{Eigen\+To\+PC}!testl\+\_\+path.\+cc@{testl\+\_\+path.\+cc}}
+\subsubsection{\texorpdfstring{Eigen\+To\+P\+C()}{EigenToPC()}}
+{\footnotesize\ttfamily sensor\+\_\+msgs\+::\+Point\+Cloud2 Eigen\+To\+PC (\begin{DoxyParamCaption}\item[{const vector$<$ Vector2d $>$ \&}]{pts,  }\item[{const ros\+::\+Time \&}]{time }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{testl__path_8cc_a98c917a625ecff5dc303c35a35f1e073}\label{testl__path_8cc_a98c917a625ecff5dc303c35a35f1e073}} 
+\index{testl\+\_\+path.\+cc@{testl\+\_\+path.\+cc}!Get\+DiffT@{Get\+DiffT}}
+\index{Get\+DiffT@{Get\+DiffT}!testl\+\_\+path.\+cc@{testl\+\_\+path.\+cc}}
+\subsubsection{\texorpdfstring{Get\+Diff\+T()}{GetDiffT()}}
+{\footnotesize\ttfamily Affine2d Get\+DiffT (\begin{DoxyParamCaption}\item[{const vector$<$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \&}]{vepcs,  }\item[{const ros\+::\+Time \&}]{t1,  }\item[{const ros\+::\+Time \&}]{t2 }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{testl__path_8cc_a3c04138a5bfe5d72780bb7e82a18e627}\label{testl__path_8cc_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{testl\+\_\+path.\+cc@{testl\+\_\+path.\+cc}!main@{main}}
+\index{main@{main}!testl\+\_\+path.\+cc@{testl\+\_\+path.\+cc}}
+\subsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{testl__path_8cc_ac8d8dd8b8085d38e153ef2eb5a208414}\label{testl__path_8cc_ac8d8dd8b8085d38e153ef2eb5a208414}} 
+\index{testl\+\_\+path.\+cc@{testl\+\_\+path.\+cc}!P\+C\+Msg\+To2D@{P\+C\+Msg\+To2D}}
+\index{P\+C\+Msg\+To2D@{P\+C\+Msg\+To2D}!testl\+\_\+path.\+cc@{testl\+\_\+path.\+cc}}
+\subsubsection{\texorpdfstring{P\+C\+Msg\+To2\+D()}{PCMsgTo2D()}}
+{\footnotesize\ttfamily vector$<$Vector2d$>$ P\+C\+Msg\+To2D (\begin{DoxyParamCaption}\item[{const sensor\+\_\+msgs\+::\+Point\+Cloud2 \&}]{msg }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+

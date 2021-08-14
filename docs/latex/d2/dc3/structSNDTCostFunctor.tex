@@ -2,6 +2,10 @@
 \label{structSNDTCostFunctor}\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
 
 
+{\ttfamily \#include $<$cost\+\_\+functors.\+h$>$}
+
+
+
 Collaboration diagram for S\+N\+D\+T\+Cost\+Functor\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -22,10 +26,6 @@ Collaboration diagram for S\+N\+D\+T\+Cost\+Functor\+:\nopagebreak
 {\footnotesize template$<$typename T $>$ }\\static Eigen\+::\+Matrix$<$ T, 2, 2 $>$ \hyperlink{structSNDTCostFunctor_ac3ec5d55425287082f5ce7f1788715c7}{Rotation\+Matrix2D} (T yaw)
 \item 
 static ceres\+::\+Cost\+Function $\ast$ \hyperlink{structSNDTCostFunctor_a22ee42d8807a659af32c15d144ed0c6b}{Create} (const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$cellp, const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$cellq)
-\item 
-static double \hyperlink{structSNDTCostFunctor_a24876e79d893ae4a8fc098f85c615c6b}{Score} (const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$\hyperlink{structSNDTCostFunctor_ac9abfd289124b6b30105e89266c062a0}{p}, const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$\hyperlink{structSNDTCostFunctor_a2e02683aa3af214e6d8bb7ca40b9f0b3}{q})
-\item 
-static std\+::vector$<$ double $>$ \hyperlink{structSNDTCostFunctor_aec08f243fe9582c59c73a0a93a2c0f81}{Mean\+And\+Cov} (const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$\hyperlink{structSNDTCostFunctor_ac9abfd289124b6b30105e89266c062a0}{p}, const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$\hyperlink{structSNDTCostFunctor_a2e02683aa3af214e6d8bb7ca40b9f0b3}{q})
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -56,12 +56,6 @@ const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$ \hyperlink{structSNDTCo
 
 Referenced by S\+N\+D\+T\+Match().
 
-\mbox{\Hypertarget{structSNDTCostFunctor_aec08f243fe9582c59c73a0a93a2c0f81}\label{structSNDTCostFunctor_aec08f243fe9582c59c73a0a93a2c0f81}} 
-\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}!Mean\+And\+Cov@{Mean\+And\+Cov}}
-\index{Mean\+And\+Cov@{Mean\+And\+Cov}!S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
-\subsubsection{\texorpdfstring{Mean\+And\+Cov()}{MeanAndCov()}}
-{\footnotesize\ttfamily static std\+::vector$<$double$>$ S\+N\+D\+T\+Cost\+Functor\+::\+Mean\+And\+Cov (\begin{DoxyParamCaption}\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{p,  }\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{q }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
-
 \mbox{\Hypertarget{structSNDTCostFunctor_aa90d5ea666b39220dc48e0474172268b}\label{structSNDTCostFunctor_aa90d5ea666b39220dc48e0474172268b}} 
 \index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}!operator()@{operator()}}
 \index{operator()@{operator()}!S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
@@ -75,12 +69,6 @@ bool S\+N\+D\+T\+Cost\+Functor\+::operator() (\begin{DoxyParamCaption}\item[{con
 \subsubsection{\texorpdfstring{Rotation\+Matrix2\+D()}{RotationMatrix2D()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
 static Eigen\+::\+Matrix$<$T, 2, 2$>$ S\+N\+D\+T\+Cost\+Functor\+::\+Rotation\+Matrix2D (\begin{DoxyParamCaption}\item[{T}]{yaw }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
-
-\mbox{\Hypertarget{structSNDTCostFunctor_a24876e79d893ae4a8fc098f85c615c6b}\label{structSNDTCostFunctor_a24876e79d893ae4a8fc098f85c615c6b}} 
-\index{S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}!Score@{Score}}
-\index{Score@{Score}!S\+N\+D\+T\+Cost\+Functor@{S\+N\+D\+T\+Cost\+Functor}}
-\subsubsection{\texorpdfstring{Score()}{Score()}}
-{\footnotesize\ttfamily static double S\+N\+D\+T\+Cost\+Functor\+::\+Score (\begin{DoxyParamCaption}\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{p,  }\item[{const \hyperlink{classSNDTCell}{S\+N\+D\+T\+Cell} $\ast$}]{q }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
 
 
 
@@ -101,4 +89,4 @@ static Eigen\+::\+Matrix$<$T, 2, 2$>$ S\+N\+D\+T\+Cost\+Functor\+::\+Rotation\+M
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-\hyperlink{matcher_8cc}{matcher.\+cc}\end{DoxyCompactItemize}
+\hyperlink{cost__functors_8h}{cost\+\_\+functors.\+h}\end{DoxyCompactItemize}

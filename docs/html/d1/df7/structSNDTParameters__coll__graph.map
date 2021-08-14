@@ -1,2 +1,4 @@
 <map id="SNDTParameters" name="SNDTParameters">
+<area shape="rect" id="node2" href="$d3/d19/structCommonParameters.html" title="{CommonParameters\n|+ max_iterations\l+ max_min_ctr\l+ threads\l+ threshold\l+ huber\l+ verbose\l+ solver\l+ _iteration\l+ _min_ctr\l+ _min_cost\l+ _converge\l+ _costs\l+ _corres\l|+ CommonParameters()\l+ InitializeInput()\l+ InitializeOutput()\l}" alt="" coords="5,189,168,472"/>
+<area shape="rect" id="node3" href="$db/df5/structUsedTime.html" title="{UsedTime\n|+ total\l+ optimize\l+ others\l|+ UsedTime()\l+ Initialize()\l}" alt="" coords="35,5,138,127"/>
 </map>

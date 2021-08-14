@@ -1,0 +1,216 @@
+\hypertarget{sndt_2include_2sndt_2eigen__utils_8h}{}\section{eigen\+\_\+utils.\+h File Reference}
+\label{sndt_2include_2sndt_2eigen__utils_8h}\index{eigen\+\_\+utils.\+h@{eigen\+\_\+utils.\+h}}
+{\ttfamily \#include $<$bits/stdc++.\+h$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Dense$>$}\newline
+{\ttfamily \#include $<$gsl/gsl$>$}\newline
+Include dependency graph for sndt/include/sndt/eigen\+\_\+utils.h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=309pt]{dd/d0f/sndt_2include_2sndt_2eigen__utils_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{dc/d15/sndt_2include_2sndt_2eigen__utils_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Vector2d \hyperlink{sndt_2include_2sndt_2eigen__utils_8h_ac76ef106dead87ab068bb20b17b88f14}{Compute\+Mean} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points)
+\begin{DoxyCompactList}\small\item\em Compute mean of points. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix2d \hyperlink{sndt_2include_2sndt_2eigen__utils_8h_ac0b2c1f587c4d84a2b85d2f016846385}{Compute\+Mean} (const std\+::vector$<$ Eigen\+::\+Matrix2d $>$ \&matrices)
+\begin{DoxyCompactList}\small\item\em Compute mean of matrices. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix2d \hyperlink{sndt_2include_2sndt_2eigen__utils_8h_acfdd9d858db69f6d307a257f72a4f852}{Compute\+Cov} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points, const Eigen\+::\+Vector2d \&mean, const Eigen\+::\+Matrix2d \&offset=Eigen\+::\+Matrix2d\+::\+Zero())
+\begin{DoxyCompactList}\small\item\em Compute covariance of points. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix2d \hyperlink{sndt_2include_2sndt_2eigen__utils_8h_ad95bec29517831e80ff94b4a28eeeee3}{Compute\+Cov} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points, const Eigen\+::\+Vector2d \&mean, const std\+::vector$<$ Eigen\+::\+Matrix2d $>$ \&offsets)
+\begin{DoxyCompactList}\small\item\em Compute covariance of points. \end{DoxyCompactList}\item 
+void \hyperlink{sndt_2include_2sndt_2eigen__utils_8h_a5a63ec836a7cc8692fa23f092b00fcd2}{Compute\+Eval\+Evec} (const Eigen\+::\+Matrix2d \&covariance, Eigen\+::\+Vector2d \&evals, Eigen\+::\+Matrix2d \&evecs)
+\begin{DoxyCompactList}\small\item\em Compute eigenvalues and eigenvectors from covariance. \end{DoxyCompactList}\item 
+std\+::vector$<$ Eigen\+::\+Vector2d $>$ \hyperlink{sndt_2include_2sndt_2eigen__utils_8h_ab18ffd55bea42efcdfd8c29f396b9da3}{Exclude\+Na\+N\+Inf} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points)
+\begin{DoxyCompactList}\small\item\em Remove points that contain NaN or Inf. \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::vector$<$ Eigen\+::\+Vector2d $>$, std\+::vector$<$ Eigen\+::\+Matrix2d $>$ $>$ \hyperlink{sndt_2include_2sndt_2eigen__utils_8h_af5a5439955f7a206e8dff7df4893ee57}{Exclude\+Na\+N\+Inf2} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points, const std\+::vector$<$ Eigen\+::\+Matrix2d $>$ \&covariances)
+\begin{DoxyCompactList}\small\item\em Remove points and covariances that contain NaN or Inf. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{sndt_2include_2sndt_2eigen__utils_8h_acfdd9d858db69f6d307a257f72a4f852}\label{sndt_2include_2sndt_2eigen__utils_8h_acfdd9d858db69f6d307a257f72a4f852}} 
+\index{sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}!Compute\+Cov@{Compute\+Cov}}
+\index{Compute\+Cov@{Compute\+Cov}!sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Compute\+Cov()}{ComputeCov()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix2d Compute\+Cov (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points,  }\item[{const Eigen\+::\+Vector2d \&}]{mean,  }\item[{const Eigen\+::\+Matrix2d \&}]{offset = {\ttfamily Eigen\+:\+:Matrix2d\+:\+:Zero()} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Compute covariance of points. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & Input points \\
+\hline
+{\em mean} & Input mean of points \\
+\hline
+{\em offset} & Offset added to the covariance (default zero) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Covariance of points 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This function does not check the validity of its elements 
+\end{DoxyNote}
+
+
+Referenced by Compute\+Cov(), S\+N\+D\+T\+Cell\+::\+Compute\+Gaussian(), and N\+D\+T\+Cell\+::\+Compute\+Gaussian().
+
+\mbox{\Hypertarget{sndt_2include_2sndt_2eigen__utils_8h_ad95bec29517831e80ff94b4a28eeeee3}\label{sndt_2include_2sndt_2eigen__utils_8h_ad95bec29517831e80ff94b4a28eeeee3}} 
+\index{sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}!Compute\+Cov@{Compute\+Cov}}
+\index{Compute\+Cov@{Compute\+Cov}!sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Compute\+Cov()}{ComputeCov()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix2d Compute\+Cov (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points,  }\item[{const Eigen\+::\+Vector2d \&}]{mean,  }\item[{const std\+::vector$<$ Eigen\+::\+Matrix2d $>$ \&}]{offsets }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Compute covariance of points. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & Input points \\
+\hline
+{\em mean} & Input mean of points \\
+\hline
+{\em offsets} & Offsets that will be averaged and added to the covariance \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Covariance of points 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+Arguments {\ttfamily points} and {\ttfamily offsets} should have the same size. 
+\end{DoxyPrecond}
+\begin{DoxyNote}{Note}
+This function does not check the validity of its elements 
+\end{DoxyNote}
+\mbox{\Hypertarget{sndt_2include_2sndt_2eigen__utils_8h_a5a63ec836a7cc8692fa23f092b00fcd2}\label{sndt_2include_2sndt_2eigen__utils_8h_a5a63ec836a7cc8692fa23f092b00fcd2}} 
+\index{sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}!Compute\+Eval\+Evec@{Compute\+Eval\+Evec}}
+\index{Compute\+Eval\+Evec@{Compute\+Eval\+Evec}!sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Compute\+Eval\+Evec()}{ComputeEvalEvec()}}
+{\footnotesize\ttfamily void Compute\+Eval\+Evec (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix2d \&}]{covariance,  }\item[{Eigen\+::\+Vector2d \&}]{evals,  }\item[{Eigen\+::\+Matrix2d \&}]{evecs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Compute eigenvalues and eigenvectors from covariance. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em covariance} & Input covariance \\
+\hline
+\mbox{\tt out}  & {\em evals} & Output eigenvalues \\
+\hline
+\mbox{\tt out}  & {\em evecs} & Output eigenvectors \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by S\+N\+D\+T\+Cell\+::\+Compute\+Gaussian(), and N\+D\+T\+Cell\+::\+Compute\+Gaussian().
+
+\mbox{\Hypertarget{sndt_2include_2sndt_2eigen__utils_8h_ac76ef106dead87ab068bb20b17b88f14}\label{sndt_2include_2sndt_2eigen__utils_8h_ac76ef106dead87ab068bb20b17b88f14}} 
+\index{sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}!Compute\+Mean@{Compute\+Mean}}
+\index{Compute\+Mean@{Compute\+Mean}!sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Compute\+Mean()}{ComputeMean()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2d Compute\+Mean (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Compute mean of points. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & Input points \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Mean of points 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This function does not check the validity of its elements 
+\end{DoxyNote}
+
+
+Referenced by Compute\+Cov(), S\+N\+D\+T\+Cell\+::\+Compute\+Gaussian(), N\+D\+T\+Cell\+::\+Compute\+Gaussian(), and Map\+Interface\+::\+Guess\+Map\+Size().
+
+\mbox{\Hypertarget{sndt_2include_2sndt_2eigen__utils_8h_ac0b2c1f587c4d84a2b85d2f016846385}\label{sndt_2include_2sndt_2eigen__utils_8h_ac0b2c1f587c4d84a2b85d2f016846385}} 
+\index{sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}!Compute\+Mean@{Compute\+Mean}}
+\index{Compute\+Mean@{Compute\+Mean}!sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Compute\+Mean()}{ComputeMean()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix2d Compute\+Mean (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Matrix2d $>$ \&}]{matrices }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Compute mean of matrices. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em matrices} & Input matrices \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Mean of matrices 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This function does not check the validity of its elements 
+\end{DoxyNote}
+\mbox{\Hypertarget{sndt_2include_2sndt_2eigen__utils_8h_ab18ffd55bea42efcdfd8c29f396b9da3}\label{sndt_2include_2sndt_2eigen__utils_8h_ab18ffd55bea42efcdfd8c29f396b9da3}} 
+\index{sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}!Exclude\+Na\+N\+Inf@{Exclude\+Na\+N\+Inf}}
+\index{Exclude\+Na\+N\+Inf@{Exclude\+Na\+N\+Inf}!sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Exclude\+Na\+N\+Inf()}{ExcludeNaNInf()}}
+{\footnotesize\ttfamily std\+::vector$<$Eigen\+::\+Vector2d$>$ Exclude\+Na\+N\+Inf (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Remove points that contain NaN or Inf. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & Input points \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Result points 
+\end{DoxyReturn}
+
+
+Referenced by S\+N\+D\+T\+Cell\+::\+Compute\+Gaussian(), Map\+Interface\+::\+Guess\+Map\+Size(), and S\+I\+C\+P\+Match().
+
+\mbox{\Hypertarget{sndt_2include_2sndt_2eigen__utils_8h_af5a5439955f7a206e8dff7df4893ee57}\label{sndt_2include_2sndt_2eigen__utils_8h_af5a5439955f7a206e8dff7df4893ee57}} 
+\index{sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}!Exclude\+Na\+N\+Inf2@{Exclude\+Na\+N\+Inf2}}
+\index{Exclude\+Na\+N\+Inf2@{Exclude\+Na\+N\+Inf2}!sndt/include/sndt/eigen\+\_\+utils.\+h@{sndt/include/sndt/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Exclude\+Na\+N\+Inf2()}{ExcludeNaNInf2()}}
+{\footnotesize\ttfamily std\+::pair$<$std\+::vector$<$Eigen\+::\+Vector2d$>$, std\+::vector$<$Eigen\+::\+Matrix2d$>$ $>$ Exclude\+Na\+N\+Inf2 (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points,  }\item[{const std\+::vector$<$ Eigen\+::\+Matrix2d $>$ \&}]{covariances }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Remove points and covariances that contain NaN or Inf. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & Input points \\
+\hline
+{\em covariances} & Input covariances \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pair of result points and result covariances
+\end{DoxyReturn}
+This function keeps the entries that have both valid point and valid covariance \begin{DoxyPrecond}{Precondition}
+Arguments {\ttfamily points} and {\ttfamily covariances} should have the same size 
+\end{DoxyPrecond}
+
+
+Referenced by S\+N\+D\+T\+Cell\+::\+Compute\+Gaussian(), and N\+D\+T\+Cell\+::\+Compute\+Gaussian().
+

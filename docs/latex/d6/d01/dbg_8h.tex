@@ -188,11 +188,11 @@ std\+::string \hyperlink{namespacedbg_a3bcf58cf4aba1da7a34e79b0fb2ce036}{dbg\+::
 \item 
 {\footnotesize template$<$typename T $>$ }\\print\+\_\+type$<$ T $>$ \hyperlink{namespacedbg_a2365d80e3a3525e6025040383ff8661b}{dbg\+::type} ()
 \item 
-{\footnotesize template$<$typename T $>$ }\\void \hyperlink{namespacedbg_a4ba5b016ce65b09fef3935a945310904}{dbg\+::pretty\+\_\+print} (std\+::ostream \&stream, const T \&value, \hyperlink{namespacestd_a6a860513044e23d34e553ea986e83fa1}{std\+::true\+\_\+type})
+{\footnotesize template$<$typename T $>$ }\\void \hyperlink{namespacedbg_a4ba5b016ce65b09fef3935a945310904}{dbg\+::pretty\+\_\+print} (std\+::ostream \&stream, const T \&value, std\+::true\+\_\+type)
 \item 
-{\footnotesize template$<$typename T $>$ }\\void \hyperlink{namespacedbg_ab875770941388a1d8279e9b5257e5a93}{dbg\+::pretty\+\_\+print} (std\+::ostream \&, const T \&, \hyperlink{namespacestd_aebe6729ab5488ecc76c762873d226857}{std\+::false\+\_\+type})
+{\footnotesize template$<$typename T $>$ }\\void \hyperlink{namespacedbg_ab875770941388a1d8279e9b5257e5a93}{dbg\+::pretty\+\_\+print} (std\+::ostream \&, const T \&, std\+::false\+\_\+type)
 \item 
-{\footnotesize template$<$typename T $>$ }\\\hyperlink{structstd_1_1enable__if}{std\+::enable\+\_\+if}$<$!detail\+::is\+\_\+container$<$ const T \& $>$\+::value \&\&!std\+::is\+\_\+enum$<$ T $>$\+::value, bool $>$\+::type \hyperlink{namespacedbg_a4920208faa7096e0333f9d14119a9c2f}{dbg\+::pretty\+\_\+print} (std\+::ostream \&stream, const T \&value)
+{\footnotesize template$<$typename T $>$ }\\std\+::enable\+\_\+if$<$!detail\+::is\+\_\+container$<$ const T \& $>$\+::value \&\&!std\+::is\+\_\+enum$<$ T $>$\+::value, bool $>$\+::type \hyperlink{namespacedbg_a4920208faa7096e0333f9d14119a9c2f}{dbg\+::pretty\+\_\+print} (std\+::ostream \&stream, const T \&value)
 \item 
 bool \hyperlink{namespacedbg_a4f9989bfef507d5034cc50d015654ca4}{dbg\+::pretty\+\_\+print} (std\+::ostream \&stream, const bool \&value)
 \item 
@@ -220,13 +220,13 @@ bool \hyperlink{namespacedbg_acc6a678f0c3954671e247468e249e5a4}{dbg\+::pretty\+\
 \item 
 {\footnotesize template$<$typename T $>$ }\\bool \hyperlink{namespacedbg_abb85fb70314b6ada2e66eebeafcd15bf}{dbg\+::pretty\+\_\+print} (std\+::ostream \&stream, const print\+\_\+type$<$ T $>$ \&)
 \item 
-{\footnotesize template$<$typename Enum $>$ }\\\hyperlink{structstd_1_1enable__if}{std\+::enable\+\_\+if}$<$ std\+::is\+\_\+enum$<$ Enum $>$\+::value, bool $>$\+::type \hyperlink{namespacedbg_acd3034b7476cdf474e46eb2bbca6e0d1}{dbg\+::pretty\+\_\+print} (std\+::ostream \&stream, Enum const \&value)
+{\footnotesize template$<$typename Enum $>$ }\\std\+::enable\+\_\+if$<$ std\+::is\+\_\+enum$<$ Enum $>$\+::value, bool $>$\+::type \hyperlink{namespacedbg_acd3034b7476cdf474e46eb2bbca6e0d1}{dbg\+::pretty\+\_\+print} (std\+::ostream \&stream, Enum const \&value)
 \item 
 bool \hyperlink{namespacedbg_ae620aa6031e088dc11e1df853e38f5fa}{dbg\+::pretty\+\_\+print} (std\+::ostream \&stream, const std\+::string \&value)
 \item 
 {\footnotesize template$<$typename T1 , typename T2 $>$ }\\bool \hyperlink{namespacedbg_adf02078069da78815c208dd638a01640}{dbg\+::pretty\+\_\+print} (std\+::ostream \&stream, const std\+::pair$<$ T1, T2 $>$ \&value)
 \item 
-{\footnotesize template$<$typename Container $>$ }\\\hyperlink{structstd_1_1enable__if}{std\+::enable\+\_\+if}$<$ detail\+::is\+\_\+container$<$ const Container \& $>$\+::value, bool $>$\+::type \hyperlink{namespacedbg_a1212dc990d58f20efcf5d66eb4a5781c}{dbg\+::pretty\+\_\+print} (std\+::ostream \&stream, const Container \&value)
+{\footnotesize template$<$typename Container $>$ }\\std\+::enable\+\_\+if$<$ detail\+::is\+\_\+container$<$ const Container \& $>$\+::value, bool $>$\+::type \hyperlink{namespacedbg_a1212dc990d58f20efcf5d66eb4a5781c}{dbg\+::pretty\+\_\+print} (std\+::ostream \&stream, const Container \&value)
 \item 
 {\footnotesize template$<$typename T $>$ }\\T \&\& \hyperlink{namespacedbg_a23f10decf1edf2d34e226437e5562452}{dbg\+::identity} (T \&\&t)
 \item 

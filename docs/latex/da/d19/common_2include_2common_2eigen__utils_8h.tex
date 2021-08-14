@@ -1,0 +1,225 @@
+\hypertarget{common_2include_2common_2eigen__utils_8h}{}\section{eigen\+\_\+utils.\+h File Reference}
+\label{common_2include_2common_2eigen__utils_8h}\index{eigen\+\_\+utils.\+h@{eigen\+\_\+utils.\+h}}
+{\ttfamily \#include $<$angles/angles.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+msgs/\+Float64\+Multi\+Array.\+h$>$}\newline
+{\ttfamily \#include $<$tf2\+\_\+eigen/tf2\+\_\+eigen.\+h$>$}\newline
+{\ttfamily \#include $<$tf2\+\_\+geometry\+\_\+msgs/tf2\+\_\+geometry\+\_\+msgs.\+h$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Dense$>$}\newline
+Include dependency graph for common/include/common/eigen\+\_\+utils.h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d6/d63/common_2include_2common_2eigen__utils_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{dc/d45/common_2include_2common_2eigen__utils_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Affine3d \hyperlink{common_2include_2common_2eigen__utils_8h_abb5e561bc6e372e117279ac76f24cb24}{Affine3d\+From\+X\+Y\+Z\+R\+PY} (const Eigen\+::\+Vector3d \&xyz, const Eigen\+::\+Vector3d \&rpy)
+\item 
+Eigen\+::\+Affine3d \hyperlink{common_2include_2common_2eigen__utils_8h_a961e6a09138ad580ee37252fe51e9652}{Affine3d\+From\+Affine2d} (const Eigen\+::\+Affine2d \&aff)
+\item 
+Eigen\+::\+Affine3d \hyperlink{common_2include_2common_2eigen__utils_8h_abd317625fa85a69c92d81fa41e164f81}{Affine3d\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
+\item 
+Eigen\+::\+Affine3d \hyperlink{common_2include_2common_2eigen__utils_8h_af43b4d67a3f31f201b2ddb0f9910b8f7}{Affine3d\+From\+Matrix4f} (const Eigen\+::\+Matrix4f \&mtx)
+\item 
+Eigen\+::\+Matrix$<$ double, 6, 1 $>$ \hyperlink{common_2include_2common_2eigen__utils_8h_a0ce68ed327616c22f58c0aeb20bc81d6}{X\+Y\+Z\+R\+P\+Y\+From\+Affine3d} (const Eigen\+::\+Affine3d \&mtx)
+\item 
+Eigen\+::\+Matrix$<$ double, 6, 1 $>$ \hyperlink{common_2include_2common_2eigen__utils_8h_a8216d8984e1344d2739aa00df6e329af}{X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f} (const Eigen\+::\+Matrix4f \&mtx)
+\item 
+Eigen\+::\+Vector3d \hyperlink{common_2include_2common_2eigen__utils_8h_ab56dfbdfd6ec14b68d5965347af13f4e}{X\+Y\+T\+Radian\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
+\item 
+Eigen\+::\+Vector3d \hyperlink{common_2include_2common_2eigen__utils_8h_a044d98b2963cbd8d000571dd549d24e0}{X\+Y\+T\+Degree\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
+\item 
+Eigen\+::\+Matrix3d \hyperlink{common_2include_2common_2eigen__utils_8h_a288d803c85df82dccfa1be2edef40781}{Matrix3d\+From\+X\+Y\+T\+Radian} (const Eigen\+::\+Vector3d \&xyt)
+\item 
+Eigen\+::\+Matrix3d \hyperlink{common_2include_2common_2eigen__utils_8h_aef3c4c2affdb20b3fd2f4f8b394e00f1}{Matrix3d\+From\+X\+Y\+T\+Degree} (const Eigen\+::\+Vector3d \&xyt)
+\item 
+Eigen\+::\+Matrix3d \hyperlink{common_2include_2common_2eigen__utils_8h_a056378840c3f7a54a620641d3548e898}{Matrix3d\+From\+Matrix4f} (const Eigen\+::\+Matrix4f \&mtx)
+\item 
+Eigen\+::\+Matrix4f \hyperlink{common_2include_2common_2eigen__utils_8h_a1e88ac9ecb077269958bffb6bc69d3cf}{Matrix4f\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
+\item 
+Eigen\+::\+Matrix4f \hyperlink{common_2include_2common_2eigen__utils_8h_a0e74f7e9f6716fcd2b1e7ceb757583b5}{Matrix4f\+From\+X\+Y\+T\+Radian} (const Eigen\+::\+Vector3d \&xyt)
+\item 
+geometry\+\_\+msgs\+::\+Transform\+Stamped \hyperlink{common_2include_2common_2eigen__utils_8h_a41a18f4508893ef60fc6692392367a46}{Tst\+From\+Affine3d} (const Eigen\+::\+Affine3d \&T, const ros\+::\+Time \&stamp, const std\+::string \&frame\+\_\+id, const std\+::string \&child\+\_\+frame\+\_\+id)
+\item 
+geometry\+\_\+msgs\+::\+Transform\+Stamped \hyperlink{common_2include_2common_2eigen__utils_8h_a24a837cef9eac50642ec5810ed8d6cfd}{Tst\+From\+Matrix4f} (const Eigen\+::\+Matrix4f \&T, const ros\+::\+Time \&stamp, const std\+::string \&frame\+\_\+id, const std\+::string \&child\+\_\+frame\+\_\+id)
+\item 
+Eigen\+::\+Affine3d \hyperlink{common_2include_2common_2eigen__utils_8h_aaf4be689ca7e0430265353ae5630d484}{Conserve2\+D\+From\+Affine3d} (const Eigen\+::\+Affine3d \&T)
+\item 
+Eigen\+::\+Vector2d \hyperlink{common_2include_2common_2eigen__utils_8h_a028a9765db2a0515c84b7a2ee05ea1bd}{Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
+\item 
+geometry\+\_\+msgs\+::\+Pose\+Stamped \hyperlink{common_2include_2common_2eigen__utils_8h_a8095d4da1c9b63de99dd04dd0d895119}{Make\+Pose\+Stamped\+Msg} (const ros\+::\+Time \&time, const Eigen\+::\+Matrix4f \&mtx)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_a961e6a09138ad580ee37252fe51e9652}\label{common_2include_2common_2eigen__utils_8h_a961e6a09138ad580ee37252fe51e9652}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Affine3d\+From\+Affine2d@{Affine3d\+From\+Affine2d}}
+\index{Affine3d\+From\+Affine2d@{Affine3d\+From\+Affine2d}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Affine3d\+From\+Affine2d()}{Affine3dFromAffine2d()}}
+{\footnotesize\ttfamily Eigen\+::\+Affine3d Affine3d\+From\+Affine2d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Affine2d \&}]{aff }\end{DoxyParamCaption})}
+
+
+
+Referenced by Affine3d\+From\+Matrix3d().
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_abd317625fa85a69c92d81fa41e164f81}\label{common_2include_2common_2eigen__utils_8h_abd317625fa85a69c92d81fa41e164f81}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Affine3d\+From\+Matrix3d@{Affine3d\+From\+Matrix3d}}
+\index{Affine3d\+From\+Matrix3d@{Affine3d\+From\+Matrix3d}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Affine3d\+From\+Matrix3d()}{Affine3dFromMatrix3d()}}
+{\footnotesize\ttfamily Eigen\+::\+Affine3d Affine3d\+From\+Matrix3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix3d \&}]{mtx }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_af43b4d67a3f31f201b2ddb0f9910b8f7}\label{common_2include_2common_2eigen__utils_8h_af43b4d67a3f31f201b2ddb0f9910b8f7}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Affine3d\+From\+Matrix4f@{Affine3d\+From\+Matrix4f}}
+\index{Affine3d\+From\+Matrix4f@{Affine3d\+From\+Matrix4f}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Affine3d\+From\+Matrix4f()}{Affine3dFromMatrix4f()}}
+{\footnotesize\ttfamily Eigen\+::\+Affine3d Affine3d\+From\+Matrix4f (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix4f \&}]{mtx }\end{DoxyParamCaption})}
+
+
+
+Referenced by Make\+Pose\+Stamped\+Msg(), Tst\+From\+Matrix4f(), and X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f().
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_abb5e561bc6e372e117279ac76f24cb24}\label{common_2include_2common_2eigen__utils_8h_abb5e561bc6e372e117279ac76f24cb24}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Affine3d\+From\+X\+Y\+Z\+R\+PY@{Affine3d\+From\+X\+Y\+Z\+R\+PY}}
+\index{Affine3d\+From\+X\+Y\+Z\+R\+PY@{Affine3d\+From\+X\+Y\+Z\+R\+PY}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Affine3d\+From\+X\+Y\+Z\+R\+P\+Y()}{Affine3dFromXYZRPY()}}
+{\footnotesize\ttfamily Eigen\+::\+Affine3d Affine3d\+From\+X\+Y\+Z\+R\+PY (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector3d \&}]{xyz,  }\item[{const Eigen\+::\+Vector3d \&}]{rpy }\end{DoxyParamCaption})}
+
+
+
+Referenced by Conserve2\+D\+From\+Affine3d().
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_aaf4be689ca7e0430265353ae5630d484}\label{common_2include_2common_2eigen__utils_8h_aaf4be689ca7e0430265353ae5630d484}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Conserve2\+D\+From\+Affine3d@{Conserve2\+D\+From\+Affine3d}}
+\index{Conserve2\+D\+From\+Affine3d@{Conserve2\+D\+From\+Affine3d}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Conserve2\+D\+From\+Affine3d()}{Conserve2DFromAffine3d()}}
+{\footnotesize\ttfamily Eigen\+::\+Affine3d Conserve2\+D\+From\+Affine3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Affine3d \&}]{T }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb(), main(), and Make\+Gt\+Local().
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_a8095d4da1c9b63de99dd04dd0d895119}\label{common_2include_2common_2eigen__utils_8h_a8095d4da1c9b63de99dd04dd0d895119}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Make\+Pose\+Stamped\+Msg@{Make\+Pose\+Stamped\+Msg}}
+\index{Make\+Pose\+Stamped\+Msg@{Make\+Pose\+Stamped\+Msg}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Make\+Pose\+Stamped\+Msg()}{MakePoseStampedMsg()}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Pose\+Stamped Make\+Pose\+Stamped\+Msg (\begin{DoxyParamCaption}\item[{const ros\+::\+Time \&}]{time,  }\item[{const Eigen\+::\+Matrix4f \&}]{mtx }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_a056378840c3f7a54a620641d3548e898}\label{common_2include_2common_2eigen__utils_8h_a056378840c3f7a54a620641d3548e898}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Matrix3d\+From\+Matrix4f@{Matrix3d\+From\+Matrix4f}}
+\index{Matrix3d\+From\+Matrix4f@{Matrix3d\+From\+Matrix4f}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Matrix3d\+From\+Matrix4f()}{Matrix3dFromMatrix4f()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix3d Matrix3d\+From\+Matrix4f (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix4f \&}]{mtx }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_aef3c4c2affdb20b3fd2f4f8b394e00f1}\label{common_2include_2common_2eigen__utils_8h_aef3c4c2affdb20b3fd2f4f8b394e00f1}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Matrix3d\+From\+X\+Y\+T\+Degree@{Matrix3d\+From\+X\+Y\+T\+Degree}}
+\index{Matrix3d\+From\+X\+Y\+T\+Degree@{Matrix3d\+From\+X\+Y\+T\+Degree}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Matrix3d\+From\+X\+Y\+T\+Degree()}{Matrix3dFromXYTDegree()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix3d Matrix3d\+From\+X\+Y\+T\+Degree (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector3d \&}]{xyt }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_a288d803c85df82dccfa1be2edef40781}\label{common_2include_2common_2eigen__utils_8h_a288d803c85df82dccfa1be2edef40781}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Matrix3d\+From\+X\+Y\+T\+Radian@{Matrix3d\+From\+X\+Y\+T\+Radian}}
+\index{Matrix3d\+From\+X\+Y\+T\+Radian@{Matrix3d\+From\+X\+Y\+T\+Radian}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Matrix3d\+From\+X\+Y\+T\+Radian()}{Matrix3dFromXYTRadian()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix3d Matrix3d\+From\+X\+Y\+T\+Radian (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector3d \&}]{xyt }\end{DoxyParamCaption})}
+
+
+
+Referenced by Matrix3d\+From\+Matrix4f(), Matrix3d\+From\+X\+Y\+T\+Degree(), and Matrix4f\+From\+X\+Y\+T\+Radian().
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_a1e88ac9ecb077269958bffb6bc69d3cf}\label{common_2include_2common_2eigen__utils_8h_a1e88ac9ecb077269958bffb6bc69d3cf}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Matrix4f\+From\+Matrix3d@{Matrix4f\+From\+Matrix3d}}
+\index{Matrix4f\+From\+Matrix3d@{Matrix4f\+From\+Matrix3d}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Matrix4f\+From\+Matrix3d()}{Matrix4fFromMatrix3d()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix4f Matrix4f\+From\+Matrix3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix3d \&}]{mtx }\end{DoxyParamCaption})}
+
+
+
+Referenced by main(), and Matrix4f\+From\+X\+Y\+T\+Radian().
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_a0e74f7e9f6716fcd2b1e7ceb757583b5}\label{common_2include_2common_2eigen__utils_8h_a0e74f7e9f6716fcd2b1e7ceb757583b5}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Matrix4f\+From\+X\+Y\+T\+Radian@{Matrix4f\+From\+X\+Y\+T\+Radian}}
+\index{Matrix4f\+From\+X\+Y\+T\+Radian@{Matrix4f\+From\+X\+Y\+T\+Radian}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Matrix4f\+From\+X\+Y\+T\+Radian()}{Matrix4fFromXYTRadian()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix4f Matrix4f\+From\+X\+Y\+T\+Radian (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector3d \&}]{xyt }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_a028a9765db2a0515c84b7a2ee05ea1bd}\label{common_2include_2common_2eigen__utils_8h_a028a9765db2a0515c84b7a2ee05ea1bd}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d@{Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d}}
+\index{Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d@{Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d()}{TransNormRotDegAbsFromMatrix3d()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector2d Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix3d \&}]{mtx }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb().
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_a41a18f4508893ef60fc6692392367a46}\label{common_2include_2common_2eigen__utils_8h_a41a18f4508893ef60fc6692392367a46}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Tst\+From\+Affine3d@{Tst\+From\+Affine3d}}
+\index{Tst\+From\+Affine3d@{Tst\+From\+Affine3d}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Tst\+From\+Affine3d()}{TstFromAffine3d()}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Transform\+Stamped Tst\+From\+Affine3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Affine3d \&}]{T,  }\item[{const ros\+::\+Time \&}]{stamp,  }\item[{const std\+::string \&}]{frame\+\_\+id,  }\item[{const std\+::string \&}]{child\+\_\+frame\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+Referenced by Tst\+From\+Matrix4f().
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_a24a837cef9eac50642ec5810ed8d6cfd}\label{common_2include_2common_2eigen__utils_8h_a24a837cef9eac50642ec5810ed8d6cfd}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!Tst\+From\+Matrix4f@{Tst\+From\+Matrix4f}}
+\index{Tst\+From\+Matrix4f@{Tst\+From\+Matrix4f}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Tst\+From\+Matrix4f()}{TstFromMatrix4f()}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Transform\+Stamped Tst\+From\+Matrix4f (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix4f \&}]{T,  }\item[{const ros\+::\+Time \&}]{stamp,  }\item[{const std\+::string \&}]{frame\+\_\+id,  }\item[{const std\+::string \&}]{child\+\_\+frame\+\_\+id }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_a044d98b2963cbd8d000571dd549d24e0}\label{common_2include_2common_2eigen__utils_8h_a044d98b2963cbd8d000571dd549d24e0}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!X\+Y\+T\+Degree\+From\+Matrix3d@{X\+Y\+T\+Degree\+From\+Matrix3d}}
+\index{X\+Y\+T\+Degree\+From\+Matrix3d@{X\+Y\+T\+Degree\+From\+Matrix3d}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{X\+Y\+T\+Degree\+From\+Matrix3d()}{XYTDegreeFromMatrix3d()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d X\+Y\+T\+Degree\+From\+Matrix3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix3d \&}]{mtx }\end{DoxyParamCaption})}
+
+
+
+Referenced by Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d().
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_ab56dfbdfd6ec14b68d5965347af13f4e}\label{common_2include_2common_2eigen__utils_8h_ab56dfbdfd6ec14b68d5965347af13f4e}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!X\+Y\+T\+Radian\+From\+Matrix3d@{X\+Y\+T\+Radian\+From\+Matrix3d}}
+\index{X\+Y\+T\+Radian\+From\+Matrix3d@{X\+Y\+T\+Radian\+From\+Matrix3d}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{X\+Y\+T\+Radian\+From\+Matrix3d()}{XYTRadianFromMatrix3d()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d X\+Y\+T\+Radian\+From\+Matrix3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix3d \&}]{mtx }\end{DoxyParamCaption})}
+
+
+
+Referenced by X\+Y\+T\+Degree\+From\+Matrix3d().
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_a0ce68ed327616c22f58c0aeb20bc81d6}\label{common_2include_2common_2eigen__utils_8h_a0ce68ed327616c22f58c0aeb20bc81d6}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!X\+Y\+Z\+R\+P\+Y\+From\+Affine3d@{X\+Y\+Z\+R\+P\+Y\+From\+Affine3d}}
+\index{X\+Y\+Z\+R\+P\+Y\+From\+Affine3d@{X\+Y\+Z\+R\+P\+Y\+From\+Affine3d}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{X\+Y\+Z\+R\+P\+Y\+From\+Affine3d()}{XYZRPYFromAffine3d()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix$<$double, 6, 1$>$ X\+Y\+Z\+R\+P\+Y\+From\+Affine3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Affine3d \&}]{mtx }\end{DoxyParamCaption})}
+
+
+
+Referenced by Conserve2\+D\+From\+Affine3d(), and X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f().
+
+\mbox{\Hypertarget{common_2include_2common_2eigen__utils_8h_a8216d8984e1344d2739aa00df6e329af}\label{common_2include_2common_2eigen__utils_8h_a8216d8984e1344d2739aa00df6e329af}} 
+\index{common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}!X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f@{X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f}}
+\index{X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f@{X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f}!common/include/common/eigen\+\_\+utils.\+h@{common/include/common/eigen\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f()}{XYZRPYFromMatrix4f()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix$<$double, 6, 1$>$ X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix4f \&}]{mtx }\end{DoxyParamCaption})}
+
+
+
+Referenced by Matrix3d\+From\+Matrix4f().
+

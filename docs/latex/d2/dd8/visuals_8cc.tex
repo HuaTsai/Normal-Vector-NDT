@@ -10,7 +10,8 @@ Definition of Visual Utilities.
 {\ttfamily \#include $<$ros/ros.\+h$>$}\newline
 {\ttfamily \#include $<$tf2\+\_\+eigen/tf2\+\_\+eigen.\+h$>$}\newline
 {\ttfamily \#include $<$tf2\+\_\+geometry\+\_\+msgs/tf2\+\_\+geometry\+\_\+msgs.\+h$>$}\newline
-Include dependency graph for visuals.\+cc\+:\nopagebreak
+Include dependency graph for visuals.\+cc\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -36,7 +37,7 @@ Marker \hyperlink{visuals_8cc_a6b9a086fbc16a2fd65ff1e383c5ec464}{Marker\+Of\+Bou
 \begin{DoxyCompactList}\small\item\em Marker of the cell boundary. \end{DoxyCompactList}\item 
 Marker \hyperlink{visuals_8cc_a808fb660a1011da69991d07eb8545d58}{Marker\+Of\+Ellipse} (const Eigen\+::\+Vector2d \&mean, const Eigen\+::\+Matrix2d \&covariance, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
 \begin{DoxyCompactList}\small\item\em Marker of the cell covariance. \end{DoxyCompactList}\item 
-Marker \hyperlink{visuals_8cc_ae4971f818c67abb95bc2dfafa016eb5f}{Marker\+Of\+Circle} (const Eigen\+::\+Vector2d \&center, double \hyperlink{test__match_8cc_a3f67c53b80389c5f53961936edba04c9}{radius}, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
+Marker \hyperlink{visuals_8cc_ae4971f818c67abb95bc2dfafa016eb5f}{Marker\+Of\+Circle} (const Eigen\+::\+Vector2d \&center, double \hyperlink{testl__match_8cc_a3f67c53b80389c5f53961936edba04c9}{radius}, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
 \begin{DoxyCompactList}\small\item\em Marker of the circle. \end{DoxyCompactList}\item 
 Marker \hyperlink{visuals_8cc_aba882a4a83b939c984d61ac354416932}{Marker\+Of\+Lines} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color, double alpha)
 \begin{DoxyCompactList}\small\item\em Marker of the lines. \end{DoxyCompactList}\item 
@@ -186,7 +187,7 @@ Joined markerarray
 \end{DoxyReturn}
 
 
-Referenced by Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
+Referenced by cb(), Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
 
 \mbox{\Hypertarget{visuals_8cc_ada7233b2c81fb4e5eb3d41a607d7244b}\label{visuals_8cc_ada7233b2c81fb4e5eb3d41a607d7244b}} 
 \index{visuals.\+cc@{visuals.\+cc}!Make\+Color\+R\+G\+BA@{Make\+Color\+R\+G\+BA}}
@@ -416,7 +417,7 @@ Marker of type {\ttfamily L\+I\+N\+E\+\_\+\+L\+I\+ST} of the cell boundary
 \end{DoxyReturn}
 
 
-Referenced by Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
+Referenced by cb(), Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
 
 \mbox{\Hypertarget{visuals_8cc_ae4971f818c67abb95bc2dfafa016eb5f}\label{visuals_8cc_ae4971f818c67abb95bc2dfafa016eb5f}} 
 \index{visuals.\+cc@{visuals.\+cc}!Marker\+Of\+Circle@{Marker\+Of\+Circle}}
@@ -529,7 +530,7 @@ Referenced by Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N
 \index{visuals.\+cc@{visuals.\+cc}!Marker\+Of\+Points@{Marker\+Of\+Points}}
 \index{Marker\+Of\+Points@{Marker\+Of\+Points}!visuals.\+cc@{visuals.\+cc}}
 \subsubsection{\texorpdfstring{Marker\+Of\+Points()}{MarkerOfPoints()}}
-{\footnotesize\ttfamily Marker Marker\+Of\+Points (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points,  }\item[{double}]{size = {\ttfamily 0.1},  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}},  }\item[{double}]{alpha = {\ttfamily 1.0} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily Marker Marker\+Of\+Points (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points,  }\item[{double}]{size = {\ttfamily 0.5},  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}},  }\item[{double}]{alpha = {\ttfamily 1.0} }\end{DoxyParamCaption})}
 
 
 

@@ -25,7 +25,7 @@ Collaboration diagram for Normal2d\+Estimation\+:\nopagebreak
 \begin{DoxyCompactList}\small\item\em Classic constructor, you can directly setup parameters using constructor arguments. \end{DoxyCompactList}\item 
 void \hyperlink{classNormal2dEstimation_a908d3a85cda5b29bb3ef119ab30d6ab6}{compute} (const \hyperlink{Normal2dEstimation_8h_a2894055ff89c63cbae90e22dfddaa610}{Ptr\+Cloud} \&normal\+\_\+cloud) const
 \begin{DoxyCompactList}\small\item\em Compute on each point the normal estimation. \end{DoxyCompactList}\item 
-void \hyperlink{classNormal2dEstimation_ac3fd17679a20a7f4faab72f58fdc6199}{compute} (const \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Normal $>$\+::Ptr \&normal\+\_\+cloud) const
+void \hyperlink{classNormal2dEstimation_ac3fd17679a20a7f4faab72f58fdc6199}{compute} (const pcl\+::\+Point\+Cloud$<$ pcl\+::\+Normal $>$\+::Ptr \&normal\+\_\+cloud) const
 \begin{DoxyCompactList}\small\item\em Compute on each point the normal estimation. \end{DoxyCompactList}\item 
 void \hyperlink{classNormal2dEstimation_ad05b65f35c4aa0b1511bf81e5a70b36d}{set\+View\+Point} (const \hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \&origin)
 \begin{DoxyCompactList}\small\item\em Setup the view point. \end{DoxyCompactList}\item 
@@ -48,35 +48,7 @@ void \hyperlink{classNormal2dEstimation_a8cd86c1bddf1eb5bc7cb11f0a12810f8}{set\+
 void \hyperlink{classNormal2dEstimation_a91bb44f43f09aa33f3c447cfe2cde6b3}{set\+Indices} (const pcl\+::\+Point\+Indices\+::\+Ptr \&indices)
 \begin{DoxyCompactList}\small\item\em Provide a pointer to the vector of indices that represents the input data. \end{DoxyCompactList}\item 
 void \hyperlink{classNormal2dEstimation_a57a561d5d51d42584687dd4a3d29defd}{set\+Indices} (const pcl\+::\+Point\+Indices\+::\+Const\+Ptr \&indices)
-\begin{DoxyCompactList}\small\item\em Provide a pointer to the vector of indices that represents the input data. \end{DoxyCompactList}\item 
-\hyperlink{classNormal2dEstimation_ac93035a8de2a45651571f7f6022f18b7}{Normal2d\+Estimation} (double search\+\_\+radius=0.\+0, unsigned int k=0)
-\item 
-void \hyperlink{classNormal2dEstimation_a908d3a85cda5b29bb3ef119ab30d6ab6}{compute} (const \hyperlink{Normal2dEstimation_8h_a2894055ff89c63cbae90e22dfddaa610}{Ptr\+Cloud} \&normal\+\_\+cloud) const
-\item 
-void \hyperlink{classNormal2dEstimation_ac3fd17679a20a7f4faab72f58fdc6199}{compute} (const \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Normal $>$\+::Ptr \&normal\+\_\+cloud) const
-\item 
-void \hyperlink{classNormal2dEstimation_ad05b65f35c4aa0b1511bf81e5a70b36d}{set\+View\+Point} (const \hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \&origin)
-\item 
-\hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \hyperlink{classNormal2dEstimation_a9a8b5ac0f03023a476f7986cf06c8f96}{get\+View\+Point} () const
-\item 
-void \hyperlink{classNormal2dEstimation_aebdbc9d5d5cabd269522f42af9d1552f}{set\+Radius\+Search} (double search\+\_\+radius)
-\item 
-double \hyperlink{classNormal2dEstimation_a2b25a3efe493da9995622279e3a21437}{get\+Radius\+Search} () const
-\item 
-void \hyperlink{classNormal2dEstimation_a87261649c17ea4f561da89066591a900}{set\+Search\+Method} (const \hyperlink{Normal2dEstimation_8h_a8b809d6f98757c822d529e8f675940cd}{Ptrkd\+Tree} \&kdtree)
-\item 
-void \hyperlink{classNormal2dEstimation_a7d0bd5709580b6533a0e3f84d4a4b0e6}{set\+K\+Search} (unsigned int k)
-\item 
-int \hyperlink{classNormal2dEstimation_a19ddcf3ade201742d36e64869c344641}{get\+K\+Search} () const
-\item 
-void \hyperlink{classNormal2dEstimation_a8cd86c1bddf1eb5bc7cb11f0a12810f8}{set\+Input\+Cloud} (const \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} \&cloud)
-\item 
-\hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} \hyperlink{classNormal2dEstimation_a386f045fac5df50ed493d7b0aa265482}{get\+Input\+Cloud} () const
-\item 
-void \hyperlink{classNormal2dEstimation_a91bb44f43f09aa33f3c447cfe2cde6b3}{set\+Indices} (const pcl\+::\+Point\+Indices\+::\+Ptr \&indices)
-\item 
-void \hyperlink{classNormal2dEstimation_a57a561d5d51d42584687dd4a3d29defd}{set\+Indices} (const pcl\+::\+Point\+Indices\+::\+Const\+Ptr \&indices)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Provide a pointer to the vector of indices that represents the input data. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -91,7 +63,7 @@ This class use 3D points cloud but ignore all z components. So make sure you hav
 \mbox{\Hypertarget{classNormal2dEstimation_ac93035a8de2a45651571f7f6022f18b7}\label{classNormal2dEstimation_ac93035a8de2a45651571f7f6022f18b7}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!Normal2d\+Estimation@{Normal2d\+Estimation}}
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{Normal2d\+Estimation()}{Normal2dEstimation()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\subsubsection{\texorpdfstring{Normal2d\+Estimation()}{Normal2dEstimation()}}
 {\footnotesize\ttfamily Normal2d\+Estimation\+::\+Normal2d\+Estimation (\begin{DoxyParamCaption}\item[{double}]{search\+\_\+radius = {\ttfamily 0.0},  }\item[{unsigned int}]{k = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
@@ -105,25 +77,13 @@ Classic constructor, you can directly setup parameters using constructor argumen
 {\em k} & If different from zero, the normal estimation will find the kth closest points for computing line estimation. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classNormal2dEstimation_ac93035a8de2a45651571f7f6022f18b7}\label{classNormal2dEstimation_ac93035a8de2a45651571f7f6022f18b7}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{Normal2d\+Estimation()}{Normal2dEstimation()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily Normal2d\+Estimation\+::\+Normal2d\+Estimation (\begin{DoxyParamCaption}\item[{double}]{search\+\_\+radius = {\ttfamily 0.0},  }\item[{unsigned int}]{k = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
 
 
 \subsection{Member Function Documentation}
 \mbox{\Hypertarget{classNormal2dEstimation_a908d3a85cda5b29bb3ef119ab30d6ab6}\label{classNormal2dEstimation_a908d3a85cda5b29bb3ef119ab30d6ab6}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!compute@{compute}}
 \index{compute@{compute}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{compute()}{compute()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
-{\footnotesize\ttfamily void Normal2d\+Estimation\+::compute (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_a2894055ff89c63cbae90e22dfddaa610}{Ptr\+Cloud} \&}]{normal\+\_\+cloud }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{classNormal2dEstimation_a908d3a85cda5b29bb3ef119ab30d6ab6}\label{classNormal2dEstimation_a908d3a85cda5b29bb3ef119ab30d6ab6}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!compute@{compute}}
-\index{compute@{compute}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{compute()}{compute()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+\subsubsection{\texorpdfstring{compute()}{compute()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily void Normal2d\+Estimation\+::compute (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_a2894055ff89c63cbae90e22dfddaa610}{Ptr\+Cloud} \&}]{normal\+\_\+cloud }\end{DoxyParamCaption}) const}
 
 
@@ -142,8 +102,8 @@ Referenced by Compute\+Normals(), and Normal2d\+Estimation().
 \mbox{\Hypertarget{classNormal2dEstimation_ac3fd17679a20a7f4faab72f58fdc6199}\label{classNormal2dEstimation_ac3fd17679a20a7f4faab72f58fdc6199}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!compute@{compute}}
 \index{compute@{compute}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{compute()}{compute()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
-{\footnotesize\ttfamily void Normal2d\+Estimation\+::compute (\begin{DoxyParamCaption}\item[{const \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Normal $>$\+::Ptr \&}]{normal\+\_\+cloud }\end{DoxyParamCaption}) const}
+\subsubsection{\texorpdfstring{compute()}{compute()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Normal2d\+Estimation\+::compute (\begin{DoxyParamCaption}\item[{const pcl\+::\+Point\+Cloud$<$ pcl\+::\+Normal $>$\+::Ptr \&}]{normal\+\_\+cloud }\end{DoxyParamCaption}) const}
 
 
 
@@ -154,16 +114,10 @@ Compute on each point the normal estimation.
 {\em normal\+\_\+cloud} & Normal cloud to fill with normal estimation result. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classNormal2dEstimation_ac3fd17679a20a7f4faab72f58fdc6199}\label{classNormal2dEstimation_ac3fd17679a20a7f4faab72f58fdc6199}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!compute@{compute}}
-\index{compute@{compute}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{compute()}{compute()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
-{\footnotesize\ttfamily void Normal2d\+Estimation\+::compute (\begin{DoxyParamCaption}\item[{const \hyperlink{test0426_8cc_a6c737bbce051bc4690e4c608adc2deec}{pcl\+::\+Point\+Cloud}$<$ pcl\+::\+Normal $>$\+::Ptr \&}]{normal\+\_\+cloud }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
 \mbox{\Hypertarget{classNormal2dEstimation_a386f045fac5df50ed493d7b0aa265482}\label{classNormal2dEstimation_a386f045fac5df50ed493d7b0aa265482}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!get\+Input\+Cloud@{get\+Input\+Cloud}}
 \index{get\+Input\+Cloud@{get\+Input\+Cloud}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{get\+Input\+Cloud()}{getInputCloud()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\subsubsection{\texorpdfstring{get\+Input\+Cloud()}{getInputCloud()}}
 {\footnotesize\ttfamily \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} Normal2d\+Estimation\+::get\+Input\+Cloud (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
@@ -173,16 +127,10 @@ Provide the current cloud set as input.
 \begin{DoxyReturn}{Returns}
 A pointer to current input cloud. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classNormal2dEstimation_a386f045fac5df50ed493d7b0aa265482}\label{classNormal2dEstimation_a386f045fac5df50ed493d7b0aa265482}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!get\+Input\+Cloud@{get\+Input\+Cloud}}
-\index{get\+Input\+Cloud@{get\+Input\+Cloud}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{get\+Input\+Cloud()}{getInputCloud()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} Normal2d\+Estimation\+::get\+Input\+Cloud (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
 \mbox{\Hypertarget{classNormal2dEstimation_a19ddcf3ade201742d36e64869c344641}\label{classNormal2dEstimation_a19ddcf3ade201742d36e64869c344641}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!get\+K\+Search@{get\+K\+Search}}
 \index{get\+K\+Search@{get\+K\+Search}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{get\+K\+Search()}{getKSearch()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\subsubsection{\texorpdfstring{get\+K\+Search()}{getKSearch()}}
 {\footnotesize\ttfamily int Normal2d\+Estimation\+::get\+K\+Search (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
@@ -192,16 +140,10 @@ Provide the current k constant.
 \begin{DoxyReturn}{Returns}
 k constant. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classNormal2dEstimation_a19ddcf3ade201742d36e64869c344641}\label{classNormal2dEstimation_a19ddcf3ade201742d36e64869c344641}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!get\+K\+Search@{get\+K\+Search}}
-\index{get\+K\+Search@{get\+K\+Search}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{get\+K\+Search()}{getKSearch()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily int Normal2d\+Estimation\+::get\+K\+Search (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
 \mbox{\Hypertarget{classNormal2dEstimation_a2b25a3efe493da9995622279e3a21437}\label{classNormal2dEstimation_a2b25a3efe493da9995622279e3a21437}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!get\+Radius\+Search@{get\+Radius\+Search}}
 \index{get\+Radius\+Search@{get\+Radius\+Search}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{get\+Radius\+Search()}{getRadiusSearch()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\subsubsection{\texorpdfstring{get\+Radius\+Search()}{getRadiusSearch()}}
 {\footnotesize\ttfamily double Normal2d\+Estimation\+::get\+Radius\+Search (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
@@ -211,32 +153,20 @@ Prove current radius for normal estimation.
 \begin{DoxyReturn}{Returns}
 Current search radius. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classNormal2dEstimation_a2b25a3efe493da9995622279e3a21437}\label{classNormal2dEstimation_a2b25a3efe493da9995622279e3a21437}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!get\+Radius\+Search@{get\+Radius\+Search}}
-\index{get\+Radius\+Search@{get\+Radius\+Search}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{get\+Radius\+Search()}{getRadiusSearch()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily double Normal2d\+Estimation\+::get\+Radius\+Search (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
 \mbox{\Hypertarget{classNormal2dEstimation_a9a8b5ac0f03023a476f7986cf06c8f96}\label{classNormal2dEstimation_a9a8b5ac0f03023a476f7986cf06c8f96}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!get\+View\+Point@{get\+View\+Point}}
 \index{get\+View\+Point@{get\+View\+Point}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{get\+View\+Point()}{getViewPoint()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\subsubsection{\texorpdfstring{get\+View\+Point()}{getViewPoint()}}
 {\footnotesize\ttfamily \hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} Normal2d\+Estimation\+::get\+View\+Point (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
 return the current view point. 
 
-\mbox{\Hypertarget{classNormal2dEstimation_a9a8b5ac0f03023a476f7986cf06c8f96}\label{classNormal2dEstimation_a9a8b5ac0f03023a476f7986cf06c8f96}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!get\+View\+Point@{get\+View\+Point}}
-\index{get\+View\+Point@{get\+View\+Point}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{get\+View\+Point()}{getViewPoint()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily \hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} Normal2d\+Estimation\+::get\+View\+Point (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
 \mbox{\Hypertarget{classNormal2dEstimation_a91bb44f43f09aa33f3c447cfe2cde6b3}\label{classNormal2dEstimation_a91bb44f43f09aa33f3c447cfe2cde6b3}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+Indices@{set\+Indices}}
 \index{set\+Indices@{set\+Indices}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+Indices (\begin{DoxyParamCaption}\item[{const pcl\+::\+Point\+Indices\+::\+Ptr \&}]{indices }\end{DoxyParamCaption})}
 
 
@@ -255,7 +185,7 @@ Referenced by get\+Input\+Cloud().
 \mbox{\Hypertarget{classNormal2dEstimation_a57a561d5d51d42584687dd4a3d29defd}\label{classNormal2dEstimation_a57a561d5d51d42584687dd4a3d29defd}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+Indices@{set\+Indices}}
 \index{set\+Indices@{set\+Indices}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+Indices (\begin{DoxyParamCaption}\item[{const pcl\+::\+Point\+Indices\+::\+Const\+Ptr \&}]{indices }\end{DoxyParamCaption})}
 
 
@@ -267,22 +197,10 @@ Provide a pointer to the vector of indices that represents the input data.
 {\em indices} & indices a pointer to the indices that represent the input data. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classNormal2dEstimation_a91bb44f43f09aa33f3c447cfe2cde6b3}\label{classNormal2dEstimation_a91bb44f43f09aa33f3c447cfe2cde6b3}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+Indices@{set\+Indices}}
-\index{set\+Indices@{set\+Indices}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
-{\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+Indices (\begin{DoxyParamCaption}\item[{const pcl\+::\+Point\+Indices\+::\+Ptr \&}]{indices }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{classNormal2dEstimation_a57a561d5d51d42584687dd4a3d29defd}\label{classNormal2dEstimation_a57a561d5d51d42584687dd4a3d29defd}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+Indices@{set\+Indices}}
-\index{set\+Indices@{set\+Indices}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+Indices()}{setIndices()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
-{\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+Indices (\begin{DoxyParamCaption}\item[{const pcl\+::\+Point\+Indices\+::\+Const\+Ptr \&}]{indices }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
 \mbox{\Hypertarget{classNormal2dEstimation_a8cd86c1bddf1eb5bc7cb11f0a12810f8}\label{classNormal2dEstimation_a8cd86c1bddf1eb5bc7cb11f0a12810f8}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+Input\+Cloud@{set\+Input\+Cloud}}
 \index{set\+Input\+Cloud@{set\+Input\+Cloud}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+Input\+Cloud()}{setInputCloud()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\subsubsection{\texorpdfstring{set\+Input\+Cloud()}{setInputCloud()}}
 {\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+Input\+Cloud (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} \&}]{cloud }\end{DoxyParamCaption})}
 
 
@@ -298,16 +216,10 @@ Provide a input cloud pointer to deal with.
 
 Referenced by Compute\+Normals(), and get\+K\+Search().
 
-\mbox{\Hypertarget{classNormal2dEstimation_a8cd86c1bddf1eb5bc7cb11f0a12810f8}\label{classNormal2dEstimation_a8cd86c1bddf1eb5bc7cb11f0a12810f8}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+Input\+Cloud@{set\+Input\+Cloud}}
-\index{set\+Input\+Cloud@{set\+Input\+Cloud}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+Input\+Cloud()}{setInputCloud()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+Input\+Cloud (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_a389a43addc496dc19a5bb0575cc60bc4}{Const\+Ptr\+Cloud} \&}]{cloud }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
 \mbox{\Hypertarget{classNormal2dEstimation_a7d0bd5709580b6533a0e3f84d4a4b0e6}\label{classNormal2dEstimation_a7d0bd5709580b6533a0e3f84d4a4b0e6}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+K\+Search@{set\+K\+Search}}
 \index{set\+K\+Search@{set\+K\+Search}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+K\+Search()}{setKSearch()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\subsubsection{\texorpdfstring{set\+K\+Search()}{setKSearch()}}
 {\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+K\+Search (\begin{DoxyParamCaption}\item[{unsigned int}]{k }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
@@ -319,16 +231,10 @@ Setup the cluster size for normal estimation.
 {\em k} & cluster size for normal estimation. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classNormal2dEstimation_a7d0bd5709580b6533a0e3f84d4a4b0e6}\label{classNormal2dEstimation_a7d0bd5709580b6533a0e3f84d4a4b0e6}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+K\+Search@{set\+K\+Search}}
-\index{set\+K\+Search@{set\+K\+Search}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+K\+Search()}{setKSearch()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+K\+Search (\begin{DoxyParamCaption}\item[{unsigned int}]{k }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
 \mbox{\Hypertarget{classNormal2dEstimation_aebdbc9d5d5cabd269522f42af9d1552f}\label{classNormal2dEstimation_aebdbc9d5d5cabd269522f42af9d1552f}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+Radius\+Search@{set\+Radius\+Search}}
 \index{set\+Radius\+Search@{set\+Radius\+Search}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+Radius\+Search()}{setRadiusSearch()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\subsubsection{\texorpdfstring{set\+Radius\+Search()}{setRadiusSearch()}}
 {\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+Radius\+Search (\begin{DoxyParamCaption}\item[{double}]{search\+\_\+radius }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
@@ -344,16 +250,10 @@ Setup a search radius for normal estimation on each point.
 
 Referenced by Compute\+Normals().
 
-\mbox{\Hypertarget{classNormal2dEstimation_aebdbc9d5d5cabd269522f42af9d1552f}\label{classNormal2dEstimation_aebdbc9d5d5cabd269522f42af9d1552f}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+Radius\+Search@{set\+Radius\+Search}}
-\index{set\+Radius\+Search@{set\+Radius\+Search}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+Radius\+Search()}{setRadiusSearch()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+Radius\+Search (\begin{DoxyParamCaption}\item[{double}]{search\+\_\+radius }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
 \mbox{\Hypertarget{classNormal2dEstimation_a87261649c17ea4f561da89066591a900}\label{classNormal2dEstimation_a87261649c17ea4f561da89066591a900}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+Search\+Method@{set\+Search\+Method}}
 \index{set\+Search\+Method@{set\+Search\+Method}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+Search\+Method()}{setSearchMethod()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\subsubsection{\texorpdfstring{set\+Search\+Method()}{setSearchMethod()}}
 {\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+Search\+Method (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_a8b809d6f98757c822d529e8f675940cd}{Ptrkd\+Tree} \&}]{kdtree }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
@@ -369,16 +269,10 @@ Provide a pointer to the search object.
 
 Referenced by Compute\+Normals().
 
-\mbox{\Hypertarget{classNormal2dEstimation_a87261649c17ea4f561da89066591a900}\label{classNormal2dEstimation_a87261649c17ea4f561da89066591a900}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+Search\+Method@{set\+Search\+Method}}
-\index{set\+Search\+Method@{set\+Search\+Method}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+Search\+Method()}{setSearchMethod()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+Search\+Method (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_a8b809d6f98757c822d529e8f675940cd}{Ptrkd\+Tree} \&}]{kdtree }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
 \mbox{\Hypertarget{classNormal2dEstimation_ad05b65f35c4aa0b1511bf81e5a70b36d}\label{classNormal2dEstimation_ad05b65f35c4aa0b1511bf81e5a70b36d}} 
 \index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+View\+Point@{set\+View\+Point}}
 \index{set\+View\+Point@{set\+View\+Point}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+View\+Point()}{setViewPoint()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\subsubsection{\texorpdfstring{set\+View\+Point()}{setViewPoint()}}
 {\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+View\+Point (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \&}]{origin }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
@@ -392,15 +286,8 @@ The view points is used in normal orientation purpose. This orientation force al
 {\em origin} & View point position. \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classNormal2dEstimation_ad05b65f35c4aa0b1511bf81e5a70b36d}\label{classNormal2dEstimation_ad05b65f35c4aa0b1511bf81e5a70b36d}} 
-\index{Normal2d\+Estimation@{Normal2d\+Estimation}!set\+View\+Point@{set\+View\+Point}}
-\index{set\+View\+Point@{set\+View\+Point}!Normal2d\+Estimation@{Normal2d\+Estimation}}
-\subsubsection{\texorpdfstring{set\+View\+Point()}{setViewPoint()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void Normal2d\+Estimation\+::set\+View\+Point (\begin{DoxyParamCaption}\item[{const \hyperlink{Normal2dEstimation_8h_ab8d898f36957cca40634530a6f118a3e}{Point} \&}]{origin }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
-
-The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-\hyperlink{Normal2dEstimation_8h}{Normal2d\+Estimation.\+h}\item 
-\hyperlink{Normal2dEstimation_8hpp}{Normal2d\+Estimation.\+hpp}\end{DoxyCompactItemize}
+\hyperlink{Normal2dEstimation_8h}{Normal2d\+Estimation.\+h}\end{DoxyCompactItemize}

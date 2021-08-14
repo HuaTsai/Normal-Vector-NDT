@@ -19,9 +19,10 @@
 {\ttfamily \#include $<$sensor\+\_\+msgs/\+Point\+Cloud2.\+h$>$}\newline
 {\ttfamily \#include $<$tf2\+\_\+eigen/tf2\+\_\+eigen.\+h$>$}\newline
 {\ttfamily \#include $<$boost/program\+\_\+options.\+hpp$>$}\newline
-{\ttfamily \#include \char`\"{}common/\+Ego\+Point\+Clouds.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}common/common.\+h\char`\"{}}\newline
-Include dependency graph for ego.\+cc\+:\nopagebreak
+{\ttfamily \#include $<$common/\+Ego\+Point\+Clouds.\+h$>$}\newline
+{\ttfamily \#include $<$common/common.\+h$>$}\newline
+Include dependency graph for ego.\+cc\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -31,14 +32,14 @@ Include dependency graph for ego.\+cc\+:\nopagebreak
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-typedef message\+\_\+filters\+::sync\+\_\+policies\+::\+Approximate\+Time$<$ conti\+\_\+radar\+::\+Measurement, conti\+\_\+radar\+::\+Measurement, conti\+\_\+radar\+::\+Measurement, conti\+\_\+radar\+::\+Measurement, conti\+\_\+radar\+::\+Measurement $>$ \hyperlink{ego_8cc_a7c37557d5df3421386b045b1fc26e336}{No\+Cloud\+Sync\+Policy}
+typedef message\+\_\+filters\+::sync\+\_\+policies\+::\+Approximate\+Time$<$ \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement}, \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement}, \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement}, \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement}, \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement} $>$ \hyperlink{ego_8cc_a7c37557d5df3421386b045b1fc26e336}{No\+Cloud\+Sync\+Policy}
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-sensor\+\_\+msgs\+::\+Point\+Cloud2 \hyperlink{ego_8cc_a5f541868b9812d39a4af38b364dfb90f}{conti\+\_\+to\+\_\+rospc} (const conti\+\_\+radar\+::\+Measurement \&msg, int label)
+sensor\+\_\+msgs\+::\+Point\+Cloud2 \hyperlink{ego_8cc_ad83b4e25ee07b049ead614356dd4be71}{conti\+\_\+to\+\_\+rospc} (const \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement} \&msg)
 \item 
-void \hyperlink{ego_8cc_acf8693287c401b1113e0bd33db5e2ded}{System\+Motion} (string id, const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&input, Matrix\+Xd \&Rj, Vector\+Xd \&V\+Dj)
+void \hyperlink{ego_8cc_acf8693287c401b1113e0bd33db5e2ded}{System\+Motion} (string id, const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&input, Matrix\+Xd \&Rj, Vector\+Xd \&V\+Dj)
 \item 
 vector$<$ int $>$ \hyperlink{ego_8cc_a88ef993a7fa12b2ca150c15b974123d0}{Inliers\+After\+R\+A\+N\+S\+AC} (const Matrix\+Xd \&R, const Vector\+Xd \&VD, double threshold)
 \item 
@@ -48,17 +49,17 @@ Matrix3d \hyperlink{ego_8cc_a7825635262f020ccb6ca07909102ecf6}{Compute\+Covarian
 \item 
 nav\+\_\+msgs\+::\+Odometry \hyperlink{ego_8cc_ae354adb7ab878fe7f7225ac653690b62}{Make\+Odom} (double time, const Vector3d \&ego\+\_\+mat, const Matrix3d \&cov\+\_\+mat)
 \item 
-conti\+\_\+radar\+::\+Measurement \hyperlink{ego_8cc_ab2a4fd9800cc1908cfcb7ca7b01cb0cd}{Conti\+Msg} (const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&input, const vector$<$ int $>$ \&indices)
+\hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement} \hyperlink{ego_8cc_ab2a4fd9800cc1908cfcb7ca7b01cb0cd}{Conti\+Msg} (const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&input, const vector$<$ int $>$ \&indices)
 \item 
-conti\+\_\+radar\+::\+Measurement \hyperlink{ego_8cc_a007ed6ff5f0a0b7823c59ebf59bee7bd}{Conti\+Msg\+Comp} (string id, const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&input, const vector$<$ int $>$ \&indices, const Vector3d \&ego\+\_\+mat)
+\hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement} \hyperlink{ego_8cc_a007ed6ff5f0a0b7823c59ebf59bee7bd}{Conti\+Msg\+Comp} (string id, const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&input, const vector$<$ int $>$ \&indices, const Vector3d \&ego\+\_\+mat)
 \item 
 Matrix4d \hyperlink{ego_8cc_a094e9b61bedaadc52e7bf670f7749f65}{Get\+Transform} (const Vector3d \&xyt)
 \item 
-vector$<$ \hyperlink{PCA2D_8hpp_ab8d898f36957cca40634530a6f118a3e}{geometry\+\_\+msgs\+::\+Point} $>$ \hyperlink{ego_8cc_a7e526e51e818ac8db9565139d63fc40e}{To\+Geometry\+Msgs} (const sensor\+\_\+msgs\+::\+Point\+Cloud2 \&msg)
+vector$<$ \hyperlink{PCA2D_8h_ab8d898f36957cca40634530a6f118a3e}{geometry\+\_\+msgs\+::\+Point} $>$ \hyperlink{ego_8cc_a7e526e51e818ac8db9565139d63fc40e}{To\+Geometry\+Msgs} (const sensor\+\_\+msgs\+::\+Point\+Cloud2 \&msg)
 \item 
-common\+::\+Point\+Cloud\+Sensor \hyperlink{ego_8cc_aba0d9bc189fbb03dcfccd32189397e41}{Make\+Point\+Cloud\+Sensor} (string frame\+\_\+id, const Matrix4d \&origin, const sensor\+\_\+msgs\+::\+Point\+Cloud2 \&pc, sensor\+\_\+msgs\+::\+Point\+Cloud2 \&augpc)
+\hyperlink{namespacecommon_a493470d1acdb35b20776bd075266358e}{common\+::\+Point\+Cloud\+Sensor} \hyperlink{ego_8cc_aba0d9bc189fbb03dcfccd32189397e41}{Make\+Point\+Cloud\+Sensor} (string frame\+\_\+id, const Matrix4d \&origin, const sensor\+\_\+msgs\+::\+Point\+Cloud2 \&pc, sensor\+\_\+msgs\+::\+Point\+Cloud2 \&augpc)
 \item 
-void \hyperlink{ego_8cc_a1cdf95f259b848ae8997eef0cb1f9873}{Callback} (const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&f\+\_\+input, const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&fl\+\_\+input, const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&fr\+\_\+input, const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&bl\+\_\+input, const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&br\+\_\+input)
+void \hyperlink{ego_8cc_a1cdf95f259b848ae8997eef0cb1f9873}{Callback} (const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&f\+\_\+input, const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&fl\+\_\+input, const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&fr\+\_\+input, const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&bl\+\_\+input, const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&br\+\_\+input)
 \item 
 void \hyperlink{ego_8cc_a089eeabec95d1f4809e55ab75e1c9c0c}{savecb} (const std\+\_\+msgs\+::\+Empty\+::\+Const\+Ptr \&msg)
 \item 
@@ -93,11 +94,11 @@ ros\+::\+Publisher \hyperlink{ego_8cc_a95f040e3556b2e2032876e2800345b7c}{br\+\_\
 \item 
 ros\+::\+Publisher \hyperlink{ego_8cc_ab82e2dd5b9b30572d0767ddef2859595}{bl\+\_\+inlier\+\_\+pub}
 \item 
-vector$<$ common\+::\+Ego\+Point\+Clouds $>$ \hyperlink{ego_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}
+vector$<$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \hyperlink{ego_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}
 \item 
 string \hyperlink{ego_8cc_a52516861536e85f61ce9a8558d336242}{outpath}
 \item 
-unordered\+\_\+map$<$ string, shared\+\_\+ptr$<$ ros\+::\+Publisher $>$ $>$ \hyperlink{ego_8cc_a2d4902d9f45bb2e307357f9b16034104}{publishers}
+unordered\+\_\+map$<$ string, ros\+::\+Publisher $>$ \hyperlink{ego_8cc_ae0895bd61f6a3e53d36544442badf477}{publishers}
 \item 
 unordered\+\_\+map$<$ string, Vector3d $>$ \hyperlink{ego_8cc_ab40fdf1750f6e6c71b9a7280fba8b529}{sensor\+\_\+origins}
 \item 
@@ -112,7 +113,7 @@ unordered\+\_\+map$<$ string, Matrix$<$ double, 2, 3 $>$ $>$ \hyperlink{ego_8cc_
 \index{ego.\+cc@{ego.\+cc}!No\+Cloud\+Sync\+Policy@{No\+Cloud\+Sync\+Policy}}
 \index{No\+Cloud\+Sync\+Policy@{No\+Cloud\+Sync\+Policy}!ego.\+cc@{ego.\+cc}}
 \subsubsection{\texorpdfstring{No\+Cloud\+Sync\+Policy}{NoCloudSyncPolicy}}
-{\footnotesize\ttfamily typedef message\+\_\+filters\+::sync\+\_\+policies\+::\+Approximate\+Time$<$ conti\+\_\+radar\+::\+Measurement, conti\+\_\+radar\+::\+Measurement, conti\+\_\+radar\+::\+Measurement, conti\+\_\+radar\+::\+Measurement, conti\+\_\+radar\+::\+Measurement$>$ \hyperlink{ego_8cc_a7c37557d5df3421386b045b1fc26e336}{No\+Cloud\+Sync\+Policy}}
+{\footnotesize\ttfamily typedef message\+\_\+filters\+::sync\+\_\+policies\+::\+Approximate\+Time$<$ \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement}, \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement}, \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement}, \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement}, \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement}$>$ \hyperlink{ego_8cc_a7c37557d5df3421386b045b1fc26e336}{No\+Cloud\+Sync\+Policy}}
 
 
 
@@ -121,7 +122,7 @@ unordered\+\_\+map$<$ string, Matrix$<$ double, 2, 3 $>$ $>$ \hyperlink{ego_8cc_
 \index{ego.\+cc@{ego.\+cc}!Callback@{Callback}}
 \index{Callback@{Callback}!ego.\+cc@{ego.\+cc}}
 \subsubsection{\texorpdfstring{Callback()}{Callback()}}
-{\footnotesize\ttfamily void Callback (\begin{DoxyParamCaption}\item[{const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&}]{f\+\_\+input,  }\item[{const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&}]{fl\+\_\+input,  }\item[{const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&}]{fr\+\_\+input,  }\item[{const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&}]{bl\+\_\+input,  }\item[{const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&}]{br\+\_\+input }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void Callback (\begin{DoxyParamCaption}\item[{const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&}]{f\+\_\+input,  }\item[{const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&}]{fl\+\_\+input,  }\item[{const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&}]{fr\+\_\+input,  }\item[{const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&}]{bl\+\_\+input,  }\item[{const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&}]{br\+\_\+input }\end{DoxyParamCaption})}
 
 
 
@@ -137,11 +138,11 @@ Referenced by main().
 
 Referenced by Callback().
 
-\mbox{\Hypertarget{ego_8cc_a5f541868b9812d39a4af38b364dfb90f}\label{ego_8cc_a5f541868b9812d39a4af38b364dfb90f}} 
+\mbox{\Hypertarget{ego_8cc_ad83b4e25ee07b049ead614356dd4be71}\label{ego_8cc_ad83b4e25ee07b049ead614356dd4be71}} 
 \index{ego.\+cc@{ego.\+cc}!conti\+\_\+to\+\_\+rospc@{conti\+\_\+to\+\_\+rospc}}
 \index{conti\+\_\+to\+\_\+rospc@{conti\+\_\+to\+\_\+rospc}!ego.\+cc@{ego.\+cc}}
 \subsubsection{\texorpdfstring{conti\+\_\+to\+\_\+rospc()}{conti\_to\_rospc()}}
-{\footnotesize\ttfamily sensor\+\_\+msgs\+::\+Point\+Cloud2 conti\+\_\+to\+\_\+rospc (\begin{DoxyParamCaption}\item[{const conti\+\_\+radar\+::\+Measurement \&}]{msg,  }\item[{int}]{label }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily sensor\+\_\+msgs\+::\+Point\+Cloud2 conti\+\_\+to\+\_\+rospc (\begin{DoxyParamCaption}\item[{const \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement} \&}]{msg }\end{DoxyParamCaption})}
 
 
 
@@ -151,7 +152,7 @@ Referenced by Callback().
 \index{ego.\+cc@{ego.\+cc}!Conti\+Msg@{Conti\+Msg}}
 \index{Conti\+Msg@{Conti\+Msg}!ego.\+cc@{ego.\+cc}}
 \subsubsection{\texorpdfstring{Conti\+Msg()}{ContiMsg()}}
-{\footnotesize\ttfamily conti\+\_\+radar\+::\+Measurement Conti\+Msg (\begin{DoxyParamCaption}\item[{const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&}]{input,  }\item[{const vector$<$ int $>$ \&}]{indices }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement} Conti\+Msg (\begin{DoxyParamCaption}\item[{const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&}]{input,  }\item[{const vector$<$ int $>$ \&}]{indices }\end{DoxyParamCaption})}
 
 
 
@@ -161,7 +162,7 @@ Referenced by Callback().
 \index{ego.\+cc@{ego.\+cc}!Conti\+Msg\+Comp@{Conti\+Msg\+Comp}}
 \index{Conti\+Msg\+Comp@{Conti\+Msg\+Comp}!ego.\+cc@{ego.\+cc}}
 \subsubsection{\texorpdfstring{Conti\+Msg\+Comp()}{ContiMsgComp()}}
-{\footnotesize\ttfamily conti\+\_\+radar\+::\+Measurement Conti\+Msg\+Comp (\begin{DoxyParamCaption}\item[{string}]{id,  }\item[{const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&}]{input,  }\item[{const vector$<$ int $>$ \&}]{indices,  }\item[{const Vector3d \&}]{ego\+\_\+mat }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \hyperlink{namespaceconti__radar_a89a4c51c8eaeb98be9a074f53e585df1}{conti\+\_\+radar\+::\+Measurement} Conti\+Msg\+Comp (\begin{DoxyParamCaption}\item[{string}]{id,  }\item[{const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&}]{input,  }\item[{const vector$<$ int $>$ \&}]{indices,  }\item[{const Vector3d \&}]{ego\+\_\+mat }\end{DoxyParamCaption})}
 
 
 
@@ -207,7 +208,7 @@ Referenced by Callback().
 \index{ego.\+cc@{ego.\+cc}!Make\+Point\+Cloud\+Sensor@{Make\+Point\+Cloud\+Sensor}}
 \index{Make\+Point\+Cloud\+Sensor@{Make\+Point\+Cloud\+Sensor}!ego.\+cc@{ego.\+cc}}
 \subsubsection{\texorpdfstring{Make\+Point\+Cloud\+Sensor()}{MakePointCloudSensor()}}
-{\footnotesize\ttfamily common\+::\+Point\+Cloud\+Sensor Make\+Point\+Cloud\+Sensor (\begin{DoxyParamCaption}\item[{string}]{frame\+\_\+id,  }\item[{const Matrix4d \&}]{origin,  }\item[{const sensor\+\_\+msgs\+::\+Point\+Cloud2 \&}]{pc,  }\item[{sensor\+\_\+msgs\+::\+Point\+Cloud2 \&}]{augpc }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \hyperlink{namespacecommon_a493470d1acdb35b20776bd075266358e}{common\+::\+Point\+Cloud\+Sensor} Make\+Point\+Cloud\+Sensor (\begin{DoxyParamCaption}\item[{string}]{frame\+\_\+id,  }\item[{const Matrix4d \&}]{origin,  }\item[{const sensor\+\_\+msgs\+::\+Point\+Cloud2 \&}]{pc,  }\item[{sensor\+\_\+msgs\+::\+Point\+Cloud2 \&}]{augpc }\end{DoxyParamCaption})}
 
 
 
@@ -247,7 +248,7 @@ Referenced by main().
 \index{ego.\+cc@{ego.\+cc}!System\+Motion@{System\+Motion}}
 \index{System\+Motion@{System\+Motion}!ego.\+cc@{ego.\+cc}}
 \subsubsection{\texorpdfstring{System\+Motion()}{SystemMotion()}}
-{\footnotesize\ttfamily void System\+Motion (\begin{DoxyParamCaption}\item[{string}]{id,  }\item[{const conti\+\_\+radar\+::\+Measurement\+Const\+Ptr \&}]{input,  }\item[{Matrix\+Xd \&}]{Rj,  }\item[{Vector\+Xd \&}]{V\+Dj }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void System\+Motion (\begin{DoxyParamCaption}\item[{string}]{id,  }\item[{const \hyperlink{namespaceconti__radar_ae267646599157e26315eb50600c57bff}{conti\+\_\+radar\+::\+Measurement\+Const\+Ptr} \&}]{input,  }\item[{Matrix\+Xd \&}]{Rj,  }\item[{Vector\+Xd \&}]{V\+Dj }\end{DoxyParamCaption})}
 
 
 
@@ -257,7 +258,7 @@ Referenced by Callback().
 \index{ego.\+cc@{ego.\+cc}!To\+Geometry\+Msgs@{To\+Geometry\+Msgs}}
 \index{To\+Geometry\+Msgs@{To\+Geometry\+Msgs}!ego.\+cc@{ego.\+cc}}
 \subsubsection{\texorpdfstring{To\+Geometry\+Msgs()}{ToGeometryMsgs()}}
-{\footnotesize\ttfamily vector$<$\hyperlink{PCA2D_8hpp_ab8d898f36957cca40634530a6f118a3e}{geometry\+\_\+msgs\+::\+Point}$>$ To\+Geometry\+Msgs (\begin{DoxyParamCaption}\item[{const sensor\+\_\+msgs\+::\+Point\+Cloud2 \&}]{msg }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily vector$<$\hyperlink{PCA2D_8h_ab8d898f36957cca40634530a6f118a3e}{geometry\+\_\+msgs\+::\+Point}$>$ To\+Geometry\+Msgs (\begin{DoxyParamCaption}\item[{const sensor\+\_\+msgs\+::\+Point\+Cloud2 \&}]{msg }\end{DoxyParamCaption})}
 
 
 
@@ -356,11 +357,11 @@ Referenced by Callback(), and main().
 
 Referenced by Callback(), and main().
 
-\mbox{\Hypertarget{ego_8cc_a2d4902d9f45bb2e307357f9b16034104}\label{ego_8cc_a2d4902d9f45bb2e307357f9b16034104}} 
+\mbox{\Hypertarget{ego_8cc_ae0895bd61f6a3e53d36544442badf477}\label{ego_8cc_ae0895bd61f6a3e53d36544442badf477}} 
 \index{ego.\+cc@{ego.\+cc}!publishers@{publishers}}
 \index{publishers@{publishers}!ego.\+cc@{ego.\+cc}}
 \subsubsection{\texorpdfstring{publishers}{publishers}}
-{\footnotesize\ttfamily unordered\+\_\+map$<$string, shared\+\_\+ptr$<$ros\+::\+Publisher$>$ $>$ publishers}
+{\footnotesize\ttfamily unordered\+\_\+map$<$string, ros\+::\+Publisher$>$ publishers}
 
 
 
@@ -374,7 +375,7 @@ Referenced by Callback(), and main().
 
 
 
-Referenced by trimesh\+::\+Color\+::col\+\_\+transform(), Conti\+Msg\+Comp(), Make\+Map(), trimesh\+::operator$\ast$(), Pre\+Compute\+System(), and System\+Motion().
+Referenced by Conti\+Msg\+Comp(), Make\+N\+D\+T\+Map(), Make\+S\+N\+D\+T\+Map(), Pre\+Compute\+System(), and System\+Motion().
 
 \mbox{\Hypertarget{ego_8cc_ab40fdf1750f6e6c71b9a7280fba8b529}\label{ego_8cc_ab40fdf1750f6e6c71b9a7280fba8b529}} 
 \index{ego.\+cc@{ego.\+cc}!sensor\+\_\+origins@{sensor\+\_\+origins}}
@@ -400,7 +401,7 @@ Referenced by Callback(), and Pre\+Compute\+System().
 \index{ego.\+cc@{ego.\+cc}!vepcs@{vepcs}}
 \index{vepcs@{vepcs}!ego.\+cc@{ego.\+cc}}
 \subsubsection{\texorpdfstring{vepcs}{vepcs}}
-{\footnotesize\ttfamily vector$<$common\+::\+Ego\+Point\+Clouds$>$ vepcs}
+{\footnotesize\ttfamily vector$<$\hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds}$>$ vepcs}
 
 
 

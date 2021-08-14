@@ -1,0 +1,448 @@
+\hypertarget{testl__match_8cc}{}\section{testl\+\_\+match.\+cc File Reference}
+\label{testl__match_8cc}\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+{\ttfamily \#include $<$common/\+Ego\+Point\+Clouds.\+h$>$}\newline
+{\ttfamily \#include $<$common/common.\+h$>$}\newline
+{\ttfamily \#include $<$geometry\+\_\+msgs/\+Vector3.\+h$>$}\newline
+{\ttfamily \#include $<$nav\+\_\+msgs/\+Path.\+h$>$}\newline
+{\ttfamily \#include $<$ros/ros.\+h$>$}\newline
+{\ttfamily \#include $<$sensor\+\_\+msgs/\+Compressed\+Image.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/matcher.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/visuals.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+msgs/\+Float64\+Multi\+Array.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+msgs/\+Int32.\+h$>$}\newline
+{\ttfamily \#include $<$boost/program\+\_\+options.\+hpp$>$}\newline
+{\ttfamily \#include $<$sndt\+\_\+exec/wrapper.\+hpp$>$}\newline
+{\ttfamily \#include $<$pcl\+\_\+ros/point\+\_\+cloud.\+h$>$}\newline
+{\ttfamily \#include $<$pcl/filters/voxel\+\_\+grid.\+h$>$}\newline
+Include dependency graph for testl\+\_\+match.\+cc\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d4/dfe/testl__match_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ Vector2d $>$ \hyperlink{testl__match_8cc_ac8d8dd8b8085d38e153ef2eb5a208414}{P\+C\+Msg\+To2D} (const sensor\+\_\+msgs\+::\+Point\+Cloud2 \&msg)
+\item 
+Affine2d \hyperlink{testl__match_8cc_a98c917a625ecff5dc303c35a35f1e073}{Get\+DiffT} (const vector$<$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \&\hyperlink{testl__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}, const ros\+::\+Time \&t1, const ros\+::\+Time \&t2)
+\item 
+void \hyperlink{testl__match_8cc_abf7613499686c6bb646f6244258a331b}{cb} (const std\+\_\+msgs\+::\+Int32 \&num)
+\item 
+void \hyperlink{testl__match_8cc_ae7d472afb23bff8ec98a5f46cca5848e}{Get\+Files} (string data)
+\item 
+int \hyperlink{testl__match_8cc_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{testl__match_8cc_ab19438289dc006d3f3e0476780c65cb6}{imb}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{testl__match_8cc_a15b1bc8eceb2b159d223eb5d4d5b0cab}{imbl}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{testl__match_8cc_a39608350f0ce9d831ab56bff0867c80d}{imbr}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{testl__match_8cc_a6841637de94054692b83c8d4763f0408}{imf}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{testl__match_8cc_ae47ac24e18dc2e843096015690834c38}{imfl}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{testl__match_8cc_a1ebb671bb4254879909df0304c0efc3a}{imfr}
+\item 
+vector$<$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \hyperlink{testl__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Point\+Cloud2 $>$ \hyperlink{testl__match_8cc_adb60e4d938daf072bde2bb525ed5fdbe}{vpc}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_ade99baad604daed9de810ac3cf5da418}{pub1}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_a2bef9e72d62d7ea1be803444f1ca7a6b}{pub2}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_a0e8d412fdaada4745c72680b946d90a5}{pub3}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_ab12b64a45b0ec98fdd9cce22e0b560ca}{pub4}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_ae06a537905927bd65d6e9d58360530ff}{pub5}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_a21bf5a7507c5f2621f0190f5f163abae}{pub6}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_afbec5b55605c8b8a790745fdb732b4b5}{pub7}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_a072eb3ff928908d2afed4d6547c1a775}{pubd}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_a4e75660e09f65cdc40028e2a3ad5d83d}{pube}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_a338d91f2326697a1ed2a8e16a9b05c9b}{pb1}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_a4aad474c7b2258175e6c83439a3e6329}{pb2}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_a3f0e0bb661df616dc05b1046c299b981}{pb3}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_a16890c3693b8e1927eab27cb2d00a862}{pb4}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_af4081b23f7d00ff81363a731165957f4}{pb5}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_ab7388010ade0a6883cc992b23595c2dc}{pb6}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_ac6e966f8ce340d7750108fee5d84c527}{pbs}
+\item 
+ros\+::\+Publisher \hyperlink{testl__match_8cc_a31e4900c7bba6abbbc976f87ae021a21}{pbt}
+\item 
+double \hyperlink{testl__match_8cc_a456553c1fc05d94c07e74c5fd45f6621}{cell\+\_\+size}
+\item 
+double \hyperlink{testl__match_8cc_a3f67c53b80389c5f53961936edba04c9}{radius}
+\item 
+double \hyperlink{testl__match_8cc_ad556df891db2504a92174300e47bf8c0}{huber}
+\item 
+bool \hyperlink{testl__match_8cc_ab3f078684998b83967d507d0f453f454}{verbose}
+\item 
+nav\+\_\+msgs\+::\+Path \hyperlink{testl__match_8cc_a2db96f9b5362cb25affd2f5e43348e20}{gtpath}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{testl__match_8cc_abf7613499686c6bb646f6244258a331b}\label{testl__match_8cc_abf7613499686c6bb646f6244258a331b}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!cb@{cb}}
+\index{cb@{cb}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{cb()}{cb()}}
+{\footnotesize\ttfamily void cb (\begin{DoxyParamCaption}\item[{const std\+\_\+msgs\+::\+Int32 \&}]{num }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{testl__match_8cc_a98c917a625ecff5dc303c35a35f1e073}\label{testl__match_8cc_a98c917a625ecff5dc303c35a35f1e073}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!Get\+DiffT@{Get\+DiffT}}
+\index{Get\+DiffT@{Get\+DiffT}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{Get\+Diff\+T()}{GetDiffT()}}
+{\footnotesize\ttfamily Affine2d Get\+DiffT (\begin{DoxyParamCaption}\item[{const vector$<$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \&}]{vepcs,  }\item[{const ros\+::\+Time \&}]{t1,  }\item[{const ros\+::\+Time \&}]{t2 }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{testl__match_8cc_ae7d472afb23bff8ec98a5f46cca5848e}\label{testl__match_8cc_ae7d472afb23bff8ec98a5f46cca5848e}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!Get\+Files@{Get\+Files}}
+\index{Get\+Files@{Get\+Files}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{Get\+Files()}{GetFiles()}}
+{\footnotesize\ttfamily void Get\+Files (\begin{DoxyParamCaption}\item[{string}]{data }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{testl__match_8cc_a3c04138a5bfe5d72780bb7e82a18e627}\label{testl__match_8cc_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!main@{main}}
+\index{main@{main}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{testl__match_8cc_ac8d8dd8b8085d38e153ef2eb5a208414}\label{testl__match_8cc_ac8d8dd8b8085d38e153ef2eb5a208414}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!P\+C\+Msg\+To2D@{P\+C\+Msg\+To2D}}
+\index{P\+C\+Msg\+To2D@{P\+C\+Msg\+To2D}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{P\+C\+Msg\+To2\+D()}{PCMsgTo2D()}}
+{\footnotesize\ttfamily vector$<$Vector2d$>$ P\+C\+Msg\+To2D (\begin{DoxyParamCaption}\item[{const sensor\+\_\+msgs\+::\+Point\+Cloud2 \&}]{msg }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb().
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{testl__match_8cc_a456553c1fc05d94c07e74c5fd45f6621}\label{testl__match_8cc_a456553c1fc05d94c07e74c5fd45f6621}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!cell\+\_\+size@{cell\+\_\+size}}
+\index{cell\+\_\+size@{cell\+\_\+size}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{cell\+\_\+size}{cell\_size}}
+{\footnotesize\ttfamily double cell\+\_\+size}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{testl__match_8cc_a2db96f9b5362cb25affd2f5e43348e20}\label{testl__match_8cc_a2db96f9b5362cb25affd2f5e43348e20}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!gtpath@{gtpath}}
+\index{gtpath@{gtpath}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{gtpath}{gtpath}}
+{\footnotesize\ttfamily nav\+\_\+msgs\+::\+Path gtpath}
+
+
+
+Referenced by cb(), and Get\+Files().
+
+\mbox{\Hypertarget{testl__match_8cc_ad556df891db2504a92174300e47bf8c0}\label{testl__match_8cc_ad556df891db2504a92174300e47bf8c0}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!huber@{huber}}
+\index{huber@{huber}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{huber}{huber}}
+{\footnotesize\ttfamily double huber}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{testl__match_8cc_ab19438289dc006d3f3e0476780c65cb6}\label{testl__match_8cc_ab19438289dc006d3f3e0476780c65cb6}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!imb@{imb}}
+\index{imb@{imb}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{imb}{imb}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Compressed\+Image$>$ imb}
+
+
+
+Referenced by cb(), and Get\+Files().
+
+\mbox{\Hypertarget{testl__match_8cc_a15b1bc8eceb2b159d223eb5d4d5b0cab}\label{testl__match_8cc_a15b1bc8eceb2b159d223eb5d4d5b0cab}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!imbl@{imbl}}
+\index{imbl@{imbl}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{imbl}{imbl}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Compressed\+Image$>$ imbl}
+
+
+
+Referenced by cb(), and Get\+Files().
+
+\mbox{\Hypertarget{testl__match_8cc_a39608350f0ce9d831ab56bff0867c80d}\label{testl__match_8cc_a39608350f0ce9d831ab56bff0867c80d}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!imbr@{imbr}}
+\index{imbr@{imbr}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{imbr}{imbr}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Compressed\+Image$>$ imbr}
+
+
+
+Referenced by cb(), and Get\+Files().
+
+\mbox{\Hypertarget{testl__match_8cc_a6841637de94054692b83c8d4763f0408}\label{testl__match_8cc_a6841637de94054692b83c8d4763f0408}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!imf@{imf}}
+\index{imf@{imf}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{imf}{imf}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Compressed\+Image$>$ imf}
+
+
+
+Referenced by cb(), and Get\+Files().
+
+\mbox{\Hypertarget{testl__match_8cc_ae47ac24e18dc2e843096015690834c38}\label{testl__match_8cc_ae47ac24e18dc2e843096015690834c38}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!imfl@{imfl}}
+\index{imfl@{imfl}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{imfl}{imfl}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Compressed\+Image$>$ imfl}
+
+
+
+Referenced by cb(), and Get\+Files().
+
+\mbox{\Hypertarget{testl__match_8cc_a1ebb671bb4254879909df0304c0efc3a}\label{testl__match_8cc_a1ebb671bb4254879909df0304c0efc3a}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!imfr@{imfr}}
+\index{imfr@{imfr}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{imfr}{imfr}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Compressed\+Image$>$ imfr}
+
+
+
+Referenced by cb(), and Get\+Files().
+
+\mbox{\Hypertarget{testl__match_8cc_a338d91f2326697a1ed2a8e16a9b05c9b}\label{testl__match_8cc_a338d91f2326697a1ed2a8e16a9b05c9b}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pb1@{pb1}}
+\index{pb1@{pb1}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pb1}{pb1}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb1}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{testl__match_8cc_a4aad474c7b2258175e6c83439a3e6329}\label{testl__match_8cc_a4aad474c7b2258175e6c83439a3e6329}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pb2@{pb2}}
+\index{pb2@{pb2}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pb2}{pb2}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb2}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{testl__match_8cc_a3f0e0bb661df616dc05b1046c299b981}\label{testl__match_8cc_a3f0e0bb661df616dc05b1046c299b981}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pb3@{pb3}}
+\index{pb3@{pb3}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pb3}{pb3}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb3}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{testl__match_8cc_a16890c3693b8e1927eab27cb2d00a862}\label{testl__match_8cc_a16890c3693b8e1927eab27cb2d00a862}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pb4@{pb4}}
+\index{pb4@{pb4}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pb4}{pb4}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb4}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{testl__match_8cc_af4081b23f7d00ff81363a731165957f4}\label{testl__match_8cc_af4081b23f7d00ff81363a731165957f4}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pb5@{pb5}}
+\index{pb5@{pb5}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pb5}{pb5}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb5}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{testl__match_8cc_ab7388010ade0a6883cc992b23595c2dc}\label{testl__match_8cc_ab7388010ade0a6883cc992b23595c2dc}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pb6@{pb6}}
+\index{pb6@{pb6}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pb6}{pb6}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb6}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{testl__match_8cc_ac6e966f8ce340d7750108fee5d84c527}\label{testl__match_8cc_ac6e966f8ce340d7750108fee5d84c527}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pbs@{pbs}}
+\index{pbs@{pbs}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pbs}{pbs}}
+{\footnotesize\ttfamily ros\+::\+Publisher pbs}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{testl__match_8cc_a31e4900c7bba6abbbc976f87ae021a21}\label{testl__match_8cc_a31e4900c7bba6abbbc976f87ae021a21}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pbt@{pbt}}
+\index{pbt@{pbt}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pbt}{pbt}}
+{\footnotesize\ttfamily ros\+::\+Publisher pbt}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{testl__match_8cc_ade99baad604daed9de810ac3cf5da418}\label{testl__match_8cc_ade99baad604daed9de810ac3cf5da418}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pub1@{pub1}}
+\index{pub1@{pub1}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pub1}{pub1}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub1}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{testl__match_8cc_a2bef9e72d62d7ea1be803444f1ca7a6b}\label{testl__match_8cc_a2bef9e72d62d7ea1be803444f1ca7a6b}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pub2@{pub2}}
+\index{pub2@{pub2}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pub2}{pub2}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub2}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{testl__match_8cc_a0e8d412fdaada4745c72680b946d90a5}\label{testl__match_8cc_a0e8d412fdaada4745c72680b946d90a5}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pub3@{pub3}}
+\index{pub3@{pub3}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pub3}{pub3}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub3}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{testl__match_8cc_ab12b64a45b0ec98fdd9cce22e0b560ca}\label{testl__match_8cc_ab12b64a45b0ec98fdd9cce22e0b560ca}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pub4@{pub4}}
+\index{pub4@{pub4}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pub4}{pub4}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub4}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{testl__match_8cc_ae06a537905927bd65d6e9d58360530ff}\label{testl__match_8cc_ae06a537905927bd65d6e9d58360530ff}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pub5@{pub5}}
+\index{pub5@{pub5}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pub5}{pub5}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub5}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{testl__match_8cc_a21bf5a7507c5f2621f0190f5f163abae}\label{testl__match_8cc_a21bf5a7507c5f2621f0190f5f163abae}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pub6@{pub6}}
+\index{pub6@{pub6}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pub6}{pub6}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub6}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{testl__match_8cc_afbec5b55605c8b8a790745fdb732b4b5}\label{testl__match_8cc_afbec5b55605c8b8a790745fdb732b4b5}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pub7@{pub7}}
+\index{pub7@{pub7}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pub7}{pub7}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub7}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{testl__match_8cc_a072eb3ff928908d2afed4d6547c1a775}\label{testl__match_8cc_a072eb3ff928908d2afed4d6547c1a775}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pubd@{pubd}}
+\index{pubd@{pubd}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pubd}{pubd}}
+{\footnotesize\ttfamily ros\+::\+Publisher pubd}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{testl__match_8cc_a4e75660e09f65cdc40028e2a3ad5d83d}\label{testl__match_8cc_a4e75660e09f65cdc40028e2a3ad5d83d}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!pube@{pube}}
+\index{pube@{pube}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{pube}{pube}}
+{\footnotesize\ttfamily ros\+::\+Publisher pube}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{testl__match_8cc_a3f67c53b80389c5f53961936edba04c9}\label{testl__match_8cc_a3f67c53b80389c5f53961936edba04c9}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!radius@{radius}}
+\index{radius@{radius}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{radius}{radius}}
+{\footnotesize\ttfamily double radius}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{testl__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}\label{testl__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!vepcs@{vepcs}}
+\index{vepcs@{vepcs}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{vepcs}{vepcs}}
+{\footnotesize\ttfamily vector$<$\hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds}$>$ vepcs}
+
+
+
+Referenced by cb(), and Get\+Files().
+
+\mbox{\Hypertarget{testl__match_8cc_ab3f078684998b83967d507d0f453f454}\label{testl__match_8cc_ab3f078684998b83967d507d0f453f454}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!verbose@{verbose}}
+\index{verbose@{verbose}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{verbose}{verbose}}
+{\footnotesize\ttfamily bool verbose}
+
+
+
+Referenced by cb(), Common\+Parameters\+::\+Initialize\+Input(), and main().
+
+\mbox{\Hypertarget{testl__match_8cc_adb60e4d938daf072bde2bb525ed5fdbe}\label{testl__match_8cc_adb60e4d938daf072bde2bb525ed5fdbe}} 
+\index{testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}!vpc@{vpc}}
+\index{vpc@{vpc}!testl\+\_\+match.\+cc@{testl\+\_\+match.\+cc}}
+\subsubsection{\texorpdfstring{vpc}{vpc}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Point\+Cloud2$>$ vpc}
+
+
+
+Referenced by cb(), Get\+Files(), and main().
+

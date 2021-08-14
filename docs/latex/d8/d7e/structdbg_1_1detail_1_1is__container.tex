@@ -31,12 +31,12 @@ constexpr bool \hyperlink{structdbg_1_1detail_1_1is__container}{dbg\+::detail\+:
 {\bfseries Initial value\+:}
 \begin{DoxyCode}
 =
-      \hyperlink{namespacetrimesh_ab10cc1052c9d1d1376d92211b6ca27dd}{is\_detected<detect\_begin\_t, T>::value} &&
-      \hyperlink{namespacetrimesh_ab10cc1052c9d1d1376d92211b6ca27dd}{is\_detected<detect\_end\_t, T>::value} &&
-      \hyperlink{namespacetrimesh_ab10cc1052c9d1d1376d92211b6ca27dd}{is\_detected<detect\_size\_t, T>::value} &&
-      !std::is\_same<\hyperlink{namespacetrimesh_a51b4a31323874089623d4b17afabc1aa}{std::string},
+      is\_detected<detect\_begin\_t, T>::value &&
+      is\_detected<detect\_end\_t, T>::value &&
+      is\_detected<detect\_size\_t, T>::value &&
+      !std::is\_same<std::string,
                     \textcolor{keyword}{typename} std::remove\_cv<
-                        \textcolor{keyword}{typename} \hyperlink{namespacetrimesh_aa726c5bf9cff74a26269e8d258ae9e3d}{std::remove\_reference<T>::type}>
+                        \textcolor{keyword}{typename} \hyperlink{namespacedbg_a2365d80e3a3525e6025040383ff8661b}{std::remove\_reference<T>::type}>
       \hyperlink{namespacedbg_a2365d80e3a3525e6025040383ff8661b}{::type}>\hyperlink{structdbg_1_1detail_1_1is__container_aa9a4594488352384b65b36198ac414f8}{::value}
 \end{DoxyCode}
 

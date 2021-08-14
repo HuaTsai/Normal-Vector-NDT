@@ -67,6 +67,8 @@ $(function() {
 <div class="title">SNDTCostFunctor Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="../../d7/dc6/cost__functors_8h_source.html">cost_functors.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for SNDTCostFunctor:</div>
 <div class="dyncontent">
@@ -92,10 +94,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:ac3ec5d55425287082f5ce7f1788715c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22ee42d8807a659af32c15d144ed0c6b"><td class="memItemLeft" align="right" valign="top">static ceres::CostFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dc3/structSNDTCostFunctor.html#a22ee42d8807a659af32c15d144ed0c6b">Create</a> (const <a class="el" href="../../da/d64/classSNDTCell.html">SNDTCell</a> *cellp, const <a class="el" href="../../da/d64/classSNDTCell.html">SNDTCell</a> *cellq)</td></tr>
 <tr class="separator:a22ee42d8807a659af32c15d144ed0c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24876e79d893ae4a8fc098f85c615c6b"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dc3/structSNDTCostFunctor.html#a24876e79d893ae4a8fc098f85c615c6b">Score</a> (const <a class="el" href="../../da/d64/classSNDTCell.html">SNDTCell</a> *<a class="el" href="../../d2/dc3/structSNDTCostFunctor.html#ac9abfd289124b6b30105e89266c062a0">p</a>, const <a class="el" href="../../da/d64/classSNDTCell.html">SNDTCell</a> *<a class="el" href="../../d2/dc3/structSNDTCostFunctor.html#a2e02683aa3af214e6d8bb7ca40b9f0b3">q</a>)</td></tr>
-<tr class="separator:a24876e79d893ae4a8fc098f85c615c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec08f243fe9582c59c73a0a93a2c0f81"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dc3/structSNDTCostFunctor.html#aec08f243fe9582c59c73a0a93a2c0f81">MeanAndCov</a> (const <a class="el" href="../../da/d64/classSNDTCell.html">SNDTCell</a> *<a class="el" href="../../d2/dc3/structSNDTCostFunctor.html#ac9abfd289124b6b30105e89266c062a0">p</a>, const <a class="el" href="../../da/d64/classSNDTCell.html">SNDTCell</a> *<a class="el" href="../../d2/dc3/structSNDTCostFunctor.html#a2e02683aa3af214e6d8bb7ca40b9f0b3">q</a>)</td></tr>
-<tr class="separator:aec08f243fe9582c59c73a0a93a2c0f81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -176,43 +174,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="../../da/d72/matcher_8cc.html#a3e38f8536ae2a6c848c11730c1287144">SNDTMatch()</a>.</p>
-
-</div>
-</div>
-<a id="aec08f243fe9582c59c73a0a93a2c0f81"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec08f243fe9582c59c73a0a93a2c0f81">&#9670;&nbsp;</a></span>MeanAndCov()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static std::vector&lt;double&gt; SNDTCostFunctor::MeanAndCov </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="../../da/d64/classSNDTCell.html">SNDTCell</a> *&#160;</td>
-          <td class="paramname"><em>p</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="../../da/d64/classSNDTCell.html">SNDTCell</a> *&#160;</td>
-          <td class="paramname"><em>q</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p class="reference">Referenced by <a class="el" href="../../da/d72/matcher_8cc.html#ab8c996ac9bda49055a348bdb2eb70764">SNDTMatch()</a>.</p>
 
 </div>
 </div>
@@ -294,42 +256,6 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a24876e79d893ae4a8fc098f85c615c6b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24876e79d893ae4a8fc098f85c615c6b">&#9670;&nbsp;</a></span>Score()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static double SNDTCostFunctor::Score </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="../../da/d64/classSNDTCell.html">SNDTCell</a> *&#160;</td>
-          <td class="paramname"><em>p</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="../../da/d64/classSNDTCell.html">SNDTCell</a> *&#160;</td>
-          <td class="paramname"><em>q</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="ac9abfd289124b6b30105e89266c062a0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac9abfd289124b6b30105e89266c062a0">&#9670;&nbsp;</a></span>p</h2>
@@ -360,7 +286,7 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li><a class="el" href="../../da/d72/matcher_8cc.html">matcher.cc</a></li>
+<li><a class="el" href="../../d7/dc6/cost__functors_8h_source.html">cost_functors.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

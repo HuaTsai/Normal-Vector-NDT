@@ -1,8 +1,6 @@
 <map id="getimages.cc" name="getimages.cc">
-<area shape="rect" id="node5" href="$dc/d54/common_8h.html" title="common/common.h" alt="" coords="1009,80,1146,107"/>
-<area shape="rect" id="node6" href="$d2/dcd/common__utils_8hpp.html" title="common/common_utils.hpp" alt="" coords="1609,162,1791,189"/>
-<area shape="rect" id="node8" href="$d0/d2b/eigen__utils_8hpp.html" title="common/eigen_utils.hpp" alt="" coords="605,162,768,189"/>
-<area shape="rect" id="node15" href="$dd/d4f/geometry__utils_8hpp.html" title="common/geometry_utils.hpp" alt="" coords="883,162,1069,189"/>
-<area shape="rect" id="node16" href="$d3/df7/match__utils_8hpp.html" title="common/match_utils.hpp" alt="" coords="1093,162,1261,189"/>
-<area shape="rect" id="node20" href="$d3/d24/visualization__utils_8hpp.html" title="common/visualization\l_utils.hpp" alt="" coords="297,155,445,196"/>
+<area shape="rect" id="node5" href="$dc/d54/common_8h.html" title="common/common.h" alt="" coords="397,80,534,107"/>
+<area shape="rect" id="node6" href="$da/d19/common_2include_2common_2eigen__utils_8h.html" title="common/eigen_utils.h" alt="" coords="625,155,775,181"/>
+<area shape="rect" id="node12" href="$d7/d0c/geometry__utils_8h.html" title="common/geometry_utils.h" alt="" coords="353,155,525,181"/>
+<area shape="rect" id="node14" href="$d8/df8/other__utils_8h.html" title="common/other_utils.h" alt="" coords="117,155,264,181"/>
 </map>

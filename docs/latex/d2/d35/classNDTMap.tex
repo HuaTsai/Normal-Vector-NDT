@@ -25,7 +25,7 @@ Collaboration diagram for N\+D\+T\+Map\+:\nopagebreak
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hyperlink{classNDTMap_aec578016c17abfe085d0d4cf1dca1828}{N\+D\+T\+Map} (double \hyperlink{test__match_8cc_a456553c1fc05d94c07e74c5fd45f6621}{cell\+\_\+size})
+\hyperlink{classNDTMap_aec578016c17abfe085d0d4cf1dca1828}{N\+D\+T\+Map} (double \hyperlink{testl__match_8cc_a456553c1fc05d94c07e74c5fd45f6621}{cell\+\_\+size})
 \begin{DoxyCompactList}\small\item\em Construct a new \hyperlink{classNDTMap}{N\+D\+T\+Map} object. \end{DoxyCompactList}\item 
 \hyperlink{classNDTMap_af6e42f0f13a33e6027e14635631e1312}{$\sim$\+N\+D\+T\+Map} ()
 \item 
@@ -147,6 +147,10 @@ Get the cell by a given point.
 {\em point} & Input point \\
 \hline
 \end{DoxyParams}
+
+
+Referenced by N\+D\+T\+D2\+D\+Match().
+
 \mbox{\Hypertarget{classNDTMap_a2b44ded259db4af8c4abffed0553e6c0}\label{classNDTMap_a2b44ded259db4af8c4abffed0553e6c0}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!Get\+Points@{Get\+Points}}
 \index{Get\+Points@{Get\+Points}!N\+D\+T\+Map@{N\+D\+T\+Map}}
@@ -160,6 +164,10 @@ Get the Points object.
 \begin{DoxyNote}{Note}
 The points are retrived from active\+\_\+cells\+\_\+, which does not necessarily equal to the original input 
 \end{DoxyNote}
+
+
+Referenced by N\+D\+T\+D2\+D\+Match().
+
 \mbox{\Hypertarget{classNDTMap_ab22791d0b328ae9639799bc5d31d8b49}\label{classNDTMap_ab22791d0b328ae9639799bc5d31d8b49}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!Load\+Points@{Load\+Points}}
 \index{Load\+Points@{Load\+Points}!N\+D\+T\+Map@{N\+D\+T\+Map}}
@@ -202,6 +210,10 @@ Load points and point covariances into the \hyperlink{classNDTMap}{N\+D\+T\+Map}
 \begin{DoxyNote}{Note}
 {\ttfamily points}, {\ttfamily point\+\_\+covs}, and {\ttfamily normals} should have the same size 
 \end{DoxyNote}
+
+
+Referenced by Make\+N\+D\+T\+Map().
+
 \mbox{\Hypertarget{classNDTMap_a3d16c1f716de28d6c5a6572346c45ee6}\label{classNDTMap_a3d16c1f716de28d6c5a6572346c45ee6}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!Pseudo\+Transform\+Cells@{Pseudo\+Transform\+Cells}}
 \index{Pseudo\+Transform\+Cells@{Pseudo\+Transform\+Cells}!N\+D\+T\+Map@{N\+D\+T\+Map}}
@@ -222,6 +234,10 @@ Perform transformation to \hyperlink{classNDTMap}{N\+D\+T\+Map}.
 \begin{DoxyReturn}{Returns}
 Transformed cells 
 \end{DoxyReturn}
+
+
+Referenced by N\+D\+T\+D2\+D\+Match().
+
 \mbox{\Hypertarget{classNDTMap_aa9e3541e2f4c56ea43d598aef43e5503}\label{classNDTMap_aa9e3541e2f4c56ea43d598aef43e5503}} 
 \index{N\+D\+T\+Map@{N\+D\+T\+Map}!size@{size}}
 \index{size@{size}!N\+D\+T\+Map@{N\+D\+T\+Map}}

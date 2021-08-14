@@ -1,0 +1,50 @@
+\hypertarget{geometry__utils_8h}{}\section{geometry\+\_\+utils.\+h File Reference}
+\label{geometry__utils_8h}\index{geometry\+\_\+utils.\+h@{geometry\+\_\+utils.\+h}}
+{\ttfamily \#include $<$tf2\+\_\+geometry\+\_\+msgs/tf2\+\_\+geometry\+\_\+msgs.\+h$>$}\newline
+{\ttfamily \#include $<$gsl/gsl$>$}\newline
+Include dependency graph for geometry\+\_\+utils.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=260pt]{d7/d90/geometry__utils_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d0/dd0/geometry__utils_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+geometry\+\_\+msgs\+::\+Pose \hyperlink{geometry__utils_8h_a6a758d94e073010c2d31bd37255b65ed}{Pose\+Interpolate} (const geometry\+\_\+msgs\+::\+Pose\+Stamped \&p1, const geometry\+\_\+msgs\+::\+Pose\+Stamped \&p2, const ros\+::\+Time \&time)
+\item 
+geometry\+\_\+msgs\+::\+Pose \hyperlink{geometry__utils_8h_ac9df67b9316253ea01f313f4f96ec164}{Get\+Pose} (const std\+::vector$<$ geometry\+\_\+msgs\+::\+Pose\+Stamped $>$ \&poses, const ros\+::\+Time \&time)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{geometry__utils_8h_ac9df67b9316253ea01f313f4f96ec164}\label{geometry__utils_8h_ac9df67b9316253ea01f313f4f96ec164}} 
+\index{geometry\+\_\+utils.\+h@{geometry\+\_\+utils.\+h}!Get\+Pose@{Get\+Pose}}
+\index{Get\+Pose@{Get\+Pose}!geometry\+\_\+utils.\+h@{geometry\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Get\+Pose()}{GetPose()}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Pose Get\+Pose (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ geometry\+\_\+msgs\+::\+Pose\+Stamped $>$ \&}]{poses,  }\item[{const ros\+::\+Time \&}]{time }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb(), and Make\+Gt\+Local().
+
+\mbox{\Hypertarget{geometry__utils_8h_a6a758d94e073010c2d31bd37255b65ed}\label{geometry__utils_8h_a6a758d94e073010c2d31bd37255b65ed}} 
+\index{geometry\+\_\+utils.\+h@{geometry\+\_\+utils.\+h}!Pose\+Interpolate@{Pose\+Interpolate}}
+\index{Pose\+Interpolate@{Pose\+Interpolate}!geometry\+\_\+utils.\+h@{geometry\+\_\+utils.\+h}}
+\subsubsection{\texorpdfstring{Pose\+Interpolate()}{PoseInterpolate()}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Pose Pose\+Interpolate (\begin{DoxyParamCaption}\item[{const geometry\+\_\+msgs\+::\+Pose\+Stamped \&}]{p1,  }\item[{const geometry\+\_\+msgs\+::\+Pose\+Stamped \&}]{p2,  }\item[{const ros\+::\+Time \&}]{time }\end{DoxyParamCaption})}
+
+
+
+Referenced by Get\+Pose().
+

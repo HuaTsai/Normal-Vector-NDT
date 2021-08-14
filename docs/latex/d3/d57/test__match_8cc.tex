@@ -17,7 +17,8 @@ Test Matching.
 {\ttfamily \#include $<$std\+\_\+msgs/\+Int32.\+h$>$}\newline
 {\ttfamily \#include $<$boost/program\+\_\+options.\+hpp$>$}\newline
 {\ttfamily \#include $<$sndt\+\_\+exec/wrapper.\+hpp$>$}\newline
-Include dependency graph for test\+\_\+match.\+cc\+:\nopagebreak
+Include dependency graph for test\+\_\+match.\+cc\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -26,8 +27,6 @@ Include dependency graph for test\+\_\+match.\+cc\+:\nopagebreak
 \end{figure}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
-\item 
-vector$<$ pair$<$ Matrix\+Xd, Affine2d $>$ $>$ \hyperlink{test__match_8cc_aabe4ed907be8fc3af5411d0606d9c0c1}{Augment} (const vector$<$ common\+::\+Ego\+Point\+Clouds $>$ \&\hyperlink{test__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}, int start, int end, Affine2d \&T, vector$<$ Affine2d $>$ \&allT)
 \item 
 void \hyperlink{test__match_8cc_abf7613499686c6bb646f6244258a331b}{cb} (const std\+\_\+msgs\+::\+Int32 \&num)
 \item 
@@ -52,7 +51,7 @@ vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{test__match_8cc
 \item 
 vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{test__match_8cc_a1ebb671bb4254879909df0304c0efc3a}{imfr}
 \item 
-vector$<$ common\+::\+Ego\+Point\+Clouds $>$ \hyperlink{test__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}
+vector$<$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \hyperlink{test__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}
 \item 
 ros\+::\+Publisher \hyperlink{test__match_8cc_ade99baad604daed9de810ac3cf5da418}{pub1}
 \item 
@@ -126,16 +125,6 @@ Copyright (c) 2021
 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{test__match_8cc_aabe4ed907be8fc3af5411d0606d9c0c1}\label{test__match_8cc_aabe4ed907be8fc3af5411d0606d9c0c1}} 
-\index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!Augment@{Augment}}
-\index{Augment@{Augment}!test\+\_\+match.\+cc@{test\+\_\+match.\+cc}}
-\subsubsection{\texorpdfstring{Augment()}{Augment()}}
-{\footnotesize\ttfamily vector$<$pair$<$Matrix\+Xd, Affine2d$>$ $>$ Augment (\begin{DoxyParamCaption}\item[{const vector$<$ common\+::\+Ego\+Point\+Clouds $>$ \&}]{vepcs,  }\item[{int}]{start,  }\item[{int}]{end,  }\item[{Affine2d \&}]{T,  }\item[{vector$<$ Affine2d $>$ \&}]{allT }\end{DoxyParamCaption})}
-
-
-
-Referenced by cb().
-
 \mbox{\Hypertarget{test__match_8cc_abf7613499686c6bb646f6244258a331b}\label{test__match_8cc_abf7613499686c6bb646f6244258a331b}} 
 \index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!cb@{cb}}
 \index{cb@{cb}!test\+\_\+match.\+cc@{test\+\_\+match.\+cc}}
@@ -189,7 +178,7 @@ Referenced by main().
 
 
 
-Referenced by cb(), main(), Make\+Map(), Map\+Interface\+::\+Map\+Interface(), and common\+::\+Match\+Internal\+::set\+\_\+cell\+\_\+size().
+Referenced by main().
 
 \mbox{\Hypertarget{test__match_8cc_a61217d5bc9d5b446d9c08e7ca401b733}\label{test__match_8cc_a61217d5bc9d5b446d9c08e7ca401b733}} 
 \index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!frames@{frames}}
@@ -209,7 +198,7 @@ Referenced by cb(), and main().
 
 
 
-Referenced by cb(), Get\+Files(), and main().
+Referenced by cb(), and Get\+Files().
 
 \mbox{\Hypertarget{test__match_8cc_ad556df891db2504a92174300e47bf8c0}\label{test__match_8cc_ad556df891db2504a92174300e47bf8c0}} 
 \index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!huber@{huber}}
@@ -229,7 +218,7 @@ Referenced by cb(), and main().
 
 
 
-Referenced by cb(), Get\+Files(), and main().
+Referenced by cb(), and Get\+Files().
 
 \mbox{\Hypertarget{test__match_8cc_a15b1bc8eceb2b159d223eb5d4d5b0cab}\label{test__match_8cc_a15b1bc8eceb2b159d223eb5d4d5b0cab}} 
 \index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!imbl@{imbl}}
@@ -239,7 +228,7 @@ Referenced by cb(), Get\+Files(), and main().
 
 
 
-Referenced by cb(), Get\+Files(), and main().
+Referenced by cb(), and Get\+Files().
 
 \mbox{\Hypertarget{test__match_8cc_a39608350f0ce9d831ab56bff0867c80d}\label{test__match_8cc_a39608350f0ce9d831ab56bff0867c80d}} 
 \index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!imbr@{imbr}}
@@ -249,7 +238,7 @@ Referenced by cb(), Get\+Files(), and main().
 
 
 
-Referenced by cb(), Get\+Files(), and main().
+Referenced by cb(), and Get\+Files().
 
 \mbox{\Hypertarget{test__match_8cc_a6841637de94054692b83c8d4763f0408}\label{test__match_8cc_a6841637de94054692b83c8d4763f0408}} 
 \index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!imf@{imf}}
@@ -259,7 +248,7 @@ Referenced by cb(), Get\+Files(), and main().
 
 
 
-Referenced by cb(), Get\+Files(), and main().
+Referenced by cb(), and Get\+Files().
 
 \mbox{\Hypertarget{test__match_8cc_ae47ac24e18dc2e843096015690834c38}\label{test__match_8cc_ae47ac24e18dc2e843096015690834c38}} 
 \index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!imfl@{imfl}}
@@ -269,7 +258,7 @@ Referenced by cb(), Get\+Files(), and main().
 
 
 
-Referenced by cb(), Get\+Files(), and main().
+Referenced by cb(), and Get\+Files().
 
 \mbox{\Hypertarget{test__match_8cc_a1ebb671bb4254879909df0304c0efc3a}\label{test__match_8cc_a1ebb671bb4254879909df0304c0efc3a}} 
 \index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!imfr@{imfr}}
@@ -279,7 +268,7 @@ Referenced by cb(), Get\+Files(), and main().
 
 
 
-Referenced by cb(), Get\+Files(), and main().
+Referenced by cb(), and Get\+Files().
 
 \mbox{\Hypertarget{test__match_8cc_a338d91f2326697a1ed2a8e16a9b05c9b}\label{test__match_8cc_a338d91f2326697a1ed2a8e16a9b05c9b}} 
 \index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!pb1@{pb1}}
@@ -459,7 +448,7 @@ Referenced by cb(), and main().
 
 
 
-Referenced by cb(), common\+::\+Random\+Transform\+Generator2\+D\+::\+Generate(), main(), Make\+Map(), Make\+Mesh(), and Marker\+Of\+Circle().
+Referenced by main().
 
 \mbox{\Hypertarget{test__match_8cc_a09ff184b5f358f6069434df0167479a7}\label{test__match_8cc_a09ff184b5f358f6069434df0167479a7}} 
 \index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!rvar@{rvar}}
@@ -469,7 +458,7 @@ Referenced by cb(), common\+::\+Random\+Transform\+Generator2\+D\+::\+Generate()
 
 
 
-Referenced by cb(), and main().
+Referenced by main().
 
 \mbox{\Hypertarget{test__match_8cc_a86623871870f863b5735a0bb2d3c74d2}\label{test__match_8cc_a86623871870f863b5735a0bb2d3c74d2}} 
 \index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!tvar@{tvar}}
@@ -479,13 +468,13 @@ Referenced by cb(), and main().
 
 
 
-Referenced by cb(), and main().
+Referenced by main().
 
 \mbox{\Hypertarget{test__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}\label{test__match_8cc_a534dd5b2e3bb626d915366ce052db0f0}} 
 \index{test\+\_\+match.\+cc@{test\+\_\+match.\+cc}!vepcs@{vepcs}}
 \index{vepcs@{vepcs}!test\+\_\+match.\+cc@{test\+\_\+match.\+cc}}
 \subsubsection{\texorpdfstring{vepcs}{vepcs}}
-{\footnotesize\ttfamily vector$<$common\+::\+Ego\+Point\+Clouds$>$ vepcs}
+{\footnotesize\ttfamily vector$<$\hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds}$>$ vepcs}
 
 
 

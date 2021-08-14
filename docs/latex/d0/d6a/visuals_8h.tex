@@ -8,7 +8,8 @@ Declaration of Visual Utilities.
 {\ttfamily \#include $<$visualization\+\_\+msgs/\+Marker\+Array.\+h$>$}\newline
 {\ttfamily \#include $<$sndt/ndt\+\_\+map.\+h$>$}\newline
 {\ttfamily \#include $<$sndt/sndt\+\_\+map.\+h$>$}\newline
-Include dependency graph for visuals.\+h\+:\nopagebreak
+Include dependency graph for visuals.\+h\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -62,7 +63,7 @@ Marker \hyperlink{visuals_8h_ac49382099269c152bf69330248d5351a}{Marker\+Of\+Line
 \begin{DoxyCompactList}\small\item\em Marker of the lines. \end{DoxyCompactList}\item 
 Marker \hyperlink{visuals_8h_a787c16cc6ee94b52d4d1220764eaaecd}{Marker\+Of\+Lines\+By\+Middle\+Points} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, double alpha=1.\+0)
 \begin{DoxyCompactList}\small\item\em Marker of the lines by middle points. \end{DoxyCompactList}\item 
-Marker \hyperlink{visuals_8h_ae02be2cffab8fc0456c6ff02372620b6}{Marker\+Of\+Points} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points, double size=0.\+1, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, double alpha=1.\+0)
+Marker \hyperlink{visuals_8h_abc6c2ad9625760e1973ad1c445a99894}{Marker\+Of\+Points} (const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&points, double size=0.\+5, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, double alpha=1.\+0)
 \begin{DoxyCompactList}\small\item\em Marker of the points. \end{DoxyCompactList}\item 
 Marker \hyperlink{visuals_8h_a2c2bda7c4b818c8ff0d5da2b87e1a012}{Marker\+Of\+Arrow} (const Eigen\+::\+Vector2d \&start, const Eigen\+::\+Vector2d \&end, const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&color=\hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, double alpha=1.\+0)
 \begin{DoxyCompactList}\small\item\em Marker of the arrows. \end{DoxyCompactList}\item 
@@ -239,7 +240,7 @@ Joined markerarray
 \end{DoxyReturn}
 
 
-Referenced by Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
+Referenced by cb(), Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
 
 \mbox{\Hypertarget{visuals_8h_ab97e7041dcb22256c900611b5142f2c3}\label{visuals_8h_ab97e7041dcb22256c900611b5142f2c3}} 
 \index{visuals.\+h@{visuals.\+h}!Make\+Color\+R\+G\+BA@{Make\+Color\+R\+G\+BA}}
@@ -487,7 +488,7 @@ Marker of type {\ttfamily L\+I\+N\+E\+\_\+\+L\+I\+ST} of the cell boundary
 \end{DoxyReturn}
 
 
-Referenced by Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
+Referenced by cb(), Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
 
 \mbox{\Hypertarget{visuals_8h_ac2e1fa77fe7b62e6847bf9d4db90511e}\label{visuals_8h_ac2e1fa77fe7b62e6847bf9d4db90511e}} 
 \index{visuals.\+h@{visuals.\+h}!Marker\+Of\+Circle@{Marker\+Of\+Circle}}
@@ -596,11 +597,11 @@ Points 0-\/1 forms line 0, points 1-\/2 forms line 1, etc.
 
 Referenced by Marker\+Array\+Of\+S\+N\+D\+T\+Cell(), and Marker\+Array\+Of\+S\+N\+D\+T\+Cell2().
 
-\mbox{\Hypertarget{visuals_8h_ae02be2cffab8fc0456c6ff02372620b6}\label{visuals_8h_ae02be2cffab8fc0456c6ff02372620b6}} 
+\mbox{\Hypertarget{visuals_8h_abc6c2ad9625760e1973ad1c445a99894}\label{visuals_8h_abc6c2ad9625760e1973ad1c445a99894}} 
 \index{visuals.\+h@{visuals.\+h}!Marker\+Of\+Points@{Marker\+Of\+Points}}
 \index{Marker\+Of\+Points@{Marker\+Of\+Points}!visuals.\+h@{visuals.\+h}}
 \subsubsection{\texorpdfstring{Marker\+Of\+Points()}{MarkerOfPoints()}}
-{\footnotesize\ttfamily Marker Marker\+Of\+Points (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points,  }\item[{double}]{size = {\ttfamily 0.1},  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}},  }\item[{double}]{alpha = {\ttfamily 1.0} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily Marker Marker\+Of\+Points (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ Eigen\+::\+Vector2d $>$ \&}]{points,  }\item[{double}]{size = {\ttfamily 0.5},  }\item[{const \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1c}{Color} \&}]{color = {\ttfamily \hyperlink{visuals_8h_ab87bacfdad76e61b9412d7124be44c1cab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}},  }\item[{double}]{alpha = {\ttfamily 1.0} }\end{DoxyParamCaption})}
 
 
 

@@ -3,416 +3,121 @@
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-struct \hyperlink{structcommon_1_1Correspondences}{Correspondences}
+struct \hyperlink{structcommon_1_1EgoPointClouds__}{Ego\+Point\+Clouds\+\_\+}
 \item 
-class \hyperlink{classcommon_1_1MatchInternal}{Match\+Internal}
-\item 
-struct \hyperlink{structcommon_1_1MatchPackage}{Match\+Package}
-\item 
-class \hyperlink{classcommon_1_1MatchResults}{Match\+Results}
-\item 
-class \hyperlink{classcommon_1_1RandomTransformGenerator2D}{Random\+Transform\+Generator2D}
+struct \hyperlink{structcommon_1_1PointCloudSensor__}{Point\+Cloud\+Sensor\+\_\+}
 \end{DoxyCompactItemize}
-\subsection*{Enumerations}
+\subsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-enum \hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}{Color} \{ \newline
-\hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631afb0136b923af8c04b31a9d1b5e989acf}{Color\+::k\+Red}, 
-\hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631ab7b3861337a76c8ac3cfc5ec8ec49a24}{Color\+::k\+Lime}, 
-\hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631a8d069917ec494cc042c27acaad671f52}{Color\+::k\+Blue}, 
-\hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631ad368dbde55a733c6dde5a20566d50736}{Color\+::k\+White}, 
-\newline
-\hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631ac5157738e8808c557e6cac46c034a2db}{Color\+::k\+Black}, 
-\hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631a5d82e39ac78ae57980c4156efef59c16}{Color\+::k\+Gray}, 
-\hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631a4c6c30a3642462190739bb7f13af9c7b}{Color\+::k\+Yellow}, 
-\hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631a82c602e70d64cffd84b9662ebeb4435d}{Color\+::k\+Aqua}, 
-\newline
-\hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631abead6bc4d4eca2252128b312324b19e2}{Color\+::k\+Fuchsia}
- \}
+typedef \+::\hyperlink{structcommon_1_1EgoPointClouds__}{common\+::\+Ego\+Point\+Clouds\+\_\+}$<$ std\+::allocator$<$ void $>$ $>$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{Ego\+Point\+Clouds}
+\item 
+typedef boost\+::shared\+\_\+ptr$<$ \+::\hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \hyperlink{namespacecommon_a079a4e76c38ec190f07e5cd2b7da05e0}{Ego\+Point\+Clouds\+Ptr}
+\item 
+typedef boost\+::shared\+\_\+ptr$<$ \+::\hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} const  $>$ \hyperlink{namespacecommon_ac9ac5560cc07d92a2ece5e0a9f70952c}{Ego\+Point\+Clouds\+Const\+Ptr}
+\item 
+typedef \+::\hyperlink{structcommon_1_1PointCloudSensor__}{common\+::\+Point\+Cloud\+Sensor\+\_\+}$<$ std\+::allocator$<$ void $>$ $>$ \hyperlink{namespacecommon_a493470d1acdb35b20776bd075266358e}{Point\+Cloud\+Sensor}
+\item 
+typedef boost\+::shared\+\_\+ptr$<$ \+::\hyperlink{namespacecommon_a493470d1acdb35b20776bd075266358e}{common\+::\+Point\+Cloud\+Sensor} $>$ \hyperlink{namespacecommon_a7d3f864e41d4e734cba72e7ae91a0b9e}{Point\+Cloud\+Sensor\+Ptr}
+\item 
+typedef boost\+::shared\+\_\+ptr$<$ \+::\hyperlink{namespacecommon_a493470d1acdb35b20776bd075266358e}{common\+::\+Point\+Cloud\+Sensor} const  $>$ \hyperlink{namespacecommon_ab9d5f19cc1df76e97ea53d81e8eb3d87}{Point\+Cloud\+Sensor\+Const\+Ptr}
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-{\footnotesize template$<$typename T $>$ }\\void \hyperlink{namespacecommon_aaafeb67e7c22aa1324903d0c2539d310}{Serialization\+Input} (const std\+::string \&filepath, T \&msg)
+{\footnotesize template$<$typename Container\+Allocator $>$ }\\std\+::ostream \& \hyperlink{namespacecommon_ab88da1e27722dfe7cfc22f6106e01016}{operator$<$$<$} (std\+::ostream \&s, const \+::\hyperlink{structcommon_1_1EgoPointClouds__}{common\+::\+Ego\+Point\+Clouds\+\_\+}$<$ Container\+Allocator $>$ \&v)
 \item 
-{\footnotesize template$<$typename T $>$ }\\void \hyperlink{namespacecommon_ab793b440cdf411b716bde82330d2b364}{Serialization\+Output} (const std\+::string \&filepath, const T \&msg)
+{\footnotesize template$<$typename Container\+Allocator1 , typename Container\+Allocator2 $>$ }\\bool \hyperlink{namespacecommon_af4bbfa6ad580ed64356a91d0f46fd59a}{operator==} (const \+::\hyperlink{structcommon_1_1EgoPointClouds__}{common\+::\+Ego\+Point\+Clouds\+\_\+}$<$ Container\+Allocator1 $>$ \&lhs, const \+::\hyperlink{structcommon_1_1EgoPointClouds__}{common\+::\+Ego\+Point\+Clouds\+\_\+}$<$ Container\+Allocator2 $>$ \&rhs)
 \item 
-std\+::vector$<$ std\+::string $>$ \hyperlink{namespacecommon_a7301dc27a588fd37f62232a7c1a86149}{Get\+Data\+Path} (std\+::string data)
+{\footnotesize template$<$typename Container\+Allocator1 , typename Container\+Allocator2 $>$ }\\bool \hyperlink{namespacecommon_afd4a49a0e5d3d1823ae5842fa54a7466}{operator!=} (const \+::\hyperlink{structcommon_1_1EgoPointClouds__}{common\+::\+Ego\+Point\+Clouds\+\_\+}$<$ Container\+Allocator1 $>$ \&lhs, const \+::\hyperlink{structcommon_1_1EgoPointClouds__}{common\+::\+Ego\+Point\+Clouds\+\_\+}$<$ Container\+Allocator2 $>$ \&rhs)
 \item 
-Eigen\+::\+Affine3d \hyperlink{namespacecommon_a8aeeb6f99d9f52e3f03d311bb7b724e8}{Affine3d\+From\+X\+Y\+Z\+R\+PY} (const Eigen\+::\+Vector3d \&xyz, const Eigen\+::\+Vector3d \&rpy)
+{\footnotesize template$<$typename Container\+Allocator $>$ }\\std\+::ostream \& \hyperlink{namespacecommon_a8fbe91682ecab877102fddadf0793d6e}{operator$<$$<$} (std\+::ostream \&s, const \+::\hyperlink{structcommon_1_1PointCloudSensor__}{common\+::\+Point\+Cloud\+Sensor\+\_\+}$<$ Container\+Allocator $>$ \&v)
 \item 
-Eigen\+::\+Affine3d \hyperlink{namespacecommon_ad4b5251bf0c4c9741c75b6bef6a23f30}{Affine3d\+From\+Affine2d} (const Eigen\+::\+Affine2d \&aff)
+{\footnotesize template$<$typename Container\+Allocator1 , typename Container\+Allocator2 $>$ }\\bool \hyperlink{namespacecommon_a7c09f723fcbe2e36f39855e3b7ece998}{operator==} (const \+::\hyperlink{structcommon_1_1PointCloudSensor__}{common\+::\+Point\+Cloud\+Sensor\+\_\+}$<$ Container\+Allocator1 $>$ \&lhs, const \+::\hyperlink{structcommon_1_1PointCloudSensor__}{common\+::\+Point\+Cloud\+Sensor\+\_\+}$<$ Container\+Allocator2 $>$ \&rhs)
 \item 
-Eigen\+::\+Affine3d \hyperlink{namespacecommon_ae99f4d457d2bc28539862ba2698fc063}{Affine3d\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
-\item 
-Eigen\+::\+Affine3d \hyperlink{namespacecommon_a52b746932856cc09f947c6e7b30c3a09}{Affine3d\+From\+Matrix4f} (const Eigen\+::\+Matrix4f \&mtx)
-\item 
-Eigen\+::\+Matrix$<$ double, 6, 1 $>$ \hyperlink{namespacecommon_abf63050ffc1423dd7c334a6c3c5618a1}{X\+Y\+Z\+R\+P\+Y\+From\+Affine3d} (const Eigen\+::\+Affine3d \&mtx)
-\item 
-Eigen\+::\+Matrix$<$ double, 6, 1 $>$ \hyperlink{namespacecommon_a75012054387d4de49be04481e844d4aa}{X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f} (const Eigen\+::\+Matrix4f \&mtx)
-\item 
-Eigen\+::\+Vector3d \hyperlink{namespacecommon_a380c663a4f46d093dca7813385d5472c}{X\+Y\+T\+Radian\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
-\item 
-Eigen\+::\+Vector3d \hyperlink{namespacecommon_ac2334937b8f4c3b74ba6393a30876499}{X\+Y\+T\+Degree\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
-\item 
-Eigen\+::\+Matrix3d \hyperlink{namespacecommon_a79c5532f7b71e03e4436194f78e637ce}{Matrix3d\+From\+X\+Y\+T\+Radian} (const Eigen\+::\+Vector3d \&xyt)
-\item 
-Eigen\+::\+Matrix3d \hyperlink{namespacecommon_abd161a56797ce1d90331acbf3d441d90}{Matrix3d\+From\+X\+Y\+T\+Degree} (const Eigen\+::\+Vector3d \&xyt)
-\item 
-Eigen\+::\+Matrix3d \hyperlink{namespacecommon_a12010389a8f6bfb72230dbe65eb60ff2}{Matrix3d\+From\+Matrix4f} (const Eigen\+::\+Matrix4f \&mtx)
-\item 
-Eigen\+::\+Matrix4f \hyperlink{namespacecommon_a95c001ee532d4d5659496a2f3699e3d7}{Matrix4f\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
-\item 
-Eigen\+::\+Matrix4f \hyperlink{namespacecommon_a43b57f5e12ace94174d0110531826896}{Matrix4f\+From\+X\+Y\+T\+Radian} (const Eigen\+::\+Vector3d \&xyt)
-\item 
-geometry\+\_\+msgs\+::\+Transform\+Stamped \hyperlink{namespacecommon_af406e07c4c8640ce9b10a2ff45365ae1}{Tst\+From\+Affine3d} (const Eigen\+::\+Affine3d \&T, const ros\+::\+Time \&stamp, const std\+::string \&frame\+\_\+id, const std\+::string \&child\+\_\+frame\+\_\+id)
-\item 
-geometry\+\_\+msgs\+::\+Transform\+Stamped \hyperlink{namespacecommon_a3e57252779375868d389d7c9f943a44f}{Tst\+From\+Matrix4f} (const Eigen\+::\+Matrix4f \&T, const ros\+::\+Time \&stamp, const std\+::string \&frame\+\_\+id, const std\+::string \&child\+\_\+frame\+\_\+id)
-\item 
-Eigen\+::\+Affine3d \hyperlink{namespacecommon_ac1ecd24c73d1ded5d44eee957aa24b6d}{Conserve2\+D\+From\+Affine3d} (const Eigen\+::\+Affine3d \&T)
-\item 
-Eigen\+::\+Vector2d \hyperlink{namespacecommon_a191afad1f06d091167c390fbe1457b5d}{Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d} (const Eigen\+::\+Matrix3d \&mtx)
-\item 
-geometry\+\_\+msgs\+::\+Pose \hyperlink{namespacecommon_a31d70b6febb50afde5fa00fc9a310fe3}{Pose\+Interpolate} (const geometry\+\_\+msgs\+::\+Pose\+Stamped \&p1, const geometry\+\_\+msgs\+::\+Pose\+Stamped \&p2, const ros\+::\+Time \&time)
-\item 
-{\footnotesize template$<$typename T $>$ }\\geometry\+\_\+msgs\+::\+Pose \hyperlink{namespacecommon_afec20fc02d4e0364825bb7f9dbca7bfc}{Get\+Pose} (const T \&poses, const ros\+::\+Time \&time)
-\item 
-{\footnotesize template$<$typename T $>$ }\\void \hyperlink{namespacecommon_adac07f1443b546753894f4466ae7d051}{Serialize\+Out} (std\+::string file\+\_\+name, const T \&data)
-\item 
-{\footnotesize template$<$typename T $>$ }\\void \hyperlink{namespacecommon_aa28e88e788569055b2217ed26e48f922}{Serialize\+In} (std\+::string file\+\_\+name, T \&data)
-\item 
-std\+::vector$<$ std\+::vector$<$ double $>$ $>$ \hyperlink{namespacecommon_a064e9e4908dbc190a24e3b18635e3379}{Combinations} (std\+::vector$<$ std\+::vector$<$ double $>$$>$ x)
-\item 
-std\+\_\+msgs\+::\+Color\+R\+G\+BA \hyperlink{namespacecommon_a1536d9969a0d06faf584e616bd12ca08}{Make\+Color\+R\+G\+BA} (const \hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}{Color} \&color, double alpha=1.)
-\item 
-visualization\+\_\+msgs\+::\+Marker \hyperlink{namespacecommon_ad66202ab90483412f7aca1dbfe5d399f}{Make\+Arrow\+Marker\+By\+Ends} (int idx, const std\+::string \&frame\+\_\+id, const Eigen\+::\+Vector3d \&start, const Eigen\+::\+Vector3d \&end, const \hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}{Color} \&color)
-\item 
-visualization\+\_\+msgs\+::\+Marker \hyperlink{namespacecommon_a1e46ad350c4ff03cf926cb40667019f9}{Make\+Arrow\+Marker\+By\+Pose} (int idx, const std\+::string \&frame\+\_\+id, const geometry\+\_\+msgs\+::\+Pose \&pose, const \hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}{Color} \&color)
-\item 
-visualization\+\_\+msgs\+::\+Marker \hyperlink{namespacecommon_a61576f8134edf708a3d72a842db21413}{Make\+Covariance\+Marker} (int idx, const std\+::string \&frame\+\_\+id, const Eigen\+::\+Vector2d \&pt, const Eigen\+::\+Matrix2d \&cov, const \hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}{Color} \&color)
-\item 
-visualization\+\_\+msgs\+::\+Marker \hyperlink{namespacecommon_a8f52e7ee9db9db31ef41df1566c08b2e}{Make\+Text\+Marker} (int idx, const std\+::string \&frame\+\_\+id, const std\+::string \&text, const geometry\+\_\+msgs\+::\+Pose \&pose, const \hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}{Color} \&color)
+{\footnotesize template$<$typename Container\+Allocator1 , typename Container\+Allocator2 $>$ }\\bool \hyperlink{namespacecommon_ab204ea7eb40246b726341e9d9ed63520}{operator!=} (const \+::\hyperlink{structcommon_1_1PointCloudSensor__}{common\+::\+Point\+Cloud\+Sensor\+\_\+}$<$ Container\+Allocator1 $>$ \&lhs, const \+::\hyperlink{structcommon_1_1PointCloudSensor__}{common\+::\+Point\+Cloud\+Sensor\+\_\+}$<$ Container\+Allocator2 $>$ \&rhs)
 \end{DoxyCompactItemize}
 
 
-\subsection{Enumeration Type Documentation}
-\mbox{\Hypertarget{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}\label{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}} 
-\index{common@{common}!Color@{Color}}
-\index{Color@{Color}!common@{common}}
-\subsubsection{\texorpdfstring{Color}{Color}}
-{\footnotesize\ttfamily enum \hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}{common\+::\+Color}\hspace{0.3cm}{\ttfamily [strong]}}
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}\label{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}} 
+\index{common@{common}!Ego\+Point\+Clouds@{Ego\+Point\+Clouds}}
+\index{Ego\+Point\+Clouds@{Ego\+Point\+Clouds}!common@{common}}
+\subsubsection{\texorpdfstring{Ego\+Point\+Clouds}{EgoPointClouds}}
+{\footnotesize\ttfamily typedef \+::\hyperlink{structcommon_1_1EgoPointClouds__}{common\+::\+Ego\+Point\+Clouds\+\_\+}$<$std\+::allocator$<$void$>$ $>$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds}}
 
-\begin{DoxyEnumFields}{Enumerator}
-\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Red@{k\+Red}!common@{common}}\index{common@{common}!k\+Red@{k\+Red}}}\mbox{\Hypertarget{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631afb0136b923af8c04b31a9d1b5e989acf}\label{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631afb0136b923af8c04b31a9d1b5e989acf}} 
-k\+Red&\\
-\hline
+\mbox{\Hypertarget{namespacecommon_ac9ac5560cc07d92a2ece5e0a9f70952c}\label{namespacecommon_ac9ac5560cc07d92a2ece5e0a9f70952c}} 
+\index{common@{common}!Ego\+Point\+Clouds\+Const\+Ptr@{Ego\+Point\+Clouds\+Const\+Ptr}}
+\index{Ego\+Point\+Clouds\+Const\+Ptr@{Ego\+Point\+Clouds\+Const\+Ptr}!common@{common}}
+\subsubsection{\texorpdfstring{Ego\+Point\+Clouds\+Const\+Ptr}{EgoPointCloudsConstPtr}}
+{\footnotesize\ttfamily typedef boost\+::shared\+\_\+ptr$<$ \+::\hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} const$>$ \hyperlink{namespacecommon_ac9ac5560cc07d92a2ece5e0a9f70952c}{common\+::\+Ego\+Point\+Clouds\+Const\+Ptr}}
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Lime@{k\+Lime}!common@{common}}\index{common@{common}!k\+Lime@{k\+Lime}}}\mbox{\Hypertarget{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631ab7b3861337a76c8ac3cfc5ec8ec49a24}\label{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631ab7b3861337a76c8ac3cfc5ec8ec49a24}} 
-k\+Lime&\\
-\hline
+\mbox{\Hypertarget{namespacecommon_a079a4e76c38ec190f07e5cd2b7da05e0}\label{namespacecommon_a079a4e76c38ec190f07e5cd2b7da05e0}} 
+\index{common@{common}!Ego\+Point\+Clouds\+Ptr@{Ego\+Point\+Clouds\+Ptr}}
+\index{Ego\+Point\+Clouds\+Ptr@{Ego\+Point\+Clouds\+Ptr}!common@{common}}
+\subsubsection{\texorpdfstring{Ego\+Point\+Clouds\+Ptr}{EgoPointCloudsPtr}}
+{\footnotesize\ttfamily typedef boost\+::shared\+\_\+ptr$<$ \+::\hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \hyperlink{namespacecommon_a079a4e76c38ec190f07e5cd2b7da05e0}{common\+::\+Ego\+Point\+Clouds\+Ptr}}
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Blue@{k\+Blue}!common@{common}}\index{common@{common}!k\+Blue@{k\+Blue}}}\mbox{\Hypertarget{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631a8d069917ec494cc042c27acaad671f52}\label{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631a8d069917ec494cc042c27acaad671f52}} 
-k\+Blue&\\
-\hline
+\mbox{\Hypertarget{namespacecommon_a493470d1acdb35b20776bd075266358e}\label{namespacecommon_a493470d1acdb35b20776bd075266358e}} 
+\index{common@{common}!Point\+Cloud\+Sensor@{Point\+Cloud\+Sensor}}
+\index{Point\+Cloud\+Sensor@{Point\+Cloud\+Sensor}!common@{common}}
+\subsubsection{\texorpdfstring{Point\+Cloud\+Sensor}{PointCloudSensor}}
+{\footnotesize\ttfamily typedef \+::\hyperlink{structcommon_1_1PointCloudSensor__}{common\+::\+Point\+Cloud\+Sensor\+\_\+}$<$std\+::allocator$<$void$>$ $>$ \hyperlink{namespacecommon_a493470d1acdb35b20776bd075266358e}{common\+::\+Point\+Cloud\+Sensor}}
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+White@{k\+White}!common@{common}}\index{common@{common}!k\+White@{k\+White}}}\mbox{\Hypertarget{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631ad368dbde55a733c6dde5a20566d50736}\label{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631ad368dbde55a733c6dde5a20566d50736}} 
-k\+White&\\
-\hline
+\mbox{\Hypertarget{namespacecommon_ab9d5f19cc1df76e97ea53d81e8eb3d87}\label{namespacecommon_ab9d5f19cc1df76e97ea53d81e8eb3d87}} 
+\index{common@{common}!Point\+Cloud\+Sensor\+Const\+Ptr@{Point\+Cloud\+Sensor\+Const\+Ptr}}
+\index{Point\+Cloud\+Sensor\+Const\+Ptr@{Point\+Cloud\+Sensor\+Const\+Ptr}!common@{common}}
+\subsubsection{\texorpdfstring{Point\+Cloud\+Sensor\+Const\+Ptr}{PointCloudSensorConstPtr}}
+{\footnotesize\ttfamily typedef boost\+::shared\+\_\+ptr$<$ \+::\hyperlink{namespacecommon_a493470d1acdb35b20776bd075266358e}{common\+::\+Point\+Cloud\+Sensor} const$>$ \hyperlink{namespacecommon_ab9d5f19cc1df76e97ea53d81e8eb3d87}{common\+::\+Point\+Cloud\+Sensor\+Const\+Ptr}}
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Black@{k\+Black}!common@{common}}\index{common@{common}!k\+Black@{k\+Black}}}\mbox{\Hypertarget{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631ac5157738e8808c557e6cac46c034a2db}\label{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631ac5157738e8808c557e6cac46c034a2db}} 
-k\+Black&\\
-\hline
+\mbox{\Hypertarget{namespacecommon_a7d3f864e41d4e734cba72e7ae91a0b9e}\label{namespacecommon_a7d3f864e41d4e734cba72e7ae91a0b9e}} 
+\index{common@{common}!Point\+Cloud\+Sensor\+Ptr@{Point\+Cloud\+Sensor\+Ptr}}
+\index{Point\+Cloud\+Sensor\+Ptr@{Point\+Cloud\+Sensor\+Ptr}!common@{common}}
+\subsubsection{\texorpdfstring{Point\+Cloud\+Sensor\+Ptr}{PointCloudSensorPtr}}
+{\footnotesize\ttfamily typedef boost\+::shared\+\_\+ptr$<$ \+::\hyperlink{namespacecommon_a493470d1acdb35b20776bd075266358e}{common\+::\+Point\+Cloud\+Sensor} $>$ \hyperlink{namespacecommon_a7d3f864e41d4e734cba72e7ae91a0b9e}{common\+::\+Point\+Cloud\+Sensor\+Ptr}}
 
-\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Gray@{k\+Gray}!common@{common}}\index{common@{common}!k\+Gray@{k\+Gray}}}\mbox{\Hypertarget{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631a5d82e39ac78ae57980c4156efef59c16}\label{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631a5d82e39ac78ae57980c4156efef59c16}} 
-k\+Gray&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Yellow@{k\+Yellow}!common@{common}}\index{common@{common}!k\+Yellow@{k\+Yellow}}}\mbox{\Hypertarget{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631a4c6c30a3642462190739bb7f13af9c7b}\label{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631a4c6c30a3642462190739bb7f13af9c7b}} 
-k\+Yellow&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Aqua@{k\+Aqua}!common@{common}}\index{common@{common}!k\+Aqua@{k\+Aqua}}}\mbox{\Hypertarget{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631a82c602e70d64cffd84b9662ebeb4435d}\label{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631a82c602e70d64cffd84b9662ebeb4435d}} 
-k\+Aqua&\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{k\+Fuchsia@{k\+Fuchsia}!common@{common}}\index{common@{common}!k\+Fuchsia@{k\+Fuchsia}}}\mbox{\Hypertarget{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631abead6bc4d4eca2252128b312324b19e2}\label{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631abead6bc4d4eca2252128b312324b19e2}} 
-k\+Fuchsia&\\
-\hline
-
-\end{DoxyEnumFields}
 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{namespacecommon_ad4b5251bf0c4c9741c75b6bef6a23f30}\label{namespacecommon_ad4b5251bf0c4c9741c75b6bef6a23f30}} 
-\index{common@{common}!Affine3d\+From\+Affine2d@{Affine3d\+From\+Affine2d}}
-\index{Affine3d\+From\+Affine2d@{Affine3d\+From\+Affine2d}!common@{common}}
-\subsubsection{\texorpdfstring{Affine3d\+From\+Affine2d()}{Affine3dFromAffine2d()}}
-{\footnotesize\ttfamily Eigen\+::\+Affine3d common\+::\+Affine3d\+From\+Affine2d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Affine2d \&}]{aff }\end{DoxyParamCaption})}
-
-
-
-Referenced by Affine3d\+From\+Matrix3d().
-
-\mbox{\Hypertarget{namespacecommon_ae99f4d457d2bc28539862ba2698fc063}\label{namespacecommon_ae99f4d457d2bc28539862ba2698fc063}} 
-\index{common@{common}!Affine3d\+From\+Matrix3d@{Affine3d\+From\+Matrix3d}}
-\index{Affine3d\+From\+Matrix3d@{Affine3d\+From\+Matrix3d}!common@{common}}
-\subsubsection{\texorpdfstring{Affine3d\+From\+Matrix3d()}{Affine3dFromMatrix3d()}}
-{\footnotesize\ttfamily Eigen\+::\+Affine3d common\+::\+Affine3d\+From\+Matrix3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix3d \&}]{mtx }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{namespacecommon_a52b746932856cc09f947c6e7b30c3a09}\label{namespacecommon_a52b746932856cc09f947c6e7b30c3a09}} 
-\index{common@{common}!Affine3d\+From\+Matrix4f@{Affine3d\+From\+Matrix4f}}
-\index{Affine3d\+From\+Matrix4f@{Affine3d\+From\+Matrix4f}!common@{common}}
-\subsubsection{\texorpdfstring{Affine3d\+From\+Matrix4f()}{Affine3dFromMatrix4f()}}
-{\footnotesize\ttfamily Eigen\+::\+Affine3d common\+::\+Affine3d\+From\+Matrix4f (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix4f \&}]{mtx }\end{DoxyParamCaption})}
-
-
-
-Referenced by Make\+P\+S\+T(), Tst\+From\+Matrix4f(), and X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f().
-
-\mbox{\Hypertarget{namespacecommon_a8aeeb6f99d9f52e3f03d311bb7b724e8}\label{namespacecommon_a8aeeb6f99d9f52e3f03d311bb7b724e8}} 
-\index{common@{common}!Affine3d\+From\+X\+Y\+Z\+R\+PY@{Affine3d\+From\+X\+Y\+Z\+R\+PY}}
-\index{Affine3d\+From\+X\+Y\+Z\+R\+PY@{Affine3d\+From\+X\+Y\+Z\+R\+PY}!common@{common}}
-\subsubsection{\texorpdfstring{Affine3d\+From\+X\+Y\+Z\+R\+P\+Y()}{Affine3dFromXYZRPY()}}
-{\footnotesize\ttfamily Eigen\+::\+Affine3d common\+::\+Affine3d\+From\+X\+Y\+Z\+R\+PY (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector3d \&}]{xyz,  }\item[{const Eigen\+::\+Vector3d \&}]{rpy }\end{DoxyParamCaption})}
-
-
-
-Referenced by Conserve2\+D\+From\+Affine3d().
-
-\mbox{\Hypertarget{namespacecommon_a064e9e4908dbc190a24e3b18635e3379}\label{namespacecommon_a064e9e4908dbc190a24e3b18635e3379}} 
-\index{common@{common}!Combinations@{Combinations}}
-\index{Combinations@{Combinations}!common@{common}}
-\subsubsection{\texorpdfstring{Combinations()}{Combinations()}}
-{\footnotesize\ttfamily std\+::vector$<$std\+::vector$<$double$>$ $>$ common\+::\+Combinations (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ double $>$$>$}]{x }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{namespacecommon_ac1ecd24c73d1ded5d44eee957aa24b6d}\label{namespacecommon_ac1ecd24c73d1ded5d44eee957aa24b6d}} 
-\index{common@{common}!Conserve2\+D\+From\+Affine3d@{Conserve2\+D\+From\+Affine3d}}
-\index{Conserve2\+D\+From\+Affine3d@{Conserve2\+D\+From\+Affine3d}!common@{common}}
-\subsubsection{\texorpdfstring{Conserve2\+D\+From\+Affine3d()}{Conserve2DFromAffine3d()}}
-{\footnotesize\ttfamily Eigen\+::\+Affine3d common\+::\+Conserve2\+D\+From\+Affine3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Affine3d \&}]{T }\end{DoxyParamCaption})}
-
-
-
-Referenced by cb(), Get\+Poses\+Dis(), Make\+Gt\+Local(), and Make\+Local\+Gt().
-
-\mbox{\Hypertarget{namespacecommon_a7301dc27a588fd37f62232a7c1a86149}\label{namespacecommon_a7301dc27a588fd37f62232a7c1a86149}} 
-\index{common@{common}!Get\+Data\+Path@{Get\+Data\+Path}}
-\index{Get\+Data\+Path@{Get\+Data\+Path}!common@{common}}
-\subsubsection{\texorpdfstring{Get\+Data\+Path()}{GetDataPath()}}
-{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ common\+::\+Get\+Data\+Path (\begin{DoxyParamCaption}\item[{std\+::string}]{data }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{namespacecommon_afec20fc02d4e0364825bb7f9dbca7bfc}\label{namespacecommon_afec20fc02d4e0364825bb7f9dbca7bfc}} 
-\index{common@{common}!Get\+Pose@{Get\+Pose}}
-\index{Get\+Pose@{Get\+Pose}!common@{common}}
-\subsubsection{\texorpdfstring{Get\+Pose()}{GetPose()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-geometry\+\_\+msgs\+::\+Pose common\+::\+Get\+Pose (\begin{DoxyParamCaption}\item[{const T \&}]{poses,  }\item[{const ros\+::\+Time \&}]{time }\end{DoxyParamCaption})}
-
-
-
-Referenced by cb(), and Make\+Gt\+Local().
-
-\mbox{\Hypertarget{namespacecommon_ad66202ab90483412f7aca1dbfe5d399f}\label{namespacecommon_ad66202ab90483412f7aca1dbfe5d399f}} 
-\index{common@{common}!Make\+Arrow\+Marker\+By\+Ends@{Make\+Arrow\+Marker\+By\+Ends}}
-\index{Make\+Arrow\+Marker\+By\+Ends@{Make\+Arrow\+Marker\+By\+Ends}!common@{common}}
-\subsubsection{\texorpdfstring{Make\+Arrow\+Marker\+By\+Ends()}{MakeArrowMarkerByEnds()}}
-{\footnotesize\ttfamily visualization\+\_\+msgs\+::\+Marker common\+::\+Make\+Arrow\+Marker\+By\+Ends (\begin{DoxyParamCaption}\item[{int}]{idx,  }\item[{const std\+::string \&}]{frame\+\_\+id,  }\item[{const Eigen\+::\+Vector3d \&}]{start,  }\item[{const Eigen\+::\+Vector3d \&}]{end,  }\item[{const \hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}{Color} \&}]{color }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{namespacecommon_a1e46ad350c4ff03cf926cb40667019f9}\label{namespacecommon_a1e46ad350c4ff03cf926cb40667019f9}} 
-\index{common@{common}!Make\+Arrow\+Marker\+By\+Pose@{Make\+Arrow\+Marker\+By\+Pose}}
-\index{Make\+Arrow\+Marker\+By\+Pose@{Make\+Arrow\+Marker\+By\+Pose}!common@{common}}
-\subsubsection{\texorpdfstring{Make\+Arrow\+Marker\+By\+Pose()}{MakeArrowMarkerByPose()}}
-{\footnotesize\ttfamily visualization\+\_\+msgs\+::\+Marker common\+::\+Make\+Arrow\+Marker\+By\+Pose (\begin{DoxyParamCaption}\item[{int}]{idx,  }\item[{const std\+::string \&}]{frame\+\_\+id,  }\item[{const geometry\+\_\+msgs\+::\+Pose \&}]{pose,  }\item[{const \hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}{Color} \&}]{color }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{namespacecommon_a1536d9969a0d06faf584e616bd12ca08}\label{namespacecommon_a1536d9969a0d06faf584e616bd12ca08}} 
-\index{common@{common}!Make\+Color\+R\+G\+BA@{Make\+Color\+R\+G\+BA}}
-\index{Make\+Color\+R\+G\+BA@{Make\+Color\+R\+G\+BA}!common@{common}}
-\subsubsection{\texorpdfstring{Make\+Color\+R\+G\+B\+A()}{MakeColorRGBA()}}
-{\footnotesize\ttfamily std\+\_\+msgs\+::\+Color\+R\+G\+BA common\+::\+Make\+Color\+R\+G\+BA (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}{Color} \&}]{color,  }\item[{double}]{alpha = {\ttfamily 1.} }\end{DoxyParamCaption})}
-
-
-
-Referenced by Make\+Arrow\+Marker\+By\+Ends(), Make\+Arrow\+Marker\+By\+Pose(), Make\+Covariance\+Marker(), and Make\+Text\+Marker().
-
-\mbox{\Hypertarget{namespacecommon_a61576f8134edf708a3d72a842db21413}\label{namespacecommon_a61576f8134edf708a3d72a842db21413}} 
-\index{common@{common}!Make\+Covariance\+Marker@{Make\+Covariance\+Marker}}
-\index{Make\+Covariance\+Marker@{Make\+Covariance\+Marker}!common@{common}}
-\subsubsection{\texorpdfstring{Make\+Covariance\+Marker()}{MakeCovarianceMarker()}}
-{\footnotesize\ttfamily visualization\+\_\+msgs\+::\+Marker common\+::\+Make\+Covariance\+Marker (\begin{DoxyParamCaption}\item[{int}]{idx,  }\item[{const std\+::string \&}]{frame\+\_\+id,  }\item[{const Eigen\+::\+Vector2d \&}]{pt,  }\item[{const Eigen\+::\+Matrix2d \&}]{cov,  }\item[{const \hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}{Color} \&}]{color }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{namespacecommon_a8f52e7ee9db9db31ef41df1566c08b2e}\label{namespacecommon_a8f52e7ee9db9db31ef41df1566c08b2e}} 
-\index{common@{common}!Make\+Text\+Marker@{Make\+Text\+Marker}}
-\index{Make\+Text\+Marker@{Make\+Text\+Marker}!common@{common}}
-\subsubsection{\texorpdfstring{Make\+Text\+Marker()}{MakeTextMarker()}}
-{\footnotesize\ttfamily visualization\+\_\+msgs\+::\+Marker common\+::\+Make\+Text\+Marker (\begin{DoxyParamCaption}\item[{int}]{idx,  }\item[{const std\+::string \&}]{frame\+\_\+id,  }\item[{const std\+::string \&}]{text,  }\item[{const geometry\+\_\+msgs\+::\+Pose \&}]{pose,  }\item[{const \hyperlink{namespacecommon_a325f61d2a1dcd20782fbb1421c0c3631}{Color} \&}]{color }\end{DoxyParamCaption})}
-
-
-
-Referenced by Make\+Texts().
-
-\mbox{\Hypertarget{namespacecommon_a12010389a8f6bfb72230dbe65eb60ff2}\label{namespacecommon_a12010389a8f6bfb72230dbe65eb60ff2}} 
-\index{common@{common}!Matrix3d\+From\+Matrix4f@{Matrix3d\+From\+Matrix4f}}
-\index{Matrix3d\+From\+Matrix4f@{Matrix3d\+From\+Matrix4f}!common@{common}}
-\subsubsection{\texorpdfstring{Matrix3d\+From\+Matrix4f()}{Matrix3dFromMatrix4f()}}
-{\footnotesize\ttfamily Eigen\+::\+Matrix3d common\+::\+Matrix3d\+From\+Matrix4f (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix4f \&}]{mtx }\end{DoxyParamCaption})}
-
-
-
-Referenced by Do\+P\+C\+L\+S\+I\+C\+P(), main(), and Matrix3d\+From\+X\+Form().
-
-\mbox{\Hypertarget{namespacecommon_abd161a56797ce1d90331acbf3d441d90}\label{namespacecommon_abd161a56797ce1d90331acbf3d441d90}} 
-\index{common@{common}!Matrix3d\+From\+X\+Y\+T\+Degree@{Matrix3d\+From\+X\+Y\+T\+Degree}}
-\index{Matrix3d\+From\+X\+Y\+T\+Degree@{Matrix3d\+From\+X\+Y\+T\+Degree}!common@{common}}
-\subsubsection{\texorpdfstring{Matrix3d\+From\+X\+Y\+T\+Degree()}{Matrix3dFromXYTDegree()}}
-{\footnotesize\ttfamily Eigen\+::\+Matrix3d common\+::\+Matrix3d\+From\+X\+Y\+T\+Degree (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector3d \&}]{xyt }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{namespacecommon_a79c5532f7b71e03e4436194f78e637ce}\label{namespacecommon_a79c5532f7b71e03e4436194f78e637ce}} 
-\index{common@{common}!Matrix3d\+From\+X\+Y\+T\+Radian@{Matrix3d\+From\+X\+Y\+T\+Radian}}
-\index{Matrix3d\+From\+X\+Y\+T\+Radian@{Matrix3d\+From\+X\+Y\+T\+Radian}!common@{common}}
-\subsubsection{\texorpdfstring{Matrix3d\+From\+X\+Y\+T\+Radian()}{Matrix3dFromXYTRadian()}}
-{\footnotesize\ttfamily Eigen\+::\+Matrix3d common\+::\+Matrix3d\+From\+X\+Y\+T\+Radian (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector3d \&}]{xyt }\end{DoxyParamCaption})}
-
-
-
-Referenced by Matrix3d\+From\+Matrix4f(), Matrix3d\+From\+X\+Y\+T\+Degree(), and Matrix4f\+From\+X\+Y\+T\+Radian().
-
-\mbox{\Hypertarget{namespacecommon_a95c001ee532d4d5659496a2f3699e3d7}\label{namespacecommon_a95c001ee532d4d5659496a2f3699e3d7}} 
-\index{common@{common}!Matrix4f\+From\+Matrix3d@{Matrix4f\+From\+Matrix3d}}
-\index{Matrix4f\+From\+Matrix3d@{Matrix4f\+From\+Matrix3d}!common@{common}}
-\subsubsection{\texorpdfstring{Matrix4f\+From\+Matrix3d()}{Matrix4fFromMatrix3d()}}
-{\footnotesize\ttfamily Eigen\+::\+Matrix4f common\+::\+Matrix4f\+From\+Matrix3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix3d \&}]{mtx }\end{DoxyParamCaption})}
-
-
-
-Referenced by Do\+P\+C\+L\+S\+I\+C\+P(), Do\+S\+I\+C\+P(), main(), and Matrix4f\+From\+X\+Y\+T\+Radian().
-
-\mbox{\Hypertarget{namespacecommon_a43b57f5e12ace94174d0110531826896}\label{namespacecommon_a43b57f5e12ace94174d0110531826896}} 
-\index{common@{common}!Matrix4f\+From\+X\+Y\+T\+Radian@{Matrix4f\+From\+X\+Y\+T\+Radian}}
-\index{Matrix4f\+From\+X\+Y\+T\+Radian@{Matrix4f\+From\+X\+Y\+T\+Radian}!common@{common}}
-\subsubsection{\texorpdfstring{Matrix4f\+From\+X\+Y\+T\+Radian()}{Matrix4fFromXYTRadian()}}
-{\footnotesize\ttfamily Eigen\+::\+Matrix4f common\+::\+Matrix4f\+From\+X\+Y\+T\+Radian (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Vector3d \&}]{xyt }\end{DoxyParamCaption})}
-
-
-
-Referenced by Augment\+Point\+Cloud(), and main().
-
-\mbox{\Hypertarget{namespacecommon_a31d70b6febb50afde5fa00fc9a310fe3}\label{namespacecommon_a31d70b6febb50afde5fa00fc9a310fe3}} 
-\index{common@{common}!Pose\+Interpolate@{Pose\+Interpolate}}
-\index{Pose\+Interpolate@{Pose\+Interpolate}!common@{common}}
-\subsubsection{\texorpdfstring{Pose\+Interpolate()}{PoseInterpolate()}}
-{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Pose common\+::\+Pose\+Interpolate (\begin{DoxyParamCaption}\item[{const geometry\+\_\+msgs\+::\+Pose\+Stamped \&}]{p1,  }\item[{const geometry\+\_\+msgs\+::\+Pose\+Stamped \&}]{p2,  }\item[{const ros\+::\+Time \&}]{time }\end{DoxyParamCaption})}
-
-
-
-Referenced by Get\+Pose().
-
-\mbox{\Hypertarget{namespacecommon_aaafeb67e7c22aa1324903d0c2539d310}\label{namespacecommon_aaafeb67e7c22aa1324903d0c2539d310}} 
-\index{common@{common}!Serialization\+Input@{Serialization\+Input}}
-\index{Serialization\+Input@{Serialization\+Input}!common@{common}}
-\subsubsection{\texorpdfstring{Serialization\+Input()}{SerializationInput()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void common\+::\+Serialization\+Input (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filepath,  }\item[{T \&}]{msg }\end{DoxyParamCaption})}
-
-
-
-Referenced by Get\+Files(), and main().
-
-\mbox{\Hypertarget{namespacecommon_ab793b440cdf411b716bde82330d2b364}\label{namespacecommon_ab793b440cdf411b716bde82330d2b364}} 
-\index{common@{common}!Serialization\+Output@{Serialization\+Output}}
-\index{Serialization\+Output@{Serialization\+Output}!common@{common}}
-\subsubsection{\texorpdfstring{Serialization\+Output()}{SerializationOutput()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void common\+::\+Serialization\+Output (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filepath,  }\item[{const T \&}]{msg }\end{DoxyParamCaption})}
-
-
-
-Referenced by main(), and savecb().
-
-\mbox{\Hypertarget{namespacecommon_aa28e88e788569055b2217ed26e48f922}\label{namespacecommon_aa28e88e788569055b2217ed26e48f922}} 
-\index{common@{common}!Serialize\+In@{Serialize\+In}}
-\index{Serialize\+In@{Serialize\+In}!common@{common}}
-\subsubsection{\texorpdfstring{Serialize\+In()}{SerializeIn()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void common\+::\+Serialize\+In (\begin{DoxyParamCaption}\item[{std\+::string}]{file\+\_\+name,  }\item[{T \&}]{data }\end{DoxyParamCaption})}
-
-
-
-Referenced by main().
-
-\mbox{\Hypertarget{namespacecommon_adac07f1443b546753894f4466ae7d051}\label{namespacecommon_adac07f1443b546753894f4466ae7d051}} 
-\index{common@{common}!Serialize\+Out@{Serialize\+Out}}
-\index{Serialize\+Out@{Serialize\+Out}!common@{common}}
-\subsubsection{\texorpdfstring{Serialize\+Out()}{SerializeOut()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void common\+::\+Serialize\+Out (\begin{DoxyParamCaption}\item[{std\+::string}]{file\+\_\+name,  }\item[{const T \&}]{data }\end{DoxyParamCaption})}
-
-
-
-Referenced by main().
-
-\mbox{\Hypertarget{namespacecommon_a191afad1f06d091167c390fbe1457b5d}\label{namespacecommon_a191afad1f06d091167c390fbe1457b5d}} 
-\index{common@{common}!Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d@{Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d}}
-\index{Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d@{Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d}!common@{common}}
-\subsubsection{\texorpdfstring{Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d()}{TransNormRotDegAbsFromMatrix3d()}}
-{\footnotesize\ttfamily Eigen\+::\+Vector2d common\+::\+Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix3d \&}]{mtx }\end{DoxyParamCaption})}
-
-
-
-Referenced by cb().
-
-\mbox{\Hypertarget{namespacecommon_af406e07c4c8640ce9b10a2ff45365ae1}\label{namespacecommon_af406e07c4c8640ce9b10a2ff45365ae1}} 
-\index{common@{common}!Tst\+From\+Affine3d@{Tst\+From\+Affine3d}}
-\index{Tst\+From\+Affine3d@{Tst\+From\+Affine3d}!common@{common}}
-\subsubsection{\texorpdfstring{Tst\+From\+Affine3d()}{TstFromAffine3d()}}
-{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Transform\+Stamped common\+::\+Tst\+From\+Affine3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Affine3d \&}]{T,  }\item[{const ros\+::\+Time \&}]{stamp,  }\item[{const std\+::string \&}]{frame\+\_\+id,  }\item[{const std\+::string \&}]{child\+\_\+frame\+\_\+id }\end{DoxyParamCaption})}
-
-
-
-Referenced by Tst\+From\+Matrix4f().
-
-\mbox{\Hypertarget{namespacecommon_a3e57252779375868d389d7c9f943a44f}\label{namespacecommon_a3e57252779375868d389d7c9f943a44f}} 
-\index{common@{common}!Tst\+From\+Matrix4f@{Tst\+From\+Matrix4f}}
-\index{Tst\+From\+Matrix4f@{Tst\+From\+Matrix4f}!common@{common}}
-\subsubsection{\texorpdfstring{Tst\+From\+Matrix4f()}{TstFromMatrix4f()}}
-{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Transform\+Stamped common\+::\+Tst\+From\+Matrix4f (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix4f \&}]{T,  }\item[{const ros\+::\+Time \&}]{stamp,  }\item[{const std\+::string \&}]{frame\+\_\+id,  }\item[{const std\+::string \&}]{child\+\_\+frame\+\_\+id }\end{DoxyParamCaption})}
-
-\mbox{\Hypertarget{namespacecommon_ac2334937b8f4c3b74ba6393a30876499}\label{namespacecommon_ac2334937b8f4c3b74ba6393a30876499}} 
-\index{common@{common}!X\+Y\+T\+Degree\+From\+Matrix3d@{X\+Y\+T\+Degree\+From\+Matrix3d}}
-\index{X\+Y\+T\+Degree\+From\+Matrix3d@{X\+Y\+T\+Degree\+From\+Matrix3d}!common@{common}}
-\subsubsection{\texorpdfstring{X\+Y\+T\+Degree\+From\+Matrix3d()}{XYTDegreeFromMatrix3d()}}
-{\footnotesize\ttfamily Eigen\+::\+Vector3d common\+::\+X\+Y\+T\+Degree\+From\+Matrix3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix3d \&}]{mtx }\end{DoxyParamCaption})}
-
-
-
-Referenced by main(), and Trans\+Norm\+Rot\+Deg\+Abs\+From\+Matrix3d().
-
-\mbox{\Hypertarget{namespacecommon_a380c663a4f46d093dca7813385d5472c}\label{namespacecommon_a380c663a4f46d093dca7813385d5472c}} 
-\index{common@{common}!X\+Y\+T\+Radian\+From\+Matrix3d@{X\+Y\+T\+Radian\+From\+Matrix3d}}
-\index{X\+Y\+T\+Radian\+From\+Matrix3d@{X\+Y\+T\+Radian\+From\+Matrix3d}!common@{common}}
-\subsubsection{\texorpdfstring{X\+Y\+T\+Radian\+From\+Matrix3d()}{XYTRadianFromMatrix3d()}}
-{\footnotesize\ttfamily Eigen\+::\+Vector3d common\+::\+X\+Y\+T\+Radian\+From\+Matrix3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix3d \&}]{mtx }\end{DoxyParamCaption})}
-
-
-
-Referenced by X\+Y\+T\+Degree\+From\+Matrix3d().
-
-\mbox{\Hypertarget{namespacecommon_abf63050ffc1423dd7c334a6c3c5618a1}\label{namespacecommon_abf63050ffc1423dd7c334a6c3c5618a1}} 
-\index{common@{common}!X\+Y\+Z\+R\+P\+Y\+From\+Affine3d@{X\+Y\+Z\+R\+P\+Y\+From\+Affine3d}}
-\index{X\+Y\+Z\+R\+P\+Y\+From\+Affine3d@{X\+Y\+Z\+R\+P\+Y\+From\+Affine3d}!common@{common}}
-\subsubsection{\texorpdfstring{X\+Y\+Z\+R\+P\+Y\+From\+Affine3d()}{XYZRPYFromAffine3d()}}
-{\footnotesize\ttfamily Eigen\+::\+Matrix$<$double, 6, 1$>$ common\+::\+X\+Y\+Z\+R\+P\+Y\+From\+Affine3d (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Affine3d \&}]{mtx }\end{DoxyParamCaption})}
-
-
-
-Referenced by Conserve2\+D\+From\+Affine3d(), and X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f().
-
-\mbox{\Hypertarget{namespacecommon_a75012054387d4de49be04481e844d4aa}\label{namespacecommon_a75012054387d4de49be04481e844d4aa}} 
-\index{common@{common}!X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f@{X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f}}
-\index{X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f@{X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f}!common@{common}}
-\subsubsection{\texorpdfstring{X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f()}{XYZRPYFromMatrix4f()}}
-{\footnotesize\ttfamily Eigen\+::\+Matrix$<$double, 6, 1$>$ common\+::\+X\+Y\+Z\+R\+P\+Y\+From\+Matrix4f (\begin{DoxyParamCaption}\item[{const Eigen\+::\+Matrix4f \&}]{mtx }\end{DoxyParamCaption})}
-
-
-
-Referenced by Matrix3d\+From\+Matrix4f().
+\mbox{\Hypertarget{namespacecommon_ab204ea7eb40246b726341e9d9ed63520}\label{namespacecommon_ab204ea7eb40246b726341e9d9ed63520}} 
+\index{common@{common}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!common@{common}}
+\subsubsection{\texorpdfstring{operator"!=()}{operator!=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Container\+Allocator1 , typename Container\+Allocator2 $>$ \\
+bool common\+::operator!= (\begin{DoxyParamCaption}\item[{const \+::\hyperlink{structcommon_1_1PointCloudSensor__}{common\+::\+Point\+Cloud\+Sensor\+\_\+}$<$ Container\+Allocator1 $>$ \&}]{lhs,  }\item[{const \+::\hyperlink{structcommon_1_1PointCloudSensor__}{common\+::\+Point\+Cloud\+Sensor\+\_\+}$<$ Container\+Allocator2 $>$ \&}]{rhs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacecommon_afd4a49a0e5d3d1823ae5842fa54a7466}\label{namespacecommon_afd4a49a0e5d3d1823ae5842fa54a7466}} 
+\index{common@{common}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!common@{common}}
+\subsubsection{\texorpdfstring{operator"!=()}{operator!=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Container\+Allocator1 , typename Container\+Allocator2 $>$ \\
+bool common\+::operator!= (\begin{DoxyParamCaption}\item[{const \+::\hyperlink{structcommon_1_1EgoPointClouds__}{common\+::\+Ego\+Point\+Clouds\+\_\+}$<$ Container\+Allocator1 $>$ \&}]{lhs,  }\item[{const \+::\hyperlink{structcommon_1_1EgoPointClouds__}{common\+::\+Ego\+Point\+Clouds\+\_\+}$<$ Container\+Allocator2 $>$ \&}]{rhs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacecommon_a8fbe91682ecab877102fddadf0793d6e}\label{namespacecommon_a8fbe91682ecab877102fddadf0793d6e}} 
+\index{common@{common}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!common@{common}}
+\subsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Container\+Allocator $>$ \\
+std\+::ostream\& common\+::operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{s,  }\item[{const \+::\hyperlink{structcommon_1_1PointCloudSensor__}{common\+::\+Point\+Cloud\+Sensor\+\_\+}$<$ Container\+Allocator $>$ \&}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacecommon_ab88da1e27722dfe7cfc22f6106e01016}\label{namespacecommon_ab88da1e27722dfe7cfc22f6106e01016}} 
+\index{common@{common}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!common@{common}}
+\subsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Container\+Allocator $>$ \\
+std\+::ostream\& common\+::operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{s,  }\item[{const \+::\hyperlink{structcommon_1_1EgoPointClouds__}{common\+::\+Ego\+Point\+Clouds\+\_\+}$<$ Container\+Allocator $>$ \&}]{v }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacecommon_a7c09f723fcbe2e36f39855e3b7ece998}\label{namespacecommon_a7c09f723fcbe2e36f39855e3b7ece998}} 
+\index{common@{common}!operator==@{operator==}}
+\index{operator==@{operator==}!common@{common}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Container\+Allocator1 , typename Container\+Allocator2 $>$ \\
+bool common\+::operator== (\begin{DoxyParamCaption}\item[{const \+::\hyperlink{structcommon_1_1PointCloudSensor__}{common\+::\+Point\+Cloud\+Sensor\+\_\+}$<$ Container\+Allocator1 $>$ \&}]{lhs,  }\item[{const \+::\hyperlink{structcommon_1_1PointCloudSensor__}{common\+::\+Point\+Cloud\+Sensor\+\_\+}$<$ Container\+Allocator2 $>$ \&}]{rhs }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacecommon_af4bbfa6ad580ed64356a91d0f46fd59a}\label{namespacecommon_af4bbfa6ad580ed64356a91d0f46fd59a}} 
+\index{common@{common}!operator==@{operator==}}
+\index{operator==@{operator==}!common@{common}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Container\+Allocator1 , typename Container\+Allocator2 $>$ \\
+bool common\+::operator== (\begin{DoxyParamCaption}\item[{const \+::\hyperlink{structcommon_1_1EgoPointClouds__}{common\+::\+Ego\+Point\+Clouds\+\_\+}$<$ Container\+Allocator1 $>$ \&}]{lhs,  }\item[{const \+::\hyperlink{structcommon_1_1EgoPointClouds__}{common\+::\+Ego\+Point\+Clouds\+\_\+}$<$ Container\+Allocator2 $>$ \&}]{rhs }\end{DoxyParamCaption})}
 

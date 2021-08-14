@@ -1,0 +1,551 @@
+\hypertarget{test__diff_8cc}{}\section{test\+\_\+diff.\+cc File Reference}
+\label{test__diff_8cc}\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+{\ttfamily \#include $<$common/\+Ego\+Point\+Clouds.\+h$>$}\newline
+{\ttfamily \#include $<$common/common.\+h$>$}\newline
+{\ttfamily \#include $<$ros/ros.\+h$>$}\newline
+{\ttfamily \#include $<$sensor\+\_\+msgs/\+Compressed\+Image.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/matcher.\+h$>$}\newline
+{\ttfamily \#include $<$sndt/visuals.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+msgs/\+Int32.\+h$>$}\newline
+{\ttfamily \#include $<$nav\+\_\+msgs/\+Path.\+h$>$}\newline
+{\ttfamily \#include $<$boost/program\+\_\+options.\+hpp$>$}\newline
+{\ttfamily \#include $<$sndt\+\_\+exec/wrapper.\+hpp$>$}\newline
+Include dependency graph for test\+\_\+diff.\+cc\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{d2/d8e/test__diff_8cc__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+pair$<$ int, double $>$ \hyperlink{test__diff_8cc_a37e74be56daa201a76d5fc720be5b628}{Find\+Max} (double a, double b, double c)
+\item 
+pair$<$ int, double $>$ \hyperlink{test__diff_8cc_af9e6d707ff1c7554c2953bd0c74d5af3}{Find\+Min} (double a, double b, double c)
+\item 
+void \hyperlink{test__diff_8cc_abf7613499686c6bb646f6244258a331b}{cb} (const std\+\_\+msgs\+::\+Int32 \&num)
+\item 
+void \hyperlink{test__diff_8cc_ae7d472afb23bff8ec98a5f46cca5848e}{Get\+Files} (string data)
+\item 
+int \hyperlink{test__diff_8cc_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{test__diff_8cc_ab19438289dc006d3f3e0476780c65cb6}{imb}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{test__diff_8cc_a15b1bc8eceb2b159d223eb5d4d5b0cab}{imbl}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{test__diff_8cc_a39608350f0ce9d831ab56bff0867c80d}{imbr}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{test__diff_8cc_a6841637de94054692b83c8d4763f0408}{imf}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{test__diff_8cc_ae47ac24e18dc2e843096015690834c38}{imfl}
+\item 
+vector$<$ sensor\+\_\+msgs\+::\+Compressed\+Image $>$ \hyperlink{test__diff_8cc_a1ebb671bb4254879909df0304c0efc3a}{imfr}
+\item 
+vector$<$ \hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds} $>$ \hyperlink{test__diff_8cc_a534dd5b2e3bb626d915366ce052db0f0}{vepcs}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_ade99baad604daed9de810ac3cf5da418}{pub1}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_a2bef9e72d62d7ea1be803444f1ca7a6b}{pub2}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_a0e8d412fdaada4745c72680b946d90a5}{pub3}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_ab12b64a45b0ec98fdd9cce22e0b560ca}{pub4}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_ae06a537905927bd65d6e9d58360530ff}{pub5}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_a21bf5a7507c5f2621f0190f5f163abae}{pub6}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_afbec5b55605c8b8a790745fdb732b4b5}{pub7}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_ab37b77ca08a1600c8f5ca9909ba2f83f}{pub8}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_a4e75660e09f65cdc40028e2a3ad5d83d}{pube}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_a338d91f2326697a1ed2a8e16a9b05c9b}{pb1}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_a4aad474c7b2258175e6c83439a3e6329}{pb2}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_a3f0e0bb661df616dc05b1046c299b981}{pb3}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_a16890c3693b8e1927eab27cb2d00a862}{pb4}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_af4081b23f7d00ff81363a731165957f4}{pb5}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_ab7388010ade0a6883cc992b23595c2dc}{pb6}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_ac6e966f8ce340d7750108fee5d84c527}{pbs}
+\item 
+ros\+::\+Publisher \hyperlink{test__diff_8cc_a31e4900c7bba6abbbc976f87ae021a21}{pbt}
+\item 
+int \hyperlink{test__diff_8cc_a61217d5bc9d5b446d9c08e7ca401b733}{frames}
+\item 
+double \hyperlink{test__diff_8cc_a456553c1fc05d94c07e74c5fd45f6621}{cell\+\_\+size}
+\item 
+double \hyperlink{test__diff_8cc_a3f67c53b80389c5f53961936edba04c9}{radius}
+\item 
+double \hyperlink{test__diff_8cc_a09ff184b5f358f6069434df0167479a7}{rvar}
+\item 
+double \hyperlink{test__diff_8cc_a86623871870f863b5735a0bb2d3c74d2}{tvar}
+\item 
+double \hyperlink{test__diff_8cc_ad556df891db2504a92174300e47bf8c0}{huber}
+\item 
+nav\+\_\+msgs\+::\+Path \hyperlink{test__diff_8cc_a2db96f9b5362cb25affd2f5e43348e20}{gtpath}
+\item 
+std\+\_\+msgs\+::\+Float64\+Multi\+Array \hyperlink{test__diff_8cc_af82c0f6e9832052d78f1bd22b30c6cb8}{errs}
+\item 
+vector$<$ int $>$ \hyperlink{test__diff_8cc_ae353b1eaf77ad3bcfe220f1957db00f8}{corr0}
+\item 
+vector$<$ int $>$ \hyperlink{test__diff_8cc_ad906be2875c53c172578cc01463da623}{corr1}
+\item 
+vector$<$ int $>$ \hyperlink{test__diff_8cc_afe8130e345fa0045d8061e363822e819}{corr2}
+\item 
+vector$<$ int $>$ \hyperlink{test__diff_8cc_a8e048d51a151fc9d9c6987d9b9176334}{opt0}
+\item 
+vector$<$ int $>$ \hyperlink{test__diff_8cc_abe774921531a91d499290ae8b9113e53}{opt1}
+\item 
+vector$<$ int $>$ \hyperlink{test__diff_8cc_a03a3eff80acf406cef31ed01f0cb3210}{opt2}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+your name (\href{mailto:you@domain.com}{\tt you@domain.\+com}) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2021-\/08-\/01
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2021 
+\end{DoxyCopyright}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{test__diff_8cc_abf7613499686c6bb646f6244258a331b}\label{test__diff_8cc_abf7613499686c6bb646f6244258a331b}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!cb@{cb}}
+\index{cb@{cb}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{cb()}{cb()}}
+{\footnotesize\ttfamily void cb (\begin{DoxyParamCaption}\item[{const std\+\_\+msgs\+::\+Int32 \&}]{num }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{test__diff_8cc_a37e74be56daa201a76d5fc720be5b628}\label{test__diff_8cc_a37e74be56daa201a76d5fc720be5b628}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!Find\+Max@{Find\+Max}}
+\index{Find\+Max@{Find\+Max}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{Find\+Max()}{FindMax()}}
+{\footnotesize\ttfamily pair$<$int, double$>$ Find\+Max (\begin{DoxyParamCaption}\item[{double}]{a,  }\item[{double}]{b,  }\item[{double}]{c }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb().
+
+\mbox{\Hypertarget{test__diff_8cc_af9e6d707ff1c7554c2953bd0c74d5af3}\label{test__diff_8cc_af9e6d707ff1c7554c2953bd0c74d5af3}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!Find\+Min@{Find\+Min}}
+\index{Find\+Min@{Find\+Min}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{Find\+Min()}{FindMin()}}
+{\footnotesize\ttfamily pair$<$int, double$>$ Find\+Min (\begin{DoxyParamCaption}\item[{double}]{a,  }\item[{double}]{b,  }\item[{double}]{c }\end{DoxyParamCaption})}
+
+
+
+Referenced by cb().
+
+\mbox{\Hypertarget{test__diff_8cc_ae7d472afb23bff8ec98a5f46cca5848e}\label{test__diff_8cc_ae7d472afb23bff8ec98a5f46cca5848e}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!Get\+Files@{Get\+Files}}
+\index{Get\+Files@{Get\+Files}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{Get\+Files()}{GetFiles()}}
+{\footnotesize\ttfamily void Get\+Files (\begin{DoxyParamCaption}\item[{string}]{data }\end{DoxyParamCaption})}
+
+
+
+Referenced by main().
+
+\mbox{\Hypertarget{test__diff_8cc_a3c04138a5bfe5d72780bb7e82a18e627}\label{test__diff_8cc_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!main@{main}}
+\index{main@{main}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{test__diff_8cc_a456553c1fc05d94c07e74c5fd45f6621}\label{test__diff_8cc_a456553c1fc05d94c07e74c5fd45f6621}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!cell\+\_\+size@{cell\+\_\+size}}
+\index{cell\+\_\+size@{cell\+\_\+size}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{cell\+\_\+size}{cell\_size}}
+{\footnotesize\ttfamily double cell\+\_\+size}
+
+
+
+Referenced by main(), Make\+N\+D\+T\+Map(), Make\+S\+N\+D\+T\+Map(), Map\+Interface\+::\+Map\+Interface(), N\+D\+T\+D2\+D\+Parameters\+::\+N\+D\+T\+D2\+D\+Parameters(), and S\+N\+D\+T\+Parameters\+::\+S\+N\+D\+T\+Parameters().
+
+\mbox{\Hypertarget{test__diff_8cc_ae353b1eaf77ad3bcfe220f1957db00f8}\label{test__diff_8cc_ae353b1eaf77ad3bcfe220f1957db00f8}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!corr0@{corr0}}
+\index{corr0@{corr0}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{corr0}{corr0}}
+{\footnotesize\ttfamily vector$<$int$>$ corr0}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_ad906be2875c53c172578cc01463da623}\label{test__diff_8cc_ad906be2875c53c172578cc01463da623}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!corr1@{corr1}}
+\index{corr1@{corr1}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{corr1}{corr1}}
+{\footnotesize\ttfamily vector$<$int$>$ corr1}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_afe8130e345fa0045d8061e363822e819}\label{test__diff_8cc_afe8130e345fa0045d8061e363822e819}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!corr2@{corr2}}
+\index{corr2@{corr2}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{corr2}{corr2}}
+{\footnotesize\ttfamily vector$<$int$>$ corr2}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_af82c0f6e9832052d78f1bd22b30c6cb8}\label{test__diff_8cc_af82c0f6e9832052d78f1bd22b30c6cb8}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!errs@{errs}}
+\index{errs@{errs}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{errs}{errs}}
+{\footnotesize\ttfamily std\+\_\+msgs\+::\+Float64\+Multi\+Array errs}
+
+
+
+Referenced by cb().
+
+\mbox{\Hypertarget{test__diff_8cc_a61217d5bc9d5b446d9c08e7ca401b733}\label{test__diff_8cc_a61217d5bc9d5b446d9c08e7ca401b733}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!frames@{frames}}
+\index{frames@{frames}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{frames}{frames}}
+{\footnotesize\ttfamily int frames}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a2db96f9b5362cb25affd2f5e43348e20}\label{test__diff_8cc_a2db96f9b5362cb25affd2f5e43348e20}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!gtpath@{gtpath}}
+\index{gtpath@{gtpath}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{gtpath}{gtpath}}
+{\footnotesize\ttfamily nav\+\_\+msgs\+::\+Path gtpath}
+
+
+
+Referenced by cb(), Get\+Files(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_ad556df891db2504a92174300e47bf8c0}\label{test__diff_8cc_ad556df891db2504a92174300e47bf8c0}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!huber@{huber}}
+\index{huber@{huber}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{huber}{huber}}
+{\footnotesize\ttfamily double huber}
+
+
+
+Referenced by Common\+Parameters\+::\+Initialize\+Input(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_ab19438289dc006d3f3e0476780c65cb6}\label{test__diff_8cc_ab19438289dc006d3f3e0476780c65cb6}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!imb@{imb}}
+\index{imb@{imb}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{imb}{imb}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Compressed\+Image$>$ imb}
+
+
+
+Referenced by cb(), Get\+Files(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a15b1bc8eceb2b159d223eb5d4d5b0cab}\label{test__diff_8cc_a15b1bc8eceb2b159d223eb5d4d5b0cab}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!imbl@{imbl}}
+\index{imbl@{imbl}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{imbl}{imbl}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Compressed\+Image$>$ imbl}
+
+
+
+Referenced by cb(), Get\+Files(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a39608350f0ce9d831ab56bff0867c80d}\label{test__diff_8cc_a39608350f0ce9d831ab56bff0867c80d}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!imbr@{imbr}}
+\index{imbr@{imbr}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{imbr}{imbr}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Compressed\+Image$>$ imbr}
+
+
+
+Referenced by cb(), Get\+Files(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a6841637de94054692b83c8d4763f0408}\label{test__diff_8cc_a6841637de94054692b83c8d4763f0408}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!imf@{imf}}
+\index{imf@{imf}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{imf}{imf}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Compressed\+Image$>$ imf}
+
+
+
+Referenced by cb(), Get\+Files(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_ae47ac24e18dc2e843096015690834c38}\label{test__diff_8cc_ae47ac24e18dc2e843096015690834c38}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!imfl@{imfl}}
+\index{imfl@{imfl}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{imfl}{imfl}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Compressed\+Image$>$ imfl}
+
+
+
+Referenced by cb(), Get\+Files(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a1ebb671bb4254879909df0304c0efc3a}\label{test__diff_8cc_a1ebb671bb4254879909df0304c0efc3a}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!imfr@{imfr}}
+\index{imfr@{imfr}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{imfr}{imfr}}
+{\footnotesize\ttfamily vector$<$sensor\+\_\+msgs\+::\+Compressed\+Image$>$ imfr}
+
+
+
+Referenced by cb(), Get\+Files(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a8e048d51a151fc9d9c6987d9b9176334}\label{test__diff_8cc_a8e048d51a151fc9d9c6987d9b9176334}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!opt0@{opt0}}
+\index{opt0@{opt0}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{opt0}{opt0}}
+{\footnotesize\ttfamily vector$<$int$>$ opt0}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_abe774921531a91d499290ae8b9113e53}\label{test__diff_8cc_abe774921531a91d499290ae8b9113e53}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!opt1@{opt1}}
+\index{opt1@{opt1}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{opt1}{opt1}}
+{\footnotesize\ttfamily vector$<$int$>$ opt1}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a03a3eff80acf406cef31ed01f0cb3210}\label{test__diff_8cc_a03a3eff80acf406cef31ed01f0cb3210}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!opt2@{opt2}}
+\index{opt2@{opt2}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{opt2}{opt2}}
+{\footnotesize\ttfamily vector$<$int$>$ opt2}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a338d91f2326697a1ed2a8e16a9b05c9b}\label{test__diff_8cc_a338d91f2326697a1ed2a8e16a9b05c9b}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pb1@{pb1}}
+\index{pb1@{pb1}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pb1}{pb1}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb1}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a4aad474c7b2258175e6c83439a3e6329}\label{test__diff_8cc_a4aad474c7b2258175e6c83439a3e6329}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pb2@{pb2}}
+\index{pb2@{pb2}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pb2}{pb2}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb2}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a3f0e0bb661df616dc05b1046c299b981}\label{test__diff_8cc_a3f0e0bb661df616dc05b1046c299b981}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pb3@{pb3}}
+\index{pb3@{pb3}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pb3}{pb3}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb3}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a16890c3693b8e1927eab27cb2d00a862}\label{test__diff_8cc_a16890c3693b8e1927eab27cb2d00a862}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pb4@{pb4}}
+\index{pb4@{pb4}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pb4}{pb4}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb4}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_af4081b23f7d00ff81363a731165957f4}\label{test__diff_8cc_af4081b23f7d00ff81363a731165957f4}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pb5@{pb5}}
+\index{pb5@{pb5}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pb5}{pb5}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb5}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_ab7388010ade0a6883cc992b23595c2dc}\label{test__diff_8cc_ab7388010ade0a6883cc992b23595c2dc}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pb6@{pb6}}
+\index{pb6@{pb6}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pb6}{pb6}}
+{\footnotesize\ttfamily ros\+::\+Publisher pb6}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_ac6e966f8ce340d7750108fee5d84c527}\label{test__diff_8cc_ac6e966f8ce340d7750108fee5d84c527}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pbs@{pbs}}
+\index{pbs@{pbs}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pbs}{pbs}}
+{\footnotesize\ttfamily ros\+::\+Publisher pbs}
+
+\mbox{\Hypertarget{test__diff_8cc_a31e4900c7bba6abbbc976f87ae021a21}\label{test__diff_8cc_a31e4900c7bba6abbbc976f87ae021a21}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pbt@{pbt}}
+\index{pbt@{pbt}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pbt}{pbt}}
+{\footnotesize\ttfamily ros\+::\+Publisher pbt}
+
+\mbox{\Hypertarget{test__diff_8cc_ade99baad604daed9de810ac3cf5da418}\label{test__diff_8cc_ade99baad604daed9de810ac3cf5da418}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pub1@{pub1}}
+\index{pub1@{pub1}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pub1}{pub1}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub1}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a2bef9e72d62d7ea1be803444f1ca7a6b}\label{test__diff_8cc_a2bef9e72d62d7ea1be803444f1ca7a6b}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pub2@{pub2}}
+\index{pub2@{pub2}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pub2}{pub2}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub2}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a0e8d412fdaada4745c72680b946d90a5}\label{test__diff_8cc_a0e8d412fdaada4745c72680b946d90a5}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pub3@{pub3}}
+\index{pub3@{pub3}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pub3}{pub3}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub3}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_ab12b64a45b0ec98fdd9cce22e0b560ca}\label{test__diff_8cc_ab12b64a45b0ec98fdd9cce22e0b560ca}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pub4@{pub4}}
+\index{pub4@{pub4}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pub4}{pub4}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub4}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_ae06a537905927bd65d6e9d58360530ff}\label{test__diff_8cc_ae06a537905927bd65d6e9d58360530ff}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pub5@{pub5}}
+\index{pub5@{pub5}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pub5}{pub5}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub5}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a21bf5a7507c5f2621f0190f5f163abae}\label{test__diff_8cc_a21bf5a7507c5f2621f0190f5f163abae}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pub6@{pub6}}
+\index{pub6@{pub6}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pub6}{pub6}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub6}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_afbec5b55605c8b8a790745fdb732b4b5}\label{test__diff_8cc_afbec5b55605c8b8a790745fdb732b4b5}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pub7@{pub7}}
+\index{pub7@{pub7}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pub7}{pub7}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub7}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_ab37b77ca08a1600c8f5ca9909ba2f83f}\label{test__diff_8cc_ab37b77ca08a1600c8f5ca9909ba2f83f}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pub8@{pub8}}
+\index{pub8@{pub8}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pub8}{pub8}}
+{\footnotesize\ttfamily ros\+::\+Publisher pub8}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a4e75660e09f65cdc40028e2a3ad5d83d}\label{test__diff_8cc_a4e75660e09f65cdc40028e2a3ad5d83d}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!pube@{pube}}
+\index{pube@{pube}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{pube}{pube}}
+{\footnotesize\ttfamily ros\+::\+Publisher pube}
+
+
+
+Referenced by cb(), and main().
+
+\mbox{\Hypertarget{test__diff_8cc_a3f67c53b80389c5f53961936edba04c9}\label{test__diff_8cc_a3f67c53b80389c5f53961936edba04c9}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!radius@{radius}}
+\index{radius@{radius}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{radius}{radius}}
+{\footnotesize\ttfamily double radius}
+
+
+
+Referenced by main(), Make\+S\+N\+D\+T\+Map(), Marker\+Of\+Circle(), S\+I\+C\+P\+Parameters\+::\+S\+I\+C\+P\+Parameters(), and S\+N\+D\+T\+Parameters\+::\+S\+N\+D\+T\+Parameters().
+
+\mbox{\Hypertarget{test__diff_8cc_a09ff184b5f358f6069434df0167479a7}\label{test__diff_8cc_a09ff184b5f358f6069434df0167479a7}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!rvar@{rvar}}
+\index{rvar@{rvar}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{rvar}{rvar}}
+{\footnotesize\ttfamily double rvar}
+
+
+
+Referenced by main(), Make\+N\+D\+T\+Map(), and Make\+S\+N\+D\+T\+Map().
+
+\mbox{\Hypertarget{test__diff_8cc_a86623871870f863b5735a0bb2d3c74d2}\label{test__diff_8cc_a86623871870f863b5735a0bb2d3c74d2}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!tvar@{tvar}}
+\index{tvar@{tvar}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{tvar}{tvar}}
+{\footnotesize\ttfamily double tvar}
+
+
+
+Referenced by main(), Make\+N\+D\+T\+Map(), and Make\+S\+N\+D\+T\+Map().
+
+\mbox{\Hypertarget{test__diff_8cc_a534dd5b2e3bb626d915366ce052db0f0}\label{test__diff_8cc_a534dd5b2e3bb626d915366ce052db0f0}} 
+\index{test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}!vepcs@{vepcs}}
+\index{vepcs@{vepcs}!test\+\_\+diff.\+cc@{test\+\_\+diff.\+cc}}
+\subsubsection{\texorpdfstring{vepcs}{vepcs}}
+{\footnotesize\ttfamily vector$<$\hyperlink{namespacecommon_a6cbd2086f9b345d169e432c35ffecf4d}{common\+::\+Ego\+Point\+Clouds}$>$ vepcs}
+
+
+
+Referenced by cb(), Get\+Files(), and main().
+
