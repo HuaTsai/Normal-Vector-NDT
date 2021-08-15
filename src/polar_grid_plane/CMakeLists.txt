@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_conversions
   tf_conversions
   eigen_conversions
+  common
 )
 
 catkin_package(CATKIN_DEPENDS
@@ -42,6 +43,19 @@ target_include_directories(groundplanfit PRIVATE
 )
 
 target_link_libraries(groundplanfit
+	${catkin_LIBRARIES}
+	${PCL_LIBRARIES}
+)
+
+add_executable(groundfit 
+	src/groundfit.cc
+)
+
+target_include_directories(groundfit PRIVATE
+	${PCL_INCLUDE_DIRS}
+)
+
+target_link_libraries(groundfit
 	${catkin_LIBRARIES}
 	${PCL_LIBRARIES}
 )
