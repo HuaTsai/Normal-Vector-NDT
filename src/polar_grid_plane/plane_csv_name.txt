@@ -1,0 +1,29 @@
+/plane_scene_xxxx.csv
+/nuscenes_lidar
+15
+20
+7
+3
+nuscenes
+
+
+first: csv_name
+second: subscribe_topic
+third: horizontal_seg_str
+forth: vertical_seg_str
+fifth: vertical_dist_str
+sixth: num_iter_str
+seventh: nctu, nuscenes
+
+// polar
+15
+20
+7
+3
+
+// test parameter
+25
+140
+1.5
+3
+
