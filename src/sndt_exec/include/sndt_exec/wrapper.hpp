@@ -24,7 +24,7 @@ std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> Augment(
   std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> ret;
   double dx = 0, dy = 0, dth = 0;
   for (int i = start; i <= end; ++i) {
-    Eigen::Affine2d T0i = Eigen::Rotation2Dd(dth) * Eigen::Translation2d(dx, dy);
+    Eigen::Affine2d T0i = Eigen::Translation2d(dx, dy) * Eigen::Rotation2Dd(dth);
     allT.push_back(T0i);
     for (const auto &pc : vepcs[i].pcs) {
       std::vector<Eigen::Vector2d> pts;
@@ -42,7 +42,7 @@ std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> Augment(
     dy += vepcs[i].vxyt[1] * dt;
     dth += vepcs[i].vxyt[2] * dt;
   }
-  T = Eigen::Rotation2Dd(dth) * Eigen::Translation2d(dx, dy);
+  T = Eigen::Translation2d(dx, dy) * Eigen::Rotation2Dd(dth);
   return ret;
 }
 
@@ -54,7 +54,7 @@ std::vector<Eigen::Vector2d> AugmentPoints(
   std::vector<Eigen::Vector2d> ret;
   double dx = 0, dy = 0, dth = 0;
   for (int i = start; i <= end; ++i) {
-    Eigen::Affine2d T0i = Eigen::Rotation2Dd(dth) * Eigen::Translation2d(dx, dy);
+    Eigen::Affine2d T0i = Eigen::Translation2d(dx, dy) * Eigen::Rotation2Dd(dth);
     allT.push_back(T0i);
     for (const auto &pc : vepcs[i].pcs) {
       Eigen::Affine3d aff3;
@@ -73,7 +73,7 @@ std::vector<Eigen::Vector2d> AugmentPoints(
     dy += vepcs[i].vxyt[1] * dt;
     dth += vepcs[i].vxyt[2] * dt;
   }
-  T = Eigen::Rotation2Dd(dth) * Eigen::Translation2d(dx, dy);
+  T = Eigen::Translation2d(dx, dy) * Eigen::Rotation2Dd(dth);
   return ret;
 }
 

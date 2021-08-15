@@ -127,7 +127,6 @@ Eigen::Affine2d NDTD2DMatch(
       problem.AddResidualBlock(NDTD2DCostFunctor::Create(cellp.get(), cellq), loss, &x, &y, &t);
       ++blks;
     }
-    std::cout << "D2D BLKS: " << blks << std::endl;
     params._corres.push_back(blks);
 
     ceres::Solver::Options options;
