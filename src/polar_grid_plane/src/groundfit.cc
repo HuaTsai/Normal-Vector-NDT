@@ -22,17 +22,15 @@
 #include <pcl/common/centroid.h>
 #include <pcl/filters/extract_indices.h>
 #include <pcl/filters/filter.h>
-#include <pcl/point_types.h>
-#include <pcl_conversions/pcl_conversions.h>
 #include <pcl_ros/point_cloud.h>
 #include <ros/package.h>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
-#include <visualization_msgs/Marker.h>
-#include <visualization_msgs/MarkerArray.h>
-#include <rosbag/bag.h>
 #include <rosbag/view.h>
 #include <common/common.h>
+#include <boost/program_options.hpp>
+
+namespace po = boost::program_options;
 
 // Customed Point Struct for holding clustered points
 namespace scan_line_run {
@@ -66,12 +64,8 @@ using Eigen::MatrixXf;
 using Eigen::VectorXf;
 using namespace std;
 
-int sequence, counter;
-float total_accuracy;
-std_msgs::Header _velodyne_header;
-std::string point_topic_, horizontal_seg_str, vertical_seg_str,
-    vertical_dist_str, num_iter_str, scene_str;
-std::ofstream outfile;
+int hori_seg, vert_seg, num_iter;
+double vert_dist;
 pcl::PointCloud<pcl::PointXYZL>::Ptr g_seeds_pc(
     new pcl::PointCloud<pcl::PointXYZL>());
 pcl::PointCloud<pcl::PointXYZL>::Ptr g_all_seeds_pc(
@@ -82,8 +76,6 @@ pcl::PointCloud<pcl::PointXYZL>::Ptr segmented_not_ground_pc(
     new pcl::PointCloud<pcl::PointXYZL>());
 pcl::PointCloud<SLRPointXYZIRL>::Ptr g_all_pc(
     new pcl::PointCloud<SLRPointXYZIRL>());
-
-visualization_msgs::MarkerArray marker_array;
 
 /*
     @brief Compare function to sort points. Here use z axis.
@@ -170,7 +162,7 @@ GroundPlaneFit::GroundPlaneFit() {
   printf("Sensor Height: %f\n", sensor_height_);
   num_seg_ = 3;
   printf("Num of Segments: %d\n", num_seg_);
-  num_iter_ = std::stoi(num_iter_str);
+  num_iter_ = num_iter;
   printf("Num of Iteration: %d\n", num_iter_);
   num_lpr_ = 20;
   printf("Num of LPR: %d\n", num_lpr_);
@@ -178,8 +170,8 @@ GroundPlaneFit::GroundPlaneFit() {
   printf("Seeds Threshold: %f\n", th_seeds_);
   th_dist_ = 0.2;
   printf("Distance Threshold: %f\n", th_dist_);
-  m = std::stoi(horizontal_seg_str);
-  n = std::stoi(vertical_seg_str);
+  m = hori_seg;
+  n = vert_seg;
 }
 
 /*
@@ -274,7 +266,6 @@ void GroundPlaneFit::horizontal_seg(
     pcl::PointCloud<pcl::PointXYZI> laserCloudIn,
     vector<vector<PointContainer>>& data) {
   double angle_div = 2 * M_PI / m;
-  double vert_dist = std::stod(vertical_dist_str);
 
   for (size_t i = 0; i < laserCloudIn.points.size(); i++) {
     const auto& point = laserCloudIn.points[i];
@@ -378,8 +369,6 @@ sensor_msgs::PointCloud2 GroundPlaneFit::velodyne_callback_(
   remove_ego_points(laserCloudIn_org, laserCloudIn, ego_cloud);
 
   cube_counter = 0;
-  _velodyne_header = in_cloud_msg->header;
-  marker_array.markers.clear();
   // For mark ground points and hold all points
   SLRPointXYZIRL point;
   for (size_t i = 0; i < laserCloudIn.points.size(); i++) {
@@ -442,39 +431,40 @@ sensor_msgs::PointCloud2 GroundPlaneFit::velodyne_callback_(
     temp_point.z = g_all_pc->points[i].z;
     temp_point.intensity = g_all_pc->points[i].intensity;
 
-    if (label == 0u && g_all_pc->points[i].z > -3.5)
-      ;// nop
-    else
+    if (!(label == 0u && g_all_pc->points[i].z > -3.5))
       nonground_seg.points.push_back(temp_point);
   }
   g_all_pc->clear();
   sensor_msgs::PointCloud2 ret;
   pcl::toROSMsg(nonground_seg, ret);
-  ret.header = _velodyne_header;
+  ret.header = in_cloud_msg->header;
   return ret;
 }
 
 int main(int argc, char** argv) {
-  counter = 0;
-  total_accuracy = 0.0;
-  std::string path = ros::package::getPath("polar_grid_plane");
-  std::fstream csv_config(path + "/plane_csv_name.txt");
-  std::string filename, data;
-  getline(csv_config, filename, '\n');
-  getline(csv_config, point_topic_, '\n');
-  getline(csv_config, horizontal_seg_str, '\n');
-  getline(csv_config, vertical_seg_str, '\n');
-  getline(csv_config, vertical_dist_str, '\n');
-  getline(csv_config, num_iter_str, '\n');
-  getline(csv_config, scene_str, '\n');
-  getline(csv_config, data, '\n');
-  outfile.open(path + "/csv" + filename);
+  std::string data, topic;
+  po::options_description desc("Allowed options");
+  desc.add_options()
+      ("help,h", "Produce help message")
+      ("data,d", po::value<string>(&data)->required(), "Data (logxx)")
+      ("topic", po::value<string>(&topic)->default_value("nuscenes"), "Topic")
+      ("hori_seg", po::value<int>(&hori_seg)->default_value(15), "Horizontal Segments")
+      ("vert_seg", po::value<int>(&vert_seg)->default_value(20), "Vertical Segments")
+      ("vert_dist", po::value<double>(&vert_dist)->default_value(7.), "Vertical Distance")
+      ("num_iter", po::value<int>(&num_iter)->default_value(3), "Number of Iterations");
+  po::variables_map vm;
+  po::store(po::parse_command_line(argc, argv, desc), vm);
+  po::notify(vm);
+  if (vm.count("help")) {
+    cout << desc << endl;
+    return 1;
+  }
 
-  std::cout << "sub_topic: " << point_topic_ << std::endl;
-  std::cout << "horizontal: " << horizontal_seg_str << " angle division: "
-            << 2 * M_PI / stod(horizontal_seg_str) * 180 / M_PI << endl;
-  std::cout << "vertical: " << vertical_seg_str << "  max radial distance: "
-            << (stoi(vertical_seg_str)) * stod(vertical_dist_str) << endl;
+  std::cout << "sub_topic: " << topic << std::endl;
+  std::cout << "horizontal: " << hori_seg << " angle division: "
+            << 2 * M_PI / hori_seg * 180 / M_PI << endl;
+  std::cout << "vertical: " << vert_seg << "  max radial distance: "
+            << vert_seg * vert_dist << endl;
 
   vector<sensor_msgs::PointCloud2ConstPtr> pcs;
   for (auto path : GetBagsPath(data)) {
@@ -489,8 +479,10 @@ int main(int argc, char** argv) {
   }
   GroundPlaneFit node;
   vector<sensor_msgs::PointCloud2> pcs_seg;
-  for (size_t i = 0; i < pcs.size(); ++i) {
-    printf("\rGround Segentation: (%d/%ld)", i, pcs.size());
+  int n = pcs.size();
+  for (int i = 0; i < n; ++i) {
+    printf("\rGround Segentation: (%d/%d)", i, n - 1);
+    fflush(stdout);
     auto ng = node.velodyne_callback_(pcs[i]);
     pcs_seg.push_back(ng);
   }

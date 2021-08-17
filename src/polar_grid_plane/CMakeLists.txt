@@ -1,61 +1,25 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(polar_grid_plane)
 
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  std_msgs
-  pcl_ros
-  pcl_conversions
-  tf_conversions
-  eigen_conversions
-  common
+set(CMAKE_CXX_FLAGS "-Wall")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_BUILD_TYPE Release)
+
+find_package(catkin REQUIRED
+  COMPONENTS
+    roscpp
+    pcl_ros
+    common
 )
 
-catkin_package(CATKIN_DEPENDS
-	sensor_msgs
-)
-
-###########
-## Build ##
-###########
+catkin_package()
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-find_package(Eigen3 REQUIRED)
+add_executable(groundfitnode src/groundfitnode.cc)
+target_link_libraries(groundfitnode ${catkin_LIBRARIES})
 
-#SET(CMAKE_CXX_FLAGS "-std=c++11 -O2 -g -Wall ${CMAKE_CXX_FLAGS}")
-SET(CMAKE_CXX_FLAGS "-std=c++11 -O2 -g -Wall ${CMAKE_CXX_FLAGS}")
-
-link_directories(${PCL_LIBRARY_DIRS})
-
-#Ground Plane Fitter
-find_package(PCL 1.7 REQUIRED)
-add_definitions(${PCL_DEFINITIONS})
-
-add_executable(groundplanfit 
-	nodes/ground_filter/groundplanfit.cpp
-)
-
-target_include_directories(groundplanfit PRIVATE
-	${PCL_INCLUDE_DIRS}
-)
-
-target_link_libraries(groundplanfit
-	${catkin_LIBRARIES}
-	${PCL_LIBRARIES}
-)
-
-add_executable(groundfit 
-	src/groundfit.cc
-)
-
-target_include_directories(groundfit PRIVATE
-	${PCL_INCLUDE_DIRS}
-)
-
-target_link_libraries(groundfit
-	${catkin_LIBRARIES}
-	${PCL_LIBRARIES}
-)
+add_executable(groundfit src/groundfit.cc)
+target_link_libraries(groundfit ${catkin_LIBRARIES})
