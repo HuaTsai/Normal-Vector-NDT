@@ -9,3 +9,5 @@ src/rpg_te/doc
 *.pyc
 *.info
 debug*
+docs/html
+docs/latex

@@ -1,4 +1,0 @@
-<map id="MapInterface" name="MapInterface">
-<area shape="rect" id="node2" href="$d2/d35/classNDTMap.html" title="{NDTMap\n||+ NDTMap()\l+ ~NDTMap()\l+ LoadPoints()\l+ LoadPointsWithCovariances()\l+ PseudoTransformCells()\l+ GetCellAndAllocate()\l+ GetCellForPoint()\l+ ToString()\l+ GetPoints()\l+ size()\l+ begin()\l+ begin()\l+ end()\l+ end()\l}" alt="" coords="5,351,212,619"/>
-<area shape="rect" id="node3" href="$d1/dbd/classSNDTMap.html" title="{SNDTMap\n||+ SNDTMap()\l+ ~SNDTMap()\l+ LoadPointsAndNormals()\l+ LoadPointsWithCovariances\lAndNormals()\l+ PseudoTransformCells()\l+ GetCellAndAllocate()\l+ GetCellForPoint()\l+ ToString()\l+ GetPoints()\l+ GetNormals()\l+ size()\l+ begin()\l+ begin()\l+ end()\l+ end()\l}" alt="" coords="236,336,435,633"/>
-</map>

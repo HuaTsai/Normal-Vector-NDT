@@ -1,7 +1,0 @@
-var searchData=
-[
-  ['joinmarkerarrays',['JoinMarkerArrays',['../d0/d6a/visuals_8h.html#a23de7b431d7bb8ae8fc3d5049c0d4cdf',1,'JoinMarkerArrays(const std::vector&lt; MarkerArray &gt; &amp;markerarrays):&#160;visuals.cc'],['../d2/dd8/visuals_8cc.html#a23de7b431d7bb8ae8fc3d5049c0d4cdf',1,'JoinMarkerArrays(const std::vector&lt; MarkerArray &gt; &amp;markerarrays):&#160;visuals.cc']]],
-  ['joinmarkerarraysandmarkers',['JoinMarkerArraysAndMarkers',['../d0/d6a/visuals_8h.html#acfe970a87296542244960cef1c8d3b74',1,'JoinMarkerArraysAndMarkers(const std::vector&lt; MarkerArray &gt; &amp;markerarrays, const std::vector&lt; Marker &gt; &amp;markers):&#160;visuals.cc'],['../d2/dd8/visuals_8cc.html#acfe970a87296542244960cef1c8d3b74',1,'JoinMarkerArraysAndMarkers(const std::vector&lt; MarkerArray &gt; &amp;markerarrays, const std::vector&lt; Marker &gt; &amp;markers):&#160;visuals.cc']]],
-  ['joinmarkers',['JoinMarkers',['../d0/d6a/visuals_8h.html#a18206cff75f5db4b5ac17a10e2a07eb4',1,'JoinMarkers(const std::vector&lt; Marker &gt; &amp;markers):&#160;visuals.cc'],['../d2/dd8/visuals_8cc.html#a18206cff75f5db4b5ac17a10e2a07eb4',1,'JoinMarkers(const std::vector&lt; Marker &gt; &amp;markers):&#160;visuals.cc']]],
-  ['joinpath',['JoinPath',['../d8/df8/other__utils_8h.html#ad59dcaa9774a8d0e7559caf782eb1781',1,'JoinPath():&#160;other_utils.h'],['../d8/df8/other__utils_8h.html#af4ed607851c0ac628103c67e615f9c4e',1,'JoinPath(std::string s1, Args... args):&#160;other_utils.h']]]
-];

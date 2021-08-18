@@ -1,3 +1,0 @@
-<map id="NDTMap" name="NDTMap">
-<area shape="rect" id="node2" href="$d7/d23/classMapInterface.html" title="{MapInterface\n|# is_loaded_\l# cell_size_\l# map_size_\l# map_center_\l# map_center_index_\l# cellptrs_size_\l|+ MapInterface()\l+ ~MapInterface()\l+ GetIndexForPoint()\l+ ToString()\l+ GetCellSize()\l+ GetMapSize()\l+ GetMapCenter()\l# GuessMapSize()\l# Initialize()\l# IsValidIndex()\l}" alt="" coords="35,5,182,288"/>
-</map>

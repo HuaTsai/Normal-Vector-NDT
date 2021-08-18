@@ -1,7 +1,0 @@
-<map id="trimesh::TriMesh" name="trimesh::TriMesh">
-<area shape="rect" id="node2" href="$de/db1/classtrimesh_1_1Box.html" title="{trimesh::Box\&lt; 3, float \&gt;\n|+ valid\l|+ Box()\l+ Box()\l+ Box()\l+ clear()\l+ center()\l+ size()\l+ radius()\l+ operator+=()\l+ operator+=()\l+ contains()\l+ contains()\l+ intersects()\l+ read()\l+ write()\l}" alt="" coords="5,477,165,745"/>
-<area shape="rect" id="node3" href="$db/de5/classtrimesh_1_1Vec.html" title="{trimesh::Vec\&lt; D, float \&gt;\n||+ Vec()\l+ Vec()\l+ Vec()\l+ Vec()\l+ Vec()\l+ Vec()\l+ Vec()\l+ operator=()\l+ operator=()\l+ operator[]()\land 70 more...\l+ uniform_rnd()\l+ normal_rnd()\l}" alt="" coords="9,147,172,400"/>
-<area shape="rect" id="node4" href="$d6/dda/structtrimesh_1_1Vec__data.html" title="{trimesh::Vec_data\&lt;\l D, float \&gt;\n|+ v\l|}" alt="" coords="115,5,251,97"/>
-<area shape="rect" id="node6" href="$db/de5/classtrimesh_1_1Vec.html" title="{trimesh::Vec\&lt; 3, float \&gt;\n||+ Vec()\l+ Vec()\l+ Vec()\l+ Vec()\l+ Vec()\l+ Vec()\l+ Vec()\l+ operator=()\l+ operator=()\l+ operator[]()\land 70 more...\l+ uniform_rnd()\l+ normal_rnd()\l}" alt="" coords="197,147,357,400"/>
-<area shape="rect" id="node5" href="$d7/d3c/structtrimesh_1_1TriMesh_1_1BSphere.html" title="{trimesh::TriMesh::BSphere\n|+ r\l+ valid\l|+ BSphere()\l}" alt="" coords="189,565,368,657"/>
-</map>

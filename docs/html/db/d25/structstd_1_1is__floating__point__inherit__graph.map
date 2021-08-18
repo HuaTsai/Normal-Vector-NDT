@@ -1,4 +1,0 @@
-<map id="std::is_floating_point&lt; T &gt;" name="std::is_floating_point&lt; T &gt;">
-<area shape="rect" id="node3" href="$de/df8/structstd_1_1is__floating__point_3_01const_01T_01_4.html" title="{std::is_floating_point\l\&lt; const T \&gt;\n||}" alt="" coords="25,315,168,407"/>
-<area shape="rect" id="node2" href="$da/dcf/structstd_1_1integral__constant.html" title="{std::integral_constant\l\&lt; bool, ::std::numeric\l_limits\&lt; T \&gt;::is_specialized\l &amp;&amp;!::std::numeric_limits\&lt;\l T \&gt;::is_integer \&gt;\n|+ value\l|}" alt="" coords="5,5,188,141"/>
-</map>
