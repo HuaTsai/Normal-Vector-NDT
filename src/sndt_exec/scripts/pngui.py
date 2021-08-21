@@ -1,11 +1,8 @@
 #!/usr/bin/env python2
-import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
-import math
 import rospy
 from std_msgs.msg import Int32
-from geometry_msgs.msg import Vector3
 
 
 idx = 0

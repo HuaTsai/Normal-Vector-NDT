@@ -24,14 +24,11 @@ struct UsedTime {
   UsedTime() {
     Initialize();
   }
-  void Initialize() { normal = ndt = optimize = others = 0; }
-  int total() { return normal + ndt + optimize + others; }
-  void show() {
-    printf("nm: %d, ndt: %d, opt: %d, oth: %d, ttl: %d\n", normal, ndt,
-           optimize, others, total());
-  }
+  void Initialize() { normal = ndt = build = optimize = others = 0; }
+  int total() { return normal + ndt + build + optimize + others; }
   int normal;
   int ndt;
+  int build;
   int optimize;
   int others;
 };
@@ -45,8 +42,10 @@ struct CommonParameters {
   void InitializeInput() {
     max_iterations = 400;
     ceres_max_iterations = 400;
-    max_min_ctr = 5;
-    threads = 8;
+    // Note:
+    //   Higher # of threads, more time spent.
+    //   This property does not perform well now.
+    threads = 1;
     threshold = 0.01;
     huber = 1;
     verbose = false;
@@ -55,8 +54,6 @@ struct CommonParameters {
   void InitializeOutput() {
     _iteration = 0;
     _ceres_iteration = 0;
-    _min_ctr = 0;
-    _min_cost = std::numeric_limits<double>::max();
     _converge = Converge::kNotConverge;
     _costs.clear();
     _corres.clear();
@@ -64,7 +61,6 @@ struct CommonParameters {
   }
   int max_iterations;
   int ceres_max_iterations;
-  int max_min_ctr;
   int threads;
   double threshold;
   double huber;
@@ -73,8 +69,6 @@ struct CommonParameters {
 
   int _iteration;
   int _ceres_iteration;
-  int _min_ctr;
-  double _min_cost;
   Converge _converge;
   std::vector<double> _costs;
   std::vector<int> _corres;

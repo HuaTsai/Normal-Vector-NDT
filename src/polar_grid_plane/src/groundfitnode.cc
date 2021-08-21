@@ -363,7 +363,6 @@ void GroundPlaneFit::polar_grid_map()
 void GroundPlaneFit::estimate_plane(int num_iter)
 {
     // Create covarian matrix in single pass.
-    // TODO: compare the efficiency.
     Eigen::Matrix3f cov;
     Eigen::Vector4f pc_mean;
     if(segmented_ground_pc->points.size() >= 3)

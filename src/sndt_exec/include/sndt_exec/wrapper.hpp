@@ -148,9 +148,11 @@ std::vector<Eigen::Vector2d> MakePoints(
   auto t1 = GetTime();
   std::vector<Eigen::Vector2d> ret;
   for (const auto &elem : data) {
+    auto pts = elem.first;
     auto aff = elem.second;
-    for (const auto &pt : elem.first)
-      ret.push_back(aff * pt);
+    for (size_t i = 0; i < pts.size(); ++i)
+      if (pts[i].allFinite())
+        ret.push_back(aff * pts[i]);
   }
   auto t2 = GetTime();
   params._usedtime.others += GetDiffTime(t1, t2);

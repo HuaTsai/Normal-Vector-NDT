@@ -7,6 +7,7 @@
 #include <pcl_ros/point_cloud.h>
 #include <pcl/filters/voxel_grid.h>
 #include <rosbag/bag.h>
+#include <tqdm/tqdm.h>
 
 using namespace std;
 using namespace Eigen;
@@ -79,11 +80,11 @@ int main(int argc, char **argv) {
       ("n,n", po::value<int>(&n)->default_value(-1), "n");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
-  po::notify(vm);
   if (vm.count("help")) {
     cout << desc << endl;
     return 1;
   }
+  po::notify(vm);
 
   vector<sensor_msgs::PointCloud2> vpc;
   SerializationInput(JoinPath(GetDataPath(data), "lidar.ser"), vpc);
@@ -96,10 +97,12 @@ int main(int argc, char **argv) {
   //           Tr(bf)  Tr(af)
   vector<int> it1, it2, it3;
   vector<int> iit1, iit2, iit3;
-  vector<int> ts1, ts2, ts3;
+  vector<int> ndt1, ndt2, ndt3;
   vector<int> nm1, nm2, nm3;
   vector<int> opt1, opt2, opt3;
   vector<int> oth1, oth2, oth3;
+  vector<int> bud1, bud2, bud3;
+  vector<int> ttl1, ttl2, ttl3;
   vector<double> rerr1, rerr2, rerr3;
   vector<double> terr1, terr2, terr3;
   if (n == -1)
@@ -109,9 +112,9 @@ int main(int argc, char **argv) {
   Affine2d Tg2 = Affine2d::Identity();
   Affine2d Tg3 = Affine2d::Identity();
 
+  tqdm bar;
   for (int i = 0; i < n; ++i) {
-    ::printf("\rRun Matching (%d/%d)", i + 1, n);
-    fflush(stdout);
+    bar.progress(i, n);
 
     auto tgt = PCMsgTo2D(vpc[i], voxel);
     auto src = PCMsgTo2D(vpc[i + 1], voxel);
@@ -127,10 +130,12 @@ int main(int argc, char **argv) {
     auto src1 = MakeSNDTMap(datas, params1);
     auto T1 = SNDTMatch(tgt1, src1, params1, Tg1);
     Tg1 = T1;
-    ts1.push_back(params1._usedtime.ndt);
+    ndt1.push_back(params1._usedtime.ndt);
     nm1.push_back(params1._usedtime.normal);
     opt1.push_back(params1._usedtime.optimize);
+    bud1.push_back(params1._usedtime.build);
     oth1.push_back(params1._usedtime.others);
+    ttl1.push_back(params1._usedtime.total());
     auto err1 = TransNormRotDegAbsFromMatrix3d((Tingt.inverse() * T1).matrix());
     rerr1.push_back(err1(0));
     terr1.push_back(err1(1));
@@ -145,10 +150,12 @@ int main(int argc, char **argv) {
     auto src2 = MakeNDTMap(datas, params2);
     auto T2 = NDTD2DMatch(tgt2, src2, params2, Tg2);
     Tg2 = T2;
-    ts2.push_back(params2._usedtime.ndt);
+    ndt2.push_back(params2._usedtime.ndt);
     nm2.push_back(params2._usedtime.normal);
     opt2.push_back(params2._usedtime.optimize);
+    bud2.push_back(params2._usedtime.build);
     oth2.push_back(params2._usedtime.others);
+    ttl2.push_back(params2._usedtime.total());
     auto err2 = TransNormRotDegAbsFromMatrix3d((Tingt.inverse() * T2).matrix());
     rerr2.push_back(err2(0));
     terr2.push_back(err2(1));
@@ -163,24 +170,28 @@ int main(int argc, char **argv) {
     auto src3 = MakePoints(datas, params3);
     auto T3 = SICPMatch(tgt3, src3, params3, Tg3);
     Tg3 = T3;
-    ts3.push_back(params3._usedtime.ndt);
+    ndt3.push_back(params3._usedtime.ndt);
     nm3.push_back(params3._usedtime.normal);
     opt3.push_back(params3._usedtime.optimize);
+    bud3.push_back(params3._usedtime.build);
     oth3.push_back(params3._usedtime.others);
+    ttl3.push_back(params3._usedtime.total());
     auto err3 = TransNormRotDegAbsFromMatrix3d((Tingt.inverse() * T3).matrix());
     rerr3.push_back(err3(0));
     terr3.push_back(err3(1));
     it3.push_back(params3._iteration);
     iit3.push_back(params3._ceres_iteration);
   }
+  bar.finish();
 
   ::printf("\n%s\n", data.c_str());
-  ::printf("SNDT: ndt: %.2f, nm: %.2f, opt: %.2f, oth: %.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-      Avg2(ts1), Avg2(nm1), Avg2(opt1), Avg2(oth1), Avg(terr1), Avg(rerr1), Avg(it1), Avg(iit1));
+  ::printf("ndt, nm, bud, opt, oth\n");
+  ::printf("SNDT: [%.2f, %.2f, %.2f, %.2f, %.2f], %.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+      Avg2(ndt1), Avg2(nm1), Avg2(bud1), Avg2(opt1), Avg2(oth1), Avg2(ttl1), Avg(terr1), Avg(rerr1), Avg(it1), Avg(iit1));
 
-  ::printf(" NDT: ndt: %.2f, nm: %.2f, opt: %.2f, oth: %.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-      Avg2(ts2), Avg2(nm2), Avg2(opt2), Avg2(oth2), Avg(terr2), Avg(rerr2), Avg(it2), Avg(iit2));
+  ::printf(" NDT: [%.2f, %.2f, %.2f, %.2f, %.2f], %.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+      Avg2(ndt2), Avg2(nm2), Avg2(bud2), Avg2(opt2), Avg2(oth2), Avg2(ttl2), Avg(terr2), Avg(rerr2), Avg(it2), Avg(iit2));
 
-  ::printf("SICP: ndt: %.2f, nm: %.2f, opt: %.2f, oth: %.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-      Avg2(ts3), Avg2(nm3), Avg2(opt3), Avg2(oth3), Avg(terr3), Avg(rerr3), Avg(it3), Avg(iit3));
+  ::printf("SICP: [%.2f, %.2f, %.2f, %.2f, %.2f], %.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+      Avg2(ndt3), Avg2(nm3), Avg2(bud3), Avg2(opt3), Avg2(oth3), Avg2(ttl3), Avg(terr3), Avg(rerr3), Avg(it3), Avg(iit3));
 }

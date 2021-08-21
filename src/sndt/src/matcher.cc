@@ -59,6 +59,7 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
   auto cur_tf = guess_tf;
 
   while (params._converge == Converge::kNotConverge) {
+    auto t1 = GetTime();
     double x = 0, y = 0, t = 0;
     auto next_map = source_map.PseudoTransformCells(cur_tf);
 
@@ -79,13 +80,16 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
       ++blks;
     }
     params._corres.push_back(blks);
+    auto t2 = GetTime();
+    params._usedtime.build += GetDiffTime(t1, t2);
 
     Optimize(problem, params);
     cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
     CheckConverge(params, x, y);
   }
   auto t2 = GetTime();
-  params._usedtime.others = GetDiffTime(t1, t2) - params._usedtime.optimize;
+  params._usedtime.others =
+      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
   return cur_tf;
 }
 
@@ -98,7 +102,7 @@ Eigen::Affine2d NDTD2DMatch(
   auto cur_tf = guess_tf;
 
   while (params._converge == Converge::kNotConverge) {
-    ++params._iteration;
+    auto t1 = GetTime();
     double x = 0, y = 0, t = 0;
     auto next_map = source_map.PseudoTransformCells(cur_tf);
 
@@ -119,32 +123,34 @@ Eigen::Affine2d NDTD2DMatch(
       ++blks;
     }
     params._corres.push_back(blks);
+    auto t2 = GetTime();
+    params._usedtime.build += GetDiffTime(t1, t2);
 
     Optimize(problem, params);
     cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
     CheckConverge(params, x, y);
   }
   auto t2 = GetTime();
-  params._usedtime.others = GetDiffTime(t1, t2) - params._usedtime.optimize;
+  params._usedtime.others =
+      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
   return cur_tf;
 }
 
 Eigen::Affine2d SICPMatch(
-    const std::vector<Eigen::Vector2d> &target_points,
-    const std::vector<Eigen::Vector2d> &source_points,
+    const std::vector<Eigen::Vector2d> &tpts,
+    const std::vector<Eigen::Vector2d> &spts,
     SICPParameters &params,
     const Eigen::Affine2d &guess_tf) {
   auto t1 = GetTime();
-  auto tpts = ExcludeNaNInf(target_points);
-  auto spts = ExcludeNaNInf(source_points);
-  auto kd = MakeKDTree(tpts);
-  auto t2 = GetTime();
   auto tnms = ComputeNormals(tpts, params.radius);
   auto snms = ComputeNormals(spts, params.radius);
-  auto t3 = GetTime();
+  auto t2 = GetTime();
+  params._usedtime.normal = GetDiffTime(t1, t2);
+  auto kd = MakeKDTree(tpts);
   auto cur_tf = guess_tf;
 
   while (params._converge == Converge::kNotConverge) {
+    auto t1 = GetTime();
     double x = 0, y = 0, t = 0;
     std::vector<Eigen::Vector2d> next_pts;
     std::vector<Eigen::Vector2d> next_nms;
@@ -174,14 +180,15 @@ Eigen::Affine2d SICPMatch(
       ++blks;
     }
     params._corres.push_back(blks);
+    auto t2 = GetTime();
+    params._usedtime.build += GetDiffTime(t1, t2);
 
     Optimize(problem, params);
     cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
     CheckConverge(params, x, y);
   }
-  auto t4 = GetTime();
-  params._usedtime.normal = GetDiffTime(t2, t3);
+  auto t3 = GetTime();
   params._usedtime.others =
-      GetDiffTime(t1, t4) - params._usedtime.optimize - params._usedtime.normal;
+      GetDiffTime(t2, t3) - params._usedtime.optimize - params._usedtime.build;
   return cur_tf;
 }
