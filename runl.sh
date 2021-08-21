@@ -1,5 +1,5 @@
 execfile=devel/lib/sndt_exec/testl_path
-folder=resultslO3
+folder=resultslrt
 Date=20210816
 Analysis=src/rpg_te/scripts/analyze_trajectories.py
 

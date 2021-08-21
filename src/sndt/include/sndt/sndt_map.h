@@ -84,6 +84,13 @@ class SNDTMap : public MapInterface {
   std::vector<Eigen::Vector2d> GetPoints() const;
 
   /**
+   * @brief Get the Points object
+   * 
+   * @brief return points that in valid gaussian cells
+   */
+  std::vector<Eigen::Vector2d> GetPointsWithGaussianCell() const;
+
+  /**
    * @brief Get the Normals object
    * 
    * @note The normals are retrived from active_cells_, which does not

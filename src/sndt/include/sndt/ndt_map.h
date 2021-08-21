@@ -81,6 +81,13 @@ class NDTMap : public MapInterface {
    */
   std::vector<Eigen::Vector2d> GetPoints() const;
 
+  /**
+   * @brief Get the Points object
+   * 
+   * @brief return points that in valid gaussian cells
+   */
+  std::vector<Eigen::Vector2d> GetPointsWithGaussianCell() const;
+
   size_t size() const { return active_cells_.size(); }
   std::vector<NDTCell *>::iterator begin() { return active_cells_.begin(); }
   std::vector<NDTCell *>::const_iterator begin() const { return active_cells_.begin(); }

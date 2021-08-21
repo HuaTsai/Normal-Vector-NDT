@@ -27,6 +27,7 @@ ros::Publisher pb1, pb2, pb3, pb4, pb5, pb6, pbs, pbt;
 double cell_size, radius, huber;
 bool verbose;
 nav_msgs::Path gtpath;
+Affine2d Tg;
 
 vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg) {
   pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
@@ -39,32 +40,13 @@ vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg) {
 
   vector<Vector2d> ret;
   for (const auto &pt : *fpc)
-    if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z) && pt.z > -0.9)
+    if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z))
       ret.push_back(Vector2d(pt.x, pt.y));
   return ret;
 }
 
-Affine2d GetDiffT(const vector<common::EgoPointClouds> &vepcs,
-                   const ros::Time &t1, const ros::Time &t2) {
-  if (t1 <= vepcs[0].stamp || t2 >= vepcs[vepcs.size() - 1].stamp)
-    return Affine2d::Identity();
-  auto it1 = lower_bound(vepcs.begin(), vepcs.end(), t1, [](auto a, auto b) { return a.stamp < b; });
-  auto it2 = lower_bound(vepcs.begin(), vepcs.end(), t2, [](auto a, auto b) { return a.stamp < b; });
-  Vector3d xyt = Vector3d::Zero();
-  if (it1 == it2)
-    xyt += Vector3d(it1->vxyt[0], it1->vxyt[1], it1->vxyt[2]) * (t2 - t1).toSec();
-  for (auto it = it1; it != it2; ++it) {
-    Vector3d v(it->vxyt[0], it->vxyt[1], it->vxyt[2]);
-    double dt;
-    if (it == it1)
-      dt = ((it + 1)->stamp - t1).toSec();
-    else if (it == it2)
-      dt = (t2 - it->stamp).toSec();
-    else
-      dt = ((it + 1)->stamp - it->stamp).toSec();
-    xyt += v * dt;
-  }
-  return Rotation2Dd(xyt[2]) * Translation2d(xyt[0], xyt[1]);
+void cb2(const geometry_msgs::Vector3 &xyt) {
+  Tg = Translation2d(xyt.x, xyt.y) * Rotation2Dd(xyt.z);
 }
 
 void cb(const std_msgs::Int32 &num) {
@@ -85,10 +67,8 @@ void cb(const std_msgs::Int32 &num) {
   vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, aff2}};
   vector<pair<vector<Vector2d>, Affine2d>> datas{{src, aff2}};
 
-  // auto Tg = GetDiffT(vepcs, vpc[i].header.stamp, vpc[i + 1].header.stamp);
-  auto Tg = Affine2d::Identity();
-
   // SNDT Method
+  cout << "SNDT: " << endl;
   auto t1 = GetTime();
   SNDTParameters params1;
   params1.r_variance = params1.t_variance = 0;
@@ -96,24 +76,32 @@ void cb(const std_msgs::Int32 &num) {
   auto mapt1 = MakeSNDTMap(datat, params1);
   auto maps1 = MakeSNDTMap(datas, params1);
   auto T1 = SNDTMatch(mapt1, maps1, params1, Tg);
+  auto t2 = GetTime();
+  cout << GetDiffTime(t1, t2) << " ms" << endl;
 
   // NDTD2D method
+  cout << "NDTD2D: " << endl;
+  auto t3 = GetTime();
   NDTD2DParameters params2;
   params2.r_variance = params2.t_variance = 0;
   params2.verbose = verbose;
   auto mapt2 = MakeNDTMap(datat, params2);
   auto maps2 = MakeNDTMap(datas, params2);
   auto T2 = NDTD2DMatch(mapt2, maps2, params2, Tg);
+  auto t4 = GetTime();
+  cout << GetDiffTime(t3, t4) << " ms" << endl;
 
   // SICP method
+  cout << "SICP: " << endl;
+  auto t5 = GetTime();
   vector<Vector2d> tgt2(tgt.size()), src2(src.size());
   transform(tgt.begin(), tgt.end(), tgt2.begin(), [&aff2](auto p) { return aff2 * p; });
   transform(src.begin(), src.end(), src2.begin(), [&aff2](auto p) { return aff2 * p; });
   SICPParameters params3;
   params3.verbose = verbose;
   auto T3 = SICPMatch(tgt2, src2, params3, Tg);
-  auto t2 = GetTime();
-  cout << GetDiffTime(t1, t2) << " ms" << endl;
+  auto t6 = GetTime();
+  cout << GetDiffTime(t5, t6) << " ms" << endl;
 
   /********* Compute Ground Truth *********/
   Affine3d To, Ti;
@@ -193,6 +181,7 @@ int main(int argc, char **argv) {
   GetFiles(data);
 
   ros::Subscriber sub = nh.subscribe("idx", 0, cb);
+  ros::Subscriber sub2 = nh.subscribe("xyt", 0, cb2);
 
   pub1 = nh.advertise<MarkerArray>("markers1", 0, true);
   pub2 = nh.advertise<MarkerArray>("markers2", 0, true);
@@ -212,8 +201,10 @@ int main(int argc, char **argv) {
   pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0, true);
   pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed", 0, true);
 
+  Tg = Affine2d::Identity();
+  int n = vpc.size() - 2;  n = 100;
   if (run) {
-    for (int i = 0; i < (int)vpc.size() - 2; ++i) {
+    for (int i = 0; i < n; ++i) {
       std_msgs::Int32 num;
       num.data = i;
       cb(num);

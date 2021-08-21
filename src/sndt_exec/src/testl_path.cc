@@ -24,7 +24,7 @@ vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg) {
 
   vector<Vector2d> ret;
   for (const auto &pt : *fpc)
-    if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z) && pt.z > -0.9)
+    if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z))
       ret.push_back(Vector2d(pt.x, pt.y));
   return ret;
 }
@@ -38,29 +38,6 @@ sensor_msgs::PointCloud2 EigenToPC(const vector<Vector2d> &pts, const ros::Time 
   ret.header.frame_id = "map";
   ret.header.stamp = time;
   return ret;
-}
-
-Affine2d GetDiffT(const vector<common::EgoPointClouds> &vepcs,
-                   const ros::Time &t1, const ros::Time &t2) {
-  if (t1 <= vepcs[0].stamp || t2 >= vepcs[vepcs.size() - 1].stamp)
-    return Affine2d::Identity();
-  auto it1 = lower_bound(vepcs.begin(), vepcs.end(), t1, [](auto a, auto b) { return a.stamp < b; });
-  auto it2 = lower_bound(vepcs.begin(), vepcs.end(), t2, [](auto a, auto b) { return a.stamp < b; });
-  Vector3d xyt = Vector3d::Zero();
-  if (it1 == it2)
-    xyt += Vector3d(it1->vxyt[0], it1->vxyt[1], it1->vxyt[2]) * (t2 - t1).toSec();
-  for (auto it = it1; it != it2; ++it) {
-    Vector3d v(it->vxyt[0], it->vxyt[1], it->vxyt[2]);
-    double dt;
-    if (it == it1)
-      dt = ((it + 1)->stamp - t1).toSec();
-    else if (it == it2)
-      dt = (t2 - it->stamp).toSec();
-    else
-      dt = ((it + 1)->stamp - it->stamp).toSec();
-    xyt += v * dt;
-  }
-  return Rotation2Dd(xyt[2]) * Translation2d(xyt[0], xyt[1]);
 }
 
 int main(int argc, char **argv) {
@@ -92,8 +69,6 @@ int main(int argc, char **argv) {
 
   vector<sensor_msgs::PointCloud2> vpc;
   SerializationInput(JoinPath(GetDataPath(data), "lidar.ser"), vpc);
-  // vector<common::EgoPointClouds> vepcs;
-  // SerializationInput(JoinPath(GetDataPath(data), "vepcs.ser"), vepcs);
   nav_msgs::Path gtpath;
   SerializationInput(JoinPath(GetDataPath(data), "gt.ser"), gtpath);
   vector<sensor_msgs::CompressedImage> imb, imbl, imbr, imf, imfl, imfr;

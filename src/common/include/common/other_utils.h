@@ -12,7 +12,7 @@ inline std::chrono::steady_clock::time_point GetTime() {
 
 inline int GetDiffTime(std::chrono::steady_clock::time_point t1,
                        std::chrono::steady_clock::time_point t2) {
-  return std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+  return std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 }
 
 std::string JoinPath() {

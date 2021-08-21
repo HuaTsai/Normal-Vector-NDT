@@ -1,6 +1,12 @@
 // Created by Francois Gauthier-Clerc.
 // Modified and refactored by HuaTsai.
 #include <normal2d/normal2d.h>
+#define USE_OMP
+
+#ifdef USE_OMP
+#include <omp.h>
+#define THREADS 8
+#endif
 
 void Normal2dEstimation::setInputCloud(const ConstPtrCloud& cloud) {
   m_in_cloud = cloud;
@@ -29,22 +35,17 @@ void Normal2dEstimation::setIndices(
 int Normal2dEstimation::searchForNeighbors(int index,
                                            std::vector<int>& nn_indices,
                                            std::vector<float>& nn_dists) const {
-  nn_indices.clear();
-  nn_dists.clear();
   if (m_k == 0) {
     m_kd_tree->radiusSearch(index, m_search_radius, nn_indices, nn_dists, 0);
   } else {
+    nn_indices.resize(m_k);
+    nn_dists.resize(m_k);
     m_kd_tree->nearestKSearch(index, m_k, nn_indices, nn_dists);
   }
   return nn_indices.size();
 }
 
 void Normal2dEstimation::compute(const PtrCloud& normal_cloud) const {
-  // Allocate enough space to hold the results
-  // \note This resize is irrelevant for a radiusSearch ().
-  boost::shared_ptr<std::vector<int>> nn_indices(new std::vector<int>(m_k));
-  std::vector<float> nn_dists(m_k);
-
   normal_cloud->points.resize(m_in_cloud->points.size());
   normal_cloud->height = m_in_cloud->height;
   normal_cloud->width = m_in_cloud->width;
@@ -59,51 +60,32 @@ void Normal2dEstimation::compute(const PtrCloud& normal_cloud) const {
   }
 
   m_kd_tree->setInputCloud(m_in_cloud, m_indices);
-
   normal_cloud->is_dense = true;
-  // Save a few cycles by not checking every point for NaN/Inf values if the
-  // cloud is set to dense
-  if (m_in_cloud->is_dense) {
-    // Iterating over the entire index vector
-    for (unsigned int idx = 0; idx < m_indices->size(); ++idx) {
-      if (searchForNeighbors((*m_indices)[idx], *nn_indices, nn_dists) == 0) {
-        normal_cloud->points[idx].x = normal_cloud->points[idx].y =
-            normal_cloud->points[idx].z =
-                std::numeric_limits<float>::quiet_NaN();
-        normal_cloud->is_dense = false;
-        continue;
-      }
 
-      computePointNormal2d(nn_indices, normal_cloud->points[idx].x,
-                           normal_cloud->points[idx].y,
-                           normal_cloud->points[idx].z);
+#ifdef USE_OMP
+#pragma omp parallel for num_threads(THREADS)
+#endif
+  for (unsigned int idx = 0; idx < m_indices->size(); ++idx) {
+    boost::shared_ptr<std::vector<int>> nn_indices(new std::vector<int>);
+    std::vector<float> nn_dists;
+    if (!isFinite(m_in_cloud->points[(*m_indices)[idx]]) ||
+        searchForNeighbors((*m_indices)[idx], *nn_indices, nn_dists) == 0) {
+      float nan = std::numeric_limits<float>::quiet_NaN();
+      normal_cloud->points[idx].x = nan;
+      normal_cloud->points[idx].y = nan;
+      normal_cloud->points[idx].z = nan;
+      normal_cloud->is_dense = false;
+      continue;
     }
-  } else {
-    // Iterating over the entire index vector
-    for (unsigned int idx = 0; idx < m_indices->size(); ++idx) {
-      if (!isFinite(m_in_cloud->points[(*m_indices)[idx]]) ||
-          searchForNeighbors((*m_indices)[idx], *nn_indices, nn_dists) == 0) {
-        normal_cloud->points[idx].x = normal_cloud->points[idx].y =
-            normal_cloud->points[idx].z =
-                std::numeric_limits<float>::quiet_NaN();
-        normal_cloud->is_dense = false;
-        continue;
-      }
 
-      computePointNormal2d(nn_indices, normal_cloud->points[idx].x,
-                           normal_cloud->points[idx].y,
-                           normal_cloud->points[idx].z);
-    }
+    computePointNormal2d(nn_indices, normal_cloud->points[idx].x,
+                         normal_cloud->points[idx].y,
+                         normal_cloud->points[idx].z);
   }
 }
 
 void Normal2dEstimation::compute(
     const pcl::PointCloud<pcl::Normal>::Ptr& normal_cloud) const {
-  // Allocate enough space to hold the results
-  // \note This resize is irrelevant for a radiusSearch ().
-  boost::shared_ptr<std::vector<int>> nn_indices(new std::vector<int>(m_k));
-  std::vector<float> nn_dists(m_k);
-
   normal_cloud->points.resize(m_in_cloud->points.size());
   normal_cloud->height = m_in_cloud->height;
   normal_cloud->width = m_in_cloud->width;
@@ -112,53 +94,34 @@ void Normal2dEstimation::compute(
     throw std::runtime_error(
         "You must call once either setRadiusSearch or setKSearch !");
   }
-
   if ((m_k != 0) && (m_search_radius != 0)) {
     throw std::runtime_error(
         "You must call once either setRadiusSearch or setKSearch (not both) !");
   }
 
   m_kd_tree->setInputCloud(m_in_cloud, m_indices);
-
   normal_cloud->is_dense = true;
-  // Save a few cycles by not checking every point for NaN/Inf values if the
-  // cloud is set to dense
-  if (m_in_cloud->is_dense) {
-    // Iterating over the entire index vector
-    for (unsigned int idx = 0; idx < m_indices->size(); ++idx) {
-      if (searchForNeighbors((*m_indices)[idx], *nn_indices, nn_dists) == 0) {
-        normal_cloud->points[idx].normal_x =
-            normal_cloud->points[idx].normal_y =
-                normal_cloud->points[idx].normal_z =
-                    std::numeric_limits<float>::quiet_NaN();
-        normal_cloud->is_dense = false;
-        continue;
-      }
 
-      computePointNormal2d(nn_indices, normal_cloud->points[idx].normal_x,
-                           normal_cloud->points[idx].normal_y,
-                           normal_cloud->points[idx].normal_z,
-                           normal_cloud->points[idx].curvature);
+#ifdef USE_OMP
+#pragma omp parallel for num_threads(THREADS)
+#endif
+  for (unsigned int idx = 0; idx < m_indices->size(); ++idx) {
+    boost::shared_ptr<std::vector<int>> nn_indices(new std::vector<int>);
+    std::vector<float> nn_dists;
+    if (!isFinite(m_in_cloud->points[(*m_indices)[idx]]) ||
+        searchForNeighbors((*m_indices)[idx], *nn_indices, nn_dists) == 0) {
+      float nan = std::numeric_limits<float>::quiet_NaN();
+      normal_cloud->points[idx].normal_x = nan;
+      normal_cloud->points[idx].normal_y = nan;
+      normal_cloud->points[idx].normal_z = nan;
+      normal_cloud->is_dense = false;
+      continue;
     }
-  } else {
-    // Iterating over the entire index vector
-    for (unsigned int idx = 0; idx < m_indices->size(); ++idx) {
-      if (!isFinite(m_in_cloud->points[(*m_indices)[idx]]) ||
-          searchForNeighbors((*m_indices)[idx], *nn_indices, nn_dists) == 0) {
-        normal_cloud->points[idx].normal_x =
-            normal_cloud->points[idx].normal_y =
-                normal_cloud->points[idx].normal_z =
-                    std::numeric_limits<float>::quiet_NaN();
 
-        normal_cloud->is_dense = false;
-        continue;
-      }
-
-      computePointNormal2d(nn_indices, normal_cloud->points[idx].normal_x,
-                           normal_cloud->points[idx].normal_y,
-                           normal_cloud->points[idx].normal_z,
-                           normal_cloud->points[idx].curvature);
-    }
+    computePointNormal2d(nn_indices, normal_cloud->points[idx].normal_x,
+                         normal_cloud->points[idx].normal_y,
+                         normal_cloud->points[idx].normal_z,
+                         normal_cloud->points[idx].curvature);
   }
 }
 
@@ -181,7 +144,6 @@ bool Normal2dEstimation::computePointNormal2d(
     nx = -vect_y;
     ny = vect_x;
   } else {
-    // Get the plane normal and surface curvature
     PCA2D pca;
     pca.setInputCloud(m_in_cloud);
     pca.setIndices(indices);
@@ -219,7 +181,6 @@ bool Normal2dEstimation::computePointNormal2d(
     ny = vect_x;
     curvature = 0.0;
   } else {
-    // Get the plane normal and surface curvature
     PCA2D pca;
     pca.setInputCloud(m_in_cloud);
     pca.setIndices(indices);

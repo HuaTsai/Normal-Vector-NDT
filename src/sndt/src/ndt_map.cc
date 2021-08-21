@@ -148,6 +148,15 @@ std::vector<Eigen::Vector2d> NDTMap::GetPoints() const {
   return ret;
 }
 
+std::vector<Eigen::Vector2d> NDTMap::GetPointsWithGaussianCell() const {
+  std::vector<Eigen::Vector2d> ret;
+  for (auto it = begin(); it != end(); ++it)
+    if ((*it)->HasGaussian())
+      for (auto pt : (*it)->GetPoints())
+        ret.push_back(pt);
+  return ret;
+}
+
 void NDTMap::Initialize() {
   cellptrs_ = new NDTCell **[cellptrs_size_(0)];
   for (int i = 0; i < cellptrs_size_(0); ++i) {

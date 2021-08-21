@@ -5,6 +5,8 @@ set(CMAKE_CXX_FLAGS "-Wall")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Release)
 
+find_package(OpenMP REQUIRED)
+
 find_package(catkin REQUIRED
   COMPONENTS
     pcl_ros
@@ -23,7 +25,7 @@ include_directories(
 )
 
 add_library(${PROJECT_NAME} src/normal2d.cc src/pca2d.cc)
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} OpenMP::OpenMP_CXX)
 
 add_executable(normal2dtest src/normal2dtest.cc)
 target_link_libraries(normal2dtest ${PROJECT_NAME} pcl_visualization)

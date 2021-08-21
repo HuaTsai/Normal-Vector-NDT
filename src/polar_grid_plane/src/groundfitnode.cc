@@ -692,10 +692,6 @@ void GroundPlaneFit::velodyne_callback_(const sensor_msgs::PointCloud2ConstPtr& 
                 continue;
         }
     }
-     // Calculate Accuracy and T,FP,FN
-    int true_points, false_positive_points, false_negative_points;
-    true_points = false_positive_points = false_negative_points =  0;
-
     segmented_ground_pc->clear();
     segmented_not_ground_pc->clear();
 
@@ -704,7 +700,6 @@ void GroundPlaneFit::velodyne_callback_(const sensor_msgs::PointCloud2ConstPtr& 
 
     for(size_t i = 0; i < g_all_pc->points.size(); i++)
     {
-        int intensity = g_all_pc->points[i].intensity;
         int label = g_all_pc->points[i].label;
 
         pcl::PointXYZI temp_point;

@@ -24,8 +24,14 @@ struct UsedTime {
   UsedTime() {
     Initialize();
   }
-  void Initialize() { total = optimize = others = 0; }
-  int total;
+  void Initialize() { normal = ndt = optimize = others = 0; }
+  int total() { return normal + ndt + optimize + others; }
+  void show() {
+    printf("nm: %d, ndt: %d, opt: %d, oth: %d, ttl: %d\n", normal, ndt,
+           optimize, others, total());
+  }
+  int normal;
+  int ndt;
   int optimize;
   int others;
 };
@@ -37,7 +43,8 @@ struct CommonParameters {
     InitializeOutput();
   }
   void InitializeInput() {
-    max_iterations = 100;
+    max_iterations = 400;
+    ceres_max_iterations = 400;
     max_min_ctr = 5;
     threads = 8;
     threshold = 0.01;
@@ -47,6 +54,7 @@ struct CommonParameters {
   }
   void InitializeOutput() {
     _iteration = 0;
+    _ceres_iteration = 0;
     _min_ctr = 0;
     _min_cost = std::numeric_limits<double>::max();
     _converge = Converge::kNotConverge;
@@ -55,6 +63,7 @@ struct CommonParameters {
     _usedtime.Initialize();
   }
   int max_iterations;
+  int ceres_max_iterations;
   int max_min_ctr;
   int threads;
   double threshold;
@@ -63,6 +72,7 @@ struct CommonParameters {
   ceres::LinearSolverType solver;
 
   int _iteration;
+  int _ceres_iteration;
   int _min_ctr;
   double _min_cost;
   Converge _converge;
@@ -71,7 +81,9 @@ struct CommonParameters {
   UsedTime _usedtime;
 };
 
-// struct ICPParameters : CommonParameters { };
+struct ICPParameters : CommonParameters { };
+
+struct Pt2plICPParameters : CommonParameters { };
 
 // struct GICPParameters : CommonParameters { };
 
@@ -82,7 +94,16 @@ struct SICPParameters : CommonParameters {
   double radius;
 };
 
-// struct NDTP2DParameters { };
+struct NDTP2DParameters {
+  NDTP2DParameters() {
+    cell_size = 1.5;
+    r_variance = 0.0625;
+    t_variance = 0.0001;
+  }
+  double cell_size;
+  double r_variance;  /**< radius variance, i.e., +-r -> (r / 3)^2 */
+  double t_variance;  /**< angle variance, i.e., +-t -> (t / 3)^2 */
+};
 
 struct NDTD2DParameters : CommonParameters {
   NDTD2DParameters() {
@@ -108,12 +129,17 @@ struct SNDTParameters : CommonParameters {
   double t_variance;  /**< angle variance, i.e., +-t -> (t / 3)^2 */
 };
 
-// TODO: ICPMatch
-// Eigen::Affine2d ICPMatch(
-//     const std::vector<Eigen::Vector2d> &target_points,
-//     const std::vector<Eigen::Vector2d> &source_points,
-//     ICPParameters &params,
-//     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
+Eigen::Affine2d ICPMatch(
+    const std::vector<Eigen::Vector2d> &target_points,
+    const std::vector<Eigen::Vector2d> &source_points,
+    ICPParameters &params,
+    const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
+
+Eigen::Affine2d Pt2plICPMatch(
+    const std::vector<Eigen::Vector2d> &target_points,
+    const std::vector<Eigen::Vector2d> &source_points,
+    Pt2plICPParameters &params,
+    const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 // TODO: GICPMatch
 // Eigen::Affine2d GICPMatch(
@@ -128,11 +154,10 @@ Eigen::Affine2d SICPMatch(
     SICPParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
-// TODO: NDTP2DMatch
-// Eigen::Affine2d NDTP2DMatch(
-//     const NDTMap &target_map, const std::vector<Eigen::Vector2d> &source_points,
-//     NDTD2DParameters &params,
-//     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
+Eigen::Affine2d NDTP2DMatch(
+    const NDTMap &target_map, const std::vector<Eigen::Vector2d> &source_points,
+    NDTD2DParameters &params,
+    const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 Eigen::Affine2d NDTD2DMatch(
     const NDTMap &target_map, const NDTMap &source_map,

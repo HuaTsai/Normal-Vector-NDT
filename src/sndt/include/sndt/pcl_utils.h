@@ -9,7 +9,7 @@
  *
  */
 #pragma once
-#include <normal2d/Normal2dEstimation.h>
+#include <normal2d/normal2d.h>
 #include <pcl/search/kdtree.h>
 
 pcl::KdTreeFLANN<pcl::PointXY> MakeKDTree(const std::vector<Eigen::Vector2d> &points) {

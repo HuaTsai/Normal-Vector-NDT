@@ -21,7 +21,6 @@ find_package(catkin REQUIRED
 
 catkin_package(
   CATKIN_DEPENDS
-    roscpp
     common
     normal2d
   INCLUDE_DIRS
@@ -35,9 +34,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-# Library
-
-set (${PROJECT_NAME}_LIB_SRCS
+set(ALL_SRCS
   src/ndt_cell.cc
   src/ndt_map.cc
   src/sndt_cell.cc
@@ -46,8 +43,11 @@ set (${PROJECT_NAME}_LIB_SRCS
   src/visuals.cc
 )
 
-set(ALLLIBS ${catkin_LIBRARIES} ${CERES_LIBRARIES})
+set(ALLLIBS
+  ${catkin_LIBRARIES}
+  ${CERES_LIBRARIES}
+)
 
-add_library(${PROJECT_NAME} ${${PROJECT_NAME}_LIB_SRCS})
+add_library(${PROJECT_NAME} ${ALL_SRCS})
 
 target_link_libraries(${PROJECT_NAME} ${ALLLIBS})

@@ -166,6 +166,15 @@ std::vector<Eigen::Vector2d> SNDTMap::GetPoints() const {
   return ret;
 }
 
+std::vector<Eigen::Vector2d> SNDTMap::GetPointsWithGaussianCell() const {
+  std::vector<Eigen::Vector2d> ret;
+  for (auto it = begin(); it != end(); ++it)
+    if ((*it)->HasGaussian())
+      for (auto pt : (*it)->GetPoints())
+        ret.push_back(pt);
+  return ret;
+}
+
 std::vector<Eigen::Vector2d> SNDTMap::GetNormals() const {
   std::vector<Eigen::Vector2d> ret;
   for (auto it = begin(); it != end(); ++it)
