@@ -52,6 +52,7 @@ struct CommonParameters {
     solver = ceres::DENSE_QR;
   }
   void InitializeOutput() {
+    _valid = false;
     _iteration = 0;
     _ceres_iteration = 0;
     _converge = Converge::kNotConverge;
@@ -67,6 +68,7 @@ struct CommonParameters {
   bool verbose;
   ceres::LinearSolverType solver;
 
+  bool _valid;
   int _iteration;
   int _ceres_iteration;
   Converge _converge;
@@ -77,7 +79,12 @@ struct CommonParameters {
 
 struct ICPParameters : CommonParameters { };
 
-struct Pt2plICPParameters : CommonParameters { };
+struct Pt2plICPParameters : CommonParameters {
+  Pt2plICPParameters() {
+    radius = 1.5;
+  }
+  double radius;
+};
 
 // struct GICPParameters : CommonParameters { };
 

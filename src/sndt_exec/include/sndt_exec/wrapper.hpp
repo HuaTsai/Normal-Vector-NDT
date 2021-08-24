@@ -144,7 +144,7 @@ SNDTMap MakeSNDTMap(
 
 std::vector<Eigen::Vector2d> MakePoints(
     const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> &data,
-    SICPParameters &params) {
+    CommonParameters &params) {
   auto t1 = GetTime();
   std::vector<Eigen::Vector2d> ret;
   for (const auto &elem : data) {

@@ -22,12 +22,20 @@ namespace po = boost::program_options;
 vector<sensor_msgs::CompressedImage> imb, imbl, imbr, imf, imfl, imfr;
 vector<common::EgoPointClouds> vepcs;
 vector<sensor_msgs::PointCloud2> vpc;
-ros::Publisher pub1, pub2, pub3, pub4, pub5, pub6, pub7, pubd, pube;
+ros::Publisher pub1, pub2, pub3, pub4, pub5, pub6, pub7, pub8, pubd, pube;
 ros::Publisher pb1, pb2, pb3, pb4, pb5, pb6, pbs, pbt;
-double cell_size, radius, huber;
-bool verbose;
+double cell_size, radius, huber, voxel;
 nav_msgs::Path gtpath;
-Affine2d Tg;
+
+Affine2d GetBenchMark(const ros::Time &t1, const ros::Time &t2) {
+  Affine3d To, Ti;
+  tf2::fromMsg(GetPose(gtpath.poses, t2), To);
+  tf2::fromMsg(GetPose(gtpath.poses, t1), Ti);
+  Affine3d Tgt3 = Conserve2DFromAffine3d(Ti.inverse() * To);
+  Affine2d ret = Translation2d(Tgt3.translation()(0), Tgt3.translation()(1)) *
+                 Rotation2Dd(Tgt3.rotation().block<2, 2>(0, 0));
+  return ret;
+}
 
 vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg) {
   pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
@@ -35,7 +43,7 @@ vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg) {
   pcl::VoxelGrid<pcl::PointXYZ> vg;
   pcl::PointCloud<pcl::PointXYZ>::Ptr fpc(new pcl::PointCloud<pcl::PointXYZ>);
   vg.setInputCloud(pc);
-  vg.setLeafSize(1, 1, 1);
+  vg.setLeafSize(voxel, voxel, voxel);
   vg.filter(*fpc);
 
   vector<Vector2d> ret;
@@ -43,10 +51,6 @@ vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg) {
     if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z))
       ret.push_back(Vector2d(pt.x, pt.y));
   return ret;
-}
-
-void cb2(const geometry_msgs::Vector3 &xyt) {
-  Tg = Translation2d(xyt.x, xyt.y) * Rotation2Dd(xyt.z);
 }
 
 void cb(const std_msgs::Int32 &num) {
@@ -68,56 +72,37 @@ void cb(const std_msgs::Int32 &num) {
   vector<pair<vector<Vector2d>, Affine2d>> datas{{src, aff2}};
 
   // SNDT Method
-  cout << "SNDT: " << endl;
-  auto t1 = GetTime();
   SNDTParameters params1;
   params1.r_variance = params1.t_variance = 0;
-  params1.verbose = verbose;
+  params1.huber = huber;
+  params1.verbose = true;
   auto mapt1 = MakeSNDTMap(datat, params1);
   auto maps1 = MakeSNDTMap(datas, params1);
-  auto T1 = SNDTMatch(mapt1, maps1, params1, Tg);
-  auto t2 = GetTime();
-  cout << GetDiffTime(t1, t2) << " ms" << endl;
+  auto T1 = SNDTMatch(mapt1, maps1, params1);
 
   // NDTD2D method
-  cout << "NDTD2D: " << endl;
-  auto t3 = GetTime();
   NDTD2DParameters params2;
   params2.r_variance = params2.t_variance = 0;
-  params2.verbose = verbose;
+  params2.huber = huber;
   auto mapt2 = MakeNDTMap(datat, params2);
   auto maps2 = MakeNDTMap(datas, params2);
-  auto T2 = NDTD2DMatch(mapt2, maps2, params2, Tg);
-  auto t4 = GetTime();
-  cout << GetDiffTime(t3, t4) << " ms" << endl;
+  auto T2 = NDTD2DMatch(mapt2, maps2, params2);
 
   // SICP method
-  cout << "SICP: " << endl;
-  auto t5 = GetTime();
-  vector<Vector2d> tgt2(tgt.size()), src2(src.size());
-  transform(tgt.begin(), tgt.end(), tgt2.begin(), [&aff2](auto p) { return aff2 * p; });
-  transform(src.begin(), src.end(), src2.begin(), [&aff2](auto p) { return aff2 * p; });
   SICPParameters params3;
-  params3.verbose = verbose;
-  auto T3 = SICPMatch(tgt2, src2, params3, Tg);
-  auto t6 = GetTime();
-  cout << GetDiffTime(t5, t6) << " ms" << endl;
+  params3.huber = huber;
+  auto tgt3 = MakePoints(datat, params3);
+  auto src3 = MakePoints(datas, params3);
+  auto T3 = SICPMatch(tgt3, src3, params3);
 
-  /********* Compute Ground Truth *********/
-  Affine3d To, Ti;
-  tf2::fromMsg(GetPose(gtpath.poses, vpc[i + 1].header.stamp), To);
-  tf2::fromMsg(GetPose(gtpath.poses, vpc[i].header.stamp), Ti);
-  Affine3d Tgt3 = Conserve2DFromAffine3d(Ti.inverse() * To);
-  Affine2d Tgt = Translation2d(Tgt3.translation()(0), Tgt3.translation()(1)) *
-                 Rotation2Dd(Tgt3.rotation().block<2, 2>(0, 0));
-  /********* Compute End Here     *********/
+  auto Tgt = GetBenchMark(vpc[i].header.stamp, vpc[i + 1].header.stamp);
 
   cout << "sndt: " << TransNormRotDegAbsFromMatrix3d((T1.inverse() * Tgt).matrix()).transpose() << endl;
   cout << " ndt: " << TransNormRotDegAbsFromMatrix3d((T2.inverse() * Tgt).matrix()).transpose() << endl;
   cout << "sicp: " << TransNormRotDegAbsFromMatrix3d((T3.inverse() * Tgt).matrix()).transpose() << endl;
 
-  pub1.publish(JoinMarkers({MarkerOfPoints(tgt2, 0.5, Color::kRed)}));
-  pub2.publish(JoinMarkers({MarkerOfPoints(src2)}));
+  pub1.publish(JoinMarkers({MarkerOfPoints(tgt3, 0.5, Color::kRed)}));
+  pub2.publish(JoinMarkers({MarkerOfPoints(src3)}));
 
   auto mps1 = maps1.GetPoints();
   transform(mps1.begin(), mps1.end(), mps1.begin(), [&T1](auto p) { return T1 * p; });
@@ -127,19 +112,23 @@ void cb(const std_msgs::Int32 &num) {
   transform(mps2.begin(), mps2.end(), mps2.begin(), [&T2](auto p) { return T2 * p; });
   pub4.publish(JoinMarkers({MarkerOfPoints(mps2)}));  // NDTD2D
 
-  transform(src2.begin(), src2.end(), src2.begin(), [&T3](auto p) { return T3 * p; });
-  pub5.publish(JoinMarkers({MarkerOfPoints(src2)}));  // SICP
+  transform(src3.begin(), src3.end(), src3.begin(), [&T3](auto p) { return T3 * p; });
+  pub5.publish(JoinMarkers({MarkerOfPoints(src3)}));  // SICP
+
+  pub6.publish(MarkerArrayOfSNDTMap(mapt1, true));
+  pub7.publish(MarkerArrayOfSNDTMap(maps1));
+  pub8.publish(MarkerArrayOfSNDTMap(maps1.PseudoTransformCells(T1)));
 
   auto stmp = vepcs[i].stamp;
   auto cmp = [](sensor_msgs::CompressedImage a, ros::Time b) {
     return a.header.stamp < b;
   };
-  pb1.publish(*lower_bound(imb.begin(), imb.end(), stmp, cmp));
-  pb2.publish(*lower_bound(imbl.begin(), imbl.end(), stmp, cmp));
-  pb3.publish(*lower_bound(imbr.begin(), imbr.end(), stmp, cmp));
-  pb4.publish(*lower_bound(imf.begin(), imf.end(), stmp, cmp));
-  pb5.publish(*lower_bound(imfl.begin(), imfl.end(), stmp, cmp));
-  pb6.publish(*lower_bound(imfr.begin(), imfr.end(), stmp, cmp));
+  // pb1.publish(*lower_bound(imb.begin(), imb.end(), stmp, cmp));
+  // pb2.publish(*lower_bound(imbl.begin(), imbl.end(), stmp, cmp));
+  // pb3.publish(*lower_bound(imbr.begin(), imbr.end(), stmp, cmp));
+  // pb4.publish(*lower_bound(imf.begin(), imf.end(), stmp, cmp));
+  // pb5.publish(*lower_bound(imfl.begin(), imfl.end(), stmp, cmp));
+  // pb6.publish(*lower_bound(imfr.begin(), imfr.end(), stmp, cmp));
 }
 
 void GetFiles(string data) {
@@ -147,12 +136,12 @@ void GetFiles(string data) {
   SerializationInput(JoinPath(base, "lidar.ser"), vpc);
   SerializationInput(JoinPath(base, "vepcs.ser"), vepcs);
   SerializationInput(JoinPath(base, "gt.ser"), gtpath);
-  SerializationInput(JoinPath(base, "back.ser"), imb);
-  SerializationInput(JoinPath(base, "back_left.ser"), imbl);
-  SerializationInput(JoinPath(base, "back_right.ser"), imbr);
-  SerializationInput(JoinPath(base, "front.ser"), imf);
-  SerializationInput(JoinPath(base, "front_left.ser"), imfl);
-  SerializationInput(JoinPath(base, "front_right.ser"), imfr);
+  // SerializationInput(JoinPath(base, "back.ser"), imb);
+  // SerializationInput(JoinPath(base, "back_left.ser"), imbl);
+  // SerializationInput(JoinPath(base, "back_right.ser"), imbr);
+  // SerializationInput(JoinPath(base, "front.ser"), imf);
+  // SerializationInput(JoinPath(base, "front_left.ser"), imfl);
+  // SerializationInput(JoinPath(base, "front_right.ser"), imfr);
 }
 
 int main(int argc, char **argv) {
@@ -165,7 +154,7 @@ int main(int argc, char **argv) {
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
       ("huber,u", po::value<double>(&huber)->default_value(1), "Huber")
-      ("verbose,v", po::value<bool>(&verbose)->default_value(false)->implicit_value(true), "Verbose")
+      ("voxel,v", po::value<double>(&voxel)->default_value(1), "Voxel")
       ("run", po::value<bool>(&run)->default_value(false)->implicit_value(true), "Run");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -181,7 +170,6 @@ int main(int argc, char **argv) {
   GetFiles(data);
 
   ros::Subscriber sub = nh.subscribe("idx", 0, cb);
-  ros::Subscriber sub2 = nh.subscribe("xyt", 0, cb2);
 
   pub1 = nh.advertise<MarkerArray>("markers1", 0, true);
   pub2 = nh.advertise<MarkerArray>("markers2", 0, true);
@@ -190,6 +178,7 @@ int main(int argc, char **argv) {
   pub5 = nh.advertise<MarkerArray>("markers5", 0, true);
   pub6 = nh.advertise<MarkerArray>("markers6", 0, true);
   pub7 = nh.advertise<MarkerArray>("markers7", 0, true);
+  pub8 = nh.advertise<MarkerArray>("markers8", 0, true);
   pubd = nh.advertise<Marker>("markerd", 0, true);
   pbs = nh.advertise<Marker>("marker1", 0, true);
   pbt = nh.advertise<Marker>("marker2", 0, true);
@@ -201,8 +190,7 @@ int main(int argc, char **argv) {
   pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0, true);
   pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed", 0, true);
 
-  Tg = Affine2d::Identity();
-  int n = vpc.size() - 2;  n = 100;
+  int n = vpc.size() - 2;
   if (run) {
     for (int i = 0; i < n; ++i) {
       std_msgs::Int32 num;
