@@ -125,8 +125,7 @@ int main(int argc, char **argv) {
 #else
   int f = 5;
   n = vepcs.size() / f * f;
-  // for (int i = 0; i < n - f; i += f) {
-  for (int i = 55; i < 56; ++i) {
+  for (int i = 0; i < n - f; i += f) {
     Affine2d Tio, Toq;
     vector<Affine2d> Tios, Toqs;
     auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
