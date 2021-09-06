@@ -26,6 +26,7 @@ ros::Publisher pub1, pub2, pub3, pub4, pub5, pub6, pub7, pub8, pubd, pube;
 ros::Publisher pb1, pb2, pb3, pb4, pb5, pb6, pbs, pbt;
 double cell_size, radius, huber, voxel;
 nav_msgs::Path gtpath;
+bool image;
 
 Affine2d GetBenchMark(const ros::Time &t1, const ros::Time &t2) {
   Affine3d To, Ti;
@@ -75,13 +76,12 @@ void cb(const std_msgs::Int32 &num) {
   SNDTParameters params1;
   params1.r_variance = params1.t_variance = 0;
   params1.huber = huber;
-  params1.verbose = true;
   auto mapt1 = MakeSNDTMap(datat, params1);
   auto maps1 = MakeSNDTMap(datas, params1);
   auto T1 = SNDTMatch(mapt1, maps1, params1);
 
   // NDTD2D method
-  NDTD2DParameters params2;
+  NDTParameters params2;
   params2.r_variance = params2.t_variance = 0;
   params2.huber = huber;
   auto mapt2 = MakeNDTMap(datat, params2);
@@ -117,18 +117,20 @@ void cb(const std_msgs::Int32 &num) {
 
   pub6.publish(MarkerArrayOfSNDTMap(mapt1, true));
   pub7.publish(MarkerArrayOfSNDTMap(maps1));
-  pub8.publish(MarkerArrayOfSNDTMap(maps1.PseudoTransformCells(T1)));
+  pub8.publish(MarkerArrayOfSNDTMap(maps1.PseudoTransformCells(T1, true)));
 
-  auto stmp = vepcs[i].stamp;
-  auto cmp = [](sensor_msgs::CompressedImage a, ros::Time b) {
-    return a.header.stamp < b;
-  };
-  // pb1.publish(*lower_bound(imb.begin(), imb.end(), stmp, cmp));
-  // pb2.publish(*lower_bound(imbl.begin(), imbl.end(), stmp, cmp));
-  // pb3.publish(*lower_bound(imbr.begin(), imbr.end(), stmp, cmp));
-  // pb4.publish(*lower_bound(imf.begin(), imf.end(), stmp, cmp));
-  // pb5.publish(*lower_bound(imfl.begin(), imfl.end(), stmp, cmp));
-  // pb6.publish(*lower_bound(imfr.begin(), imfr.end(), stmp, cmp));
+  if (image) {
+    auto stmp = vepcs[i].stamp;
+    auto cmp = [](sensor_msgs::CompressedImage a, ros::Time b) {
+      return a.header.stamp < b;
+    };
+    pb1.publish(*lower_bound(imb.begin(), imb.end(), stmp, cmp));
+    pb2.publish(*lower_bound(imbl.begin(), imbl.end(), stmp, cmp));
+    pb3.publish(*lower_bound(imbr.begin(), imbr.end(), stmp, cmp));
+    pb4.publish(*lower_bound(imf.begin(), imf.end(), stmp, cmp));
+    pb5.publish(*lower_bound(imfl.begin(), imfl.end(), stmp, cmp));
+    pb6.publish(*lower_bound(imfr.begin(), imfr.end(), stmp, cmp));
+  }
 }
 
 void GetFiles(string data) {
@@ -136,12 +138,14 @@ void GetFiles(string data) {
   SerializationInput(JoinPath(base, "lidar.ser"), vpc);
   SerializationInput(JoinPath(base, "vepcs.ser"), vepcs);
   SerializationInput(JoinPath(base, "gt.ser"), gtpath);
-  // SerializationInput(JoinPath(base, "back.ser"), imb);
-  // SerializationInput(JoinPath(base, "back_left.ser"), imbl);
-  // SerializationInput(JoinPath(base, "back_right.ser"), imbr);
-  // SerializationInput(JoinPath(base, "front.ser"), imf);
-  // SerializationInput(JoinPath(base, "front_left.ser"), imfl);
-  // SerializationInput(JoinPath(base, "front_right.ser"), imfr);
+  if (image) {
+    SerializationInput(JoinPath(base, "back.ser"), imb);
+    SerializationInput(JoinPath(base, "back_left.ser"), imbl);
+    SerializationInput(JoinPath(base, "back_right.ser"), imbr);
+    SerializationInput(JoinPath(base, "front.ser"), imf);
+    SerializationInput(JoinPath(base, "front_left.ser"), imfl);
+    SerializationInput(JoinPath(base, "front_right.ser"), imfr);
+  }
 }
 
 int main(int argc, char **argv) {
@@ -155,6 +159,7 @@ int main(int argc, char **argv) {
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
       ("huber,u", po::value<double>(&huber)->default_value(1), "Huber")
       ("voxel,v", po::value<double>(&voxel)->default_value(1), "Voxel")
+      ("image,i", po::value<bool>(&image)->default_value(false), "Image")
       ("run", po::value<bool>(&run)->default_value(false)->implicit_value(true), "Run");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -183,12 +188,14 @@ int main(int argc, char **argv) {
   pbs = nh.advertise<Marker>("marker1", 0, true);
   pbt = nh.advertise<Marker>("marker2", 0, true);
   pube = nh.advertise<geometry_msgs::Vector3>("err", 0, true);
-  pb1 = nh.advertise<sensor_msgs::CompressedImage>("back/compressed", 0, true);
-  pb2 = nh.advertise<sensor_msgs::CompressedImage>("back_left/compressed", 0, true);
-  pb3 = nh.advertise<sensor_msgs::CompressedImage>("back_right/compressed", 0, true);
-  pb4 = nh.advertise<sensor_msgs::CompressedImage>("front/compressed", 0, true);
-  pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0, true);
-  pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed", 0, true);
+  if (image) {
+    pb1 = nh.advertise<sensor_msgs::CompressedImage>("back/compressed", 0, true);
+    pb2 = nh.advertise<sensor_msgs::CompressedImage>("back_left/compressed", 0, true);
+    pb3 = nh.advertise<sensor_msgs::CompressedImage>("back_right/compressed", 0, true);
+    pb4 = nh.advertise<sensor_msgs::CompressedImage>("front/compressed", 0, true);
+    pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0, true);
+    pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed", 0, true);
+  }
 
   int n = vpc.size() - 2;
   if (run) {

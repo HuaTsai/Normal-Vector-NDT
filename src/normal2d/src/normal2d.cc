@@ -1,201 +1,79 @@
-// Created by Francois Gauthier-Clerc.
-// Modified and refactored by HuaTsai.
 #include <normal2d/normal2d.h>
+#include <pcl/search/kdtree.h>
+#include <bits/stdc++.h>
+
 #define USE_OMP
 
 #ifdef USE_OMP
-#include <omp.h>
 #define THREADS 8
+#include <omp.h>
 #endif
 
-void Normal2dEstimation::setInputCloud(const ConstPtrCloud& cloud) {
-  m_in_cloud = cloud;
-  m_indices->clear();
-  m_indices->resize(cloud->points.size());
-  for (unsigned int i = 0; i < cloud->points.size(); ++i) {
-    (*m_indices)[i] = i;
+inline pcl::KdTreeFLANN<pcl::PointXY> MakeKDTrees(const std::vector<Eigen::Vector2d> &points) {
+  pcl::PointCloud<pcl::PointXY>::Ptr pc(new pcl::PointCloud<pcl::PointXY>);
+  for (const auto &pt : points) {
+    pcl::PointXY p;
+    p.x = pt(0), p.y = pt(1);
+    pc->push_back(p);
   }
+  pcl::KdTreeFLANN<pcl::PointXY> ret;
+  ret.setInputCloud(pc);
+  return ret;
 }
 
-void Normal2dEstimation::setIndices(const pcl::PointIndices::Ptr& indices) {
-  m_indices->clear();
-  m_indices->resize(indices->indices.size());
-  std::copy(indices->indices.cbegin(), indices->indices.cend(),
-            m_indices->begin());
+inline Eigen::Vector2d ComputeMeanWithIndices(
+    const std::vector<Eigen::Vector2d> &matrices,
+    const std::vector<int> &indices) {
+  Eigen::Vector2d ret = Eigen::Vector2d::Zero();
+  for (size_t i = 0; i < indices.size(); ++i)
+    ret += matrices[indices[i]];
+  ret /= indices.size();
+  return ret;
 }
 
-void Normal2dEstimation::setIndices(
-    const pcl::PointIndices::ConstPtr& indices) {
-  m_indices->clear();
-  m_indices->resize(indices->indices.size());
-  std::copy(indices->indices.cbegin(), indices->indices.cend(),
-            m_indices->begin());
+inline Eigen::Matrix2d ComputeCovWithIndices(
+    const std::vector<Eigen::Vector2d> &points, const std::vector<int> &indices,
+    const Eigen::Vector2d &mean) {
+  int n = indices.size();
+  if (n <= 2) return Eigen::Matrix2d::Zero();
+  Eigen::MatrixXd mp(2, n);
+  for (int i = 0; i < n; ++i) mp.col(i) = points[indices[i]] - mean;
+  Eigen::Matrix2d ret;
+  ret = mp * mp.transpose() / (n - 1);
+  return ret;
 }
 
-int Normal2dEstimation::searchForNeighbors(int index,
-                                           std::vector<int>& nn_indices,
-                                           std::vector<float>& nn_dists) const {
-  if (m_k == 0) {
-    m_kd_tree->radiusSearch(index, m_search_radius, nn_indices, nn_dists, 0);
-  } else {
-    nn_indices.resize(m_k);
-    nn_dists.resize(m_k);
-    m_kd_tree->nearestKSearch(index, m_k, nn_indices, nn_dists);
-  }
-  return nn_indices.size();
-}
-
-void Normal2dEstimation::compute(const PtrCloud& normal_cloud) const {
-  normal_cloud->points.resize(m_in_cloud->points.size());
-  normal_cloud->height = m_in_cloud->height;
-  normal_cloud->width = m_in_cloud->width;
-
-  if ((m_k == 0) && (m_search_radius == 0)) {
-    throw std::runtime_error(
-        "You must call once either setRadiusSearch or setKSearch !");
-  }
-  if ((m_k != 0) && (m_search_radius != 0)) {
-    throw std::runtime_error(
-        "You must call once either setRadiusSearch or setKSearch (not both) !");
-  }
-
-  m_kd_tree->setInputCloud(m_in_cloud, m_indices);
-  normal_cloud->is_dense = true;
+std::vector<Eigen::Vector2d> ComputeNormals(
+    const std::vector<Eigen::Vector2d> &pc, double radius) {
+  std::vector<Eigen::Vector2d> ret(pc.size());
+  auto kd = MakeKDTrees(pc);
 
 #ifdef USE_OMP
 #pragma omp parallel for num_threads(THREADS)
 #endif
-  for (unsigned int idx = 0; idx < m_indices->size(); ++idx) {
-    boost::shared_ptr<std::vector<int>> nn_indices(new std::vector<int>);
-    std::vector<float> nn_dists;
-    if (!isFinite(m_in_cloud->points[(*m_indices)[idx]]) ||
-        searchForNeighbors((*m_indices)[idx], *nn_indices, nn_dists) == 0) {
-      float nan = std::numeric_limits<float>::quiet_NaN();
-      normal_cloud->points[idx].x = nan;
-      normal_cloud->points[idx].y = nan;
-      normal_cloud->points[idx].z = nan;
-      normal_cloud->is_dense = false;
+  for (size_t i = 0; i < pc.size(); ++i) {
+    if (!pc[i].allFinite()) {
+      ret[i].fill(std::numeric_limits<double>::quiet_NaN());
       continue;
     }
-
-    computePointNormal2d(nn_indices, normal_cloud->points[idx].x,
-                         normal_cloud->points[idx].y,
-                         normal_cloud->points[idx].z);
-  }
-}
-
-void Normal2dEstimation::compute(
-    const pcl::PointCloud<pcl::Normal>::Ptr& normal_cloud) const {
-  normal_cloud->points.resize(m_in_cloud->points.size());
-  normal_cloud->height = m_in_cloud->height;
-  normal_cloud->width = m_in_cloud->width;
-
-  if ((m_k == 0) && (m_search_radius == 0)) {
-    throw std::runtime_error(
-        "You must call once either setRadiusSearch or setKSearch !");
-  }
-  if ((m_k != 0) && (m_search_radius != 0)) {
-    throw std::runtime_error(
-        "You must call once either setRadiusSearch or setKSearch (not both) !");
-  }
-
-  m_kd_tree->setInputCloud(m_in_cloud, m_indices);
-  normal_cloud->is_dense = true;
-
-#ifdef USE_OMP
-#pragma omp parallel for num_threads(THREADS)
-#endif
-  for (unsigned int idx = 0; idx < m_indices->size(); ++idx) {
-    boost::shared_ptr<std::vector<int>> nn_indices(new std::vector<int>);
-    std::vector<float> nn_dists;
-    if (!isFinite(m_in_cloud->points[(*m_indices)[idx]]) ||
-        searchForNeighbors((*m_indices)[idx], *nn_indices, nn_dists) == 0) {
-      float nan = std::numeric_limits<float>::quiet_NaN();
-      normal_cloud->points[idx].normal_x = nan;
-      normal_cloud->points[idx].normal_y = nan;
-      normal_cloud->points[idx].normal_z = nan;
-      normal_cloud->is_dense = false;
+    std::vector<int> indices;
+    std::vector<float> dists;
+    pcl::PointXY pt;
+    pt.x = pc[i](0), pt.y = pc[i](1);
+    int found = kd.radiusSearch(pt, radius, indices, dists, 0);
+    if (!found || found == 1) {
+      ret[i].fill(std::numeric_limits<double>::quiet_NaN());
       continue;
     }
-
-    computePointNormal2d(nn_indices, normal_cloud->points[idx].normal_x,
-                         normal_cloud->points[idx].normal_y,
-                         normal_cloud->points[idx].normal_z,
-                         normal_cloud->points[idx].curvature);
+    if (found == 2) {
+      Eigen::Vector2d diff = pc[indices[0]] - pc[indices[1]];
+      ret[i] = Eigen::Vector2d(-diff(1), diff(0)).normalized();
+    } else {
+      Eigen::Vector2d mean = ComputeMeanWithIndices(pc, indices);
+      Eigen::Matrix2d cov = ComputeCovWithIndices(pc, indices, mean);
+      Eigen::SelfAdjointEigenSolver<Eigen::Matrix2d> evd;
+      ret[i] = evd.computeDirect(cov).eigenvectors().col(0);
+    }
   }
-}
-
-bool Normal2dEstimation::computePointNormal2d(
-    boost::shared_ptr<std::vector<int>>& indices, float& nx, float& ny,
-    float& nz) const {
-  if (indices->size() < 2) {
-    nx = ny = nz = std::numeric_limits<float>::quiet_NaN();
-    return false;
-  }
-  if (indices->size() == 2) {
-    double norm, vect_x, vect_y;
-    vect_x = m_in_cloud->points[(*indices)[0]].x -
-             m_in_cloud->points[(*indices)[1]].x;
-    vect_y = m_in_cloud->points[(*indices)[0]].y -
-             m_in_cloud->points[(*indices)[1]].y;
-    norm = std::pow(std::pow(vect_x, 2.0) + std::pow(vect_y, 2.0), 0.5);
-    vect_x /= norm;
-    vect_y /= norm;
-    nx = -vect_y;
-    ny = vect_x;
-  } else {
-    PCA2D pca;
-    pca.setInputCloud(m_in_cloud);
-    pca.setIndices(indices);
-    // Note that declare auto in release mode will not work
-    Eigen::Vector2f result = pca.getEigenVectors().col(1);
-    nx = result(0);
-    ny = result(1);
-  }
-
-  if (ny < 0) {
-    nx = -nx;
-    ny = -ny;
-  }
-  nz = 0.0;
-  return true;
-}
-
-bool Normal2dEstimation::computePointNormal2d(
-    boost::shared_ptr<std::vector<int>>& indices, float& nx, float& ny,
-    float& nz, float& curvature) const {
-  if (indices->size() < 2) {
-    nx = ny = nz = curvature = std::numeric_limits<float>::quiet_NaN();
-    return false;
-  }
-  if (indices->size() == 2) {
-    double norm, vect_x, vect_y;
-    vect_x = m_in_cloud->points[(*indices)[0]].x -
-             m_in_cloud->points[(*indices)[1]].x;
-    vect_y = m_in_cloud->points[(*indices)[0]].y -
-             m_in_cloud->points[(*indices)[1]].y;
-    norm = std::pow(std::pow(vect_x, 2.0) + std::pow(vect_y, 2.0), 0.5);
-    vect_x /= norm;
-    vect_y /= norm;
-    nx = -vect_y;
-    ny = vect_x;
-    curvature = 0.0;
-  } else {
-    PCA2D pca;
-    pca.setInputCloud(m_in_cloud);
-    pca.setIndices(indices);
-    // Note that declare auto in release mode will not work
-    Eigen::Vector2f result = pca.getEigenVectors().col(1);
-    nx = result(0);
-    ny = result(1);
-    curvature = pca.getEigenValues()(1) /
-                (pca.getEigenValues()(0) + pca.getEigenValues()(1));
-  }
-
-  if (ny < 0) {
-    nx = -nx;
-    ny = -ny;
-  }
-  nz = 0.0;
-  return true;
+  return ret;
 }

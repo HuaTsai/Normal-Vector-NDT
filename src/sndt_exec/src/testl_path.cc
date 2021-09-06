@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
 
     // NDT method
     auto t3 = GetTime();
-    NDTD2DParameters params2;
+    NDTParameters params2;
     params2.r_variance = params2.t_variance = 0;
     auto tgt2 = MakeNDTMap(datat, params2);
     auto src2 = MakeNDTMap(datas, params2);

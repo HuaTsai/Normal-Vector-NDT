@@ -191,8 +191,8 @@ Marker MarkerOfEllipse(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covar
   Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
   R.block<2, 2>(0, 0) = evec;
   Eigen::Quaterniond q(R);
-  ret.scale.x = 3 * eval(0, 0);  // 1.5 sigma
-  ret.scale.y = 3 * eval(1, 1);
+  ret.scale.x = 2 * eval(0, 0);  // +- 1 sigma
+  ret.scale.y = 2 * eval(1, 1);
   ret.scale.z = 0.1;
   ret.pose.position.x = mean(0);
   ret.pose.position.y = mean(1);
@@ -356,15 +356,24 @@ MarkerArray MarkerArrayOfSNDTCell(const SNDTCell *cell) {
   auto bdy = MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
                               cell->GetSkewRad(), Color::kLime);
   auto pell = MarkerOfEllipse(cell->GetPointMean(), cell->GetPointCov());
+  auto mpts = MarkerOfPoints(cell->GetPoints(), 0.1, Color::kFuchsia);
+  std::vector<Eigen::Vector2d> starts, ends;
+  for (int i = 0; i < cell->GetN(); ++i) {
+    if (cell->GetNormals()[i].allFinite()) {
+      starts.push_back(cell->GetPoints()[i]);
+      ends.push_back(cell->GetPoints()[i] + cell->GetNormals()[i]);
+    }
+  }
+  auto mnms = MarkerArrayOfArrows(starts, ends, Color::kBlue);
   if (cell->GetNHasGaussian()) {
     auto nell = MarkerOfEllipse(cell->GetPointMean() + cell->GetNormalMean(),
                                 cell->GetNormalCov(), Color::kGray);
     auto points = FindTangentPoints(nell, cell->GetPointMean());
     auto lines = MarkerOfLinesByMiddlePoints(
         {points[0], cell->GetPointMean(), points[1]}, Color::kGray);
-    ret = JoinMarkers({bdy, pell, nell, lines});
+    ret = JoinMarkerArraysAndMarkers({mnms}, {bdy, pell, nell, lines, mpts});
   } else {
-    ret = JoinMarkers({bdy, pell});
+    ret = JoinMarkerArraysAndMarkers({mnms}, {bdy, pell, mpts});
   }
   return ret;
 }

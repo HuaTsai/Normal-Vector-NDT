@@ -24,8 +24,8 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(${PROJECT_NAME} src/normal2d.cc src/pca2d.cc)
+add_library(${PROJECT_NAME} src/normal2d.cc)
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} OpenMP::OpenMP_CXX)
 
-add_executable(normal2dtest src/normal2dtest.cc)
-target_link_libraries(normal2dtest ${PROJECT_NAME} pcl_visualization)
+add_executable(nmtest src/normal2dtest.cc)
+target_link_libraries(nmtest ${PROJECT_NAME} pcl_visualization)

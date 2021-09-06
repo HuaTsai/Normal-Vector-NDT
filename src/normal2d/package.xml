@@ -4,9 +4,8 @@
   <version>0.0.0</version>
   <description>The normal2d package</description>
   <maintainer email="huatsai.eed07g@nctu.edu.tw">HuaTsai</maintainer>
-  <license>BSD</license>
-  <author>Gauthier-Clerc François</author>
-  <url type="github">http://www.github.com/Enderdead/PCL-Normal-Estimation-2d</url>
+  <license>MIT</license>
+  <author email="huatsai.eed07g@nctu.edu.tw">HuaTsai</author>
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>
   <depend>pcl_ros</depend>

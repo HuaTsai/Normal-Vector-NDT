@@ -9,6 +9,17 @@
  * 
  */
 #include <sndt/sndt_map.h>
+#include <chrono>
+namespace {
+inline std::chrono::steady_clock::time_point GetTime() {
+  return std::chrono::steady_clock::now();
+}
+
+inline int GetDiffTime(std::chrono::steady_clock::time_point t1,
+                       std::chrono::steady_clock::time_point t2) {
+  return std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+}
+}
 
 SNDTMap::SNDTMap(double cell_size) : MapInterface(cell_size) {}
 
@@ -32,12 +43,10 @@ void SNDTMap::LoadPointsAndNormals(const std::vector<Eigen::Vector2d> &points,
   Initialize();
   std::vector<SNDTCell *> update_cells;
   for (size_t i = 0; i < points.size(); ++i) {
-    Eigen::Vector2d point = points[i];
-    Eigen::Vector2d normal = normals[i];
-    SNDTCell *cell = GetCellAndAllocate(point);
+    SNDTCell *cell = GetCellAndAllocate(points[i]);
     if (cell) {
-      cell->AddPoint(point);
-      cell->AddNormal(normal);
+      cell->AddPoint(points[i]);
+      cell->AddNormal(normals[i]);
       update_cells.push_back(cell);
     }
   }
@@ -59,13 +68,10 @@ void SNDTMap::LoadPointsWithCovariancesAndNormals(
   Initialize();
   std::vector<SNDTCell *> update_cells;
   for (size_t i = 0; i < points.size(); ++i) {
-    Eigen::Vector2d point = points[i];
-    Eigen::Vector2d normal = normals[i];
-    Eigen::Matrix2d point_cov = point_covs[i];
-    SNDTCell *cell = GetCellAndAllocate(point);
+    SNDTCell *cell = GetCellAndAllocate(points[i]);
     if (cell) {
-      cell->AddPointWithCovariance(point, point_cov);
-      cell->AddNormal(normal);
+      cell->AddPointWithCovariance(points[i], point_covs[i]);
+      cell->AddNormal(normals[i]);
       update_cells.push_back(cell);
     }
   }

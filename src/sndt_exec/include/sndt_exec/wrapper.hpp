@@ -10,6 +10,7 @@
  */
 #pragma once
 #include <sndt/pcl_utils.h>
+#include <normal2d/normal2d.h>
 #include <sndt/matcher.h>
 #include <common/EgoPointClouds.h>
 #include <common/common.h>
@@ -79,7 +80,7 @@ std::vector<Eigen::Vector2d> AugmentPoints(
 
 NDTMap MakeNDTMap(
     const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> &data,
-    NDTD2DParameters &params) {
+    NDTParameters &params) {
   auto t1 = GetTime();
   double cell_size = params.cell_size;
   double rvar = params.r_variance;

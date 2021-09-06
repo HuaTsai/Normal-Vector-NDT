@@ -9,7 +9,6 @@
  *
  */
 #pragma once
-#include <normal2d/normal2d.h>
 #include <pcl/search/kdtree.h>
 
 pcl::KdTreeFLANN<pcl::PointXY> MakeKDTree(const std::vector<Eigen::Vector2d> &points) {
@@ -23,24 +22,3 @@ pcl::KdTreeFLANN<pcl::PointXY> MakeKDTree(const std::vector<Eigen::Vector2d> &po
   ret.setInputCloud(pc);
   return ret;
 }
-
-std::vector<Eigen::Vector2d> ComputeNormals(
-    const std::vector<Eigen::Vector2d> &pc, double radius) {
-  pcl::PointCloud<pcl::PointXYZ>::Ptr pclpc(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::PointCloud<pcl::PointXYZ>::Ptr normals(new pcl::PointCloud<pcl::PointXYZ>);
-  int n = pc.size();
-  for (int i = 0; i < n; ++i)
-    pclpc->push_back(pcl::PointXYZ(pc[i](0), pc[i](1), 0));
-  pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZ>);
-  Normal2dEstimation ne;
-  ne.setInputCloud(pclpc);
-  ne.setSearchMethod(tree);
-  ne.setRadiusSearch(radius);
-  ne.compute(normals);
-  std::vector<Eigen::Vector2d> ret;
-  for (int i = 0; i < n; ++i)
-    ret.push_back(Eigen::Vector2d((*normals)[i].x, (*normals)[i].y));
-  return ret;
-}
-
-// TODO: implement ComputeNormals

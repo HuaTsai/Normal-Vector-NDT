@@ -79,7 +79,7 @@ void cb(const std_msgs::Int32 &num) {
 
   // Matching by NDTD2D
   auto t3 = GetTime();
-  NDTD2DParameters ndtparams;
+  NDTParameters ndtparams;
   auto datat0 = Augment(vepcs, i, i + f - 1, Tio, Tios);
   auto datas0 = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
   auto mapt = MakeNDTMap(datat0, ndtparams);

@@ -23,8 +23,6 @@ SNDTCell::SNDTCell() {
 }
 
 void SNDTCell::ComputeGaussian() {
-  Expects(points_.size() == normals_.size());
-  Expects(points_.size() == point_covs_.size());
   n_ = points_.size();
   ComputePGaussian();
   ComputeNGaussian();
@@ -60,6 +58,9 @@ void SNDTCell::ComputePGaussian() {
 
 void SNDTCell::ComputeNGaussian() {
   nmean_.setZero(), ncov_.setZero();
+  for (auto &nm : normals_)
+    if (nm.allFinite() && nm.dot(pevecs_.col(0)) < 0)
+      nm = -nm;
   auto valids = ExcludeNaNInf(normals_);
   if (!valids.size()) {
     ncelltype_ = kNoPoints;
@@ -90,7 +91,64 @@ void SNDTCell::ComputeNGaussian() {
     nhasgaussian_ = true;
   }
 }
+// void SNDTCell::ComputePGaussian() {
+//   pmean_.setZero(), pcov_.setZero();
+//   auto indices = ExcludeNaNInf3(points_, point_covs_);
+//   if (!indices.size()) {
+//     pcelltype_ = kNoPoints;
+//     return;
+//   }
+//   ComputeMeanAndCov(points_, point_covs_, indices, pmean_, pcov_);
+//   if (pcov_.allFinite()) {
+//     ComputeEvalEvec(pcov_, pevals_, pevecs_);
+//     if (pevals_(0) <= 0 && pevals_(1) <= 0) {
+//       pcelltype_ = kInvalid;
+//       return;
+//     }
+//     pcelltype_ = kRegular;
+//     phasgaussian_ = true;
+//     int maxidx, minidx;
+//     double maxval = pevals_.maxCoeff(&maxidx);
+//     double minval = pevals_.minCoeff(&minidx);
+//     if (maxval > rescale_ratio_ * minval) {
+//       pevals_(minidx) = maxval / rescale_ratio_;
+//       pcov_ = pevecs_ * pevals_.asDiagonal() * pevecs_.transpose();
+//       pcelltype_ = kRescale;
+//     }
+//   }
+// }
 
+// void SNDTCell::ComputeNGaussian() {
+//   nmean_.setZero(), ncov_.setZero();
+//   auto indices = ExcludeNaNInf3(normals_);
+//   if (!indices.size()) {
+//     ncelltype_ = kNoPoints;
+//     return;
+//   }
+//   ComputeMeanAndCov(normals_, indices, nmean_, ncov_);
+//   if (ncov_.allFinite()) {
+//     ComputeEvalEvec(ncov_, nevals_, nevecs_);
+//     if (nevals_(0) <= 0 || nevals_(1) <= 0) {
+//       ncelltype_ = kInvalid;
+//       return;
+//     }
+//     ncelltype_ = kRegular;
+//     nhasgaussian_ = true;
+//     int maxidx, minidx;
+//     double maxval = nevals_.maxCoeff(&maxidx);
+//     double minval = nevals_.minCoeff(&minidx);
+//     if (maxval > rescale_ratio_ * minval) {
+//       nevals_(minidx) = maxval / rescale_ratio_;
+//       ncov_ = nevecs_ * nevals_.asDiagonal() * nevecs_.transpose();
+//       ncelltype_ = kRescale;
+//     }
+//   }
+//   if (ncov_.isZero() && indices.size() >= 3) {
+//     ncov_ = Eigen::Matrix2d::Identity() * 0.01;
+//     ncelltype_ = kAssign;
+//     nhasgaussian_ = true;
+//   }
+// }
 bool SNDTCell::HasGaussian() const {
   return phasgaussian_ && nhasgaussian_;
 }

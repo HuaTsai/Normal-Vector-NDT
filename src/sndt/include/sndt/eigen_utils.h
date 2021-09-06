@@ -18,13 +18,23 @@
  * @brief Compute mean of points
  *
  * @param points Input points
+ * @param indices Input indices
  * @return Mean of points
  * @note This function does not check the validity of its elements
  */
-inline Eigen::Vector2d ComputeMean(const std::vector<Eigen::Vector2d> &points) {
-  Eigen::Vector2d init = Eigen::Vector2d::Zero();
-  auto ret = std::accumulate(points.begin(), points.end(), init);
-  ret /= points.size();
+inline Eigen::Vector2d ComputeMean(const std::vector<Eigen::Vector2d> &points,
+                                   const std::vector<int> &indices = {}) {
+  Eigen::Vector2d ret = Eigen::Vector2d::Zero();
+  if (indices.size()) {
+    ret = std::accumulate(indices.begin(), indices.end(), ret,
+                          [&points](const Eigen::Vector2d &a, int b) {
+                            return a + points[b];
+                          });
+    ret /= indices.size();
+  } else {
+    ret = std::accumulate(points.begin(), points.end(), ret);
+    ret /= points.size();
+  }
   return ret;
 }
 
@@ -32,15 +42,58 @@ inline Eigen::Vector2d ComputeMean(const std::vector<Eigen::Vector2d> &points) {
  * @brief Compute mean of matrices
  *
  * @param matrices Input matrices
+ * @param indices Input indices
  * @return Mean of matrices
  * @note This function does not check the validity of its elements
  */
 inline Eigen::Matrix2d ComputeMean(
-    const std::vector<Eigen::Matrix2d> &matrices) {
-  Eigen::Matrix2d init = Eigen::Matrix2d::Zero();
-  auto ret = std::accumulate(matrices.begin(), matrices.end(), init);
-  ret /= matrices.size();
+    const std::vector<Eigen::Matrix2d> &matrices,
+    const std::vector<int> &indices = {}) {
+  Eigen::Matrix2d ret = Eigen::Matrix2d::Zero();
+  if (indices.size()) {
+    ret = std::accumulate(indices.begin(), indices.end(), ret,
+                          [&matrices](const Eigen::Matrix2d &a, int b) {
+                            return a + matrices[b];
+                          });
+    ret /= indices.size();
+  } else {
+    ret = std::accumulate(matrices.begin(), matrices.end(), ret);
+    ret /= matrices.size();
+  }
   return ret;
+}
+
+inline void ComputeMeanAndCov(
+    const std::vector<Eigen::Vector2d> &points,
+    const std::vector<Eigen::Matrix2d> &offsets,
+    const std::vector<int> &indices,
+    Eigen::Vector2d &mean,
+    Eigen::Matrix2d &cov) {
+  int n = indices.size();
+  mean = ComputeMean(points, indices);
+  if (n == 1) {
+    cov = offsets[indices[0]];
+    return;
+  }
+  Eigen::MatrixXd mp(2, n);
+  for (int i = 0; i < n; ++i) mp.col(i) = points[indices[i]] - mean;
+  cov = mp * mp.transpose() / (n - 1) + ComputeMean(offsets, indices);
+}
+
+inline void ComputeMeanAndCov(
+    const std::vector<Eigen::Vector2d> &points,
+    const std::vector<int> &indices,
+    Eigen::Vector2d &mean,
+    Eigen::Matrix2d &cov) {
+  int n = indices.size();
+  mean = ComputeMean(points, indices);
+  if (n <= 2) {
+    cov.fill(std::numeric_limits<double>::quiet_NaN());
+    return;
+  }
+  Eigen::MatrixXd mp(2, n);
+  for (int i = 0; i < n; ++i) mp.col(i) = points[indices[i]] - mean;
+  cov = mp * mp.transpose() / (n - 1);
 }
 
 /**
@@ -90,9 +143,10 @@ inline Eigen::Matrix2d ComputeCov(const std::vector<Eigen::Vector2d> &points,
  */
 inline void ComputeEvalEvec(const Eigen::Matrix2d &covariance,
                             Eigen::Vector2d &evals, Eigen::Matrix2d &evecs) {
-  Eigen::EigenSolver<Eigen::Matrix2d> es(covariance);
-  evals = es.pseudoEigenvalueMatrix().diagonal();
-  evecs = es.pseudoEigenvectors();
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix2d> evd;
+  evd.computeDirect(covariance);
+  evals = evd.eigenvalues();
+  evecs = evd.eigenvectors();
 }
 
 /**
@@ -130,5 +184,24 @@ ExcludeNaNInf2(const std::vector<Eigen::Vector2d> &points,
       ret.second.push_back(covariances[i]);
     }
   }
+  return ret;
+}
+
+inline std::vector<int> ExcludeNaNInf3(
+    const std::vector<Eigen::Vector2d> &points,
+    const std::vector<Eigen::Matrix2d> &covariances) {
+  std::vector<int> ret;
+  for (size_t i = 0; i < points.size(); ++i)
+    if (points[i].allFinite() && covariances[i].allFinite())
+      ret.push_back(i);
+  return ret;
+}
+
+inline std::vector<int> ExcludeNaNInf3(
+    const std::vector<Eigen::Vector2d> &points) {
+  std::vector<int> ret;
+  for (size_t i = 0; i < points.size(); ++i)
+    if (points[i].allFinite())
+      ret.push_back(i);
   return ret;
 }

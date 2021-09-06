@@ -95,19 +95,8 @@ struct SICPParameters : CommonParameters {
   double radius;
 };
 
-struct NDTP2DParameters {
-  NDTP2DParameters() {
-    cell_size = 1.5;
-    r_variance = 0.0625;
-    t_variance = 0.0001;
-  }
-  double cell_size;
-  double r_variance;  /**< radius variance, i.e., +-r -> (r / 3)^2 */
-  double t_variance;  /**< angle variance, i.e., +-t -> (t / 3)^2 */
-};
-
-struct NDTD2DParameters : CommonParameters {
-  NDTD2DParameters() {
+struct NDTParameters : CommonParameters {
+  NDTParameters() {
     cell_size = 1.5;
     r_variance = 0.0625;
     t_variance = 0.0001;
@@ -157,12 +146,12 @@ Eigen::Affine2d SICPMatch(
 
 Eigen::Affine2d NDTP2DMatch(
     const NDTMap &target_map, const std::vector<Eigen::Vector2d> &source_points,
-    NDTD2DParameters &params,
+    NDTParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 Eigen::Affine2d NDTD2DMatch(
     const NDTMap &target_map, const NDTMap &source_map,
-    NDTD2DParameters &params,
+    NDTParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 Eigen::Affine2d SNDTMatch(

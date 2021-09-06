@@ -11,6 +11,7 @@
 #include <ceres/ceres.h>
 #include <sndt/matcher.h>
 #include <sndt/pcl_utils.h>
+#include <normal2d/normal2d.h>
 #include <sndt/visuals.h>
 #include <common/other_utils.h>
 #include <sndt/cost_functors.h>
@@ -57,101 +58,6 @@ void CheckConverge(CommonParameters &params, double x, double y) {
   if (params._iteration > params.max_iterations &&
       params._converge != Converge::kThreshold)
     params._converge = Converge::kMaxIterations;
-}
-
-Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
-                          SNDTParameters &params,
-                          const Eigen::Affine2d &guess_tf) {
-  auto t1 = GetTime();
-  auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
-  auto cur_tf = guess_tf;
-
-  while (params._converge == Converge::kNotConverge) {
-    auto t1 = GetTime();
-    double x = 0, y = 0, t = 0;
-    auto next_map = source_map.PseudoTransformCells(cur_tf, true);
-
-    std::vector<ceres::CostFunction *> costs(next_map.size(), nullptr);
-#ifdef USE_OMP
-#pragma omp parallel for num_threads(THREADS)
-#endif
-    for (size_t i = 0; i < next_map.size(); ++i) {
-      auto cellp = next_map[i];
-      if (!cellp->HasGaussian()) continue;
-      auto idx = FindNearestNeighborIndex(cellp->GetPointMean(), kd);
-      if (idx == -1) continue;
-      auto cellq = target_map.GetCellForPoint(Eigen::Vector2d(
-          kd.getInputCloud()->at(idx).x, kd.getInputCloud()->at(idx).y));
-      if (!cellq || !cellq->HasGaussian()) continue;
-      costs[i] = SNDTCostFunctor::Create(cellp.get(), cellq);
-    }
-    ceres::LossFunction *loss = nullptr;
-    if (params.huber != 0)
-      loss = new ceres::HuberLoss(params.huber);
-    ceres::Problem problem;
-    for (auto cost : costs)
-      if (cost)
-        problem.AddResidualBlock(cost, loss, &x, &y, &t);
-    params._corres.push_back(problem.NumResidualBlocks());
-    auto t2 = GetTime();
-    params._usedtime.build += GetDiffTime(t1, t2);
-
-    Optimize(problem, params);
-    cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
-    CheckConverge(params, x, y);
-  }
-  auto t2 = GetTime();
-  params._usedtime.others =
-      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
-  return cur_tf;
-}
-
-Eigen::Affine2d NDTD2DMatch(
-    const NDTMap &target_map, const NDTMap &source_map,
-    NDTD2DParameters &params,
-    const Eigen::Affine2d &guess_tf) {
-  auto t1 = GetTime();
-  auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
-  auto cur_tf = guess_tf;
-
-  while (params._converge == Converge::kNotConverge) {
-    auto t1 = GetTime();
-    double x = 0, y = 0, t = 0;
-    auto next_map = source_map.PseudoTransformCells(cur_tf);
-
-    ceres::Problem problem;
-    std::vector<ceres::CostFunction *> costs(next_map.size(), nullptr);
-#ifdef USE_OMP
-#pragma omp parallel for num_threads(THREADS)
-#endif
-    for (size_t i = 0; i < next_map.size(); ++i) {
-      auto cellp = next_map[i];
-      if (!cellp->HasGaussian()) continue;
-      auto idx = FindNearestNeighborIndex(cellp->GetPointMean(), kd);
-      if (idx == -1) continue;
-      auto cellq = target_map.GetCellForPoint(Eigen::Vector2d(
-          kd.getInputCloud()->at(idx).x, kd.getInputCloud()->at(idx).y));
-      if (!cellq || !cellq->HasGaussian()) continue;
-      costs[i] = NDTD2DCostFunctor::Create(cellp.get(), cellq);
-    }
-    ceres::LossFunction *loss = nullptr;
-    if (params.huber != 0)
-      loss = new ceres::HuberLoss(params.huber);
-    for (auto cost : costs)
-      if (cost)
-        problem.AddResidualBlock(cost, loss, &x, &y, &t);
-    params._corres.push_back(problem.NumResidualBlocks());
-    auto t2 = GetTime();
-    params._usedtime.build += GetDiffTime(t1, t2);
-
-    Optimize(problem, params);
-    cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
-    CheckConverge(params, x, y);
-  }
-  auto t2 = GetTime();
-  params._usedtime.others =
-      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
-  return cur_tf;
 }
 
 Eigen::Affine2d ICPMatch(
@@ -296,6 +202,7 @@ Eigen::Affine2d SICPMatch(
       if (idx == -1) continue;
       Eigen::Vector2d q = tpts[idx], nq = tnms[idx];
       if (!q.allFinite() || !nq.allFinite()) continue;
+      if (np.dot(nq) < 0) nq = -nq;
       costs[i] = SICPCostFunctor::Create(p, np, q, nq);
     }
     ceres::LossFunction *loss = nullptr;
@@ -316,5 +223,162 @@ Eigen::Affine2d SICPMatch(
   auto t3 = GetTime();
   params._usedtime.others =
       GetDiffTime(t2, t3) - params._usedtime.optimize - params._usedtime.build;
+  return cur_tf;
+}
+
+Eigen::Affine2d NDTP2DMatch(
+    const NDTMap &target_map, const std::vector<Eigen::Vector2d> &spts,
+    NDTParameters &params,
+    const Eigen::Affine2d &guess_tf) {
+  auto t1 = GetTime();
+  auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
+  auto cur_tf = guess_tf;
+
+  while (params._converge == Converge::kNotConverge) {
+    auto t1 = GetTime();
+    double x = 0, y = 0, t = 0;
+    std::vector<Eigen::Vector2d> next_pts;
+    std::transform(spts.begin(), spts.end(), std::back_inserter(next_pts),
+                   [&cur_tf](auto p) { return cur_tf * p; });
+
+    ceres::Problem problem;
+    std::vector<ceres::CostFunction *> costs(next_pts.size(), nullptr);
+#ifdef USE_OMP
+#pragma omp parallel for num_threads(THREADS)
+#endif
+    for (size_t i = 0; i < next_pts.size(); ++i) {
+      auto p = next_pts[i];
+      if (!p.allFinite()) continue;
+      auto idx = FindNearestNeighborIndex(p, kd);
+      if (idx == -1) continue;
+      auto cellq = target_map.GetCellForPoint(Eigen::Vector2d(
+          kd.getInputCloud()->at(idx).x, kd.getInputCloud()->at(idx).y));
+      if (!cellq || !cellq->HasGaussian()) continue;
+      costs[i] = NDTP2DCostFunctor::Create(p, cellq);
+    }
+    ceres::LossFunction *loss = nullptr;
+    if (params.huber != 0)
+      loss = new ceres::HuberLoss(params.huber);
+    for (auto cost : costs)
+      if (cost)
+        problem.AddResidualBlock(cost, loss, &x, &y, &t);
+    params._corres.push_back(problem.NumResidualBlocks());
+    auto t2 = GetTime();
+    params._usedtime.build += GetDiffTime(t1, t2);
+
+    Optimize(problem, params);
+    cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
+    CheckConverge(params, x, y);
+  }
+  auto t2 = GetTime();
+  params._usedtime.others =
+      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
+  return cur_tf;
+}
+
+Eigen::Affine2d NDTD2DMatch(
+    const NDTMap &target_map, const NDTMap &source_map,
+    NDTParameters &params,
+    const Eigen::Affine2d &guess_tf) {
+  auto t1 = GetTime();
+  auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
+  auto cur_tf = guess_tf;
+
+  while (params._converge == Converge::kNotConverge) {
+    auto t1 = GetTime();
+    double x = 0, y = 0, t = 0;
+    auto next_map = source_map.PseudoTransformCells(cur_tf);
+
+    ceres::Problem problem;
+    std::vector<ceres::CostFunction *> costs(next_map.size(), nullptr);
+#ifdef USE_OMP
+#pragma omp parallel for num_threads(THREADS)
+#endif
+    for (size_t i = 0; i < next_map.size(); ++i) {
+      auto cellp = next_map[i];
+      if (!cellp->HasGaussian()) continue;
+      auto idx = FindNearestNeighborIndex(cellp->GetPointMean(), kd);
+      if (idx == -1) continue;
+      auto cellq = target_map.GetCellForPoint(Eigen::Vector2d(
+          kd.getInputCloud()->at(idx).x, kd.getInputCloud()->at(idx).y));
+      if (!cellq || !cellq->HasGaussian()) continue;
+      costs[i] = NDTD2DCostFunctor::Create(cellp.get(), cellq);
+    }
+    ceres::LossFunction *loss = nullptr;
+    if (params.huber != 0)
+      loss = new ceres::HuberLoss(params.huber);
+    for (auto cost : costs)
+      if (cost)
+        problem.AddResidualBlock(cost, loss, &x, &y, &t);
+    params._corres.push_back(problem.NumResidualBlocks());
+    auto t2 = GetTime();
+    params._usedtime.build += GetDiffTime(t1, t2);
+
+    Optimize(problem, params);
+    cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
+    CheckConverge(params, x, y);
+  }
+  auto t2 = GetTime();
+  params._usedtime.others =
+      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
+  return cur_tf;
+}
+
+Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
+                          SNDTParameters &params,
+                          const Eigen::Affine2d &guess_tf) {
+  auto t1 = GetTime();
+  auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
+  auto cur_tf = guess_tf;
+
+  while (params._converge == Converge::kNotConverge) {
+    auto t1 = GetTime();
+    double x = 0, y = 0, t = 0;
+    auto next_map = source_map.PseudoTransformCells(cur_tf, true);
+
+    std::vector<ceres::CostFunction *> costs(next_map.size(), nullptr);
+#ifdef USE_OMP
+#pragma omp parallel for num_threads(THREADS)
+#endif
+    for (size_t i = 0; i < next_map.size(); ++i) {
+      auto cellp = next_map[i];
+      if (!cellp->HasGaussian()) continue;
+      auto idx = FindNearestNeighborIndex(cellp->GetPointMean(), kd);
+      if (idx == -1) continue;
+      auto cellq = target_map.GetCellForPoint(Eigen::Vector2d(
+          kd.getInputCloud()->at(idx).x, kd.getInputCloud()->at(idx).y));
+      if (!cellq || !cellq->HasGaussian()) continue;
+      // costs[i] = SNDTCostFunctor::Create(cellp.get(), cellq);
+      auto up = cellp->GetPointMean();
+      auto cp = cellp->GetPointCov();
+      auto unp = cellp->GetNormalMean();
+      auto cnp = cellp->GetNormalCov();
+      auto uq = cellq->GetPointMean();
+      auto cq = cellq->GetPointCov();
+      auto unq = cellq->GetNormalMean();
+      auto cnq = cellq->GetNormalCov();
+      if (unp.dot(unq) < 0) {
+        unq = -unq;
+      }
+      costs[i] = SNDTCostFunctor2::Create(up, cp, unp, cnp, uq, cq, unq, cnq);
+    }
+    ceres::LossFunction *loss = nullptr;
+    if (params.huber != 0)
+      loss = new ceres::HuberLoss(params.huber);
+    ceres::Problem problem;
+    for (auto cost : costs)
+      if (cost)
+        problem.AddResidualBlock(cost, loss, &x, &y, &t);
+    params._corres.push_back(problem.NumResidualBlocks());
+    auto t2 = GetTime();
+    params._usedtime.build += GetDiffTime(t1, t2);
+
+    Optimize(problem, params);
+    cur_tf = Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t) * cur_tf;
+    CheckConverge(params, x, y);
+  }
+  auto t2 = GetTime();
+  params._usedtime.others =
+      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
   return cur_tf;
 }

@@ -66,7 +66,7 @@ struct Pt2plICPCostFunctor {
 
     Eigen::Matrix<T, 2, 1> nq2 = nq.cast<T>();
 
-    *e = abs((p2 - q2).dot(nq2));
+    *e = (p2 - q2).dot(nq2);
     return true;
   }
 
@@ -95,7 +95,7 @@ struct SICPCostFunctor {
     Eigen::Matrix<T, 2, 1> q2 = q.cast<T>();
     Eigen::Matrix<T, 2, 1> nq2 = nq.cast<T>();
 
-    *e = abs((p2 - q2).dot(np2 + nq2));
+    *e = (p2 - q2).dot(np2 + nq2);
     return true;
   }
 
@@ -197,5 +197,92 @@ struct SNDTCostFunctor {
                                      const SNDTCell *cellq) {
     return new ceres::AutoDiffCostFunction<SNDTCostFunctor, 1, 1, 1, 1>(
         new SNDTCostFunctor(cellp, cellq));
+  }
+};
+
+struct SNDTCostFunctor2 {
+  const Eigen::Vector2d up, unp, uq, unq;
+  const Eigen::Matrix2d cp, cnp, cq, cnq;
+  SNDTCostFunctor2(const Eigen::Vector2d &up_, const Eigen::Matrix2d &cp_,
+                   const Eigen::Vector2d &unp_, const Eigen::Matrix2d &cnp_,
+                   const Eigen::Vector2d &uq_, const Eigen::Matrix2d &cq_,
+                   const Eigen::Vector2d &unq_, const Eigen::Matrix2d &cnq_)
+      : up(up_), unp(unp_), uq(uq_), unq(unq_), cp(cp_), cnp(cnp_), cq(cq_), cnq(cnq_) {}
+
+  template <typename T>
+  bool operator()(const T *const x, const T *const y, const T *const yaw,
+                  T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(*yaw);
+    Eigen::Matrix<T, 2, 1> t(*x, *y);
+
+    Eigen::Matrix<T, 2, 1> up2 = R * up.cast<T>() + t;
+    Eigen::Matrix<T, 2, 1> unp2 = R * unp.cast<T>();
+    Eigen::Matrix<T, 2, 2> cp2 = R * cp.cast<T>() * R.transpose();
+    Eigen::Matrix<T, 2, 2> cnp2 = R * cnp.cast<T>() * R.transpose();
+
+    Eigen::Matrix<T, 2, 1> uq2 = uq.cast<T>();
+    Eigen::Matrix<T, 2, 1> unq2 = unq.cast<T>();
+    Eigen::Matrix<T, 2, 2> cq2 = cq.cast<T>();
+    Eigen::Matrix<T, 2, 2> cnq2 = cnq.cast<T>();
+
+    Eigen::Matrix<T, 2, 1> m1 = up2 - uq2;
+    Eigen::Matrix<T, 2, 1> m2 = unp2 + unq2;
+    Eigen::Matrix<T, 2, 2> c1 = cp2 + cq2;
+    Eigen::Matrix<T, 2, 2> c2 = cnp2 + cnq2;
+
+    T num = m1.dot(m2);
+    T den = sqrt(m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace());
+    *e = num / den;
+    return true;
+  }
+
+  static ceres::CostFunction *Create(
+      const Eigen::Vector2d &up, const Eigen::Matrix2d &cp,
+      const Eigen::Vector2d &unp, const Eigen::Matrix2d &cnp,
+      const Eigen::Vector2d &uq, const Eigen::Matrix2d &cq,
+      const Eigen::Vector2d &unq, const Eigen::Matrix2d &cnq) {
+    return new ceres::AutoDiffCostFunction<SNDTCostFunctor2, 1, 1, 1, 1>(
+        new SNDTCostFunctor2(up, cp, unp, cnp, uq, cq, unq, cnq));
+  }
+};
+
+struct SNDTCostFunctor3 {
+  const Eigen::Vector2d up, unp, uq, unq;
+  const Eigen::Matrix2d cp, cq;
+  SNDTCostFunctor3(const Eigen::Vector2d &up_, const Eigen::Matrix2d &cp_,
+                   const Eigen::Vector2d &unp_, const Eigen::Vector2d &uq_,
+                   const Eigen::Matrix2d &cq_, const Eigen::Vector2d &unq_)
+      : up(up_), unp(unp_), uq(uq_), unq(unq_), cp(cp_), cq(cq_) {}
+
+  template <typename T>
+  bool operator()(const T *const x, const T *const y, const T *const yaw,
+                  T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(*yaw);
+    Eigen::Matrix<T, 2, 1> t(*x, *y);
+
+    Eigen::Matrix<T, 2, 1> up2 = R * up.cast<T>() + t;
+    Eigen::Matrix<T, 2, 1> unp2 = R * unp.cast<T>();
+    Eigen::Matrix<T, 2, 2> cp2 = R * cp.cast<T>() * R.transpose();
+
+    Eigen::Matrix<T, 2, 1> uq2 = uq.cast<T>();
+    Eigen::Matrix<T, 2, 1> unq2 = unq.cast<T>();
+    Eigen::Matrix<T, 2, 2> cq2 = cq.cast<T>();
+
+    Eigen::Matrix<T, 2, 1> m1 = up2 - uq2;
+    Eigen::Matrix<T, 2, 1> m2 = unp2 + unq2;
+    Eigen::Matrix<T, 2, 2> c1 = cp2 + cq2;
+
+    T num = m1.dot(m2);
+    T den = sqrt(m2.dot(c1 * m2));
+    *e = num / den;
+    return true;
+  }
+
+  static ceres::CostFunction *Create(
+      const Eigen::Vector2d &up, const Eigen::Matrix2d &cp,
+      const Eigen::Vector2d &unp, const Eigen::Vector2d &uq,
+      const Eigen::Matrix2d &cq, const Eigen::Vector2d &unq) {
+    return new ceres::AutoDiffCostFunction<SNDTCostFunctor3, 1, 1, 1, 1>(
+        new SNDTCostFunctor3(up, cp, unp, uq, cq, unq));
   }
 };

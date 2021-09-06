@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
 
     // NDTD2D method
     auto t3 = GetTime();
-    NDTD2DParameters params2;
+    NDTParameters params2;
     auto tgt2 = MakeNDTMap(Augment(vepcs, i, i + f - 1, Tio, Tios), params2);
     auto src2 = MakeNDTMap(Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs), params2);
     auto T2 = NDTD2DMatch(tgt2, src2, params2, Tio);
