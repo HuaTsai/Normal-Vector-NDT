@@ -33,7 +33,7 @@ class CellInterface {
 
   /**
    * @brief Pure virtual function for computing gaussian
-   * 
+   *
    * @see NDTCell::ComputeGaussian() and SNDTCell::ComputeGaussian()
    */
   virtual void ComputeGaussian() = 0;
@@ -57,7 +57,7 @@ class CellInterface {
    * @brief Add a point to this cell
    *
    * @param point Point (x, y) to be added
-   * @warning This function does not check whether the point is inside the cell
+   * @note This function does not check whether the point is inside the cell
    * or not. The caller should take responsibility for calling this function.
    */
   void AddPoint(const Eigen::Vector2d &point) { points_.push_back(point); }
@@ -67,7 +67,7 @@ class CellInterface {
    *
    * @param point Point (x, y) to be added
    * @param covariance Covariance to be added
-   * @warning This function does not check whether the point is inside the cell
+   * @note This function does not check whether the point is inside the cell
    * or not. Besides, it also does not check the symmetricity of covariance. The
    * caller should take responsibility for calling this function.
    */
@@ -75,19 +75,6 @@ class CellInterface {
                               const Eigen::Matrix2d &covariance) {
     points_.push_back(point);
     point_covs_.push_back(covariance);
-  }
-
-  /**
-   * @brief Get the Points Matrix object
-   *
-   * @return Points represented by a @c 2xn matrix
-   * @note This function does not check the validity of its elements.
-   */
-  Eigen::MatrixXd GetPointsMatrix() const {
-    Eigen::MatrixXd ret(2, points_.size());
-    for (int i = 0; i < ret.cols(); ++i)
-      ret.col(i) = points_[i];
-    return ret;
   }
 
   int GetN() const { return n_; }
@@ -119,15 +106,15 @@ class CellInterface {
   }
 
  protected:
-  int n_;               /**< Number of points, no matter the validity */
-  bool phasgaussian_;   /**< Whether this cell has a valid point gaussian */
-  double skew_rad_;     /**< Tilted angle of the cell */
-  double size_;         /**< Cell size */
-  Eigen::Vector2d center_;                  /**< Center of the cell */
-  Eigen::Vector2d pmean_;                   /**< Point mean */
-  Eigen::Vector2d pevals_;                  /**< Point eigenvectors */
-  Eigen::Matrix2d pcov_;                    /**< Point covariance */
-  Eigen::Matrix2d pevecs_;                  /**< Point eigenvectors */
+  int n_;                  /**< Number of points, no matter the validity */
+  bool phasgaussian_;      /**< Whether this cell has a valid point gaussian */
+  double skew_rad_;        /**< Tilted angle of the cell */
+  double size_;            /**< Cell size */
+  Eigen::Vector2d center_; /**< Center of the cell */
+  Eigen::Vector2d pmean_;  /**< Point mean */
+  Eigen::Matrix2d pcov_;   /**< Point covariance */
+  Eigen::Vector2d pevals_; /**< Point eigenvectors */
+  Eigen::Matrix2d pevecs_; /**< Point eigenvectors */
   std::vector<Eigen::Vector2d> points_;     /**< Points data */
   std::vector<Eigen::Matrix2d> point_covs_; /**< Point covariances data */
 };

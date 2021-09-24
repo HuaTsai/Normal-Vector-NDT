@@ -17,12 +17,12 @@ class SNDTCell : public CellInterface {
    * @brief Cell types
    */
   enum CellType {
-    kNotInit,   /**< Covariance is not computed yet */
+    kNoInit,    /**< Covariance is not computed yet */
     kRegular,   /**< Covariance is computed well */
     kRescale,   /**< Covariance is rescaled */
     kAssign,    /**< Covariance is assigned */
-    kNoPoints,  /**< Covariance is not computed because no points */
-    kInvalid    /**< Covariance has negative eigenvalues */
+    kNoPoints,  /**< Covariance is not computed because of no points */
+    kInvalid    /**< Covariance is invalid */
   };
 
   SNDTCell();
@@ -88,6 +88,7 @@ class SNDTCell : public CellInterface {
   CellType pcelltype_;     /**< Point cell type */
   CellType ncelltype_;     /**< Normal cell type */
   double rescale_ratio_;   /**< Rescale ratio */
+  double tolerance_;       /**< Comparison tolerance */
   bool nhasgaussian_;      /**< Whether this cell has a valid normal gaussian */
   Eigen::Vector2d nmean_;  /**< Normal mean */
   Eigen::Vector2d nevals_; /**< Normal eigenvectors */

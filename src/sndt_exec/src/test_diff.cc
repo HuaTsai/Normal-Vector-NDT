@@ -70,7 +70,7 @@ void cb(const std_msgs::Int32 &num) {
   auto tgt = AugmentPoints(vepcs, i, i + f - 1, Tio, Tios);
   auto src = AugmentPoints(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
   auto sicpT = SICPMatch(tgt, src, sicpparams, Tio);
-  corr0.push_back(sicpparams._corres[0]);
+  // corr0.push_back(sicpparams._corres[0]);
   auto t2 = GetTime();
   auto t12 = GetDiffTime(t1, t2);
   opt0.push_back(t12);
@@ -79,13 +79,13 @@ void cb(const std_msgs::Int32 &num) {
 
   // Matching by NDTD2D
   auto t3 = GetTime();
-  NDTParameters ndtparams;
+  D2DNDTParameters ndtparams;
   auto datat0 = Augment(vepcs, i, i + f - 1, Tio, Tios);
   auto datas0 = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
   auto mapt = MakeNDTMap(datat0, ndtparams);
   auto maps = MakeNDTMap(datas0, ndtparams);
-  auto ndtT = NDTD2DMatch(mapt, maps, ndtparams, Tio);
-  corr1.push_back(ndtparams._corres[0]);
+  auto ndtT = D2DNDTMatch(mapt, maps, ndtparams, Tio);
+  // corr1.push_back(ndtparams._corres[0]);
   auto t4 = GetTime();
   auto t34 = GetDiffTime(t3, t4);
   opt1.push_back(t34);
@@ -100,7 +100,7 @@ void cb(const std_msgs::Int32 &num) {
   auto smapt = MakeSNDTMap(datat1, sndtparams);
   auto smaps = MakeSNDTMap(datas1, sndtparams);
   auto sndtT = SNDTMatch(smapt, smaps, sndtparams, Tio);
-  corr2.push_back(sndtparams._corres[0]);
+  // corr2.push_back(sndtparams._corres[0]);
   auto t6 = GetTime();
   auto t56 = GetDiffTime(t5, t6);
   opt2.push_back(t56);
@@ -283,12 +283,12 @@ int main(int argc, char **argv) {
       cb(num);
     }
   }
-  cout << "SICP corres:\n";
-  copy(corr0.begin(), corr0.end(), ostream_iterator<int>(cout, ", "));
-  cout << "\nNDTD2D corres:\n";
-  copy(corr1.begin(), corr1.end(), ostream_iterator<int>(cout, ", "));
-  cout << "\nSNDT corres:\n";
-  copy(corr2.begin(), corr2.end(), ostream_iterator<int>(cout, ", "));
+  // cout << "SICP corres:\n";
+  // copy(corr0.begin(), corr0.end(), ostream_iterator<int>(cout, ", "));
+  // cout << "\nNDTD2D corres:\n";
+  // copy(corr1.begin(), corr1.end(), ostream_iterator<int>(cout, ", "));
+  // cout << "\nSNDT corres:\n";
+  // copy(corr2.begin(), corr2.end(), ostream_iterator<int>(cout, ", "));
 
   cout << "\n\nSICP time:\n";
   copy(opt0.begin(), opt0.end(), ostream_iterator<int>(cout, ", "));

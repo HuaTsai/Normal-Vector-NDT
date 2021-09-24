@@ -9,6 +9,7 @@
  * 
  */
 #include <sndt/visuals.h>
+#include <sndt/eigen_utils.h>
 #include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
 #include <tf2_eigen/tf2_eigen.h>
@@ -180,29 +181,21 @@ Marker MarkerOfEllipse(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covar
   ret.type = Marker::SPHERE;
   ret.action = Marker::ADD;
   ret.color = MakeColorRGBA(color, alpha);
-  Eigen::EigenSolver<Eigen::Matrix2d> es(covariance);
-  /** Note: "pseudo" computes complex eigen value if no real solution
-   * However, covariance is always a real symmetric matrix, which means
-   *   1) it is Hermitia, all its eigenvalues are real
-   *   2) the decomposed matrix is an orthogonal matrix, i.e., rotaion matrix
-   */
-  Eigen::Matrix2d eval = es.pseudoEigenvalueMatrix().cwiseSqrt();
-  Eigen::Matrix2d evec = es.pseudoEigenvectors();
+  Eigen::Vector2d evals;
+  Eigen::Matrix2d evecs;
+  ComputeEvalEvec(covariance, evals, evecs);
   Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
-  R.block<2, 2>(0, 0) = evec;
+  R.block<2, 2>(0, 0) << evecs(0, 0), -evecs(1, 0), evecs(1, 0), evecs(0, 0);
   Eigen::Quaterniond q(R);
-  ret.scale.x = 2 * eval(0, 0);  // +- 1 sigma
-  ret.scale.y = 2 * eval(1, 1);
+  ret.scale.x = 2 * sqrt(evals(0));  // +- 1σ
+  ret.scale.y = 2 * sqrt(evals(1));
   ret.scale.z = 0.1;
   ret.pose.position.x = mean(0);
   ret.pose.position.y = mean(1);
   ret.pose.position.z = 0;
   ret.pose.orientation = tf2::toMsg(q);
   if (ret.scale.x == 0 || ret.scale.y == 0) {
-    std::cout << "cov: " << covariance << std::endl
-         << "evec: " << evec << std::endl
-         << "eval: " << eval << std::endl
-         << "eval w/o sqrt: " << es.pseudoEigenvalueMatrix() << std::endl;
+    // std::cout << "bad covariance" << covariance << std::endl;
   }
   return ret;
 }
@@ -352,11 +345,9 @@ MarkerArray MarkerArrayOfArrows(const std::vector<Eigen::Vector2d> &starts,
 }
 
 MarkerArray MarkerArrayOfSNDTCell(const SNDTCell *cell) {
-  MarkerArray ret;
-  auto bdy = MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
-                              cell->GetSkewRad(), Color::kLime);
-  auto pell = MarkerOfEllipse(cell->GetPointMean(), cell->GetPointCov());
-  auto mpts = MarkerOfPoints(cell->GetPoints(), 0.1, Color::kFuchsia);
+  std::vector<Marker> ms;
+  ms.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(), cell->GetSkewRad(), Color::kLime));
+  ms.push_back(MarkerOfPoints(cell->GetPoints(), 0.1, Color::kFuchsia));
   std::vector<Eigen::Vector2d> starts, ends;
   for (int i = 0; i < cell->GetN(); ++i) {
     if (cell->GetNormals()[i].allFinite()) {
@@ -365,43 +356,44 @@ MarkerArray MarkerArrayOfSNDTCell(const SNDTCell *cell) {
     }
   }
   auto mnms = MarkerArrayOfArrows(starts, ends, Color::kBlue);
+  if (cell->GetPHasGaussian())
+    ms.push_back(MarkerOfEllipse(cell->GetPointMean(), cell->GetPointCov()));
   if (cell->GetNHasGaussian()) {
-    auto nell = MarkerOfEllipse(cell->GetPointMean() + cell->GetNormalMean(),
-                                cell->GetNormalCov(), Color::kGray);
+    auto nell = MarkerOfEllipse(cell->GetPointMean() + cell->GetNormalMean(), cell->GetNormalCov(), Color::kGray);
+    ms.push_back(nell);
     auto points = FindTangentPoints(nell, cell->GetPointMean());
-    auto lines = MarkerOfLinesByMiddlePoints(
-        {points[0], cell->GetPointMean(), points[1]}, Color::kGray);
-    ret = JoinMarkerArraysAndMarkers({mnms}, {bdy, pell, nell, lines, mpts});
-  } else {
-    ret = JoinMarkerArraysAndMarkers({mnms}, {bdy, pell, mpts});
+    ms.push_back(MarkerOfLinesByMiddlePoints({points[0], cell->GetPointMean(), points[1]}, Color::kGray));
   }
-  return ret;
+  return JoinMarkerArraysAndMarkers({mnms}, ms);
 }
 
 MarkerArray MarkerArrayOfSNDTCell2(const SNDTCell *cell) {
-  MarkerArray ret;
-  auto bdy = MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
-                              cell->GetSkewRad(), Color::kRed);
-  auto pell = MarkerOfEllipse(cell->GetPointMean(), cell->GetPointCov(),
-                              Color::kRed);
-  if (cell->GetNHasGaussian()) {
-    auto nell = MarkerOfEllipse(cell->GetPointMean() + cell->GetNormalMean(),
-                                cell->GetNormalCov(), Color::kGray);
-    auto points = FindTangentPoints(nell, cell->GetPointMean());
-    auto lines = MarkerOfLinesByMiddlePoints(
-        {points[0], cell->GetPointMean(), points[1]}, Color::kGray);
-    ret = JoinMarkers({bdy, pell, nell, lines});
-  } else {
-    ret = JoinMarkers({bdy, pell});
+  std::vector<Marker> ms;
+  ms.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(), cell->GetSkewRad(), Color::kRed));
+  ms.push_back(MarkerOfPoints(cell->GetPoints(), 0.1, Color::kFuchsia));
+  std::vector<Eigen::Vector2d> starts, ends;
+  for (int i = 0; i < cell->GetN(); ++i) {
+    if (cell->GetNormals()[i].allFinite()) {
+      starts.push_back(cell->GetPoints()[i]);
+      ends.push_back(cell->GetPoints()[i] + cell->GetNormals()[i]);
+    }
   }
-  return ret;
+  auto mnms = MarkerArrayOfArrows(starts, ends, Color::kBlack);
+  if (cell->GetPHasGaussian())
+    ms.push_back(MarkerOfEllipse(cell->GetPointMean(), cell->GetPointCov(), Color::kRed));
+  if (cell->GetNHasGaussian()) {
+    auto nell = MarkerOfEllipse(cell->GetPointMean() + cell->GetNormalMean(), cell->GetNormalCov(), Color::kGray);
+    ms.push_back(nell);
+    auto points = FindTangentPoints(nell, cell->GetPointMean());
+    ms.push_back(MarkerOfLinesByMiddlePoints({points[0], cell->GetPointMean(), points[1]}, Color::kGray));
+  }
+  return JoinMarkerArraysAndMarkers({mnms}, ms);
 }
 
 MarkerArray MarkerArrayOfSNDTMap(const SNDTMap &map,
                                  bool use_target_color) {
   std::vector<MarkerArray> vma;
   for (auto cell : map) {
-    if (!cell->HasGaussian()) { continue; }
     if (use_target_color)
       vma.push_back(MarkerArrayOfSNDTCell2(cell));
     else
@@ -414,7 +406,6 @@ MarkerArray MarkerArrayOfSNDTMap(const std::vector<std::shared_ptr<SNDTCell>> &m
                                  bool use_target_color) {
   std::vector<MarkerArray> vma;
   for (auto cell : map) {
-    if (!cell->HasGaussian()) continue;
     if (use_target_color)
       vma.push_back(MarkerArrayOfSNDTCell2(cell.get()));
     else

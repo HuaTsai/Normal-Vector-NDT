@@ -14,6 +14,8 @@
 #include <pcl_ros/point_cloud.h>
 #include <pcl/filters/voxel_grid.h>
 
+#define LIDAR
+
 using namespace std;
 using namespace Eigen;
 using namespace visualization_msgs;
@@ -41,20 +43,23 @@ Affine2d GetBenchMark(const ros::Time &t1, const ros::Time &t2) {
 vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg) {
   pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
   pcl::fromROSMsg(msg, *pc);
-  pcl::VoxelGrid<pcl::PointXYZ> vg;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr fpc(new pcl::PointCloud<pcl::PointXYZ>);
-  vg.setInputCloud(pc);
-  vg.setLeafSize(voxel, voxel, voxel);
-  vg.filter(*fpc);
+  if (voxel != 0) {
+    pcl::VoxelGrid<pcl::PointXYZ> vg;
+    vg.setInputCloud(pc);
+    vg.setLeafSize(voxel, voxel, voxel);
+    vg.filter(*pc);
+  }
 
   vector<Vector2d> ret;
-  for (const auto &pt : *fpc)
+  for (const auto &pt : *pc)
     if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z))
       ret.push_back(Vector2d(pt.x, pt.y));
-  return ret;
+  return ret;;
 }
 
 void cb(const std_msgs::Int32 &num) {
+  int i = num.data;
+#ifdef LIDAR
   Affine3d aff3 =
       Translation3d(0.943713, 0.000000, 1.840230) *
       Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
@@ -62,40 +67,55 @@ void cb(const std_msgs::Int32 &num) {
   Affine2d aff2 =
       Translation2d(aff3.translation()(0), aff3.translation()(1)) *
       Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
-
-  int i = num.data;
-  SNDTParameters params;
-  Affine2d Tio, Toq;
-  vector<Affine2d> Tios, Toqs;
   auto tgt = PCMsgTo2D(vpc[i]);
   auto src = PCMsgTo2D(vpc[i + 1]);
   vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, aff2}};
   vector<pair<vector<Vector2d>, Affine2d>> datas{{src, aff2}};
+  auto Tgt = GetBenchMark(vpc[i].header.stamp, vpc[i + 1].header.stamp);
+  Affine2d Tg = Affine2d::Identity();
+#else
+  int f = 5;
+  Affine2d Tio, Toq;
+  vector<Affine2d> Tios, Toqs;
+  auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
+  auto datas = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
+  auto Tgt = GetBenchMark(vepcs[i].stamp, vepcs[i + f].stamp);
+  Affine2d Tg = Tio;
+#endif
 
   // SNDT Method
   SNDTParameters params1;
+#ifdef LIDAR
   params1.r_variance = params1.t_variance = 0;
+#endif
   params1.huber = huber;
+  params1.radius = radius;
   auto mapt1 = MakeSNDTMap(datat, params1);
   auto maps1 = MakeSNDTMap(datas, params1);
-  auto T1 = SNDTMatch(mapt1, maps1, params1);
+  cout << "SNDT: " << endl;
+  mapt1.ShowCellDistri();
+  maps1.ShowCellDistri();
+  auto T1 = SNDTMatch(mapt1, maps1, params1, Tg);
 
   // NDTD2D method
-  NDTParameters params2;
+  D2DNDTParameters params2;
+#ifdef LIDAR
   params2.r_variance = params2.t_variance = 0;
+#endif
   params2.huber = huber;
   auto mapt2 = MakeNDTMap(datat, params2);
   auto maps2 = MakeNDTMap(datas, params2);
-  auto T2 = NDTD2DMatch(mapt2, maps2, params2);
+  cout << "NDT: " << endl;
+  mapt2.ShowCellDistri();
+  maps2.ShowCellDistri();
+  auto T2 = D2DNDTMatch(mapt2, maps2, params2, Tg);
 
   // SICP method
   SICPParameters params3;
   params3.huber = huber;
   auto tgt3 = MakePoints(datat, params3);
   auto src3 = MakePoints(datas, params3);
-  auto T3 = SICPMatch(tgt3, src3, params3);
-
-  auto Tgt = GetBenchMark(vpc[i].header.stamp, vpc[i + 1].header.stamp);
+  auto T3 = SICPMatch(tgt3, src3, params3, Tg);
 
   cout << "sndt: " << TransNormRotDegAbsFromMatrix3d((T1.inverse() * Tgt).matrix()).transpose() << endl;
   cout << " ndt: " << TransNormRotDegAbsFromMatrix3d((T2.inverse() * Tgt).matrix()).transpose() << endl;
@@ -158,8 +178,8 @@ int main(int argc, char **argv) {
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
       ("huber,u", po::value<double>(&huber)->default_value(1), "Huber")
-      ("voxel,v", po::value<double>(&voxel)->default_value(1), "Voxel")
-      ("image,i", po::value<bool>(&image)->default_value(false), "Image")
+      ("voxel,v", po::value<double>(&voxel)->default_value(0), "Voxel")
+      ("image,i", po::value<bool>(&image)->default_value(false)->implicit_value(true), "Image")
       ("run", po::value<bool>(&run)->default_value(false)->implicit_value(true), "Run");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);

@@ -12,12 +12,12 @@
 #include <sndt/eigen_utils.h>
 
 NDTCell::NDTCell() {
-  celltype_ = kNotInit;
-  rescale_ratio_ = 1000.;
+  celltype_ = kNoInit;
+  rescale_ratio_ = 100.;
+  tolerance_ = Eigen::NumTraits<double>::dummy_precision();
 }
 
 void NDTCell::ComputeGaussian() {
-  Expects(points_.size() == point_covs_.size());
   n_ = points_.size();
   pmean_.setZero(), pcov_.setZero();
   auto valids = ExcludeNaNInf2(points_, point_covs_);
@@ -29,17 +29,14 @@ void NDTCell::ComputeGaussian() {
   pcov_ = ComputeCov(valids.first, pmean_, valids.second);
   if (!pcov_.isZero()) {
     ComputeEvalEvec(pcov_, pevals_, pevecs_);
-    if (pevals_(0) <= 0 || pevals_(1) <= 0) {
+    if (pevals_(0) <= tolerance_ || pevals_(1) <= tolerance_) {
       celltype_ = kInvalid;
       return;
     }
     celltype_ = kRegular;
     phasgaussian_ = true;
-    int maxidx, minidx;
-    double maxval = pevals_.maxCoeff(&maxidx);
-    double minval = pevals_.minCoeff(&minidx);
-    if (maxval > rescale_ratio_ * minval) {
-      pevals_(minidx) = maxval / rescale_ratio_;
+    if (pevals_(1) > rescale_ratio_ * pevals_(0)) {
+      pevals_(0) = pevals_(1) / rescale_ratio_;
       pcov_ = pevecs_ * pevals_.asDiagonal() * pevecs_.transpose();
       celltype_ = kRescale;
     }

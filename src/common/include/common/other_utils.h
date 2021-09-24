@@ -5,6 +5,8 @@
 // HACK: Change paths
 #define APATH "/home/ee904/Desktop/HuaTsai/NormalNDT/Analysis"
 #define BPATH "/home/ee904/Desktop/Dataset/nuScenes"
+#define WSPATH "/home/ee904/Desktop/HuaTsai/NormalNDT/Research"
+#define PYTHONPATH "/home/ee904/venv/com/bin/python"
 
 inline std::chrono::steady_clock::time_point GetTime() {
   return std::chrono::steady_clock::now();
@@ -101,4 +103,12 @@ std::vector<std::string> GetBagsPath(std::string data) {
   std::cerr << "No specified data " << data << std::endl;
   std::exit(-1);
   return {};
+}
+
+std::string GetCurrentTimeAsString() {
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  std::ostringstream oss;
+  oss << std::put_time(&tm, "%Y-%m-%d-%H-%M-%S");
+  return oss.str();
 }

@@ -40,6 +40,7 @@ sensor_msgs::PointCloud2 EigenToPC(const vector<Vector2d> &pts, const ros::Time 
 }
 
 int main(int argc, char **argv) {
+  bool bagout;
   double huber, cell_size, radius, rvar, tvar;
   int frames;
   string data, outfolder;
@@ -53,7 +54,8 @@ int main(int argc, char **argv) {
       ("tvar", po::value<double>(&tvar)->default_value(0.0001), "Intrinsic theta variance")
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
-      ("huber,u", po::value<double>(&huber)->default_value(1.0), "Use Huber loss");
+      ("huber,u", po::value<double>(&huber)->default_value(1.0), "Use Huber loss")
+      ("bag,b", po::value<bool>(&bagout)->default_value(false)->implicit_value(true), "Write bag");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
@@ -67,12 +69,14 @@ int main(int argc, char **argv) {
   nav_msgs::Path gtpath;
   SerializationInput(JoinPath(GetDataPath(data), "gt.ser"), gtpath);
   vector<sensor_msgs::CompressedImage> imb, imbl, imbr, imf, imfl, imfr;
-  SerializationInput(JoinPath(GetDataPath(data), "back.ser"), imb);
-  SerializationInput(JoinPath(GetDataPath(data), "back_left.ser"), imbl);
-  SerializationInput(JoinPath(GetDataPath(data), "back_right.ser"), imbr);
-  SerializationInput(JoinPath(GetDataPath(data), "front.ser"), imf);
-  SerializationInput(JoinPath(GetDataPath(data), "front_left.ser"), imfl);
-  SerializationInput(JoinPath(GetDataPath(data), "front_right.ser"), imfr);
+  if (bagout) {
+    SerializationInput(JoinPath(GetDataPath(data), "back.ser"), imb);
+    SerializationInput(JoinPath(GetDataPath(data), "back_left.ser"), imbl);
+    SerializationInput(JoinPath(GetDataPath(data), "back_right.ser"), imbr);
+    SerializationInput(JoinPath(GetDataPath(data), "front.ser"), imf);
+    SerializationInput(JoinPath(GetDataPath(data), "front_left.ser"), imfl);
+    SerializationInput(JoinPath(GetDataPath(data), "front_right.ser"), imfr);
+  }
 
   Matrix4f Tr1 = Matrix4f::Identity();
   Matrix4f Tr2 = Matrix4f::Identity();
@@ -83,19 +87,21 @@ int main(int argc, char **argv) {
   vp3.push_back(MakePoseStampedMsg(vepcs[0].stamp, Tr3));
 
   rosbag::Bag bag;
-  bag.open(JoinPath(outfolder, "replay" + data + ".bag"), rosbag::bagmode::Write);
-  for (const auto &im : imb)
-    bag.write("back/compressed", im.header.stamp, im);
-  for (const auto &im : imbl)
-    bag.write("back_left/compressed", im.header.stamp, im);
-  for (const auto &im : imbr)
-    bag.write("back_right/compressed", im.header.stamp, im);
-  for (const auto &im : imf)
-    bag.write("front/compressed", im.header.stamp, im);
-  for (const auto &im : imfl)
-    bag.write("front_left/compressed", im.header.stamp, im);
-  for (const auto &im : imfr)
-    bag.write("front_right/compressed", im.header.stamp, im);
+  if (bagout) {
+    bag.open(JoinPath(outfolder, "replay" + data + ".bag"), rosbag::bagmode::Write);
+    for (const auto &im : imb)
+      bag.write("back/compressed", im.header.stamp, im);
+    for (const auto &im : imbl)
+      bag.write("back_left/compressed", im.header.stamp, im);
+    for (const auto &im : imbr)
+      bag.write("back_right/compressed", im.header.stamp, im);
+    for (const auto &im : imf)
+      bag.write("front/compressed", im.header.stamp, im);
+    for (const auto &im : imfl)
+      bag.write("front_left/compressed", im.header.stamp, im);
+    for (const auto &im : imfr)
+      bag.write("front_right/compressed", im.header.stamp, im);
+  }
 
   // i-f, ..., i-1 | i, i+1, ..., i+f-1 | i+f, ..., i+2f-1 | i+2f -> actual id
   // ..., ...,  m  | i, ..., ...,   n   |  o , ...,   p    |  q   -> symbol id
@@ -110,7 +116,8 @@ int main(int argc, char **argv) {
     vector<Vector2d> tgt3 = AugmentPoints(vepcs, i, i + f - 1, Tio, Tios);
     vector<Vector2d> src3 = AugmentPoints(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
     auto srctime = vepcs[i + f].stamp;
-    bag.write("source", srctime, EigenToPC(src3, srctime));
+    if (bagout)
+      bag.write("source", srctime, EigenToPC(src3, srctime));
 
     // SNDT Method
     auto t1 = GetTime();
@@ -122,21 +129,23 @@ int main(int argc, char **argv) {
     vp1.push_back(MakePoseStampedMsg(vepcs[i + f].stamp, Tr1));
     vector<Vector2d> next1(tgt3.size());
     transform(tgt3.begin(), tgt3.end(), next1.begin(), [&T1](auto p) { return T1.inverse() * p; });
-    bag.write("sndt", srctime, EigenToPC(next1, srctime));
+    if (bagout)
+      bag.write("sndt", srctime, EigenToPC(next1, srctime));
     auto t2 = GetTime();
     avg1 += GetDiffTime(t1, t2);
 
     // NDTD2D method
     auto t3 = GetTime();
-    NDTParameters params2;
+    D2DNDTParameters params2;
     auto tgt2 = MakeNDTMap(Augment(vepcs, i, i + f - 1, Tio, Tios), params2);
     auto src2 = MakeNDTMap(Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs), params2);
-    auto T2 = NDTD2DMatch(tgt2, src2, params2, Tio);
+    auto T2 = D2DNDTMatch(tgt2, src2, params2, Tio);
     Tr2 = Tr2 * Matrix4fFromMatrix3d(T2.matrix());
     vp2.push_back(MakePoseStampedMsg(vepcs[i + f].stamp, Tr2));
     vector<Vector2d> next2(tgt3.size());
     transform(tgt3.begin(), tgt3.end(), next2.begin(), [&T2](auto p) { return T2.inverse() * p; });
-    bag.write("ndt", srctime, EigenToPC(next2, srctime));
+    if (bagout)
+      bag.write("ndt", srctime, EigenToPC(next2, srctime));
     auto t4 = GetTime();
     avg2 += GetDiffTime(t3, t4);
 
@@ -148,14 +157,16 @@ int main(int argc, char **argv) {
     vp3.push_back(MakePoseStampedMsg(vepcs[i + f].stamp, Tr3));
     vector<Vector2d> next3(tgt3.size());
     transform(tgt3.begin(), tgt3.end(), next3.begin(), [&T3](auto p) { return T3.inverse() * p; });
-    bag.write("sicp", srctime, EigenToPC(next3, srctime));
+    if (bagout)
+      bag.write("sicp", srctime, EigenToPC(next3, srctime));
     auto t6 = GetTime();
     avg3 += GetDiffTime(t5, t6);
 
     ::printf("\rRun SNDT/NDT/SICP Matching (%d/%d)", i, n - 2 * f);
     fflush(stdout);
   }
-  bag.close();
+  if (bagout)
+    bag.close();
   avg1 /= (n - 1);
   avg2 /= (n - 1);
   avg3 /= (n - 1);

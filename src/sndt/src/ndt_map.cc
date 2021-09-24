@@ -14,7 +14,7 @@ NDTMap::NDTMap(double cell_size) : MapInterface(cell_size) {}
 
 NDTMap::~NDTMap() {
   if (is_loaded_) {
-    for (auto &cell : active_cells_) delete cell;
+    for (auto &cell : cells_) delete cell;
     for (int i = 0; i < cellptrs_size_(0); ++i) delete[] cellptrs_[i];
     delete[] cellptrs_;
   }
@@ -22,7 +22,7 @@ NDTMap::~NDTMap() {
 
 void NDTMap::LoadPoints(const std::vector<Eigen::Vector2d> &points) {
   if (is_loaded_) {
-    for (auto &cell : active_cells_) delete cell;
+    for (auto &cell : cells_) delete cell;
     for (int i = 0; i < cellptrs_size_(0); ++i) delete[] cellptrs_[i];
     delete[] cellptrs_;
   }
@@ -46,7 +46,7 @@ void NDTMap::LoadPointsWithCovariances(
     const std::vector<Eigen::Matrix2d> &point_covs) {
   Expects(points.size() == point_covs.size());
   if (is_loaded_) {
-    for (auto &cell : active_cells_) delete cell;
+    for (auto &cell : cells_) delete cell;
     for (int i = 0; i < cellptrs_size_(0); ++i) delete[] cellptrs_[i];
     delete[] cellptrs_;
   }
@@ -54,12 +54,11 @@ void NDTMap::LoadPointsWithCovariances(
   Initialize();
   std::vector<NDTCell *> update_cells;
   for (size_t i = 0; i < points.size(); ++i) {
-    Eigen::Vector2d point = points[i];
-    Eigen::Matrix2d point_cov = point_covs[i];
-    NDTCell *cell = GetCellAndAllocate(point);
+    NDTCell *cell = GetCellAndAllocate(points[i]);
     if (cell) {
-      cell->AddPointWithCovariance(point, point_cov);
+      cell->AddPointWithCovariance(points[i], point_covs[i]);
       update_cells.push_back(cell);
+      points_.push_back(points[i]);
     }
   }
   for (auto cell : update_cells) cell->ComputeGaussian();
@@ -107,7 +106,7 @@ NDTCell *NDTMap::GetCellAndAllocate(const Eigen::Vector2d &point) {
     center(1) = map_center_(1) + (idx(1) - map_center_index_(1)) * cell_size_;
     cellptrs_[idx(0)][idx(1)]->SetCenter(center);
     cellptrs_[idx(0)][idx(1)]->SetSize(cell_size_);
-    active_cells_.push_back(cellptrs_[idx(0)][idx(1)]);
+    cells_.push_back(cellptrs_[idx(0)][idx(1)]);
   }
   return cellptrs_[idx(0)][idx(1)];
 }
@@ -129,23 +128,37 @@ std::string NDTMap::ToString() const {
              "active cells: %ld\n",
              cell_size_, map_center_(0), map_center_(1), map_size_(0),
              map_size_(1), cellptrs_size_(0), cellptrs_size_(1),
-             map_center_index_(0), map_center_index_(1), active_cells_.size());
+             map_center_index_(0), map_center_index_(1), cells_.size());
   std::string ret(c);
-  for (size_t i = 0; i < active_cells_.size(); ++i) {
-    auto idx = GetIndexForPoint(active_cells_[i]->GetCenter());
+  for (size_t i = 0; i < cells_.size(); ++i) {
+    auto idx = GetIndexForPoint(cells_[i]->GetCenter());
     char s[20];
     sprintf(s, "[#%ld, (%d, %d)] ", i, idx(0), idx(1));
-    ret += std::string(s) + active_cells_[i]->ToString();
+    ret += std::string(s) + cells_[i]->ToString();
   }
   return ret;
 }
 
+void NDTMap::ShowCellDistri() const {
+  int noinit = 0, nopts = 0, valid = 0, rescale = 0, assign = 0, invalid = 0, one = 0, two = 0, gau = 0;
+  for (auto cell : cells_) {
+    if (cell->GetCellType() == NDTCell::kNoInit) ++noinit;
+    if (cell->GetCellType() == NDTCell::kNoPoints) ++nopts;
+    if (cell->GetCellType() == NDTCell::kRegular) ++valid;
+    if (cell->GetCellType() == NDTCell::kRescale) ++rescale;
+    if (cell->GetCellType() == NDTCell::kAssign) ++assign;
+    if (cell->GetCellType() == NDTCell::kInvalid) ++invalid;
+    if (cell->GetN() == 1) ++one;
+    if (cell->GetN() == 2) ++two;
+    if (cell->HasGaussian()) ++gau;
+  }
+  ::printf("%ld cells: %d one, %d two, %d gau\n", cells_.size(), one, two, gau);
+  ::printf("nin: %d, npt: %d, reg: %d, res: %d, ass: %d, inv: %d\n\n", noinit,
+           nopts, valid, rescale, assign, invalid);
+}
+
 std::vector<Eigen::Vector2d> NDTMap::GetPoints() const {
-  std::vector<Eigen::Vector2d> ret;
-  for (auto it = begin(); it != end(); ++it)
-    for (auto pt : (*it)->GetPoints())
-      ret.push_back(pt);
-  return ret;
+  return points_;
 }
 
 std::vector<Eigen::Vector2d> NDTMap::GetPointsWithGaussianCell() const {

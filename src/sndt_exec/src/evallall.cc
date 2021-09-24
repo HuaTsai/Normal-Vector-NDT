@@ -9,7 +9,7 @@
 #include <rosbag/bag.h>
 #include <tqdm/tqdm.h>
 
-#define LIDAR
+// #define LIDAR
 
 using namespace std;
 using namespace Eigen;
@@ -56,6 +56,7 @@ Affine2d GetBenchMark(const ros::Time &t1, const ros::Time &t2) {
 }
 
 int main(int argc, char **argv) {
+#ifdef LIDAR
   Affine3d aff3 =
       Translation3d(0.943713, 0.000000, 1.840230) *
       Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
@@ -63,6 +64,7 @@ int main(int argc, char **argv) {
   Affine2d aff2 =
       Translation2d(aff3.translation()(0), aff3.translation()(1)) *
       Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
+#endif
 
   int n;
   bool usebar;
@@ -124,6 +126,7 @@ int main(int argc, char **argv) {
   int f = 5;
   n = vepcs.size() / f * f;
   for (int i = 0; i < n - f; i += f) {
+    if (usebar) bar.progress(i, n - f);
     Affine2d Tio, Toq;
     vector<Affine2d> Tios, Toqs;
     auto datat = Augment(vepcs, i, i + f - 1, Tio, Tios);
@@ -184,14 +187,14 @@ int main(int argc, char **argv) {
     iit3.push_back(params3._ceres_iteration);
 
     // P2D-NDT Method
-    NDTParameters params4;
+    P2DNDTParameters params4;
 #ifdef LIDAR
     params4.r_variance = params4.t_variance = 0;
 #endif
     params4.cell_size = cell_size;
     auto tgt4 = MakeNDTMap(datat, params4);
     auto src4 = MakePoints(datas, params4);
-    auto T4 = NDTP2DMatch(tgt4, src4, params4, Tg);
+    auto T4 = P2DNDTMatch(tgt4, src4, params4, Tg);
     ndt4.push_back(params4._usedtime.ndt / 1000.);
     nm4.push_back(params4._usedtime.normal / 1000.);
     bud4.push_back(params4._usedtime.build / 1000.);
@@ -205,14 +208,14 @@ int main(int argc, char **argv) {
     iit4.push_back(params4._ceres_iteration);
 
     // D2D-NDT Method
-    NDTParameters params5;
+    D2DNDTParameters params5;
 #ifdef LIDAR
     params5.r_variance = params5.t_variance = 0;
 #endif
     params5.cell_size = cell_size;
     auto tgt5 = MakeNDTMap(datat, params5);
     auto src5 = MakeNDTMap(datas, params5);
-    auto T5 = NDTD2DMatch(tgt5, src5, params5, Tg);
+    auto T5 = D2DNDTMatch(tgt5, src5, params5, Tg);
     ndt5.push_back(params5._usedtime.ndt / 1000.);
     nm5.push_back(params5._usedtime.normal / 1000.);
     bud5.push_back(params5._usedtime.build / 1000.);
@@ -230,7 +233,7 @@ int main(int argc, char **argv) {
 #ifdef LIDAR
     params6.r_variance = params6.t_variance = 0;
 #endif
-    params6.cell_size = cell_size;
+    params6.cell_size = cell_size, params6.huber = huber;
     auto tgt6 = MakeSNDTMap(datat, params6);
     auto src6 = MakeSNDTMap(datas, params6);
     auto T6 = SNDTMatch(tgt6, src6, params6, Tg);
@@ -249,35 +252,35 @@ int main(int argc, char **argv) {
   if (usebar) bar.finish();
 
   if (usebar) {
-    // ::printf(" ICP: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-    //     Avg(ndt1), Avg(nm1), Avg(bud1), Avg(opt1), Avg(oth1), Avg(ttl1), Avg(terr1), Avg(rerr1), Avg(it1), Avg(iit1));
+    ::printf(" ICP: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+        Avg(ndt1), Avg(nm1), Avg(bud1), Avg(opt1), Avg(oth1), Avg(ttl1), Avg(terr1), Avg(rerr1), Avg(it1), Avg(iit1));
 
-    // ::printf("NICP: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-    //     Avg(ndt2), Avg(nm2), Avg(bud2), Avg(opt2), Avg(oth2), Avg(ttl2), Avg(terr2), Avg(rerr2), Avg(it2), Avg(iit2));
+    ::printf("NICP: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+        Avg(ndt2), Avg(nm2), Avg(bud2), Avg(opt2), Avg(oth2), Avg(ttl2), Avg(terr2), Avg(rerr2), Avg(it2), Avg(iit2));
 
-    // ::printf("SICP: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-    //     Avg(ndt3), Avg(nm3), Avg(bud3), Avg(opt3), Avg(oth3), Avg(ttl3), Avg(terr3), Avg(rerr3), Avg(it3), Avg(iit3));
+    ::printf("SICP: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+        Avg(ndt3), Avg(nm3), Avg(bud3), Avg(opt3), Avg(oth3), Avg(ttl3), Avg(terr3), Avg(rerr3), Avg(it3), Avg(iit3));
 
-    // ::printf("PNDT: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-    //     Avg(ndt4), Avg(nm4), Avg(bud4), Avg(opt4), Avg(oth4), Avg(ttl4), Avg(terr4), Avg(rerr4), Avg(it4), Avg(iit4));
+    ::printf("PNDT: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+        Avg(ndt4), Avg(nm4), Avg(bud4), Avg(opt4), Avg(oth4), Avg(ttl4), Avg(terr4), Avg(rerr4), Avg(it4), Avg(iit4));
 
-    // ::printf("DNDT: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-    //     Avg(ndt5), Avg(nm5), Avg(bud5), Avg(opt5), Avg(oth5), Avg(ttl5), Avg(terr5), Avg(rerr5), Avg(it5), Avg(iit5));
+    ::printf("DNDT: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+        Avg(ndt5), Avg(nm5), Avg(bud5), Avg(opt5), Avg(oth5), Avg(ttl5), Avg(terr5), Avg(rerr5), Avg(it5), Avg(iit5));
 
-    // ::printf("SNDT: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-    //     Avg(ndt6), Avg(nm6), Avg(bud6), Avg(opt6), Avg(oth6), Avg(ttl6), Avg(terr6), Avg(rerr6), Avg(it6), Avg(iit6));
+    ::printf("SNDT: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+        Avg(ndt6), Avg(nm6), Avg(bud6), Avg(opt6), Avg(oth6), Avg(ttl6), Avg(terr6), Avg(rerr6), Avg(it6), Avg(iit6));
 
-    ::printf("NICP: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-        Avg(nm2), Avg(ndt2), Avg(bud2) + Avg(opt2), Avg(ttl2), Avg(terr2), Avg(rerr2), Avg(it2), Avg(iit2));
+    // ::printf("NICP: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+    //     Avg(nm2), Avg(ndt2), Avg(bud2) + Avg(opt2), Avg(ttl2), Avg(terr2), Avg(rerr2), Avg(it2), Avg(iit2));
 
-    ::printf("SICP: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-        Avg(nm3), Avg(ndt3), Avg(bud3) + Avg(opt3), Avg(ttl3), Avg(terr3), Avg(rerr3), Avg(it3), Avg(iit3));
+    // ::printf("SICP: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+    //     Avg(nm3), Avg(ndt3), Avg(bud3) + Avg(opt3), Avg(ttl3), Avg(terr3), Avg(rerr3), Avg(it3), Avg(iit3));
 
-    ::printf("DNDT: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-        Avg(nm5), Avg(ndt5), Avg(bud5) + Avg(opt5), Avg(ttl5), Avg(terr5), Avg(rerr5), Avg(it5), Avg(iit5));
+    // ::printf("DNDT: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+    //     Avg(nm5), Avg(ndt5), Avg(bud5) + Avg(opt5), Avg(ttl5), Avg(terr5), Avg(rerr5), Avg(it5), Avg(iit5));
 
-    ::printf("SNDT: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-        Avg(nm6), Avg(ndt6), Avg(bud6) + Avg(opt6), Avg(ttl6), Avg(terr6), Avg(rerr6), Avg(it6), Avg(iit6));
+    // ::printf("SNDT: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
+    //     Avg(nm6), Avg(ndt6), Avg(bud6) + Avg(opt6), Avg(ttl6), Avg(terr6), Avg(rerr6), Avg(it6), Avg(iit6));
   } else {
     PrintValues(ndt1); PrintValues(nm1); PrintValues(bud1); PrintValues(opt1); PrintValues(ttl1);
     PrintValues(terr1); PrintValues(rerr1); PrintValues(it1); PrintValues(iit1);

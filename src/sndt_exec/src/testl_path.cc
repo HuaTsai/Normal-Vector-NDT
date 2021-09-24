@@ -140,11 +140,11 @@ int main(int argc, char **argv) {
 
     // NDT method
     auto t3 = GetTime();
-    NDTParameters params2;
+    D2DNDTParameters params2;
     params2.r_variance = params2.t_variance = 0;
     auto tgt2 = MakeNDTMap(datat, params2);
     auto src2 = MakeNDTMap(datas, params2);
-    auto T2 = NDTD2DMatch(tgt2, src2, params2, Tg);
+    auto T2 = D2DNDTMatch(tgt2, src2, params2, Tg);
     Tr2 = Tr2 * Matrix4fFromMatrix3d(T2.matrix());
     vp2.push_back(MakePoseStampedMsg(vpc[i + 1].header.stamp, Tr2));
     vector<Vector2d> next2(tgt3.size());

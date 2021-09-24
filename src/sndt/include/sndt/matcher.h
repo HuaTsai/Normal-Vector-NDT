@@ -35,31 +35,27 @@ struct UsedTime {
 
 // Variables started with "_" are output parameters
 struct CommonParameters {
+  enum Method { kDUMMY, kICP, kPt2PlICP, kSICP, kP2DNDT, kD2DNDT, kSNDT };
   CommonParameters() {
     InitializeInput();
     InitializeOutput();
   }
   void InitializeInput() {
+    method = kDUMMY;
     max_iterations = 400;
     ceres_max_iterations = 400;
-    // Note:
-    //   Higher # of threads, more time spent.
-    //   This property does not perform well now.
-    threads = 1;
-    threshold = 0.01;
+    threshold = 0.001;
     huber = 1;
     verbose = false;
     solver = ceres::DENSE_QR;
   }
   void InitializeOutput() {
-    _valid = false;
     _iteration = 0;
     _ceres_iteration = 0;
     _converge = Converge::kNotConverge;
-    _costs.clear();
-    _corres.clear();
     _usedtime.Initialize();
   }
+  Method method;
   int max_iterations;
   int ceres_max_iterations;
   int threads;
@@ -68,19 +64,23 @@ struct CommonParameters {
   bool verbose;
   ceres::LinearSolverType solver;
 
-  bool _valid;
   int _iteration;
   int _ceres_iteration;
   Converge _converge;
-  std::vector<double> _costs;
-  std::vector<int> _corres;
+  std::vector<std::vector<double>> _costs;
   UsedTime _usedtime;
+  std::vector<std::vector<Eigen::Affine2d>> _sols;
 };
 
-struct ICPParameters : CommonParameters { };
+struct ICPParameters : CommonParameters {
+  ICPParameters() {
+    method = kICP;
+  }
+};
 
 struct Pt2plICPParameters : CommonParameters {
   Pt2plICPParameters() {
+    method = kPt2PlICP;
     radius = 1.5;
   }
   double radius;
@@ -90,6 +90,7 @@ struct Pt2plICPParameters : CommonParameters {
 
 struct SICPParameters : CommonParameters {
   SICPParameters() {
+    method = kSICP;
     radius = 1.5;
   }
   double radius;
@@ -106,17 +107,20 @@ struct NDTParameters : CommonParameters {
   double t_variance;  /**< angle variance, i.e., +-t -> (t / 3)^2 */
 };
 
-struct SNDTParameters : CommonParameters {
+struct P2DNDTParameters : NDTParameters {
+  P2DNDTParameters() { method = kP2DNDT; }
+};
+
+struct D2DNDTParameters : NDTParameters {
+  D2DNDTParameters() { method = kP2DNDT; }
+};
+
+struct SNDTParameters : NDTParameters {
   SNDTParameters() {
-    cell_size = 1.5;
+    method = kSNDT;
     radius = 1.5;
-    r_variance = 0.0625;
-    t_variance = 0.0001;
   }
-  double cell_size;
   double radius;
-  double r_variance;  /**< radius variance, i.e., +-r -> (r / 3)^2 */
-  double t_variance;  /**< angle variance, i.e., +-t -> (t / 3)^2 */
 };
 
 Eigen::Affine2d ICPMatch(
@@ -144,14 +148,14 @@ Eigen::Affine2d SICPMatch(
     SICPParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
-Eigen::Affine2d NDTP2DMatch(
+Eigen::Affine2d P2DNDTMatch(
     const NDTMap &target_map, const std::vector<Eigen::Vector2d> &source_points,
-    NDTParameters &params,
+    P2DNDTParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
-Eigen::Affine2d NDTD2DMatch(
+Eigen::Affine2d D2DNDTMatch(
     const NDTMap &target_map, const NDTMap &source_map,
-    NDTParameters &params,
+    D2DNDTParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 Eigen::Affine2d SNDTMatch(

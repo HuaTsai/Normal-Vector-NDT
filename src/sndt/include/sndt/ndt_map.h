@@ -73,10 +73,12 @@ class NDTMap : public MapInterface {
    */
   virtual std::string ToString() const override;
 
+  void ShowCellDistri() const;
+
   /**
    * @brief Get the Points object
    * 
-   * @note The points are retrived from active_cells_, which does not
+   * @note The points are retrived from cells_, which does not
    * necessarily equal to the original input
    */
   std::vector<Eigen::Vector2d> GetPoints() const;
@@ -88,11 +90,11 @@ class NDTMap : public MapInterface {
    */
   std::vector<Eigen::Vector2d> GetPointsWithGaussianCell() const;
 
-  size_t size() const { return active_cells_.size(); }
-  std::vector<NDTCell *>::iterator begin() { return active_cells_.begin(); }
-  std::vector<NDTCell *>::const_iterator begin() const { return active_cells_.begin(); }
-  std::vector<NDTCell *>::iterator end() { return active_cells_.end(); }
-  std::vector<NDTCell *>::const_iterator end() const { return active_cells_.end(); }
+  size_t size() const { return cells_.size(); }
+  std::vector<NDTCell *>::iterator begin() { return cells_.begin(); }
+  std::vector<NDTCell *>::const_iterator begin() const { return cells_.begin(); }
+  std::vector<NDTCell *>::iterator end() { return cells_.end(); }
+  std::vector<NDTCell *>::const_iterator end() const { return cells_.end(); }
 
  private:
   /**
@@ -100,6 +102,7 @@ class NDTMap : public MapInterface {
    */
   virtual void Initialize() override;
 
-  std::vector<NDTCell *> active_cells_;
+  std::vector<NDTCell *> cells_;
   NDTCell ***cellptrs_;
+  std::vector<Eigen::Vector2d> points_;
 };

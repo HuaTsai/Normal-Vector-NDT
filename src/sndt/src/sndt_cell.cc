@@ -10,11 +10,13 @@
  */
 #include <sndt/sndt_cell.h>
 #include <sndt/eigen_utils.h>
+#include <boost/functional/hash.hpp>
 
 SNDTCell::SNDTCell() {
-  pcelltype_ = kNotInit;
-  ncelltype_ = kNotInit;
-  rescale_ratio_ = 1000.;
+  pcelltype_ = kNoInit;
+  ncelltype_ = kNoInit;
+  rescale_ratio_ = 100.;
+  tolerance_ = Eigen::NumTraits<double>::dummy_precision();
   nhasgaussian_ = false;
   ncov_.setZero();
   nevecs_.setZero();
@@ -39,17 +41,14 @@ void SNDTCell::ComputePGaussian() {
   pcov_ = ComputeCov(valids.first, pmean_, valids.second);
   if (!pcov_.isZero()) {
     ComputeEvalEvec(pcov_, pevals_, pevecs_);
-    if (pevals_(0) <= 0 && pevals_(1) <= 0) {
+    if (pevals_(0) <= tolerance_ || pevals_(1) <= tolerance_) {
       pcelltype_ = kInvalid;
       return;
     }
     pcelltype_ = kRegular;
     phasgaussian_ = true;
-    int maxidx, minidx;
-    double maxval = pevals_.maxCoeff(&maxidx);
-    double minval = pevals_.minCoeff(&minidx);
-    if (maxval > rescale_ratio_ * minval) {
-      pevals_(minidx) = maxval / rescale_ratio_;
+    if (pevals_(1) > rescale_ratio_ * pevals_(0)) {
+      pevals_(0) = pevals_(1) / rescale_ratio_;
       pcov_ = pevecs_ * pevals_.asDiagonal() * pevecs_.transpose();
       pcelltype_ = kRescale;
     }
@@ -66,29 +65,31 @@ void SNDTCell::ComputeNGaussian() {
     ncelltype_ = kNoPoints;
     return;
   }
+  std::unordered_set<std::pair<int, int>, boost::hash<std::pair<int, int>>> st;
+  for (auto valid : valids)
+    st.insert({valid(0) * 1e5, valid(1) * 1e5});
   nmean_ = ComputeMean(valids);
-  ncov_ = ComputeCov(valids, nmean_);
-  if (!ncov_.isZero()) {
+  if (st.size() <= 2) {
+    nevecs_.col(0) = nmean_.normalized();
+    nevecs_.col(1) = Eigen::Vector2d(-nevecs_(1, 0), nevecs_(0, 0));
+    nevals_ = Eigen::Vector2d(0.0005, 0.01);
+    ncov_ = nevecs_ * nevals_.asDiagonal() * nevecs_.transpose();
+    ncelltype_ = kAssign;
+    nhasgaussian_ = true;
+  } else {
+    ncov_ = ComputeCov(valids, nmean_);
     ComputeEvalEvec(ncov_, nevals_, nevecs_);
-    if (nevals_(0) <= 0 || nevals_(1) <= 0) {
+    if (nevals_(0) <= tolerance_ || nevals_(1) <= tolerance_) {
       ncelltype_ = kInvalid;
       return;
     }
     ncelltype_ = kRegular;
     nhasgaussian_ = true;
-    int maxidx, minidx;
-    double maxval = nevals_.maxCoeff(&maxidx);
-    double minval = nevals_.minCoeff(&minidx);
-    if (maxval > rescale_ratio_ * minval) {
-      nevals_(minidx) = maxval / rescale_ratio_;
+    if (nevals_(1) > 1000 * nevals_(0)) {
+      nevals_(0) = nevals_(1) / 1000;
       ncov_ = nevecs_ * nevals_.asDiagonal() * nevecs_.transpose();
       ncelltype_ = kRescale;
     }
-  }
-  if (ncov_.isZero() && valids.size() >= 3) {
-    ncov_ = Eigen::Matrix2d::Identity() * 0.01;
-    ncelltype_ = kAssign;
-    nhasgaussian_ = true;
   }
 }
 // void SNDTCell::ComputePGaussian() {

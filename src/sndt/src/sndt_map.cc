@@ -9,23 +9,12 @@
  * 
  */
 #include <sndt/sndt_map.h>
-#include <chrono>
-namespace {
-inline std::chrono::steady_clock::time_point GetTime() {
-  return std::chrono::steady_clock::now();
-}
-
-inline int GetDiffTime(std::chrono::steady_clock::time_point t1,
-                       std::chrono::steady_clock::time_point t2) {
-  return std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-}
-}
 
 SNDTMap::SNDTMap(double cell_size) : MapInterface(cell_size) {}
 
 SNDTMap::~SNDTMap() {
   if (is_loaded_) {
-    for (auto &cell : active_cells_) delete cell;
+    for (auto &cell : cells_) delete cell;
     for (int i = 0; i < cellptrs_size_(0); ++i) delete[] cellptrs_[i];
     delete[] cellptrs_;
   }
@@ -33,9 +22,8 @@ SNDTMap::~SNDTMap() {
 
 void SNDTMap::LoadPointsAndNormals(const std::vector<Eigen::Vector2d> &points,
                                    const std::vector<Eigen::Vector2d> &normals) {
-  Expects(points.size() == normals.size());
   if (is_loaded_) {
-    for (auto &cell : active_cells_) delete cell;
+    for (auto &cell : cells_) delete cell;
     for (int i = 0; i < cellptrs_size_(0); ++i) delete[] cellptrs_[i];
     delete[] cellptrs_;
   }
@@ -60,7 +48,7 @@ void SNDTMap::LoadPointsWithCovariancesAndNormals(
     const std::vector<Eigen::Vector2d> &normals) {
   Expects(points.size() == point_covs.size() && points.size() == normals.size());
   if (is_loaded_) {
-    for (auto &cell : active_cells_) delete cell;
+    for (auto &cell : cells_) delete cell;
     for (int i = 0; i < cellptrs_size_(0); ++i) delete[] cellptrs_[i];
     delete[] cellptrs_;
   }
@@ -112,7 +100,7 @@ std::vector<std::shared_ptr<SNDTCell>> SNDTMap::PseudoTransformCells(
       }
       for (auto nm : (*it)->GetNormals()) {
         if (nm.allFinite()) nm = R * nm;
-        cell->AddNormal((nm(1) > 0) ? nm : -nm);
+        cell->AddNormal(nm);
       }
     }
     ret.push_back(cell);
@@ -131,7 +119,7 @@ SNDTCell *SNDTMap::GetCellAndAllocate(const Eigen::Vector2d &point) {
     center(1) = map_center_(1) + (idx(1) - map_center_index_(1)) * cell_size_;
     cellptrs_[idx(0)][idx(1)]->SetCenter(center);
     cellptrs_[idx(0)][idx(1)]->SetSize(cell_size_);
-    active_cells_.push_back(cellptrs_[idx(0)][idx(1)]);
+    cells_.push_back(cellptrs_[idx(0)][idx(1)]);
   }
   return cellptrs_[idx(0)][idx(1)];
 }
@@ -153,15 +141,43 @@ std::string SNDTMap::ToString() const {
              "active cells: %ld\n",
              cell_size_, map_center_(0), map_center_(1), map_size_(0),
              map_size_(1), cellptrs_size_(0), cellptrs_size_(1),
-             map_center_index_(0), map_center_index_(1), active_cells_.size());
+             map_center_index_(0), map_center_index_(1), cells_.size());
   std::string ret(c);
-  for (size_t i = 0; i < active_cells_.size(); ++i) {
-    auto idx = GetIndexForPoint(active_cells_[i]->GetCenter());
+  for (size_t i = 0; i < cells_.size(); ++i) {
+    auto idx = GetIndexForPoint(cells_[i]->GetCenter());
     char s[20];
     sprintf(s, "[#%ld, (%d, %d)] ", i, idx(0), idx(1));
-    ret += std::string(s) + active_cells_[i]->ToString();
+    ret += std::string(s) + cells_[i]->ToString();
   }
   return ret;
+}
+
+void SNDTMap::ShowCellDistri() const {
+  int one = 0, two = 0, gau = 0;
+  int pnoinit = 0, pnopts = 0, pvalid = 0, prescale = 0, passign = 0, pinvalid = 0;
+  int nnoinit = 0, nnopts = 0, nvalid = 0, nrescale = 0, nassign = 0, ninvalid = 0;
+  for (auto cell : cells_) {
+    if (cell->GetPCellType() == SNDTCell::kNoInit) ++pnoinit;
+    if (cell->GetNCellType() == SNDTCell::kNoInit) ++nnoinit;
+    if (cell->GetPCellType() == SNDTCell::kNoPoints) ++pnopts;
+    if (cell->GetNCellType() == SNDTCell::kNoPoints) ++nnopts;
+    if (cell->GetPCellType() == SNDTCell::kRegular) ++pvalid;
+    if (cell->GetNCellType() == SNDTCell::kRegular) ++nvalid;
+    if (cell->GetPCellType() == SNDTCell::kRescale) ++prescale;
+    if (cell->GetNCellType() == SNDTCell::kRescale) ++nrescale;
+    if (cell->GetPCellType() == SNDTCell::kAssign) ++passign;
+    if (cell->GetNCellType() == SNDTCell::kAssign) ++nassign;
+    if (cell->GetPCellType() == SNDTCell::kInvalid) ++pinvalid;
+    if (cell->GetNCellType() == SNDTCell::kInvalid) ++ninvalid;
+    if (cell->GetN() == 1) ++one;
+    if (cell->GetN() == 2) ++two;
+    if (cell->HasGaussian()) ++gau;
+  }
+  ::printf("%ld cells: %d one, %d two, %d gau\n", cells_.size(), one, two, gau);
+  ::printf("p: nin: %d, npt: %d, reg: %d, res: %d, ass: %d, inv: %d\n", pnoinit,
+           pnopts, pvalid, prescale, passign, pinvalid);
+  ::printf("n: nin: %d, npt: %d, reg: %d, res: %d, ass: %d, inv: %d\n\n", nnoinit,
+           nnopts, nvalid, nrescale, nassign, ninvalid);
 }
 
 std::vector<Eigen::Vector2d> SNDTMap::GetPoints() const {

@@ -75,10 +75,12 @@ class SNDTMap : public MapInterface {
    */
   virtual std::string ToString() const override;
 
+  void ShowCellDistri() const;
+
   /**
    * @brief Get the Points object
    * 
-   * @note The points are retrived from active_cells_, which does not
+   * @note The points are retrived from cells_, which does not
    * necessarily equal to the original input
    */
   std::vector<Eigen::Vector2d> GetPoints() const;
@@ -93,16 +95,16 @@ class SNDTMap : public MapInterface {
   /**
    * @brief Get the Normals object
    * 
-   * @note The normals are retrived from active_cells_, which does not
+   * @note The normals are retrived from cells_, which does not
    * necessarily equal to the original input
    */
   std::vector<Eigen::Vector2d> GetNormals() const;
 
-  size_t size() const { return active_cells_.size(); }
-  std::vector<SNDTCell *>::iterator begin() { return active_cells_.begin(); }
-  std::vector<SNDTCell *>::const_iterator begin() const { return active_cells_.begin(); }
-  std::vector<SNDTCell *>::iterator end() { return active_cells_.end(); }
-  std::vector<SNDTCell *>::const_iterator end() const { return active_cells_.end(); }
+  size_t size() const { return cells_.size(); }
+  std::vector<SNDTCell *>::iterator begin() { return cells_.begin(); }
+  std::vector<SNDTCell *>::const_iterator begin() const { return cells_.begin(); }
+  std::vector<SNDTCell *>::iterator end() { return cells_.end(); }
+  std::vector<SNDTCell *>::const_iterator end() const { return cells_.end(); }
 
  private:
   /**
@@ -110,6 +112,6 @@ class SNDTMap : public MapInterface {
    */
   virtual void Initialize() override;
 
-  std::vector<SNDTCell *> active_cells_;
+  std::vector<SNDTCell *> cells_;
   SNDTCell ***cellptrs_;
 };

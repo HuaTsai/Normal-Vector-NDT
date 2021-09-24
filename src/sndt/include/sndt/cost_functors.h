@@ -39,14 +39,22 @@ struct ICPCostFunctor {
     Eigen::Matrix<T, 2, 1> p2 = R * p.cast<T>() + t;
     Eigen::Matrix<T, 2, 1> q2 = q.cast<T>();
 
-    *e = (p2 - q2).norm();
+    // Note: (p2 - q2).norm() works, but with warning message (nan Jacobian)
+    e[0] = (p2 - q2)[0];
+    e[1] = (p2 - q2)[1];
     return true;
   }
 
   static ceres::CostFunction *Create(const Eigen::Vector2d &p,
                                      const Eigen::Vector2d &q) {
-    return new ceres::AutoDiffCostFunction<ICPCostFunctor, 1, 1, 1, 1>(
+    return new ceres::AutoDiffCostFunction<ICPCostFunctor, 2, 1, 1, 1>(
         new ICPCostFunctor(p, q));
+  }
+
+  static double Cost(const Eigen::Vector2d &p,
+                     const Eigen::Vector2d &q,
+                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
+    return (T * p - q).norm();
   }
 };
 
@@ -75,6 +83,13 @@ struct Pt2plICPCostFunctor {
                                      const Eigen::Vector2d &nq) {
     return new ceres::AutoDiffCostFunction<Pt2plICPCostFunctor, 1, 1, 1, 1>(
         new Pt2plICPCostFunctor(p, q, nq));
+  }
+  
+  static double Cost(const Eigen::Vector2d &p,
+                     const Eigen::Vector2d &q,
+                     const Eigen::Vector2d &nq,
+                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
+    return abs((T * p - q).dot(nq));
   }
 };
 
@@ -106,12 +121,20 @@ struct SICPCostFunctor {
     return new ceres::AutoDiffCostFunction<SICPCostFunctor, 1, 1, 1, 1>(
         new SICPCostFunctor(p, np, q, nq));
   }
+
+  static double Cost(const Eigen::Vector2d &p,
+                     const Eigen::Vector2d &q,
+                     const Eigen::Vector2d &np,
+                     const Eigen::Vector2d &nq,
+                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
+    return abs((T * p - q).dot(T.linear() * np + nq));
+  }
 };
 
-struct NDTP2DCostFunctor {
+struct P2DNDTCostFunctor {
   const Eigen::Vector2d p;
   const NDTCell *q;
-  NDTP2DCostFunctor(const Eigen::Vector2d &p_, const NDTCell *q_) : p(p_), q(q_) {}
+  P2DNDTCostFunctor(const Eigen::Vector2d &p_, const NDTCell *q_) : p(p_), q(q_) {}
   template <typename T>
   bool operator()(const T *const x, const T *const y, const T *const yaw,
                   T *e) const {
@@ -129,14 +152,22 @@ struct NDTP2DCostFunctor {
 
   static ceres::CostFunction *Create(const Eigen::Vector2d &p,
                                      const NDTCell *cellq) {
-    return new ceres::AutoDiffCostFunction<NDTP2DCostFunctor, 1, 1, 1, 1>(
-        new NDTP2DCostFunctor(p, cellq));
+    return new ceres::AutoDiffCostFunction<P2DNDTCostFunctor, 1, 1, 1, 1>(
+        new P2DNDTCostFunctor(p, cellq));
+  }
+  
+  static double Cost(const Eigen::Vector2d &p,
+                     const NDTCell *cellq,
+                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
+    Eigen::Vector2d pq = T * p - cellq->GetPointMean();
+    Eigen::Matrix2d cinv = cellq->GetPointCov().inverse();
+    return sqrt(pq.dot(cinv * pq));
   }
 };
 
-struct NDTD2DCostFunctor {
+struct D2DNDTCostFunctor {
   const NDTCell *p, *q;
-  NDTD2DCostFunctor(const NDTCell *p_, const NDTCell *q_) : p(p_), q(q_) {}
+  D2DNDTCostFunctor(const NDTCell *p_, const NDTCell *q_) : p(p_), q(q_) {}
   template <typename T>
   bool operator()(const T *const x, const T *const y, const T *const yaw,
                   T *e) const {
@@ -158,8 +189,17 @@ struct NDTD2DCostFunctor {
 
   static ceres::CostFunction *Create(const NDTCell *cellp,
                                      const NDTCell *cellq) {
-    return new ceres::AutoDiffCostFunction<NDTD2DCostFunctor, 1, 1, 1, 1>(
-        new NDTD2DCostFunctor(cellp, cellq));
+    return new ceres::AutoDiffCostFunction<D2DNDTCostFunctor, 1, 1, 1, 1>(
+        new D2DNDTCostFunctor(cellp, cellq));
+  }
+  
+  static double Cost(const NDTCell *cellp,
+                     const NDTCell *cellq,
+                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
+    auto R = T.linear();
+    auto pq = T * cellp->GetPointMean() - cellq->GetPointMean();
+    auto cinv = (R * cellp->GetPointCov() * R.transpose() + cellq->GetPointCov()).inverse();
+    return sqrt(pq.dot(cinv * pq));
   }
 };
 
@@ -197,6 +237,17 @@ struct SNDTCostFunctor {
                                      const SNDTCell *cellq) {
     return new ceres::AutoDiffCostFunction<SNDTCostFunctor, 1, 1, 1, 1>(
         new SNDTCostFunctor(cellp, cellq));
+  }
+
+  static double Cost(const SNDTCell *cellp,
+                     const SNDTCell *cellq,
+                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
+    auto R = T.linear();
+    auto m1 = T * cellp->GetPointMean() - cellq->GetPointMean();
+    auto m2 = R * cellp->GetNormalMean() + cellq->GetNormalMean();
+    auto c1 = R * cellp->GetPointCov() * R.transpose() + cellq->GetPointCov();
+    auto c2 = R * cellp->GetNormalCov() * R.transpose() + cellq->GetNormalCov();
+    return m1.dot(m2) / sqrt(m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace());
   }
 };
 
@@ -244,6 +295,20 @@ struct SNDTCostFunctor2 {
     return new ceres::AutoDiffCostFunction<SNDTCostFunctor2, 1, 1, 1, 1>(
         new SNDTCostFunctor2(up, cp, unp, cnp, uq, cq, unq, cnq));
   }
+
+  static double Cost(
+      const Eigen::Vector2d &up, const Eigen::Matrix2d &cp,
+      const Eigen::Vector2d &unp, const Eigen::Matrix2d &cnp,
+      const Eigen::Vector2d &uq, const Eigen::Matrix2d &cq,
+      const Eigen::Vector2d &unq, const Eigen::Matrix2d &cnq,
+      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
+    auto R = T.linear();
+    auto m1 = T * up - uq;
+    auto m2 = R * unp + unq;
+    auto c1 = R * cp * R.transpose() + cq;
+    auto c2 = R * cnp * R.transpose() + cnq;
+    return m1.dot(m2) / sqrt(m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace());
+  }
 };
 
 struct SNDTCostFunctor3 {
@@ -284,5 +349,17 @@ struct SNDTCostFunctor3 {
       const Eigen::Matrix2d &cq, const Eigen::Vector2d &unq) {
     return new ceres::AutoDiffCostFunction<SNDTCostFunctor3, 1, 1, 1, 1>(
         new SNDTCostFunctor3(up, cp, unp, uq, cq, unq));
+  }
+  
+  static double Cost(
+      const Eigen::Vector2d &up, const Eigen::Matrix2d &cp,
+      const Eigen::Vector2d &unp, const Eigen::Vector2d &uq,
+      const Eigen::Matrix2d &cq, const Eigen::Vector2d &unq,
+      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
+    auto R = T.linear();
+    auto m1 = T * up - uq;
+    auto m2 = R * unp + unq;
+    auto c1 = R * cp * R.transpose() + cq;
+    return m1.dot(m2) / sqrt(m2.dot(c1 * m2));
   }
 };

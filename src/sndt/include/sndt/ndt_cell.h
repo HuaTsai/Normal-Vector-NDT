@@ -17,12 +17,12 @@ class NDTCell : public CellInterface {
    * @brief Cell types
    */
   enum CellType {
-    kNotInit,   /**< Covariance is not computed yet */
+    kNoInit,    /**< Covariance is not computed yet */
+    kNoPoints,  /**< Covariance is not computed because of no points */
     kRegular,   /**< Covariance is computed well */
     kRescale,   /**< Covariance is rescaled */
     kAssign,    /**< Covariance is assigned */
-    kNoPoints,  /**< Covariance is not computed because no points */
-    kInvalid    /**< Covariance has negative eigenvalues */
+    kInvalid    /**< Covariance is invalid */
   };
 
   /**
@@ -58,4 +58,5 @@ class NDTCell : public CellInterface {
  private:
   CellType celltype_;     /**< Cell type */
   double rescale_ratio_;  /**< Rescale ratio */
+  double tolerance_;      /**< Comparison tolerance */
 };
