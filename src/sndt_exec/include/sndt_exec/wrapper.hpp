@@ -1,31 +1,35 @@
 /**
  * @file wrapper.hpp
  * @author HuaTsai (huatsai.eed07g@nctu.edu.tw)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2021-07-30
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 #pragma once
-#include <sndt/pcl_utils.h>
-#include <normal2d/normal2d.h>
-#include <sndt/matcher.h>
 #include <common/EgoPointClouds.h>
 #include <common/common.h>
 #include <nav_msgs/Path.h>
+#include <normal2d/normal2d.h>
+#include <sndt/matcher.h>
+#include <sndt/pcl_utils.h>
 
 // start, ..., end, end+1
 // <<------- T -------->>
 std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> Augment(
-    const std::vector<common::EgoPointClouds> &vepcs, int start, int end,
-    Eigen::Affine2d &T, std::vector<Eigen::Affine2d> &allT) {
+    const std::vector<common::EgoPointClouds> &vepcs,
+    int start,
+    int end,
+    Eigen::Affine2d &T,
+    std::vector<Eigen::Affine2d> &allT) {
   allT.clear();
   std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> ret;
   double dx = 0, dy = 0, dth = 0;
   for (int i = start; i <= end; ++i) {
-    Eigen::Affine2d T0i = Eigen::Translation2d(dx, dy) * Eigen::Rotation2Dd(dth);
+    Eigen::Affine2d T0i =
+        Eigen::Translation2d(dx, dy) * Eigen::Rotation2Dd(dth);
     allT.push_back(T0i);
     for (const auto &pc : vepcs[i].pcs) {
       std::vector<Eigen::Vector2d> pts;
@@ -50,12 +54,16 @@ std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> Augment(
 // start, ..., end, end+1
 // <<------- T -------->>
 std::vector<Eigen::Vector2d> AugmentPoints(
-    const std::vector<common::EgoPointClouds> &vepcs, int start, int end,
-    Eigen::Affine2d &T, std::vector<Eigen::Affine2d> &allT) {
+    const std::vector<common::EgoPointClouds> &vepcs,
+    int start,
+    int end,
+    Eigen::Affine2d &T,
+    std::vector<Eigen::Affine2d> &allT) {
   std::vector<Eigen::Vector2d> ret;
   double dx = 0, dy = 0, dth = 0;
   for (int i = start; i <= end; ++i) {
-    Eigen::Affine2d T0i = Eigen::Translation2d(dx, dy) * Eigen::Rotation2Dd(dth);
+    Eigen::Affine2d T0i =
+        Eigen::Translation2d(dx, dy) * Eigen::Rotation2Dd(dth);
     allT.push_back(T0i);
     for (const auto &pc : vepcs[i].pcs) {
       Eigen::Affine3d aff3;
@@ -79,7 +87,8 @@ std::vector<Eigen::Vector2d> AugmentPoints(
 }
 
 NDTMap MakeNDTMap(
-    const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> &data,
+    const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>>
+        &data,
     NDTParameters &params) {
   auto t1 = GetTime();
   double cell_size = params.cell_size;
@@ -98,7 +107,8 @@ NDTMap MakeNDTMap(
       Eigen::Matrix2d J = Eigen::Rotation2Dd(theta).matrix();
       Eigen::Matrix2d S = Eigen::Vector2d(rvar, r2 * tvar).asDiagonal();
       points.push_back(T * pt);
-      point_covs.push_back(T.rotation() * J * S * J.transpose() * T.rotation().transpose());
+      point_covs.push_back(T.rotation() * J * S * J.transpose() *
+                           T.rotation().transpose());
     }
   }
   NDTMap ret(cell_size);
@@ -109,7 +119,8 @@ NDTMap MakeNDTMap(
 }
 
 SNDTMap MakeSNDTMap(
-    const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> &data,
+    const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>>
+        &data,
     SNDTParameters &params) {
   auto t1 = GetTime();
   double cell_size = params.cell_size;
@@ -129,7 +140,8 @@ SNDTMap MakeSNDTMap(
       Eigen::Matrix2d J = Eigen::Rotation2Dd(theta).matrix();
       Eigen::Matrix2d S = Eigen::Vector2d(rvar, r2 * tvar).asDiagonal();
       points.push_back(T * pt);
-      point_covs.push_back(T.rotation() * J * S * J.transpose() * T.rotation().transpose());
+      point_covs.push_back(T.rotation() * J * S * J.transpose() *
+                           T.rotation().transpose());
     }
   }
   auto t2 = GetTime();
@@ -144,7 +156,8 @@ SNDTMap MakeSNDTMap(
 }
 
 std::vector<Eigen::Vector2d> MakePoints(
-    const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>> &data,
+    const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>>
+        &data,
     CommonParameters &params) {
   auto t1 = GetTime();
   std::vector<Eigen::Vector2d> ret;
@@ -152,8 +165,7 @@ std::vector<Eigen::Vector2d> MakePoints(
     auto pts = elem.first;
     auto aff = elem.second;
     for (size_t i = 0; i < pts.size(); ++i)
-      if (pts[i].allFinite())
-        ret.push_back(aff * pts[i]);
+      if (pts[i].allFinite()) ret.push_back(aff * pts[i]);
   }
   auto t2 = GetTime();
   params._usedtime.others += GetDiffTime(t1, t2);
@@ -197,7 +209,7 @@ std::vector<Eigen::Vector2d> GenerateGaussianSamples(
   std::vector<Eigen::Vector2d> ret;
   std::mt19937 rng(std::random_device{}());
   std::normal_distribution<> dis;
-  auto gau = [&rng, &dis](){ return dis(rng); };
+  auto gau = [&rng, &dis]() { return dis(rng); };
   Eigen::Vector2d evals;
   Eigen::Matrix2d evecs;
   ComputeEvalEvec(cov, evals, evecs);

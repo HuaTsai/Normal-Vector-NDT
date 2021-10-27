@@ -1,14 +1,15 @@
-#include <ros/ros.h>
-#include <sndt/matcher.h>
-#include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
-#include <pcl_ros/point_cloud.h>
+#include <pcl/filters/statistical_outlier_removal.h>
 #include <pcl/filters/voxel_grid.h>
+#include <pcl_ros/point_cloud.h>
+#include <ros/ros.h>
 #include <rosbag/bag.h>
-#include <tqdm/tqdm.h>
+#include <sndt/matcher.h>
 #include <sndt/visuals.h>
 #include <std_msgs/Int32.h>
-#include <pcl/filters/statistical_outlier_removal.h>
+#include <tqdm/tqdm.h>
+
+#include <boost/program_options.hpp>
+#include <sndt_exec/wrapper.hpp>
 
 using namespace std;
 using namespace Eigen;
@@ -33,18 +34,17 @@ vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg, double voxel) {
 }
 
 int main(int argc, char **argv) {
-  Affine3d aff3 =
-      Translation3d(0.943713, 0.000000, 1.840230) *
-      Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
+  Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
+                  Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
   aff3 = Conserve2DFromAffine3d(aff3);
-  Affine2d aff2 =
-      Translation2d(aff3.translation()(0), aff3.translation()(1)) *
-      Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
+  Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
+                  Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
   int n;
   double cell_size, huber, voxel, r, radius;
   string data;
   po::options_description desc("Allowed options");
+  // clang-format off
   desc.add_options()
       ("help,h", "Produce help message")
       ("data,d", po::value<string>(&data)->required(), "Data (logxx)")
@@ -53,6 +53,7 @@ int main(int argc, char **argv) {
       ("radius,a", po::value<double>(&radius)->default_value(1.5), "radius")
       ("n,n", po::value<int>(&n)->default_value(0), "n")
       ("r,r", po::value<double>(&r)->default_value(15), "r");
+  // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   if (vm.count("help")) {
@@ -65,7 +66,8 @@ int main(int argc, char **argv) {
   SerializationInput(JoinPath(GetDataPath(data), "lidar.ser"), vpc);
 
   auto tgt = PCMsgTo2D(vpc[n], voxel);
-  transform(tgt.begin(), tgt.end(), tgt.begin(), [&aff2](auto p) { return aff2 * p; });
+  transform(tgt.begin(), tgt.end(), tgt.begin(),
+            [&aff2](auto p) { return aff2 * p; });
 
   vector<vector<int>> ss(6);
   tqdm bar;
@@ -79,9 +81,12 @@ int main(int argc, char **argv) {
       // bar.progress(i, affs.size());
       auto aff = affs[i];
       std::vector<Eigen::Vector2d> src(tgt.size());
-      transform(tgt.begin(), tgt.end(), src.begin(), [&aff](auto p) { return aff * p; });
-      vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, Eigen::Affine2d::Identity()}};
-      vector<pair<vector<Vector2d>, Affine2d>> datas{{src, Eigen::Affine2d::Identity()}};
+      transform(tgt.begin(), tgt.end(), src.begin(),
+                [&aff](auto p) { return aff * p; });
+      vector<pair<vector<Vector2d>, Affine2d>> datat{
+          {tgt, Eigen::Affine2d::Identity()}};
+      vector<pair<vector<Vector2d>, Affine2d>> datas{
+          {src, Eigen::Affine2d::Identity()}};
 
       ICPParameters params1;
       auto tgt1 = MakePoints(datat, params1);
@@ -131,11 +136,19 @@ int main(int argc, char **argv) {
     }
   }
   bar.finish();
-  ::printf("05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25\n");
-  copy(ss[0].begin(), ss[0].end(), ostream_iterator<int>(cout, ", "));  cout << endl;
-  copy(ss[1].begin(), ss[1].end(), ostream_iterator<int>(cout, ", "));  cout << endl;
-  copy(ss[2].begin(), ss[2].end(), ostream_iterator<int>(cout, ", "));  cout << endl;
-  copy(ss[3].begin(), ss[3].end(), ostream_iterator<int>(cout, ", "));  cout << endl;
-  copy(ss[4].begin(), ss[4].end(), ostream_iterator<int>(cout, ", "));  cout << endl;
-  copy(ss[5].begin(), ss[5].end(), ostream_iterator<int>(cout, ", "));  cout << endl;
+  ::printf(
+      "05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, "
+      "23, 24, 25\n");
+  copy(ss[0].begin(), ss[0].end(), ostream_iterator<int>(cout, ", "));
+  cout << endl;
+  copy(ss[1].begin(), ss[1].end(), ostream_iterator<int>(cout, ", "));
+  cout << endl;
+  copy(ss[2].begin(), ss[2].end(), ostream_iterator<int>(cout, ", "));
+  cout << endl;
+  copy(ss[3].begin(), ss[3].end(), ostream_iterator<int>(cout, ", "));
+  cout << endl;
+  copy(ss[4].begin(), ss[4].end(), ostream_iterator<int>(cout, ", "));
+  cout << endl;
+  copy(ss[5].begin(), ss[5].end(), ostream_iterator<int>(cout, ", "));
+  cout << endl;
 }

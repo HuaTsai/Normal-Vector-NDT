@@ -4,14 +4,14 @@
  * @brief Declaration of Matching Algorithms
  * @version 0.1
  * @date 2021-07-29
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 #pragma once
+#include <ceres/types.h>
 #include <sndt/ndt_map.h>
 #include <sndt/sndt_map.h>
-#include <ceres/types.h>
 
 enum class Converge {
   kNotConverge,
@@ -22,9 +22,7 @@ enum class Converge {
 };
 
 struct UsedTime {
-  UsedTime() {
-    Initialize();
-  }
+  UsedTime() { Initialize(); }
   void Initialize() { normal = ndt = build = optimize = others = 0; }
   int total() { return normal + ndt + build + optimize + others; }
   int normal;
@@ -75,9 +73,7 @@ struct CommonParameters {
 };
 
 struct ICPParameters : CommonParameters {
-  ICPParameters() {
-    method = kICP;
-  }
+  ICPParameters() { method = kICP; }
 };
 
 struct Pt2plICPParameters : CommonParameters {
@@ -105,8 +101,8 @@ struct NDTParameters : CommonParameters {
     t_variance = 0.0001;
   }
   double cell_size;
-  double r_variance;  /**< radius variance, i.e., +-r -> (r / 3)^2 */
-  double t_variance;  /**< angle variance, i.e., +-t -> (t / 3)^2 */
+  double r_variance; /**< radius variance, i.e., +-r -> (r / 3)^2 */
+  double t_variance; /**< angle variance, i.e., +-t -> (t / 3)^2 */
 };
 
 struct P2DNDTParameters : NDTParameters {
@@ -152,26 +148,32 @@ Eigen::Affine2d SICPMatch(
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 Eigen::Affine2d P2DNDTMatch(
-    const NDTMap &target_map, const std::vector<Eigen::Vector2d> &source_points,
+    const NDTMap &target_map,
+    const std::vector<Eigen::Vector2d> &source_points,
     P2DNDTParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 Eigen::Affine2d D2DNDTMatch(
-    const NDTMap &target_map, const NDTMap &source_map,
+    const NDTMap &target_map,
+    const NDTMap &source_map,
     D2DNDTParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 Eigen::Affine2d SNDTMatch(
-    const SNDTMap &target_map, const SNDTMap &source_map,
+    const SNDTMap &target_map,
+    const SNDTMap &source_map,
     SNDTParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 Eigen::Affine2d SNDTMatch2(
-    const NDTMap &target_map, const NDTMap &source_map,
+    const NDTMap &target_map,
+    const NDTMap &source_map,
     D2DNDTParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 Eigen::Affine2d SNDTCellMatch(
-    const SNDTCell *target_cell, const SNDTCell *source_cell,
+    const SNDTCell *target_cell,
+    const SNDTCell *source_cell,
     SNDTParameters &params,
-    const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity(), int method = 0);
+    const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity(),
+    int method = 0);

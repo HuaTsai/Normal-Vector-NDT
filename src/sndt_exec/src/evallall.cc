@@ -1,13 +1,14 @@
+#include <pcl/filters/voxel_grid.h>
+#include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
+#include <rosbag/bag.h>
+#include <sensor_msgs/CompressedImage.h>
 #include <sndt/matcher.h>
 #include <sndt/visuals.h>
-#include <sensor_msgs/CompressedImage.h>
+#include <tqdm/tqdm.h>
+
 #include <boost/program_options.hpp>
 #include <sndt_exec/wrapper.hpp>
-#include <pcl_ros/point_cloud.h>
-#include <pcl/filters/voxel_grid.h>
-#include <rosbag/bag.h>
-#include <tqdm/tqdm.h>
 
 // #define LIDAR
 
@@ -24,7 +25,8 @@ double Avg(const T &c) {
 
 template <typename T>
 void PrintValues(const T &coll) {
-  copy(coll.begin(), coll.end(), ostream_iterator<typename T::value_type>(cout, ", "));
+  copy(coll.begin(), coll.end(),
+       ostream_iterator<typename T::value_type>(cout, ", "));
   cout << endl;
 }
 
@@ -57,13 +59,11 @@ Affine2d GetBenchMark(const ros::Time &t1, const ros::Time &t2) {
 
 int main(int argc, char **argv) {
 #ifdef LIDAR
-  Affine3d aff3 =
-      Translation3d(0.943713, 0.000000, 1.840230) *
-      Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
+  Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
+                  Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
   aff3 = Conserve2DFromAffine3d(aff3);
-  Affine2d aff2 =
-      Translation2d(aff3.translation()(0), aff3.translation()(1)) *
-      Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
+  Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
+                  Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 #endif
 
   int n;
@@ -71,6 +71,7 @@ int main(int argc, char **argv) {
   double cell_size, radius, huber, voxel;
   string data;
   po::options_description desc("Allowed options");
+  // clang-format off
   desc.add_options()
       ("help,h", "Produce help message")
       ("data,d", po::value<string>(&data)->required(), "Data (logxx)")
@@ -80,6 +81,7 @@ int main(int argc, char **argv) {
       ("voxel,v", po::value<double>(&voxel)->default_value(0), "Downsample voxel")
       ("bar,b", po::value<bool>(&usebar)->default_value(false)->implicit_value(true), "Show bar")
       ("n,n", po::value<int>(&n)->default_value(-1), "n");
+  // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   if (vm.count("help")) {
@@ -109,8 +111,7 @@ int main(int argc, char **argv) {
   vector<double> ttl1, ttl2, ttl3, ttl4, ttl5, ttl6;
   vector<double> terr1, terr2, terr3, terr4, terr5, terr6;
   vector<double> rerr1, rerr2, rerr3, rerr4, rerr5, rerr6;
-  if (n == -1)
-    n = vpc.size() - 1;
+  if (n == -1) n = vpc.size() - 1;
 
   tqdm bar;
 #ifdef LIDAR
@@ -252,52 +253,120 @@ int main(int argc, char **argv) {
   if (usebar) bar.finish();
 
   if (usebar) {
-    ::printf(" ICP: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-        Avg(ndt1), Avg(nm1), Avg(bud1), Avg(opt1), Avg(oth1), Avg(ttl1), Avg(terr1), Avg(rerr1), Avg(it1), Avg(iit1));
+    ::printf(
+        " ICP: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: "
+        "%.6f, it: %.2f, iit: %.2f\n",
+        Avg(ndt1), Avg(nm1), Avg(bud1), Avg(opt1), Avg(oth1), Avg(ttl1),
+        Avg(terr1), Avg(rerr1), Avg(it1), Avg(iit1));
 
-    ::printf("NICP: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-        Avg(ndt2), Avg(nm2), Avg(bud2), Avg(opt2), Avg(oth2), Avg(ttl2), Avg(terr2), Avg(rerr2), Avg(it2), Avg(iit2));
+    ::printf(
+        "NICP: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: "
+        "%.6f, it: %.2f, iit: %.2f\n",
+        Avg(ndt2), Avg(nm2), Avg(bud2), Avg(opt2), Avg(oth2), Avg(ttl2),
+        Avg(terr2), Avg(rerr2), Avg(it2), Avg(iit2));
 
-    ::printf("SICP: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-        Avg(ndt3), Avg(nm3), Avg(bud3), Avg(opt3), Avg(oth3), Avg(ttl3), Avg(terr3), Avg(rerr3), Avg(it3), Avg(iit3));
+    ::printf(
+        "SICP: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: "
+        "%.6f, it: %.2f, iit: %.2f\n",
+        Avg(ndt3), Avg(nm3), Avg(bud3), Avg(opt3), Avg(oth3), Avg(ttl3),
+        Avg(terr3), Avg(rerr3), Avg(it3), Avg(iit3));
 
-    ::printf("PNDT: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-        Avg(ndt4), Avg(nm4), Avg(bud4), Avg(opt4), Avg(oth4), Avg(ttl4), Avg(terr4), Avg(rerr4), Avg(it4), Avg(iit4));
+    ::printf(
+        "PNDT: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: "
+        "%.6f, it: %.2f, iit: %.2f\n",
+        Avg(ndt4), Avg(nm4), Avg(bud4), Avg(opt4), Avg(oth4), Avg(ttl4),
+        Avg(terr4), Avg(rerr4), Avg(it4), Avg(iit4));
 
-    ::printf("DNDT: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-        Avg(ndt5), Avg(nm5), Avg(bud5), Avg(opt5), Avg(oth5), Avg(ttl5), Avg(terr5), Avg(rerr5), Avg(it5), Avg(iit5));
+    ::printf(
+        "DNDT: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: "
+        "%.6f, it: %.2f, iit: %.2f\n",
+        Avg(ndt5), Avg(nm5), Avg(bud5), Avg(opt5), Avg(oth5), Avg(ttl5),
+        Avg(terr5), Avg(rerr5), Avg(it5), Avg(iit5));
 
-    ::printf("SNDT: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-        Avg(ndt6), Avg(nm6), Avg(bud6), Avg(opt6), Avg(oth6), Avg(ttl6), Avg(terr6), Avg(rerr6), Avg(it6), Avg(iit6));
+    ::printf(
+        "SNDT: [%.2f, %.2f, %5.2f, %5.2f, %.2f], %5.2f, terr: %.6f, rerr: "
+        "%.6f, it: %.2f, iit: %.2f\n",
+        Avg(ndt6), Avg(nm6), Avg(bud6), Avg(opt6), Avg(oth6), Avg(ttl6),
+        Avg(terr6), Avg(rerr6), Avg(it6), Avg(iit6));
 
-    // ::printf("NICP: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-    //     Avg(nm2), Avg(ndt2), Avg(bud2) + Avg(opt2), Avg(ttl2), Avg(terr2), Avg(rerr2), Avg(it2), Avg(iit2));
+    // ::printf("NICP: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it:
+    // %.2f, iit: %.2f\n",
+    //     Avg(nm2), Avg(ndt2), Avg(bud2) + Avg(opt2), Avg(ttl2), Avg(terr2),
+    //     Avg(rerr2), Avg(it2), Avg(iit2));
 
-    // ::printf("SICP: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-    //     Avg(nm3), Avg(ndt3), Avg(bud3) + Avg(opt3), Avg(ttl3), Avg(terr3), Avg(rerr3), Avg(it3), Avg(iit3));
+    // ::printf("SICP: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it:
+    // %.2f, iit: %.2f\n",
+    //     Avg(nm3), Avg(ndt3), Avg(bud3) + Avg(opt3), Avg(ttl3), Avg(terr3),
+    //     Avg(rerr3), Avg(it3), Avg(iit3));
 
-    // ::printf("DNDT: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-    //     Avg(nm5), Avg(ndt5), Avg(bud5) + Avg(opt5), Avg(ttl5), Avg(terr5), Avg(rerr5), Avg(it5), Avg(iit5));
+    // ::printf("DNDT: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it:
+    // %.2f, iit: %.2f\n",
+    //     Avg(nm5), Avg(ndt5), Avg(bud5) + Avg(opt5), Avg(ttl5), Avg(terr5),
+    //     Avg(rerr5), Avg(it5), Avg(iit5));
 
-    // ::printf("SNDT: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it: %.2f, iit: %.2f\n",
-    //     Avg(nm6), Avg(ndt6), Avg(bud6) + Avg(opt6), Avg(ttl6), Avg(terr6), Avg(rerr6), Avg(it6), Avg(iit6));
+    // ::printf("SNDT: [%.2f, %.2f, %5.2f], %5.2f, terr: %.6f, rerr: %.6f, it:
+    // %.2f, iit: %.2f\n",
+    //     Avg(nm6), Avg(ndt6), Avg(bud6) + Avg(opt6), Avg(ttl6), Avg(terr6),
+    //     Avg(rerr6), Avg(it6), Avg(iit6));
   } else {
-    PrintValues(ndt1); PrintValues(nm1); PrintValues(bud1); PrintValues(opt1); PrintValues(ttl1);
-    PrintValues(terr1); PrintValues(rerr1); PrintValues(it1); PrintValues(iit1);
+    PrintValues(ndt1);
+    PrintValues(nm1);
+    PrintValues(bud1);
+    PrintValues(opt1);
+    PrintValues(ttl1);
+    PrintValues(terr1);
+    PrintValues(rerr1);
+    PrintValues(it1);
+    PrintValues(iit1);
 
-    PrintValues(ndt2); PrintValues(nm2); PrintValues(bud2); PrintValues(opt2); PrintValues(ttl2);
-    PrintValues(terr2); PrintValues(rerr2); PrintValues(it2); PrintValues(iit2);
+    PrintValues(ndt2);
+    PrintValues(nm2);
+    PrintValues(bud2);
+    PrintValues(opt2);
+    PrintValues(ttl2);
+    PrintValues(terr2);
+    PrintValues(rerr2);
+    PrintValues(it2);
+    PrintValues(iit2);
 
-    PrintValues(ndt3); PrintValues(nm3); PrintValues(bud3); PrintValues(opt3); PrintValues(ttl3);
-    PrintValues(terr3); PrintValues(rerr3); PrintValues(it3); PrintValues(iit3);
+    PrintValues(ndt3);
+    PrintValues(nm3);
+    PrintValues(bud3);
+    PrintValues(opt3);
+    PrintValues(ttl3);
+    PrintValues(terr3);
+    PrintValues(rerr3);
+    PrintValues(it3);
+    PrintValues(iit3);
 
-    PrintValues(ndt4); PrintValues(nm4); PrintValues(bud4); PrintValues(opt4); PrintValues(ttl4);
-    PrintValues(terr4); PrintValues(rerr4); PrintValues(it4); PrintValues(iit4);
+    PrintValues(ndt4);
+    PrintValues(nm4);
+    PrintValues(bud4);
+    PrintValues(opt4);
+    PrintValues(ttl4);
+    PrintValues(terr4);
+    PrintValues(rerr4);
+    PrintValues(it4);
+    PrintValues(iit4);
 
-    PrintValues(ndt5); PrintValues(nm5); PrintValues(bud5); PrintValues(opt5); PrintValues(ttl5);
-    PrintValues(terr5); PrintValues(rerr5); PrintValues(it5); PrintValues(iit5);
+    PrintValues(ndt5);
+    PrintValues(nm5);
+    PrintValues(bud5);
+    PrintValues(opt5);
+    PrintValues(ttl5);
+    PrintValues(terr5);
+    PrintValues(rerr5);
+    PrintValues(it5);
+    PrintValues(iit5);
 
-    PrintValues(ndt6); PrintValues(nm6); PrintValues(bud6); PrintValues(opt6); PrintValues(ttl6);
-    PrintValues(terr6); PrintValues(rerr6); PrintValues(it6); PrintValues(iit6);
+    PrintValues(ndt6);
+    PrintValues(nm6);
+    PrintValues(bud6);
+    PrintValues(opt6);
+    PrintValues(ttl6);
+    PrintValues(terr6);
+    PrintValues(rerr6);
+    PrintValues(it6);
+    PrintValues(iit6);
   }
 }

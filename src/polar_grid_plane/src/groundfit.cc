@@ -16,6 +16,7 @@
 // For disable PCL complile lib, to use PointXYZIR
 #define PCL_NO_PRECOMPILE
 
+#include <common/common.h>
 #include <geometry_msgs/Point.h>
 #include <geometry_msgs/PointStamped.h>
 #include <omp.h>
@@ -25,9 +26,9 @@
 #include <pcl_ros/point_cloud.h>
 #include <ros/package.h>
 #include <ros/ros.h>
-#include <sensor_msgs/PointCloud2.h>
 #include <rosbag/view.h>
-#include <common/common.h>
+#include <sensor_msgs/PointCloud2.h>
+
 #include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
@@ -49,13 +50,15 @@ struct PointXYZIRL {
 #define SLRPointXYZIRL scan_line_run::PointXYZIRL
 #define RUN pcl::PointCloud<SLRPointXYZIRL>
 // Register custom point struct according to PCL
-POINT_CLOUD_REGISTER_POINT_STRUCT(scan_line_run::PointXYZIRL,
-                                  (float, x, x)
-                                  (float, y, y)
-                                  (float, z, z)
-                                  (float, intensity, intensity)
-                                  (uint16_t, ring, ring)
-                                  (uint16_t, label, label))
+POINT_CLOUD_REGISTER_POINT_STRUCT(
+    scan_line_run::PointXYZIRL,
+    (float, x, x)(float, y, y)(float, z, z)(float,
+                                            intensity,
+                                            intensity)(uint16_t,
+                                                       ring,
+                                                       ring)(uint16_t,
+                                                             label,
+                                                             label))
 
 // using eigen lib
 #include <Eigen/Dense>
@@ -137,7 +140,8 @@ class GroundPlaneFit {
   void extract_initial_seeds(const pcl::PointCloud<pcl::PointXYZL>& p_sorted);
   void remove_ego_points(
       const pcl::PointCloud<pcl::PointXYZI>::Ptr in_cloud_ptr,
-      pcl::PointCloud<pcl::PointXYZI>&, pcl::PointCloud<pcl::PointXYZI>&);
+      pcl::PointCloud<pcl::PointXYZI>&,
+      pcl::PointCloud<pcl::PointXYZI>&);
 
   // Model parameter for ground plane fittings
   // The ground plane model is: ax+by+cz+d=0
@@ -461,19 +465,19 @@ int main(int argc, char** argv) {
   }
 
   std::cout << "sub_topic: " << topic << std::endl;
-  std::cout << "horizontal: " << hori_seg << " angle division: "
-            << 2 * M_PI / hori_seg * 180 / M_PI << endl;
-  std::cout << "vertical: " << vert_seg << "  max radial distance: "
-            << vert_seg * vert_dist << endl;
+  std::cout << "horizontal: " << hori_seg
+            << " angle division: " << 2 * M_PI / hori_seg * 180 / M_PI << endl;
+  std::cout << "vertical: " << vert_seg
+            << "  max radial distance: " << vert_seg * vert_dist << endl;
 
   vector<sensor_msgs::PointCloud2ConstPtr> pcs;
   for (auto path : GetBagsPath(data)) {
     rosbag::Bag bag;
     bag.open(path);
     for (rosbag::MessageInstance const m : rosbag::View(bag)) {
-      sensor_msgs::PointCloud2ConstPtr msg = m.instantiate<sensor_msgs::PointCloud2>();
-      if (msg && m.getTopic() == "nuscenes_lidar")
-        pcs.push_back(msg);
+      sensor_msgs::PointCloud2ConstPtr msg =
+          m.instantiate<sensor_msgs::PointCloud2>();
+      if (msg && m.getTopic() == "nuscenes_lidar") pcs.push_back(msg);
     }
     bag.close();
   }

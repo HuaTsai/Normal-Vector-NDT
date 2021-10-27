@@ -4,14 +4,14 @@
  * @brief Declaration of Visual Utilities
  * @version 0.1
  * @date 2021-07-30
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 #pragma once
-#include <visualization_msgs/MarkerArray.h>
 #include <sndt/ndt_map.h>
 #include <sndt/sndt_map.h>
+#include <visualization_msgs/MarkerArray.h>
 
 using visualization_msgs::Marker;
 using visualization_msgs::MarkerArray;
@@ -30,7 +30,7 @@ enum class Color {
 
 /**
  * @brief Factory method for making @c std_msgs::ColorRGBA
- * 
+ *
  * @param color Input color defined in enum @c Color
  * @param alpha Alpha, 0 represents transparent while 1 represents opaque
  * @see Color
@@ -39,7 +39,7 @@ std_msgs::ColorRGBA MakeColorRGBA(const Color &color, double alpha = 1.);
 
 /**
  * @brief Given an ellipse and an external point, find the tangent points
- * 
+ *
  * @param ellipse Input ellipse
  * @param point Input external point
  * @return Two tangent points
@@ -49,7 +49,7 @@ std::vector<Eigen::Vector2d> FindTangentPoints(const Marker &ellipse,
 
 /**
  * @brief Join markers by assigning different id
- * 
+ *
  * @param markers Input markers
  * @return Joined markerarray
  */
@@ -57,7 +57,7 @@ MarkerArray JoinMarkers(const std::vector<Marker> &markers);
 
 /**
  * @brief Join markerarrays by assigning different id
- * 
+ *
  * @param markerarrays Input markerarrays
  * @return Joined markerarray
  */
@@ -65,7 +65,7 @@ MarkerArray JoinMarkerArrays(const std::vector<MarkerArray> &markerarrays);
 
 /**
  * @brief Join markerarrays and markers by assigning different id
- * 
+ *
  * @param markerarrays Input markerarrays
  * @param markers Input markers
  * @return Joined markerarray
@@ -76,7 +76,7 @@ MarkerArray JoinMarkerArraysAndMarkers(
 
 /**
  * @brief Marker of the cell boundary
- * 
+ *
  * @param center Cell center
  * @param size Cell size
  * @param skew_rad Cell skew radian (default 0)
@@ -84,37 +84,43 @@ MarkerArray JoinMarkerArraysAndMarkers(
  * @param alpha Alpha (default 1.0)
  * @return Marker of type @c LINE_LIST of the cell boundary
  */
-Marker MarkerOfBoundary(const Eigen::Vector2d &center, double size,
-                        double skew_rad = 0, const Color &color = Color::kBlack,
+Marker MarkerOfBoundary(const Eigen::Vector2d &center,
+                        double size,
+                        double skew_rad = 0,
+                        const Color &color = Color::kBlack,
                         double alpha = 1.0);
 
 /**
  * @brief Marker of the cell covariance
- * 
+ *
  * @param mean Ellipse center
  * @param covariance Ellipse axes and length
  * @param color Ellipse color (default kLime)
  * @param alpha Alpha (default 0.6)
  * @return Marker of type @c SPHERE the cell covariance
  */
-Marker MarkerOfEllipse(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covariance,
-                       const Color &color = Color::kLime, double alpha = 0.6);
+Marker MarkerOfEllipse(const Eigen::Vector2d &mean,
+                       const Eigen::Matrix2d &covariance,
+                       const Color &color = Color::kLime,
+                       double alpha = 0.6);
 
 /**
  * @brief Marker of the circle
- * 
+ *
  * @param center Circle center
  * @param size Circle size
  * @param color Circle color (default kLime)
  * @param alpha Alpha (default 0.6)
  * @return Marker of type @c SPHERE of the circle
  */
-Marker MarkerOfCircle(const Eigen::Vector2d &center, double size,
-                      const Color &color = Color::kLime, double alpha = 0.6);
+Marker MarkerOfCircle(const Eigen::Vector2d &center,
+                      double size,
+                      const Color &color = Color::kLime,
+                      double alpha = 0.6);
 
 /**
  * @brief Marker of the lines
- * 
+ *
  * @param points Points that form lines
  * @param color Lines color
  * @param alpha Alpha (default 1.0)
@@ -123,11 +129,12 @@ Marker MarkerOfCircle(const Eigen::Vector2d &center, double size,
  * @details Points 0-1 forms line 0, points 2-3 forms line 1, etc.
  */
 Marker MarkerOfLines(const std::vector<Eigen::Vector2d> &points,
-                     const Color &color = Color::kLime, double alpha = 1.0);
+                     const Color &color = Color::kLime,
+                     double alpha = 1.0);
 
 /**
  * @brief Marker of the lines by middle points
- * 
+ *
  * @param points Points that form lines
  * @param color Lines color (default kLime)
  * @param alpha Alpha (default 1.0)
@@ -140,43 +147,49 @@ Marker MarkerOfLinesByMiddlePoints(const std::vector<Eigen::Vector2d> &points,
 
 /**
  * @brief Marker of the points
- * 
+ *
  * @param points Input points
  * @param size Input point size
  * @param color Points color (default kLime)
  * @param alpha Alpha (default 1.0)
  * @return Marker of type @c SPHERE_LIST of the points
  */
-Marker MarkerOfPoints(const std::vector<Eigen::Vector2d> &points, double size = 0.5,
-                      const Color &color = Color::kLime, double alpha = 1.0);
+Marker MarkerOfPoints(const std::vector<Eigen::Vector2d> &points,
+                      double size = 0.5,
+                      const Color &color = Color::kLime,
+                      double alpha = 1.0);
 
 /**
  * @brief Marker of the arrows
- * 
+ *
  * @param start Input arrow start
  * @param end Input arrow end
  * @param color Arrow color (default kLime)
  * @param alpha Alpha (default 1.0)
  * @return Marker of type @c ARROW of the arrow
  */
-Marker MarkerOfArrow(const Eigen::Vector2d &start, const Eigen::Vector2d &end,
-                     const Color &color = Color::kLime, double alpha = 1.0);
+Marker MarkerOfArrow(const Eigen::Vector2d &start,
+                     const Eigen::Vector2d &end,
+                     const Color &color = Color::kLime,
+                     double alpha = 1.0);
 
 /**
  * @brief Marker of the text
- * 
+ *
  * @param text Input text
  * @param position Text position
  * @param color Text color (default kBlack)
  * @param alpha Alpha (default 1.0)
  * @return Marker of type @c TEXT_VIEW_FACING of the text
  */
-Marker MarkerOfText(std::string text, const Eigen::Vector2d &position,
-                    const Color &color = Color::kBlack, double alpha = 1.0);
+Marker MarkerOfText(std::string text,
+                    const Eigen::Vector2d &position,
+                    const Color &color = Color::kBlack,
+                    double alpha = 1.0);
 
 /**
  * @brief MarkerArray of the arrows
- * 
+ *
  * @param starts Starts of the arrows
  * @param ends Ends of the arrows
  * @param color Arrows color (default kLime)
@@ -212,7 +225,7 @@ MarkerArray MarkerArrayOfSNDTCell2(const SNDTCell *cell);
 
 /**
  * @brief MarkerArray of SNDTMap
- * 
+ *
  * @param map Input SNDTMap
  * @param use_target_color Use target color (default false)
  * @return MarkerArray of SNDTMap
@@ -223,18 +236,19 @@ MarkerArray MarkerArrayOfSNDTMap(const SNDTMap &map,
 
 /**
  * @brief MarkerArray of SNDTMap
- * 
+ *
  * @param map Input SNDTMap
  * @param use_target_color Use target color (default false)
  * @return MarkerArray of SNDTMap
  * @note This function omits those HasGaussian() is false
  */
-MarkerArray MarkerArrayOfSNDTMap(const std::vector<std::shared_ptr<SNDTCell>> &map,
-                                 bool use_target_color = false);
+MarkerArray MarkerArrayOfSNDTMap(
+    const std::vector<std::shared_ptr<SNDTCell>> &map,
+    bool use_target_color = false);
 
 /**
  * @brief MarkerArray of correspondences
- * 
+ *
  * @param source_cell Source cell
  * @param target_cell Target cell
  * @param text Text of the cost value
@@ -247,12 +261,14 @@ MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell,
                                          const Color &color = Color::kBlack);
 
 MarkerArray MarkerArrayOfCorrespondences(
-    const SNDTMap &smap, const SNDTMap &tmap, const Eigen::Affine2d &aff,
+    const SNDTMap &smap,
+    const SNDTMap &tmap,
+    const Eigen::Affine2d &aff,
     const std::vector<std::pair<int, Eigen::Vector2d>> &corres);
 
 /**
  * @brief MarkerArray of the sensors
- * 
+ *
  * @param affs Poses of the sensors
  * @return MarkerArray of the sensors
  */

@@ -17,12 +17,12 @@ class SNDTCell : public CellInterface {
    * @brief Cell types
    */
   enum CellType {
-    kNoInit,    /**< Covariance is not computed yet */
-    kRegular,   /**< Covariance is computed well */
-    kRescale,   /**< Covariance is rescaled */
-    kAssign,    /**< Covariance is assigned */
-    kNoPoints,  /**< Covariance is not computed because of no points */
-    kInvalid    /**< Covariance is invalid */
+    kNoInit,   /**< Covariance is not computed yet */
+    kRegular,  /**< Covariance is computed well */
+    kRescale,  /**< Covariance is rescaled */
+    kAssign,   /**< Covariance is assigned */
+    kNoPoints, /**< Covariance is not computed because of no points */
+    kInvalid   /**< Covariance is invalid */
   };
 
   SNDTCell();
@@ -73,7 +73,9 @@ class SNDTCell : public CellInterface {
   void SetNormalCov(const Eigen::Matrix2d &cov) { ncov_ = cov; }
   void SetNormalEvals(const Eigen::Vector2d &evals) { nevals_ = evals; }
   void SetNormalEvecs(const Eigen::Matrix2d &evecs) { nevecs_ = evecs; }
-  void SetNormals(const std::vector<Eigen::Vector2d> &normals) { normals_ = normals; }
+  void SetNormals(const std::vector<Eigen::Vector2d> &normals) {
+    normals_ = normals;
+  }
 
  private:
   /**

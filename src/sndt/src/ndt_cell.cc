@@ -4,12 +4,12 @@
  * @brief Class Definition of NDTCell
  * @version 0.1
  * @date 2021-07-29
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
-#include <sndt/ndt_cell.h>
 #include <sndt/helpers.h>
+#include <sndt/ndt_cell.h>
 
 NDTCell::NDTCell() {
   celltype_ = kNoInit;
@@ -43,29 +43,29 @@ void NDTCell::ComputeGaussian() {
   }
 }
 
-bool NDTCell::HasGaussian() const {
-  return phasgaussian_;
-}
+bool NDTCell::HasGaussian() const { return phasgaussian_; }
 
 std::string NDTCell::ToString() const {
   char c[600];
-  sprintf(c, "cell @ (%.2f, %.2f):\n"
-             "   N: %d\n"
-             "  𝓝p: %s\n"
-             "  sz: %.2f\n"
-             "skew: %.2f\n"
-             "  μp: (%.2f, %.2f)\n"
-             "  Σp: (%.4f, %.4f, %.4f, %.4f)\n"
-             " evp: (%.2f, %.2f)\n"
-             " ecp: (%.2f, %.2f), (%.2f, %.2f)\n",
-             center_(0), center_(1), n_,
-             phasgaussian_ ? "true" : "false", size_, skew_rad_,
-             pmean_(0), pmean_(1), pcov_(0, 0), pcov_(0, 1), pcov_(1, 0), pcov_(1, 1),
-             pevals_(0), pevals_(1), pevecs_(0, 0), pevecs_(1, 0), pevecs_(1, 0), pevecs_(1, 1));
+  sprintf(c,
+          "cell @ (%.2f, %.2f):\n"
+          "   N: %d\n"
+          "  𝓝p: %s\n"
+          "  sz: %.2f\n"
+          "skew: %.2f\n"
+          "  μp: (%.2f, %.2f)\n"
+          "  Σp: (%.4f, %.4f, %.4f, %.4f)\n"
+          " evp: (%.2f, %.2f)\n"
+          " ecp: (%.2f, %.2f), (%.2f, %.2f)\n",
+          center_(0), center_(1), n_, phasgaussian_ ? "true" : "false", size_,
+          skew_rad_, pmean_(0), pmean_(1), pcov_(0, 0), pcov_(0, 1),
+          pcov_(1, 0), pcov_(1, 1), pevals_(0), pevals_(1), pevecs_(0, 0),
+          pevecs_(1, 0), pevecs_(1, 0), pevecs_(1, 1));
   std::stringstream ss;
   ss.setf(std::ios::fixed);
   ss.precision(2);
   for (int i = 0; i < n_; ++i)
-    ss << "p[" << i << "]: (" << points_[i](0) << ", " << points_[i](1) << ")\n";
+    ss << "p[" << i << "]: (" << points_[i](0) << ", " << points_[i](1)
+       << ")\n";
   return std::string(c) + ss.str();
 }

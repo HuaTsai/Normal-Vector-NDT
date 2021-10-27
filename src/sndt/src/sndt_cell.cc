@@ -8,8 +8,9 @@
  * @copyright Copyright (c) 2021
  *
  */
-#include <sndt/sndt_cell.h>
 #include <sndt/helpers.h>
+#include <sndt/sndt_cell.h>
+
 #include <boost/functional/hash.hpp>
 
 SNDTCell::SNDTCell() {
@@ -58,16 +59,14 @@ void SNDTCell::ComputePGaussian() {
 void SNDTCell::ComputeNGaussian() {
   nmean_.setZero(), ncov_.setZero();
   for (auto &nm : normals_)
-    if (nm.allFinite() && nm.dot(pevecs_.col(0)) < 0)
-      nm = -nm;
+    if (nm.allFinite() && nm.dot(pevecs_.col(0)) < 0) nm = -nm;
   auto valids = ExcludeNaNInf(normals_);
   if (!valids.size()) {
     ncelltype_ = kNoPoints;
     return;
   }
   std::unordered_set<std::pair<int, int>, boost::hash<std::pair<int, int>>> st;
-  for (auto valid : valids)
-    st.insert({valid(0) * 1e5, valid(1) * 1e5});
+  for (auto valid : valids) st.insert({valid(0) * 1e5, valid(1) * 1e5});
   nmean_ = ComputeMean(valids);
   if (st.size() <= 2) {
     nevecs_.col(0) = nmean_.normalized();
@@ -151,31 +150,31 @@ void SNDTCell::ComputeNGaussian() {
 //     nhasgaussian_ = true;
 //   }
 // }
-bool SNDTCell::HasGaussian() const {
-  return phasgaussian_ && nhasgaussian_;
-}
+bool SNDTCell::HasGaussian() const { return phasgaussian_ && nhasgaussian_; }
 
 std::string SNDTCell::ToString() const {
   char c[600];
-  sprintf(c, "cell @ (%.2f, %.2f):\n"
-             "   N: %d\n"
-             "  𝓝p: %s, 𝓝n: %s\n"
-             "  sz: %.2f\n"
-             "skew: %.2f\n"
-             "  μp: (%.2f, %.2f)\n"
-             "  Σp: (%.4f, %.4f, %.4f, %.4f)\n"
-             " evp: (%.2f, %.2f)\n"
-             " ecp: (%.2f, %.2f), (%.2f, %.2f)\n"
-             "  μn: (%.2f, %.2f)\n"
-             "  Σn: (%.4f, %.4f, %.4f, %.4f)\n"
-             " evn: (%.2f, %.2f)\n"
-             " ecn: (%.2f, %.2f), (%.2f, %.2f)\n",
-             center_(0), center_(1), n_,
-             phasgaussian_ ? "true" : "false", nhasgaussian_ ? "true" : "false", size_, skew_rad_,
-             pmean_(0), pmean_(1), pcov_(0, 0), pcov_(0, 1), pcov_(1, 0), pcov_(1, 1),
-             pevals_(0), pevals_(1), pevecs_(0, 0), pevecs_(1, 0), pevecs_(1, 0), pevecs_(1, 1),
-             nmean_(0), nmean_(1), ncov_(0, 0), ncov_(0, 1), ncov_(1, 0), ncov_(1, 1),
-             nevals_(0), nevals_(1), nevecs_(0, 0), nevecs_(1, 0), nevecs_(1, 0), nevecs_(1, 1));
+  sprintf(c,
+          "cell @ (%.2f, %.2f):\n"
+          "   N: %d\n"
+          "  𝓝p: %s, 𝓝n: %s\n"
+          "  sz: %.2f\n"
+          "skew: %.2f\n"
+          "  μp: (%.2f, %.2f)\n"
+          "  Σp: (%.4f, %.4f, %.4f, %.4f)\n"
+          " evp: (%.2f, %.2f)\n"
+          " ecp: (%.2f, %.2f), (%.2f, %.2f)\n"
+          "  μn: (%.2f, %.2f)\n"
+          "  Σn: (%.4f, %.4f, %.4f, %.4f)\n"
+          " evn: (%.2f, %.2f)\n"
+          " ecn: (%.2f, %.2f), (%.2f, %.2f)\n",
+          center_(0), center_(1), n_, phasgaussian_ ? "true" : "false",
+          nhasgaussian_ ? "true" : "false", size_, skew_rad_, pmean_(0),
+          pmean_(1), pcov_(0, 0), pcov_(0, 1), pcov_(1, 0), pcov_(1, 1),
+          pevals_(0), pevals_(1), pevecs_(0, 0), pevecs_(1, 0), pevecs_(1, 0),
+          pevecs_(1, 1), nmean_(0), nmean_(1), ncov_(0, 0), ncov_(0, 1),
+          ncov_(1, 0), ncov_(1, 1), nevals_(0), nevals_(1), nevecs_(0, 0),
+          nevecs_(1, 0), nevecs_(1, 0), nevecs_(1, 1));
   std::stringstream ss;
   ss.setf(std::ios::fixed);
   ss.precision(2);

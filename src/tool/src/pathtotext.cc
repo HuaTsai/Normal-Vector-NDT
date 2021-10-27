@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
-#include <nav_msgs/Path.h>
 #include <common/common.h>
+#include <nav_msgs/Path.h>
+
 #include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
@@ -41,11 +42,13 @@ void WriteToFile(const nav_msgs::Path &path, string filename) {
 int main(int argc, char **argv) {
   string estpathfile, gtpathfile, outfolder;
   po::options_description desc("Allowed options");
+  // clang-format off
   desc.add_options()
       ("help,h", "Produce help message")
       ("estpath,e", po::value<string>(&estpathfile)->required(), "Path of estpath.ser")
       ("gtpath,g", po::value<string>(&gtpathfile)->required(), "Path of gtpath.ser")
       ("outpath,o", po::value<string>(&outfolder)->required(), "Path of output folder");
+  // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);

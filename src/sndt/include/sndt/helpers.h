@@ -45,9 +45,8 @@ inline Eigen::Vector2d ComputeMean(const std::vector<Eigen::Vector2d> &points,
  * @return Mean of matrices
  * @note This function does not check the validity of its elements
  */
-inline Eigen::Matrix2d ComputeMean(
-    const std::vector<Eigen::Matrix2d> &matrices,
-    const std::vector<int> &indices = {}) {
+inline Eigen::Matrix2d ComputeMean(const std::vector<Eigen::Matrix2d> &matrices,
+                                   const std::vector<int> &indices = {}) {
   Eigen::Matrix2d ret = Eigen::Matrix2d::Zero();
   if (indices.size()) {
     ret = std::accumulate(
@@ -62,12 +61,11 @@ inline Eigen::Matrix2d ComputeMean(
 }
 
 // TODO: incorporate this
-inline void ComputeMeanAndCov(
-    const std::vector<Eigen::Vector2d> &points,
-    const std::vector<Eigen::Matrix2d> &offsets,
-    const std::vector<int> &indices,
-    Eigen::Vector2d &mean,
-    Eigen::Matrix2d &cov) {
+inline void ComputeMeanAndCov(const std::vector<Eigen::Vector2d> &points,
+                              const std::vector<Eigen::Matrix2d> &offsets,
+                              const std::vector<int> &indices,
+                              Eigen::Vector2d &mean,
+                              Eigen::Matrix2d &cov) {
   int n = indices.size();
   mean = ComputeMean(points, indices);
   if (n == 1) {
@@ -80,11 +78,10 @@ inline void ComputeMeanAndCov(
 }
 
 // TODO: incorporate this
-inline void ComputeMeanAndCov(
-    const std::vector<Eigen::Vector2d> &points,
-    const std::vector<int> &indices,
-    Eigen::Vector2d &mean,
-    Eigen::Matrix2d &cov) {
+inline void ComputeMeanAndCov(const std::vector<Eigen::Vector2d> &points,
+                              const std::vector<int> &indices,
+                              Eigen::Vector2d &mean,
+                              Eigen::Matrix2d &cov) {
   int n = indices.size();
   mean = ComputeMean(points, indices);
   if (n <= 2) {
@@ -106,7 +103,8 @@ inline void ComputeMeanAndCov(
  * @note This function does not check the validity of its elements
  */
 inline Eigen::Matrix2d ComputeCov(
-    const std::vector<Eigen::Vector2d> &points, const Eigen::Vector2d &mean,
+    const std::vector<Eigen::Vector2d> &points,
+    const Eigen::Vector2d &mean,
     const Eigen::Matrix2d &offset = Eigen::Matrix2d::Zero()) {
   int n = points.size();
   if (n == 1) return offset;
@@ -146,7 +144,8 @@ inline Eigen::Matrix2d ComputeCov(const std::vector<Eigen::Vector2d> &points,
  * @see Eigen::SelfAdjointEigenSolver and Catalogue of dense decompositions
  */
 inline void ComputeEvalEvec(const Eigen::Matrix2d &covariance,
-                            Eigen::Vector2d &evals, Eigen::Matrix2d &evecs) {
+                            Eigen::Vector2d &evals,
+                            Eigen::Matrix2d &evecs) {
   Eigen::SelfAdjointEigenSolver<Eigen::Matrix2d> evd;
   evd.computeDirect(covariance);
   evals = evd.eigenvalues();
@@ -196,8 +195,7 @@ inline std::vector<int> ExcludeNaNInf3(
     const std::vector<Eigen::Vector2d> &points) {
   std::vector<int> ret;
   for (size_t i = 0; i < points.size(); ++i)
-    if (points[i].allFinite())
-      ret.push_back(i);
+    if (points[i].allFinite()) ret.push_back(i);
   return ret;
 }
 
@@ -207,8 +205,7 @@ inline std::vector<int> ExcludeNaNInf3(
     const std::vector<Eigen::Matrix2d> &covariances) {
   std::vector<int> ret;
   for (size_t i = 0; i < points.size(); ++i)
-    if (points[i].allFinite() && covariances[i].allFinite())
-      ret.push_back(i);
+    if (points[i].allFinite() && covariances[i].allFinite()) ret.push_back(i);
   return ret;
 }
 
@@ -230,6 +227,7 @@ class RandomTransformGenerator2D {
     }
     return ret;
   }
+
  private:
   std::shared_ptr<std::default_random_engine> dre_;
   double radius_;

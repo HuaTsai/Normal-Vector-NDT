@@ -236,8 +236,8 @@ class tqdm {
         unit = "kHz";
         div = 1.0e3;
       }
-      fprintf(stderr, "[%4d/%4d | %3.1f %s | %.0fs<%.0fs] ", curr, tot, avgrate / div,
-             unit.c_str(), dt_tot, peta);
+      fprintf(stderr, "[%4d/%4d | %3.1f %s | %.0fs<%.0fs] ", curr, tot,
+              avgrate / div, unit.c_str(), dt_tot, peta);
       fprintf(stderr, "%s ", label.c_str());
       if (use_colors) fprintf(stderr, "\033[0m\033[32m\033[0m\015 ");
 

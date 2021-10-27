@@ -1,21 +1,21 @@
 /**
  * @file test_diff.cc
  * @author your name (you@domain.com)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2021-08-01
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 #include <common/EgoPointClouds.h>
 #include <common/common.h>
+#include <nav_msgs/Path.h>
 #include <ros/ros.h>
 #include <sensor_msgs/CompressedImage.h>
 #include <sndt/matcher.h>
 #include <sndt/visuals.h>
 #include <std_msgs/Int32.h>
-#include <nav_msgs/Path.h>
 
 #include <boost/program_options.hpp>
 #include <sndt_exec/wrapper.hpp>
@@ -26,7 +26,7 @@ using namespace visualization_msgs;
 namespace po = boost::program_options;
 
 vector<sensor_msgs::CompressedImage> imb, imbl, imbr, imf, imfl, imfr;
-vector<common::EgoPointClouds> vepcs;  
+vector<common::EgoPointClouds> vepcs;
 ros::Publisher pub1, pub2, pub3, pub4, pub5, pub6, pub7, pub8, pube;
 ros::Publisher pb1, pb2, pb3, pb4, pb5, pb6, pbs, pbt;
 int frames;
@@ -37,18 +37,14 @@ std_msgs::Float64MultiArray errs;
 vector<int> corr0, corr1, corr2, opt0, opt1, opt2;
 
 pair<int, double> FindMax(double a, double b, double c) {
-  if (a > b && a > c)
-    return {0, a};
-  if (b > a && b > c)
-    return {1, b};
+  if (a > b && a > c) return {0, a};
+  if (b > a && b > c) return {1, b};
   return {2, c};
 }
 
 pair<int, double> FindMin(double a, double b, double c) {
-  if (a < b && a < c)
-    return {0, a};
-  if (b < a && b < c)
-    return {1, b};
+  if (a < b && a < c) return {0, a};
+  if (b < a && b < c) return {1, b};
   return {2, c};
 }
 
@@ -75,7 +71,8 @@ void cb(const std_msgs::Int32 &num) {
   auto t12 = GetDiffTime(t1, t2);
   opt0.push_back(t12);
   std::printf("sicp -> optimize: %d ms(%d%%), total: %d ms\n",
-              sicpparams._usedtime.optimize, sicpparams._usedtime.optimize * 100 / t12, t12);
+              sicpparams._usedtime.optimize,
+              sicpparams._usedtime.optimize * 100 / t12, t12);
 
   // Matching by NDTD2D
   auto t3 = GetTime();
@@ -90,7 +87,8 @@ void cb(const std_msgs::Int32 &num) {
   auto t34 = GetDiffTime(t3, t4);
   opt1.push_back(t34);
   std::printf("ndt -> optimize: %d ms(%d%%), total: %d ms\n",
-              ndtparams._usedtime.optimize, ndtparams._usedtime.optimize * 100 / t34, t34);
+              ndtparams._usedtime.optimize,
+              ndtparams._usedtime.optimize * 100 / t34, t34);
 
   // Matching by SNDT
   auto t5 = GetTime();
@@ -105,15 +103,17 @@ void cb(const std_msgs::Int32 &num) {
   auto t56 = GetDiffTime(t5, t6);
   opt2.push_back(t56);
   std::printf("sndt -> optimize: %d ms(%d%%), total: %d ms\n",
-              sndtparams._usedtime.optimize, sndtparams._usedtime.optimize * 100 / t56, t56);
+              sndtparams._usedtime.optimize,
+              sndtparams._usedtime.optimize * 100 / t56, t56);
 
   // Compute Ground Truth
   Affine3d To, Ti;
   tf2::fromMsg(GetPose(gtpath.poses, vepcs[i + f].stamp), To);
   tf2::fromMsg(GetPose(gtpath.poses, vepcs[i].stamp), Ti);
   Affine3d gtTio3 = Conserve2DFromAffine3d(Ti.inverse() * To);
-  Affine2d gtTio = Translation2d(gtTio3.translation()(0), gtTio3.translation()(1)) *
-                   Rotation2Dd(gtTio3.rotation().block<2, 2>(0, 0));
+  Affine2d gtTio =
+      Translation2d(gtTio3.translation()(0), gtTio3.translation()(1)) *
+      Rotation2Dd(gtTio3.rotation().block<2, 2>(0, 0));
 
   // Compute error
   auto err0 = TransNormRotDegAbsFromAffine2d(sicpT * gtTio.inverse());
@@ -131,11 +131,12 @@ void cb(const std_msgs::Int32 &num) {
   auto tmax = FindMax(err0(1), err1(1), err2(1));
   auto tmin = FindMin(err0(1), err1(1), err2(1));
 
-  std::printf("%d   sicp   ndt  sndt:\n"
-              "rerr %.2f, %.2f, %.2f -> best: %d, diff, %.2f\n"
-              "terr %.2f, %.2f, %.2f -> best: %d, diff, %.2f\n\n", i,
-              err0(0), err1(0), err2(0), rmin.first, rmax.second - rmin.second,
-              err0(1), err1(1), err2(1), tmin.first, tmax.second - tmin.second);
+  std::printf(
+      "%d   sicp   ndt  sndt:\n"
+      "rerr %.2f, %.2f, %.2f -> best: %d, diff, %.2f\n"
+      "terr %.2f, %.2f, %.2f -> best: %d, diff, %.2f\n\n",
+      i, err0(0), err1(0), err2(0), rmin.first, rmax.second - rmin.second,
+      err0(1), err1(1), err2(1), tmin.first, tmax.second - tmin.second);
   std::fflush(stdout);
 
   /******* Publishers *******/
@@ -143,12 +144,12 @@ void cb(const std_msgs::Int32 &num) {
 
   vector<Eigen::Vector2d> gue;
   transform(src.begin(), src.end(), back_inserter(gue),
-                 [&Tio](auto p) { return Tio * p; });
+            [&Tio](auto p) { return Tio * p; });
   pub2.publish(JoinMarkers({MarkerOfPoints(gue)}));
 
   vector<Eigen::Vector2d> res;
   transform(src.begin(), src.end(), back_inserter(res),
-                 [&sicpT](auto p) { return sicpT * p; });
+            [&sicpT](auto p) { return sicpT * p; });
   pub3.publish(JoinMarkers({MarkerOfPoints(res)}));
 
   // NDTD2D
@@ -158,8 +159,7 @@ void cb(const std_msgs::Int32 &num) {
     if (cell->HasGaussian())
       m4.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
                                     cell->GetSkewRad(), Color::kRed, 0.5));
-    for (auto pt : cell->GetPoints())
-      m4pts.push_back(pt);
+    for (auto pt : cell->GetPoints()) m4pts.push_back(pt);
   }
   m4.push_back(MarkerOfPoints(m4pts, 0.5, Color::kRed));
   pub4.publish(JoinMarkers(m4));
@@ -171,8 +171,7 @@ void cb(const std_msgs::Int32 &num) {
     if (cell->HasGaussian())
       m5.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
                                     cell->GetSkewRad(), Color::kFuchsia, 0.5));
-    for (auto pt : cell->GetPoints())
-      m5pts.push_back(pt);
+    for (auto pt : cell->GetPoints()) m5pts.push_back(pt);
   }
   m5.push_back(MarkerOfPoints(m5pts, 0.5, Color::kFuchsia));
   pub5.publish(JoinMarkers(m5));
@@ -184,8 +183,7 @@ void cb(const std_msgs::Int32 &num) {
     if (cell->HasGaussian())
       m6.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
                                     cell->GetSkewRad(), Color::kRed, 0.5));
-    for (auto pt : cell->GetPoints())
-      m6pts.push_back(pt);
+    for (auto pt : cell->GetPoints()) m6pts.push_back(pt);
   }
   m6.push_back(MarkerOfPoints(m6pts, 0.5, Color::kRed));
   pub6.publish(JoinMarkers(m6));
@@ -196,10 +194,9 @@ void cb(const std_msgs::Int32 &num) {
   for (const auto &cell : snexts) {
     if (cell->HasGaussian()) {
       m7.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
-                                     cell->GetSkewRad(), Color::kBlue));
+                                    cell->GetSkewRad(), Color::kBlue));
     }
-    for (auto pt : cell->GetPoints())
-      m7pts.push_back(pt);
+    for (auto pt : cell->GetPoints()) m7pts.push_back(pt);
   }
   m7.push_back(MarkerOfPoints(m7pts, 0.5, Color::kBlue));
   pub7.publish(JoinMarkers(m7));
@@ -232,6 +229,7 @@ void GetFiles(string data) {
 int main(int argc, char **argv) {
   bool run;
   string data;
+  // clang-format off
   po::options_description desc("Allowed options");
   desc.add_options()
       ("help,h", "Produce help message")
@@ -243,6 +241,7 @@ int main(int argc, char **argv) {
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
       ("huber,u", po::value<double>(&huber)->default_value(1), "Huber")
       ("run", po::value<bool>(&run)->default_value(false)->implicit_value(true), "Run");
+  // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
@@ -268,11 +267,15 @@ int main(int argc, char **argv) {
   pub8 = nh.advertise<MarkerArray>("markers8", 0, true);
   pube = nh.advertise<std_msgs::Float64MultiArray>("error", 0, true);
   pb1 = nh.advertise<sensor_msgs::CompressedImage>("back/compressed", 0, true);
-  pb2 = nh.advertise<sensor_msgs::CompressedImage>("back_left/compressed", 0, true);
-  pb3 = nh.advertise<sensor_msgs::CompressedImage>("back_right/compressed", 0, true);
+  pb2 = nh.advertise<sensor_msgs::CompressedImage>("back_left/compressed", 0,
+                                                   true);
+  pb3 = nh.advertise<sensor_msgs::CompressedImage>("back_right/compressed", 0,
+                                                   true);
   pb4 = nh.advertise<sensor_msgs::CompressedImage>("front/compressed", 0, true);
-  pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0, true);
-  pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed", 0, true);
+  pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0,
+                                                   true);
+  pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed", 0,
+                                                   true);
 
   if (run) {
     int n = vepcs.size() / 5 * 5;

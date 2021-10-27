@@ -1,6 +1,6 @@
+#include <bits/stdc++.h>
 #include <normal2d/normal2d.h>
 #include <pcl/search/kdtree.h>
-#include <bits/stdc++.h>
 
 #define USE_OMP
 
@@ -9,7 +9,8 @@
 #include <omp.h>
 #endif
 
-inline pcl::KdTreeFLANN<pcl::PointXY> MakeKDTrees(const std::vector<Eigen::Vector2d> &points) {
+inline pcl::KdTreeFLANN<pcl::PointXY> MakeKDTrees(
+    const std::vector<Eigen::Vector2d> &points) {
   pcl::PointCloud<pcl::PointXY>::Ptr pc(new pcl::PointCloud<pcl::PointXY>);
   for (const auto &pt : points) {
     pcl::PointXY p;
@@ -25,14 +26,14 @@ inline Eigen::Vector2d ComputeMeanWithIndices(
     const std::vector<Eigen::Vector2d> &matrices,
     const std::vector<int> &indices) {
   Eigen::Vector2d ret = Eigen::Vector2d::Zero();
-  for (size_t i = 0; i < indices.size(); ++i)
-    ret += matrices[indices[i]];
+  for (size_t i = 0; i < indices.size(); ++i) ret += matrices[indices[i]];
   ret /= indices.size();
   return ret;
 }
 
 inline Eigen::Matrix2d ComputeCovWithIndices(
-    const std::vector<Eigen::Vector2d> &points, const std::vector<int> &indices,
+    const std::vector<Eigen::Vector2d> &points,
+    const std::vector<int> &indices,
     const Eigen::Vector2d &mean) {
   int n = indices.size();
   if (n <= 2) return Eigen::Matrix2d::Zero();

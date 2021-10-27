@@ -9,21 +9,11 @@
 // Affine3d
 Eigen::Affine3d Affine3dFromXYZRPY(const Eigen::Vector3d &xyz,
                                    const Eigen::Vector3d &rpy) {
-  Eigen::Affine3d ret =
-      Eigen::Translation3d(xyz(0), xyz(1), xyz(2)) *
-      Eigen::AngleAxisd(rpy(2), Eigen::Vector3d::UnitZ()) *
-      Eigen::AngleAxisd(rpy(1), Eigen::Vector3d::UnitY()) *
-      Eigen::AngleAxisd(rpy(0), Eigen::Vector3d::UnitX());
+  Eigen::Affine3d ret = Eigen::Translation3d(xyz(0), xyz(1), xyz(2)) *
+                        Eigen::AngleAxisd(rpy(2), Eigen::Vector3d::UnitZ()) *
+                        Eigen::AngleAxisd(rpy(1), Eigen::Vector3d::UnitY()) *
+                        Eigen::AngleAxisd(rpy(0), Eigen::Vector3d::UnitX());
   return ret;
-}
-
-Eigen::Affine3d Affine3dFromAffine2d(const Eigen::Affine2d &aff) {
-  return Eigen::Translation3d(aff.translation().x(), aff.translation().y(), 0) *
-         Eigen::AngleAxisd(Eigen::Rotation2Dd(aff.rotation()).angle(), Eigen::Vector3d::UnitZ());
-}
-
-Eigen::Affine3d Affine3dFromMatrix3d(const Eigen::Matrix3d &mtx) {
-  return Affine3dFromAffine2d(Eigen::Affine2d(mtx));
 }
 
 Eigen::Affine3d Affine3dFromMatrix4f(const Eigen::Matrix4f &mtx) {
@@ -34,9 +24,10 @@ Eigen::Affine3d Affine3dFromMatrix4f(const Eigen::Matrix4f &mtx) {
 Eigen::Matrix<double, 6, 1> XYZRPYFromAffine3d(const Eigen::Affine3d &mtx) {
   Eigen::Matrix<double, 6, 1> ret;
   ret.block<3, 1>(0, 0) = mtx.translation();
-  double roll = angles::normalize_angle(mtx.rotation().eulerAngles(2, 1, 0)(2));
-  double pitch = angles::normalize_angle(mtx.rotation().eulerAngles(2, 1, 0)(1));
-  double yaw = angles::normalize_angle(mtx.rotation().eulerAngles(2, 1, 0)(0));
+  Eigen::Vector3d ypr = mtx.rotation().eulerAngles(2, 1, 0);
+  double yaw = angles::normalize_angle(ypr(0));
+  double pitch = angles::normalize_angle(ypr(1));
+  double roll = angles::normalize_angle(ypr(2));
   if (fabs(pitch) > M_PI / 2) {
     roll = angles::normalize_angle(roll + M_PI);
     pitch = angles::normalize_angle(-pitch + M_PI);
@@ -72,8 +63,10 @@ Eigen::Matrix4f Matrix4fFromMatrix3d(const Eigen::Matrix3d &mtx) {
 }
 
 geometry_msgs::TransformStamped TstFromAffine3d(
-    const Eigen::Affine3d &T, const ros::Time &stamp,
-    const std::string &frame_id, const std::string &child_frame_id) {
+    const Eigen::Affine3d &T,
+    const ros::Time &stamp,
+    const std::string &frame_id,
+    const std::string &child_frame_id) {
   geometry_msgs::TransformStamped ret = tf2::eigenToTransform(T);
   ret.header.frame_id = frame_id;
   ret.header.stamp = stamp;
@@ -82,8 +75,10 @@ geometry_msgs::TransformStamped TstFromAffine3d(
 }
 
 geometry_msgs::TransformStamped TstFromMatrix4f(
-    const Eigen::Matrix4f &T, const ros::Time &stamp,
-    const std::string &frame_id, const std::string &child_frame_id) {
+    const Eigen::Matrix4f &T,
+    const ros::Time &stamp,
+    const std::string &frame_id,
+    const std::string &child_frame_id) {
   return TstFromAffine3d(Affine3dFromMatrix4f(T), stamp, frame_id,
                          child_frame_id);
 }
@@ -103,7 +98,8 @@ Eigen::Vector2d TransNormRotDegAbsFromAffine2d(const Eigen::Affine2d &aff) {
   return ret;
 }
 
-geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time, const Eigen::Matrix4f &mtx) {
+geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time,
+                                              const Eigen::Matrix4f &mtx) {
   geometry_msgs::PoseStamped ret;
   ret.header.frame_id = "map";
   ret.header.stamp = time;

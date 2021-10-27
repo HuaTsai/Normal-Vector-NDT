@@ -47,6 +47,7 @@ int main(int argc, char **argv) {
   double cell_size, radius, huber, voxel;
   string data;
   po::options_description desc("Allowed options");
+  // clang-format off
   desc.add_options()
       ("help,h", "Produce help message")
       ("data,d", po::value<string>(&data)->required(), "Data (logxx)")
@@ -55,6 +56,7 @@ int main(int argc, char **argv) {
       ("huber,u", po::value<double>(&huber)->default_value(1.0), "Use Huber loss")
       ("voxel,v", po::value<double>(&voxel)->default_value(0), "Downsample voxel")
       ("n,n", po::value<int>(&n)->default_value(0), "n");
+  // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   if (vm.count("help")) {
@@ -67,7 +69,7 @@ int main(int argc, char **argv) {
   SerializationInput(JoinPath(GetDataPath(data), "lidar.ser"), vpc);
 
   auto tgt = PCMsgTo2D(vpc[n], voxel);
-  transform(tgt.begin(), tgt.end(), tgt.begin(), [&aff2](auto p) { return aff2 * p; });
+  TransformPointsInPlace(tgt, aff2);
 
   vector<double> rmsavgs1, rmsavgs2, rmsavgs3, rmsavgs4, rmsavgs5, rmsavgs6;
   // My rs
@@ -87,10 +89,11 @@ int main(int argc, char **argv) {
     for (size_t i = 0; i < affs.size(); ++i) {
       auto aff = affs[i];
       bar.progress(i, affs.size());
-      std::vector<Eigen::Vector2d> src(tgt.size());
-      transform(tgt.begin(), tgt.end(), src.begin(), [&aff](auto p) { return aff * p; });
-      vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, Eigen::Affine2d::Identity()}};
-      vector<pair<vector<Vector2d>, Affine2d>> datas{{src, Eigen::Affine2d::Identity()}};
+      auto src = TransformPoints(tgt, aff);
+      vector<pair<vector<Vector2d>, Affine2d>> datat{
+          {tgt, Eigen::Affine2d::Identity()}};
+      vector<pair<vector<Vector2d>, Affine2d>> datas{
+          {src, Eigen::Affine2d::Identity()}};
 
       // ICP Method
       ICPParameters params1;
@@ -164,7 +167,8 @@ int main(int argc, char **argv) {
   ofstream fout(filepath);
   for (size_t i = 0; i < rs.size(); ++i)
     fout << rs[i] << ((i + 1 == rs.size()) ? "\n" : ", ");
-  for (auto rmsavgs : {rmsavgs1, rmsavgs2, rmsavgs3, rmsavgs4, rmsavgs5, rmsavgs6})
+  for (auto rmsavgs :
+       {rmsavgs1, rmsavgs2, rmsavgs3, rmsavgs4, rmsavgs5, rmsavgs6})
     for (size_t i = 0; i < rmsavgs.size(); ++i)
       fout << rmsavgs[i] << ((i + 1 == rmsavgs.size()) ? "\n" : ", ");
   fout.close();
@@ -172,7 +176,8 @@ int main(int argc, char **argv) {
   cerr << "Generate Figure...";
   string python = PYTHONPATH;
   string script = JoinPath(WSPATH, "src/sndt_exec/scripts/evalcon.py");
-  string output = JoinPath(WSPATH, "src/sndt_exec/output/cvg-" + GetCurrentTimeAsString() + ".png");
+  string output = JoinPath(
+      WSPATH, "src/sndt_exec/output/cvg-" + GetCurrentTimeAsString() + ".png");
   system((python + " " + script + " " + filepath + " " + output).c_str());
   cerr << " Done!" << endl;
 }

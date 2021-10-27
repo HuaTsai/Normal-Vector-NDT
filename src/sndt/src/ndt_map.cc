@@ -4,9 +4,9 @@
  * @brief Class Definition of NDTMap
  * @version 0.1
  * @date 2021-07-29
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 #include <sndt/ndt_map.h>
 
@@ -96,9 +96,13 @@ std::vector<std::shared_ptr<NDTCell>> NDTMap::PseudoTransformCells(
 }
 
 NDTCell *NDTMap::GetCellAndAllocate(const Eigen::Vector2d &point) {
-  if (!point.allFinite()) { return nullptr; }
+  if (!point.allFinite()) {
+    return nullptr;
+  }
   auto idx = GetIndexForPoint(point);
-  if (!IsValidIndex(idx)) { return nullptr; }
+  if (!IsValidIndex(idx)) {
+    return nullptr;
+  }
   if (!cellptrs_[idx(0)][idx(1)]) {
     cellptrs_[idx(0)][idx(1)] = new NDTCell();
     Eigen::Vector2d center;
@@ -112,23 +116,28 @@ NDTCell *NDTMap::GetCellAndAllocate(const Eigen::Vector2d &point) {
 }
 
 const NDTCell *NDTMap::GetCellForPoint(const Eigen::Vector2d &point) const {
-  if (!is_loaded_) { return nullptr; }
+  if (!is_loaded_) {
+    return nullptr;
+  }
   auto idx = GetIndexForPoint(point);
-  if (!IsValidIndex(idx)) { return nullptr; }
+  if (!IsValidIndex(idx)) {
+    return nullptr;
+  }
   return cellptrs_[idx(0)][idx(1)];
 }
 
 std::string NDTMap::ToString() const {
   char c[600];
-  sprintf(c, "cell size: %.2f\n"
-             "map center: (%.2f, %.2f)\n"
-             "map size: (%.2f, %.2f)\n"
-             "cellptrs size: (%d, %d)\n"
-             "center index: (%d, %d)\n"
-             "active cells: %ld\n",
-             cell_size_, map_center_(0), map_center_(1), map_size_(0),
-             map_size_(1), cellptrs_size_(0), cellptrs_size_(1),
-             map_center_index_(0), map_center_index_(1), cells_.size());
+  sprintf(c,
+          "cell size: %.2f\n"
+          "map center: (%.2f, %.2f)\n"
+          "map size: (%.2f, %.2f)\n"
+          "cellptrs size: (%d, %d)\n"
+          "center index: (%d, %d)\n"
+          "active cells: %ld\n",
+          cell_size_, map_center_(0), map_center_(1), map_size_(0),
+          map_size_(1), cellptrs_size_(0), cellptrs_size_(1),
+          map_center_index_(0), map_center_index_(1), cells_.size());
   std::string ret(c);
   for (size_t i = 0; i < cells_.size(); ++i) {
     auto idx = GetIndexForPoint(cells_[i]->GetCenter());
@@ -140,7 +149,8 @@ std::string NDTMap::ToString() const {
 }
 
 void NDTMap::ShowCellDistri() const {
-  int noinit = 0, nopts = 0, valid = 0, rescale = 0, assign = 0, invalid = 0, one = 0, two = 0, gau = 0;
+  int noinit = 0, nopts = 0, valid = 0, rescale = 0, assign = 0, invalid = 0,
+      one = 0, two = 0, gau = 0;
   for (auto cell : cells_) {
     if (cell->GetCellType() == NDTCell::kNoInit) ++noinit;
     if (cell->GetCellType() == NDTCell::kNoPoints) ++nopts;
@@ -157,16 +167,13 @@ void NDTMap::ShowCellDistri() const {
            nopts, valid, rescale, assign, invalid);
 }
 
-std::vector<Eigen::Vector2d> NDTMap::GetPoints() const {
-  return points_;
-}
+std::vector<Eigen::Vector2d> NDTMap::GetPoints() const { return points_; }
 
 std::vector<Eigen::Vector2d> NDTMap::GetPointsWithGaussianCell() const {
   std::vector<Eigen::Vector2d> ret;
   for (auto it = begin(); it != end(); ++it)
     if ((*it)->HasGaussian())
-      for (auto pt : (*it)->GetPoints())
-        ret.push_back(pt);
+      for (auto pt : (*it)->GetPoints()) ret.push_back(pt);
   return ret;
 }
 

@@ -2,6 +2,8 @@
 #include <common/common.h>
 #include <geometry_msgs/Vector3.h>
 #include <nav_msgs/Path.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
 #include <sensor_msgs/CompressedImage.h>
 #include <sndt/matcher.h>
@@ -11,8 +13,6 @@
 
 #include <boost/program_options.hpp>
 #include <sndt_exec/wrapper.hpp>
-#include <pcl_ros/point_cloud.h>
-#include <pcl/filters/voxel_grid.h>
 
 #define LIDAR
 
@@ -54,19 +54,18 @@ vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg) {
   for (const auto &pt : *pc)
     if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z))
       ret.push_back(Vector2d(pt.x, pt.y));
-  return ret;;
+  return ret;
+  ;
 }
 
 void cb(const std_msgs::Int32 &num) {
   int i = num.data;
 #ifdef LIDAR
-  Affine3d aff3 =
-      Translation3d(0.943713, 0.000000, 1.840230) *
-      Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
+  Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
+                  Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
   aff3 = Conserve2DFromAffine3d(aff3);
-  Affine2d aff2 =
-      Translation2d(aff3.translation()(0), aff3.translation()(1)) *
-      Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
+  Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
+                  Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
   auto tgt = PCMsgTo2D(vpc[i]);
   auto src = PCMsgTo2D(vpc[i + 1]);
   vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, aff2}};
@@ -117,22 +116,31 @@ void cb(const std_msgs::Int32 &num) {
   auto src3 = MakePoints(datas, params3);
   auto T3 = SICPMatch(tgt3, src3, params3, Tg);
 
-  cout << "sndt: " << TransNormRotDegAbsFromAffine2d(T1.inverse() * Tgt).transpose() << endl;
-  cout << " ndt: " << TransNormRotDegAbsFromAffine2d(T2.inverse() * Tgt).transpose() << endl;
-  cout << "sicp: " << TransNormRotDegAbsFromAffine2d(T3.inverse() * Tgt).transpose() << endl;
+  cout << "sndt: "
+       << TransNormRotDegAbsFromAffine2d(T1.inverse() * Tgt).transpose()
+       << endl;
+  cout << " ndt: "
+       << TransNormRotDegAbsFromAffine2d(T2.inverse() * Tgt).transpose()
+       << endl;
+  cout << "sicp: "
+       << TransNormRotDegAbsFromAffine2d(T3.inverse() * Tgt).transpose()
+       << endl;
 
   pub1.publish(JoinMarkers({MarkerOfPoints(tgt3, 0.5, Color::kRed)}));
   pub2.publish(JoinMarkers({MarkerOfPoints(src3)}));
 
   auto mps1 = maps1.GetPoints();
-  transform(mps1.begin(), mps1.end(), mps1.begin(), [&T1](auto p) { return T1 * p; });
+  transform(mps1.begin(), mps1.end(), mps1.begin(),
+            [&T1](auto p) { return T1 * p; });
   pub3.publish(JoinMarkers({MarkerOfPoints(mps1)}));  // SNDT
 
   auto mps2 = maps2.GetPoints();
-  transform(mps2.begin(), mps2.end(), mps2.begin(), [&T2](auto p) { return T2 * p; });
+  transform(mps2.begin(), mps2.end(), mps2.begin(),
+            [&T2](auto p) { return T2 * p; });
   pub4.publish(JoinMarkers({MarkerOfPoints(mps2)}));  // NDTD2D
 
-  transform(src3.begin(), src3.end(), src3.begin(), [&T3](auto p) { return T3 * p; });
+  transform(src3.begin(), src3.end(), src3.begin(),
+            [&T3](auto p) { return T3 * p; });
   pub5.publish(JoinMarkers({MarkerOfPoints(src3)}));  // SICP
 
   pub6.publish(MarkerArrayOfSNDTMap(mapt1, true));
@@ -172,6 +180,7 @@ int main(int argc, char **argv) {
   string data;
   bool run;
   po::options_description desc("Allowed options");
+  // clang-format off
   desc.add_options()
       ("help,h", "Produce help message")
       ("data,d", po::value<string>(&data)->required(), "Data (logxx)")
@@ -181,6 +190,7 @@ int main(int argc, char **argv) {
       ("voxel,v", po::value<double>(&voxel)->default_value(0), "Voxel")
       ("image,i", po::value<bool>(&image)->default_value(false)->implicit_value(true), "Image")
       ("run", po::value<bool>(&run)->default_value(false)->implicit_value(true), "Run");
+  // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
@@ -209,12 +219,18 @@ int main(int argc, char **argv) {
   pbt = nh.advertise<Marker>("marker2", 0, true);
   pube = nh.advertise<geometry_msgs::Vector3>("err", 0, true);
   if (image) {
-    pb1 = nh.advertise<sensor_msgs::CompressedImage>("back/compressed", 0, true);
-    pb2 = nh.advertise<sensor_msgs::CompressedImage>("back_left/compressed", 0, true);
-    pb3 = nh.advertise<sensor_msgs::CompressedImage>("back_right/compressed", 0, true);
-    pb4 = nh.advertise<sensor_msgs::CompressedImage>("front/compressed", 0, true);
-    pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0, true);
-    pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed", 0, true);
+    pb1 =
+        nh.advertise<sensor_msgs::CompressedImage>("back/compressed", 0, true);
+    pb2 = nh.advertise<sensor_msgs::CompressedImage>("back_left/compressed", 0,
+                                                     true);
+    pb3 = nh.advertise<sensor_msgs::CompressedImage>("back_right/compressed", 0,
+                                                     true);
+    pb4 =
+        nh.advertise<sensor_msgs::CompressedImage>("front/compressed", 0, true);
+    pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0,
+                                                     true);
+    pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed",
+                                                     0, true);
   }
 
   int n = vpc.size() - 2;

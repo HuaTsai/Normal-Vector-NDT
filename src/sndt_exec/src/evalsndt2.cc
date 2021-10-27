@@ -1,15 +1,16 @@
 // Different Scans
-#include <ros/ros.h>
-#include <sndt/matcher.h>
-#include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
-#include <pcl_ros/point_cloud.h>
+#include <pcl/filters/statistical_outlier_removal.h>
 #include <pcl/filters/voxel_grid.h>
+#include <pcl_ros/point_cloud.h>
+#include <ros/ros.h>
 #include <rosbag/bag.h>
-#include <tqdm/tqdm.h>
+#include <sndt/matcher.h>
 #include <sndt/visuals.h>
 #include <std_msgs/Int32.h>
-#include <pcl/filters/statistical_outlier_removal.h>
+#include <tqdm/tqdm.h>
+
+#include <boost/program_options.hpp>
+#include <sndt_exec/wrapper.hpp>
 
 using namespace std;
 using namespace Eigen;
@@ -26,7 +27,9 @@ double Avg(const T &c) {
 
 void Q1MedianQ3(vector<double> &data) {
   sort(data.begin(), data.end());
-  printf("[%g, %g, %g, %g, %g]\n", data[0], data[data.size() / 4], data[data.size() / 2], data[data.size() / 4 * 3], data[data.size() - 1]);
+  printf("[%g, %g, %g, %g, %g]\n", data[0], data[data.size() / 4],
+         data[data.size() / 2], data[data.size() / 4 * 3],
+         data[data.size() - 1]);
 }
 
 vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg, double voxel) {
@@ -46,21 +49,21 @@ vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg, double voxel) {
   return ret;
 }
 
-double RMS(const vector<Vector2d> &tgt, const vector<Vector2d> &src,
+double RMS(const vector<Vector2d> &tgt,
+           const vector<Vector2d> &src,
            const Affine2d &aff = Affine2d::Identity()) {
   vector<Vector2d> src2(src.size());
-  transform(src.begin(), src.end(), src2.begin(), [&aff](auto p) { return aff * p; });
+  transform(src.begin(), src.end(), src2.begin(),
+            [&aff](auto p) { return aff * p; });
   double ret = 0;
   for (size_t i = 0; i < src2.size(); ++i)
     ret += (src2[i] - tgt[i]).squaredNorm();
   return sqrt(ret / src2.size());
 }
 
-
 void OutlierRemove(vector<Vector2d> &data) {
   pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
-  for (auto pt : data)
-    pc->push_back(pcl::PointXYZ(pt(0), pt(1), 0));
+  for (auto pt : data) pc->push_back(pcl::PointXYZ(pt(0), pt(1), 0));
   pcl::StatisticalOutlierRemoval<pcl::PointXYZ> filter(true);
   filter.setInputCloud(pc);
   filter.setMeanK(8);
@@ -68,8 +71,7 @@ void OutlierRemove(vector<Vector2d> &data) {
   vector<int> indices;
   filter.filter(indices);
   data.clear();
-  for (auto i : indices)
-    data.push_back(Vector2d(pc->at(i).x, pc->at(i).y));
+  for (auto i : indices) data.push_back(Vector2d(pc->at(i).x, pc->at(i).y));
 }
 
 Affine2d GetGtPose(string data, ros::Time tt, ros::Time ts) {
@@ -83,23 +85,23 @@ Affine2d GetGtPose(string data, ros::Time tt, ros::Time ts) {
   Affine2d ret = Translation2d(Tts.translation()(0), Tts.translation()(1)) *
                  Rotation2Dd(Tts.rotation().block<2, 2>(0, 0));
   cout << "td: " << (ts - tt).toSec() << ", ";
-  cout << "(r, t) = " << TransNormRotDegAbsFromAffine2d(ret).transpose() << endl;
+  cout << "(r, t) = " << TransNormRotDegAbsFromAffine2d(ret).transpose()
+       << endl;
   return ret;
 }
 
 int main(int argc, char **argv) {
-  Affine3d aff3 =
-      Translation3d(0.943713, 0.000000, 1.840230) *
-      Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
+  Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
+                  Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
   aff3 = Conserve2DFromAffine3d(aff3);
-  Affine2d aff2 =
-      Translation2d(aff3.translation()(0), aff3.translation()(1)) *
-      Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
+  Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
+                  Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
   int n, m, o;
   double cell_size, huber, voxel, x, y, t, r, radius;
   string data;
   po::options_description desc("Allowed options");
+  // clang-format off
   desc.add_options()
       ("help,h", "Produce help message")
       ("data,d", po::value<string>(&data)->required(), "Data (logxx)")
@@ -114,6 +116,7 @@ int main(int argc, char **argv) {
       ("r,r", po::value<double>(&r)->default_value(15), "r")
       ("m,m", po::value<int>(&m)->default_value(1), "r")
       ("o,o", po::value<int>(&o)->default_value(1), "offset");
+  // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   if (vm.count("help")) {
@@ -134,10 +137,13 @@ int main(int argc, char **argv) {
 
   auto tgt = PCMsgTo2D(vpc[n], voxel);
   auto src = PCMsgTo2D(vpc[n + o], voxel);
-  transform(tgt.begin(), tgt.end(), tgt.begin(), [&aff2](auto p) { return aff2 * p; });
-  transform(src.begin(), src.end(), src.begin(), [&aff2](auto p) { return aff2 * p; });
+  transform(tgt.begin(), tgt.end(), tgt.begin(),
+            [&aff2](auto p) { return aff2 * p; });
+  transform(src.begin(), src.end(), src.begin(),
+            [&aff2](auto p) { return aff2 * p; });
   auto affgt = GetGtPose(data, vpc[n].header.stamp, vpc[n + o].header.stamp);
-  transform(src.begin(), src.end(), src.begin(), [&affgt](auto p) { return affgt * p; });
+  transform(src.begin(), src.end(), src.begin(),
+            [&affgt](auto p) { return affgt * p; });
   // OutlierRemove(tgt);
   // OutlierRemove(src);
   pub1.publish(JoinMarkers({MarkerOfPoints(tgt, 0.5, Color::kRed)}));
@@ -148,9 +154,12 @@ int main(int argc, char **argv) {
   cout << "r = " << r << endl;
   for (auto aff : affs) {
     vector<Vector2d> srcc(src.size());
-    transform(src.begin(), src.end(), srcc.begin(), [&aff](auto p) { return aff * p; });
-    vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, Eigen::Affine2d::Identity()}};
-    vector<pair<vector<Vector2d>, Affine2d>> datas{{srcc, Eigen::Affine2d::Identity()}};
+    transform(src.begin(), src.end(), srcc.begin(),
+              [&aff](auto p) { return aff * p; });
+    vector<pair<vector<Vector2d>, Affine2d>> datat{
+        {tgt, Eigen::Affine2d::Identity()}};
+    vector<pair<vector<Vector2d>, Affine2d>> datas{
+        {srcc, Eigen::Affine2d::Identity()}};
 
     CommonParameters *params;
     Affine2d T;
@@ -211,15 +220,18 @@ int main(int argc, char **argv) {
     }
 
     if ((aff * T).translation().isZero(1)) {
-      cout << "s: " << TransNormRotDegAbsFromAffine2d(aff * T).transpose() << ", ";
+      cout << "s: " << TransNormRotDegAbsFromAffine2d(aff * T).transpose()
+           << ", ";
     } else {
-      cout << "f: " << TransNormRotDegAbsFromAffine2d(aff * T).transpose() << ", ";
+      cout << "f: " << TransNormRotDegAbsFromAffine2d(aff * T).transpose()
+           << ", ";
     }
     cout << "Iter: " << params->_iteration << " & " << params->_ceres_iteration;
     cout << ", " << int(params->_converge) << endl;
     for (auto tf : params->_sols) {
       vector<Vector2d> src2(srcc.size());
-      transform(srcc.begin(), srcc.end(), src2.begin(), [&tf](auto p) { return tf.front() * p; });
+      transform(srcc.begin(), srcc.end(), src2.begin(),
+                [&tf](auto p) { return tf.front() * p; });
       pub2.publish(JoinMarkers({MarkerOfPoints(src2)}));
       ros::Rate(10).sleep();
     }

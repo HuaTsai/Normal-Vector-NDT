@@ -40,6 +40,8 @@ New OUTPUT Topic:
 by Adam Huang 2021 August
 *********************************************************/
 #include <bits/stdc++.h>
+#include <common/EgoPointClouds.h>
+#include <common/common.h>
 #include <conti_radar/Measurement.h>
 #include <geometry_msgs/Twist.h>
 #include <message_filters/subscriber.h>
@@ -57,12 +59,10 @@ by Adam Huang 2021 August
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <tf2_eigen/tf2_eigen.h>
+
 #include <boost/program_options.hpp>
-#include <common/EgoPointClouds.h>
-#include <common/common.h>
 
 using namespace std;
-using namespace literals::chrono_literals;
 using namespace Eigen;
 namespace po = boost::program_options;
 
@@ -88,8 +88,10 @@ unordered_map<string, Matrix4d> sensor_tfs;
 unordered_map<string, Matrix<double, 2, 3>> S;
 
 typedef message_filters::sync_policies::ApproximateTime<
-    conti_radar::Measurement, conti_radar::Measurement,
-    conti_radar::Measurement, conti_radar::Measurement,
+    conti_radar::Measurement,
+    conti_radar::Measurement,
+    conti_radar::Measurement,
+    conti_radar::Measurement,
     conti_radar::Measurement>
     NoCloudSyncPolicy;
 
@@ -112,8 +114,10 @@ sensor_msgs::PointCloud2 conti_to_rospc(const conti_radar::Measurement &msg) {
   return ret;
 }
 
-void SystemMotion(string id, const conti_radar::MeasurementConstPtr &input,
-                  MatrixXd &Rj, VectorXd &VDj) {
+void SystemMotion(string id,
+                  const conti_radar::MeasurementConstPtr &input,
+                  MatrixXd &Rj,
+                  VectorXd &VDj) {
   int size = input->points.size();
   double beta = sensor_origins[id](2);
   MatrixXd Mj(size, 2);
@@ -131,14 +135,14 @@ void SystemMotion(string id, const conti_radar::MeasurementConstPtr &input,
   Rj = Mj * S[id];
 }
 
-vector<int> InliersAfterRANSAC(const MatrixXd &R, const VectorXd &VD, double threshold) {
+vector<int> InliersAfterRANSAC(const MatrixXd &R,
+                               const VectorXd &VD,
+                               double threshold) {
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
   for (int i = 0; i < R.rows(); ++i) {
-		pcl::PointXYZ pt;
-		pt.x = R(i, 0);
-		pt.y = R(i, 1);
-		pt.z = VD(i, 0);
-		cloud->push_back(pt);
+    pcl::PointXYZ pt;
+    pt.x = R(i, 0), pt.y = R(i, 1), pt.z = VD(i, 0);
+    cloud->push_back(pt);
   }
 
   pcl::SampleConsensusModelPlane<pcl::PointXYZ>::Ptr model(
@@ -154,18 +158,21 @@ vector<int> InliersAfterRANSAC(const MatrixXd &R, const VectorXd &VD, double thr
 
 MatrixXd PreserveRows(const MatrixXd &mtx, const vector<int> &cols) {
   MatrixXd ret(cols.size(), mtx.cols());
-  for (int i = 0; i < ret.rows(); ++i)
-    ret.row(i) = mtx.row(cols[i]);
+  for (int i = 0; i < ret.rows(); ++i) ret.row(i) = mtx.row(cols[i]);
   return ret;
 }
 
-Matrix3d ComputeCovariance(const MatrixXd &RANSAC_R, const MatrixXd &RANSAC_VD, const Vector3d &ego_mat) {
+Matrix3d ComputeCovariance(const MatrixXd &RANSAC_R,
+                           const MatrixXd &RANSAC_VD,
+                           const Vector3d &ego_mat) {
   VectorXd err = (RANSAC_R * ego_mat) - RANSAC_VD;
   MatrixXd scalar = ((err.transpose() * err) / (RANSAC_R.rows() - 3));
   return scalar(0, 0) * (RANSAC_R.transpose() * RANSAC_R).inverse();
 }
 
-nav_msgs::Odometry MakeOdom(double time, const Vector3d &ego_mat, const Matrix3d &cov_mat) {
+nav_msgs::Odometry MakeOdom(double time,
+                            const Vector3d &ego_mat,
+                            const Matrix3d &cov_mat) {
   nav_msgs::Odometry odom;
   odom.header.frame_id = "/car";
   odom.header.stamp = ros::Time(time);
@@ -187,8 +194,8 @@ nav_msgs::Odometry MakeOdom(double time, const Vector3d &ego_mat, const Matrix3d
   return odom;
 }
 
-conti_radar::Measurement ContiMsg(
-    const conti_radar::MeasurementConstPtr& input, const vector<int> &indices) {
+conti_radar::Measurement ContiMsg(const conti_radar::MeasurementConstPtr &input,
+                                  const vector<int> &indices) {
   conti_radar::Measurement ret;
   ret.header = input->header;
   for (const auto &index : indices)
@@ -197,8 +204,10 @@ conti_radar::Measurement ContiMsg(
 }
 
 conti_radar::Measurement ContiMsgComp(
-    string id, const conti_radar::MeasurementConstPtr &input,
-    const vector<int> &indices, const Vector3d &ego_mat) {
+    string id,
+    const conti_radar::MeasurementConstPtr &input,
+    const vector<int> &indices,
+    const Vector3d &ego_mat) {
   conti_radar::Measurement ret;
   ret.header = input->header;
   Vector2d vj = Rotation2Dd(-sensor_origins[id](2)) * (S[id] * ego_mat);
@@ -212,14 +221,17 @@ conti_radar::Measurement ContiMsgComp(
 }
 
 Matrix4d GetTransform(const Vector3d &xyt) {
-  return (Translation3d(xyt(0), xyt(1), 0) * AngleAxisd(xyt(2), Vector3d::UnitZ())).matrix();
+  Affine3d aff =
+      Translation3d(xyt(0), xyt(1), 0) * AngleAxisd(xyt(2), Vector3d::UnitZ());
+  return aff.matrix();
 }
 
-vector<geometry_msgs::Point> ToGeometryMsgs(const sensor_msgs::PointCloud2 &msg) {
+vector<geometry_msgs::Point> ToGeometryMsgs(
+    const sensor_msgs::PointCloud2 &msg) {
   vector<geometry_msgs::Point> ret;
   pcl::PointCloud<pcl::PointXYZ> pc;
   pcl::fromROSMsg(msg, pc);
-  transform(pc.begin(), pc.end(), back_inserter(ret), [](const auto &p){
+  transform(pc.begin(), pc.end(), back_inserter(ret), [](const auto &p) {
     geometry_msgs::Point pt;
     pt.x = p.x, pt.y = p.y, pt.z = p.z;
     return pt;
@@ -227,10 +239,11 @@ vector<geometry_msgs::Point> ToGeometryMsgs(const sensor_msgs::PointCloud2 &msg)
   return ret;
 }
 
-common::PointCloudSensor MakePointCloudSensor(string frame_id,
-                                              const Matrix4d &origin,
-                                              const sensor_msgs::PointCloud2 &pc,
-                                              sensor_msgs::PointCloud2 &augpc) {
+common::PointCloudSensor MakePointCloudSensor(
+    string frame_id,
+    const Matrix4d &origin,
+    const sensor_msgs::PointCloud2 &pc,
+    sensor_msgs::PointCloud2 &augpc) {
   sensor_msgs::PointCloud2 temp;
   pcl_ros::transformPointCloud(origin.cast<float>(), pc, temp);
   pcl::concatenatePointCloud(augpc, temp, augpc);
@@ -241,11 +254,11 @@ common::PointCloudSensor MakePointCloudSensor(string frame_id,
   return ret;
 }
 
-void Callback(const conti_radar::MeasurementConstPtr& f_input,
-              const conti_radar::MeasurementConstPtr& fl_input,
-              const conti_radar::MeasurementConstPtr& fr_input,
-              const conti_radar::MeasurementConstPtr& bl_input,
-              const conti_radar::MeasurementConstPtr& br_input) {
+void Callback(const conti_radar::MeasurementConstPtr &f_input,
+              const conti_radar::MeasurementConstPtr &fl_input,
+              const conti_radar::MeasurementConstPtr &fr_input,
+              const conti_radar::MeasurementConstPtr &bl_input,
+              const conti_radar::MeasurementConstPtr &br_input) {
   double f_t = f_input->header.stamp.toSec();
   double fl_t = fl_input->header.stamp.toSec();
   double fr_t = fr_input->header.stamp.toSec();
@@ -275,7 +288,8 @@ void Callback(const conti_radar::MeasurementConstPtr& f_input,
   vector<int> inliers = InliersAfterRANSAC(R, VD, 0.27);
   MatrixXd RANSAC_R = PreserveRows(R, inliers);
   VectorXd RANSAC_VD = PreserveRows(VD, inliers);
-  Vector3d ego_mat = RANSAC_R.bdcSvd(ComputeThinU | ComputeThinV).solve(RANSAC_VD);
+  Vector3d ego_mat =
+      RANSAC_R.bdcSvd(ComputeThinU | ComputeThinV).solve(RANSAC_VD);
   Matrix3d cov_mat = ComputeCovariance(RANSAC_R, RANSAC_VD, ego_mat);
   nav_msgs::Odometry odom = MakeOdom(min_t, ego_mat, cov_mat);
 
@@ -331,7 +345,8 @@ void Callback(const conti_radar::MeasurementConstPtr& f_input,
 
   Vector3d vxyt = Vector3d::Map(epcs.vxyt.data(), 3);
   Matrix4d tf_td;
-  
+
+  // clang-format off
   tf_td = GetTransform(vxyt * (f_t - min_t)) * sensor_tfs["f"];
   auto pcsr_f = MakePointCloudSensor("front", tf_td, conti_to_rospc(f_in), augpc);
   epcs.pcs.push_back(pcsr_f);
@@ -351,6 +366,7 @@ void Callback(const conti_radar::MeasurementConstPtr& f_input,
   tf_td = GetTransform(vxyt * (bl_t - min_t)) * sensor_tfs["bl"];
   auto pcsr_bl = MakePointCloudSensor("back left", tf_td, conti_to_rospc(bl_in), augpc);
   epcs.pcs.push_back(pcsr_bl);
+  // clang-format on
 
   epcs.augpc = ToGeometryMsgs(augpc);
   vepcs.push_back(epcs);
@@ -389,11 +405,13 @@ void PreComputeSystem() {
   }
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   po::options_description desc("Allowed options");
+  // clang-format off
   desc.add_options()
       ("help,h", "Produce help message")
       ("outpath", po::value<string>(&outpath)->required(), "EgoPointClouds folder path");
+  // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
@@ -413,13 +431,15 @@ int main(int argc, char** argv) {
   ros::init(argc, argv, "radar_ego_motion");
   ros::NodeHandle nh;
 
+  // clang-format off
   message_filters::Subscriber<conti_radar::Measurement> sub_f(nh, "/radar_front", 1);
   message_filters::Subscriber<conti_radar::Measurement> sub_fl(nh, "/radar_front_left", 1);
   message_filters::Subscriber<conti_radar::Measurement> sub_fr(nh, "/radar_front_right", 1);
   message_filters::Subscriber<conti_radar::Measurement> sub_bl(nh, "/radar_back_left", 1);
   message_filters::Subscriber<conti_radar::Measurement> sub_br(nh, "/radar_back_right", 1);
+  // clang-format on
 
-  message_filters::Synchronizer<NoCloudSyncPolicy>* no_cloud_sync_;
+  message_filters::Synchronizer<NoCloudSyncPolicy> *no_cloud_sync_;
 
   no_cloud_sync_ = new message_filters::Synchronizer<NoCloudSyncPolicy>(
       NoCloudSyncPolicy(3), sub_f, sub_fl, sub_fr, sub_bl, sub_br);
@@ -429,6 +449,7 @@ int main(int argc, char** argv) {
   pub = nh.advertise<nav_msgs::Odometry>("vel", 1);
   pub_pc = nh.advertise<sensor_msgs::PointCloud2>("merge_pc", 1);
 
+  // clang-format off
   publishers["f_out"] = nh.advertise<conti_radar::Measurement>("radar_front_outlier", 1);
   publishers["fr_out"] = nh.advertise<conti_radar::Measurement>("radar_front_right_outlier", 1);
   publishers["fl_out"] = nh.advertise<conti_radar::Measurement>("radar_front_left_outlier", 1);
@@ -440,6 +461,7 @@ int main(int argc, char** argv) {
   publishers["fl_in"] = nh.advertise<conti_radar::Measurement>("radar_front_left_inlier", 1);
   publishers["br_in"] = nh.advertise<conti_radar::Measurement>("radar_back_right_inlier", 1);
   publishers["bl_in"] = nh.advertise<conti_radar::Measurement>("radar_back_left_inlier", 1);
+  // clang-format on
 
   ros::spin();
 }

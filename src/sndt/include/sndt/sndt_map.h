@@ -58,14 +58,14 @@ class SNDTMap : public MapInterface {
 
   /**
    * @brief Get and allocate the cell by a given point
-   * 
+   *
    * @param point Input point
    */
   SNDTCell *GetCellAndAllocate(const Eigen::Vector2d &point);
 
   /**
    * @brief Get the cell by a given point
-   * 
+   *
    * @param point Input point
    */
   const SNDTCell *GetCellForPoint(const Eigen::Vector2d &point) const;
@@ -79,7 +79,7 @@ class SNDTMap : public MapInterface {
 
   /**
    * @brief Get the Points object
-   * 
+   *
    * @note The points are retrived from cells_, which does not
    * necessarily equal to the original input
    */
@@ -87,14 +87,14 @@ class SNDTMap : public MapInterface {
 
   /**
    * @brief Get the Points object
-   * 
+   *
    * @brief return points that in valid gaussian cells
    */
   std::vector<Eigen::Vector2d> GetPointsWithGaussianCell() const;
 
   /**
    * @brief Get the Normals object
-   * 
+   *
    * @note The normals are retrived from cells_, which does not
    * necessarily equal to the original input
    */
@@ -104,7 +104,9 @@ class SNDTMap : public MapInterface {
 
   size_t size() const { return cells_.size(); }
   std::vector<SNDTCell *>::iterator begin() { return cells_.begin(); }
-  std::vector<SNDTCell *>::const_iterator begin() const { return cells_.begin(); }
+  std::vector<SNDTCell *>::const_iterator begin() const {
+    return cells_.begin();
+  }
   std::vector<SNDTCell *>::iterator end() { return cells_.end(); }
   std::vector<SNDTCell *>::const_iterator end() const { return cells_.end(); }
   SNDTCell *&operator[](size_t i) {

@@ -4,9 +4,9 @@
  * @brief Class Declaration of NDTMap
  * @version 0.1
  * @date 2021-07-29
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 #pragma once
 #include <sndt/map_interface.h>
@@ -56,14 +56,14 @@ class NDTMap : public MapInterface {
 
   /**
    * @brief Get and allocate the cell by a given point
-   * 
+   *
    * @param point Input point
    */
   NDTCell *GetCellAndAllocate(const Eigen::Vector2d &point);
 
   /**
    * @brief Get the cell by a given point
-   * 
+   *
    * @param point Input point
    */
   const NDTCell *GetCellForPoint(const Eigen::Vector2d &point) const;
@@ -77,7 +77,7 @@ class NDTMap : public MapInterface {
 
   /**
    * @brief Get the Points object
-   * 
+   *
    * @note The points are retrived from cells_, which does not
    * necessarily equal to the original input
    */
@@ -85,14 +85,16 @@ class NDTMap : public MapInterface {
 
   /**
    * @brief Get the Points object
-   * 
+   *
    * @brief return points that in valid gaussian cells
    */
   std::vector<Eigen::Vector2d> GetPointsWithGaussianCell() const;
 
   size_t size() const { return cells_.size(); }
   std::vector<NDTCell *>::iterator begin() { return cells_.begin(); }
-  std::vector<NDTCell *>::const_iterator begin() const { return cells_.begin(); }
+  std::vector<NDTCell *>::const_iterator begin() const {
+    return cells_.begin();
+  }
   std::vector<NDTCell *>::iterator end() { return cells_.end(); }
   std::vector<NDTCell *>::const_iterator end() const { return cells_.end(); }
 

@@ -31,13 +31,15 @@ class MapInterface {
 
   /**
    * @brief Get the index by a given point
-   * 
+   *
    * @param point Input point
    */
   Eigen::Vector2i GetIndexForPoint(const Eigen::Vector2d &point) const {
     Eigen::Vector2i ret;
-    ret(0) = floor((point(0) - map_center_(0)) / cell_size_ + 0.5) + map_center_index_(0);
-    ret(1) = floor((point(1) - map_center_(1)) / cell_size_ + 0.5) + map_center_index_(1);
+    ret(0) = floor((point(0) - map_center_(0)) / cell_size_ + 0.5) +
+             map_center_index_(0);
+    ret(1) = floor((point(1) - map_center_(1)) / cell_size_ + 0.5) +
+             map_center_index_(1);
     return ret;
   }
 
@@ -78,12 +80,12 @@ class MapInterface {
 
   /**
    * @brief Check the validity of an index
-   * 
+   *
    * @param index Input index
    */
   bool IsValidIndex(const Eigen::Vector2i &index) const {
-    return index(0) >= 0 && index(1) < cellptrs_size_(0) &&
-           index(1) >= 0 && index(1) < cellptrs_size_(1);
+    return index(0) >= 0 && index(1) < cellptrs_size_(0) && index(1) >= 0 &&
+           index(1) < cellptrs_size_(1);
   }
 
   bool is_loaded_;

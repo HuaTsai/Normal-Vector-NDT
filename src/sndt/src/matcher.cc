@@ -19,7 +19,10 @@
 
 class InspectCallback : public ceres::IterationCallback {
  public:
-  InspectCallback(CommonParameters &params, double &x, double &y, double &t,
+  InspectCallback(CommonParameters &params,
+                  double &x,
+                  double &y,
+                  double &t,
                   const Eigen::Affine2d &cur_tf)
       : needinit_(true),
         params_(params),
@@ -77,11 +80,12 @@ struct OptimizeObjects {
 
     std::vector<ceres::ResidualBlockId> vrbds;
     problem.GetResidualBlocks(&vrbds);
-    params._costs.push_back(std::vector<std::pair<double, double>>(vrbds.size()));
+    params._costs.push_back(
+        std::vector<std::pair<double, double>>(vrbds.size()));
 
     for (size_t i = 0; i < vrbds.size(); ++i)
-      problem.EvaluateResidualBlock(vrbds[i], false, &params._costs.back()[i].first,
-                                    nullptr, nullptr);
+      problem.EvaluateResidualBlock(
+          vrbds[i], false, &params._costs.back()[i].first, nullptr, nullptr);
     // XXX: change huber threshold
     // if (params.method == CommonParameters::Method::kICP) {
     //   loss->Reset(new ceres::HuberLoss(1), ceres::TAKE_OWNERSHIP);
@@ -100,8 +104,8 @@ struct OptimizeObjects {
     auto t2 = GetTime();
 
     for (size_t i = 0; i < vrbds.size(); ++i)
-      problem.EvaluateResidualBlock(vrbds[i], false, &params._costs.back()[i].second,
-                                    nullptr, nullptr);
+      problem.EvaluateResidualBlock(
+          vrbds[i], false, &params._costs.back()[i].second, nullptr, nullptr);
 
     params._usedtime.optimize += GetDiffTime(t1, t2);
     ++params._iteration;
@@ -361,7 +365,8 @@ Eigen::Affine2d P2DNDTMatch(const NDTMap &target_map,
   return cur_tf;
 }
 
-Eigen::Affine2d D2DNDTMatch(const NDTMap &target_map, const NDTMap &source_map,
+Eigen::Affine2d D2DNDTMatch(const NDTMap &target_map,
+                            const NDTMap &source_map,
                             D2DNDTParameters &params,
                             const Eigen::Affine2d &guess_tf) {
   auto t1 = GetTime();
@@ -404,7 +409,8 @@ Eigen::Affine2d D2DNDTMatch(const NDTMap &target_map, const NDTMap &source_map,
   return cur_tf;
 }
 
-Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
+Eigen::Affine2d SNDTMatch(const SNDTMap &target_map,
+                          const SNDTMap &source_map,
                           SNDTParameters &params,
                           const Eigen::Affine2d &guess_tf) {
   auto t1 = GetTime();
@@ -458,7 +464,8 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map, const SNDTMap &source_map,
   return cur_tf;
 }
 
-Eigen::Affine2d SNDTMatch2(const NDTMap &target_map, const NDTMap &source_map,
+Eigen::Affine2d SNDTMatch2(const NDTMap &target_map,
+                           const NDTMap &source_map,
                            D2DNDTParameters &params,
                            const Eigen::Affine2d &guess_tf) {
   auto t1 = GetTime();
@@ -488,8 +495,7 @@ Eigen::Affine2d SNDTMatch2(const NDTMap &target_map, const NDTMap &source_map,
       auto cq = cellq->GetPointCov();
       Eigen::Vector2d unq = cellq->GetPointEvecs().col(0);
       orj.AddCorrespondence(up, uq);
-      residuals.push_back(
-          SNDTCostFunctor3::Create(up, cp, unp, uq, cq, unq));
+      residuals.push_back(SNDTCostFunctor3::Create(up, cp, unp, uq, cq, unq));
     }
     auto indices = orj.GetIndices();
     for (size_t i = 0; i < indices.size(); ++i)
@@ -508,10 +514,11 @@ Eigen::Affine2d SNDTMatch2(const NDTMap &target_map, const NDTMap &source_map,
   return cur_tf;
 }
 
-Eigen::Affine2d SNDTCellMatch(
-    const SNDTCell *target_cell, const SNDTCell *source_cell,
-    SNDTParameters &params,
-    const Eigen::Affine2d &guess_tf, int method) {
+Eigen::Affine2d SNDTCellMatch(const SNDTCell *target_cell,
+                              const SNDTCell *source_cell,
+                              SNDTParameters &params,
+                              const Eigen::Affine2d &guess_tf,
+                              int method) {
   auto cellq = target_cell;
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
@@ -568,7 +575,8 @@ Eigen::Affine2d SNDTCellMatch(
     else if (method == 5)
       opt.AddResidualBlock(D2DNDTCostFunctor2::Create(up, cp, uq, cq));
     else if (method == 6)
-      opt.AddResidualBlock(SNDTCostFunctor2::Create(up, cp, unp, cnp, uq, cq, unq, cnq));
+      opt.AddResidualBlock(
+          SNDTCostFunctor2::Create(up, cp, unp, cnp, uq, cq, unq, cnq));
     else if (method == 7)
       opt.AddResidualBlock(SNDTCostFunctor3::Create(up, cp, unp, uq, cq, unq));
     opt.Optimize(params);

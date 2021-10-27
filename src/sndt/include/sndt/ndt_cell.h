@@ -4,9 +4,9 @@
  * @brief Class Declaration of NDTCell
  * @version 0.1
  * @date 2021-07-29
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 #pragma once
 #include <sndt/cell_interface.h>
@@ -17,12 +17,12 @@ class NDTCell : public CellInterface {
    * @brief Cell types
    */
   enum CellType {
-    kNoInit,    /**< Covariance is not computed yet */
-    kNoPoints,  /**< Covariance is not computed because of no points */
-    kRegular,   /**< Covariance is computed well */
-    kRescale,   /**< Covariance is rescaled */
-    kAssign,    /**< Covariance is assigned */
-    kInvalid    /**< Covariance is invalid */
+    kNoInit,   /**< Covariance is not computed yet */
+    kNoPoints, /**< Covariance is not computed because of no points */
+    kRegular,  /**< Covariance is computed well */
+    kRescale,  /**< Covariance is rescaled */
+    kAssign,   /**< Covariance is assigned */
+    kInvalid   /**< Covariance is invalid */
   };
 
   /**
@@ -43,7 +43,7 @@ class NDTCell : public CellInterface {
    * @brief Check if the cell has a valid gaussian
    */
   virtual bool HasGaussian() const override;
-  
+
   /**
    * @brief Convert the information of this cell to a string
    */
@@ -56,7 +56,7 @@ class NDTCell : public CellInterface {
   void SetRescaleRatio(double rescale_ratio) { rescale_ratio_ = rescale_ratio; }
 
  private:
-  CellType celltype_;     /**< Cell type */
-  double rescale_ratio_;  /**< Rescale ratio */
-  double tolerance_;      /**< Comparison tolerance */
+  CellType celltype_;    /**< Cell type */
+  double rescale_ratio_; /**< Rescale ratio */
+  double tolerance_;     /**< Comparison tolerance */
 };

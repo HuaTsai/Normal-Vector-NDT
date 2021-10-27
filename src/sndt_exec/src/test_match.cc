@@ -28,7 +28,7 @@ using namespace visualization_msgs;
 namespace po = boost::program_options;
 
 vector<sensor_msgs::CompressedImage> imb, imbl, imbr, imf, imfl, imfr;
-vector<common::EgoPointClouds> vepcs;  
+vector<common::EgoPointClouds> vepcs;
 ros::Publisher pub1, pub2, pub3, pub4, pub5, pub6, pub7, pubd, pube;
 ros::Publisher pb1, pb2, pb3, pb4, pb5, pb6, pbs, pbt;
 vector<Marker> allcircs;
@@ -60,8 +60,9 @@ void cb(const std_msgs::Int32 &num) {
   tf2::fromMsg(GetPose(gtpath.poses, vepcs[i + f].stamp), To);
   tf2::fromMsg(GetPose(gtpath.poses, vepcs[i].stamp), Ti);
   Affine3d gtTio3 = Conserve2DFromAffine3d(Ti.inverse() * To);
-  Affine2d gtTio = Translation2d(gtTio3.translation()(0), gtTio3.translation()(1)) *
-                   Rotation2Dd(gtTio3.rotation().block<2, 2>(0, 0));
+  Affine2d gtTio =
+      Translation2d(gtTio3.translation()(0), gtTio3.translation()(1)) *
+      Rotation2Dd(gtTio3.rotation().block<2, 2>(0, 0));
   /********* Compute End Here     *********/
 
   params.huber = huber;
@@ -71,7 +72,8 @@ void cb(const std_msgs::Int32 &num) {
 
   // cout << "guess: " << XYTDegreeFromAffine2d(Tio).transpose() << endl;
   // cout << "result: " << XYTDegreeFromAffine2d(res).transpose() << endl;
-  // cout << "grount truth: " << XYTDegreeFromAffine2d(gtTio).transpose() << endl;
+  // cout << "grount truth: " << XYTDegreeFromAffine2d(gtTio).transpose() <<
+  // endl;
   auto err = TransNormRotDegAbsFromAffine2d(res.inverse() * gtTio);
   cout << "err: " << err.transpose() << endl;
   auto maps2 = maps.PseudoTransformCells(res, true);
@@ -84,8 +86,7 @@ void cb(const std_msgs::Int32 &num) {
   auto starts = mapt.GetPoints();
   auto nms = mapt.GetNormals();
   vector<Vector2d> ends(starts.size());
-  for (size_t i = 0; i < starts.size(); ++i)
-    ends[i] = starts[i] + nms[i];
+  for (size_t i = 0; i < starts.size(); ++i) ends[i] = starts[i] + nms[i];
   pub5.publish(MarkerArrayOfArrows(starts, ends, Color::kRed));
   pub6.publish(vmas[0].first);
   pub7.publish(vmas[0].second);
@@ -125,6 +126,7 @@ void GetFiles(string data) {
 int main(int argc, char **argv) {
   string data;
   po::options_description desc("Allowed options");
+  // clang-format off
   desc.add_options()
       ("help,h", "Produce help message")
       ("data,d", po::value<string>(&data)->required(), "Data Path")
@@ -134,6 +136,7 @@ int main(int argc, char **argv) {
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
       ("huber,u", po::value<double>(&huber)->default_value(0), "Huber");
+  // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
@@ -162,11 +165,15 @@ int main(int argc, char **argv) {
   pbt = nh.advertise<Marker>("marker2", 0, true);
   pube = nh.advertise<geometry_msgs::Vector3>("err", 0, true);
   pb1 = nh.advertise<sensor_msgs::CompressedImage>("back/compressed", 0, true);
-  pb2 = nh.advertise<sensor_msgs::CompressedImage>("back_left/compressed", 0, true);
-  pb3 = nh.advertise<sensor_msgs::CompressedImage>("back_right/compressed", 0, true);
+  pb2 = nh.advertise<sensor_msgs::CompressedImage>("back_left/compressed", 0,
+                                                   true);
+  pb3 = nh.advertise<sensor_msgs::CompressedImage>("back_right/compressed", 0,
+                                                   true);
   pb4 = nh.advertise<sensor_msgs::CompressedImage>("front/compressed", 0, true);
-  pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0, true);
-  pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed", 0, true);
+  pb5 = nh.advertise<sensor_msgs::CompressedImage>("front_left/compressed", 0,
+                                                   true);
+  pb6 = nh.advertise<sensor_msgs::CompressedImage>("front_right/compressed", 0,
+                                                   true);
 
   ros::spin();
 }

@@ -17,9 +17,7 @@ inline int GetDiffTime(std::chrono::steady_clock::time_point t1,
   return std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 }
 
-std::string JoinPath() {
-  return "";
-}
+std::string JoinPath() { return ""; }
 
 template <typename... Args>
 std::string JoinPath(std::string s1, Args... args) {

@@ -4,9 +4,9 @@
  * @brief Class Definition of SNDTMap
  * @version 0.1
  * @date 2021-07-29
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
 #include <sndt/sndt_map.h>
 
@@ -20,8 +20,9 @@ SNDTMap::~SNDTMap() {
   }
 }
 
-void SNDTMap::LoadPointsAndNormals(const std::vector<Eigen::Vector2d> &points,
-                                   const std::vector<Eigen::Vector2d> &normals) {
+void SNDTMap::LoadPointsAndNormals(
+    const std::vector<Eigen::Vector2d> &points,
+    const std::vector<Eigen::Vector2d> &normals) {
   if (is_loaded_) {
     for (auto &cell : cells_) delete cell;
     for (int i = 0; i < cellptrs_size_(0); ++i) delete[] cellptrs_[i];
@@ -46,7 +47,8 @@ void SNDTMap::LoadPointsWithCovariancesAndNormals(
     const std::vector<Eigen::Vector2d> &points,
     const std::vector<Eigen::Matrix2d> &point_covs,
     const std::vector<Eigen::Vector2d> &normals) {
-  Expects(points.size() == point_covs.size() && points.size() == normals.size());
+  Expects(points.size() == point_covs.size() &&
+          points.size() == normals.size());
   if (is_loaded_) {
     for (auto &cell : cells_) delete cell;
     for (int i = 0; i < cellptrs_size_(0); ++i) delete[] cellptrs_[i];
@@ -109,9 +111,13 @@ std::vector<std::shared_ptr<SNDTCell>> SNDTMap::PseudoTransformCells(
 }
 
 SNDTCell *SNDTMap::GetCellAndAllocate(const Eigen::Vector2d &point) {
-  if (!point.allFinite()) { return nullptr; }
+  if (!point.allFinite()) {
+    return nullptr;
+  }
   auto idx = GetIndexForPoint(point);
-  if (!IsValidIndex(idx)) { return nullptr; }
+  if (!IsValidIndex(idx)) {
+    return nullptr;
+  }
   if (!cellptrs_[idx(0)][idx(1)]) {
     cellptrs_[idx(0)][idx(1)] = new SNDTCell();
     Eigen::Vector2d center;
@@ -126,23 +132,28 @@ SNDTCell *SNDTMap::GetCellAndAllocate(const Eigen::Vector2d &point) {
 }
 
 const SNDTCell *SNDTMap::GetCellForPoint(const Eigen::Vector2d &point) const {
-  if (!is_loaded_) { return nullptr; }
+  if (!is_loaded_) {
+    return nullptr;
+  }
   auto idx = GetIndexForPoint(point);
-  if (!IsValidIndex(idx)) { return nullptr; }
+  if (!IsValidIndex(idx)) {
+    return nullptr;
+  }
   return cellptrs_[idx(0)][idx(1)];
 }
 
 std::string SNDTMap::ToString() const {
   char c[600];
-  sprintf(c, "cell size: %.2f\n"
-             "map center: (%.2f, %.2f)\n"
-             "map size: (%.2f, %.2f)\n"
-             "cellptrs size: (%d, %d)\n"
-             "center index: (%d, %d)\n"
-             "active cells: %ld\n",
-             cell_size_, map_center_(0), map_center_(1), map_size_(0),
-             map_size_(1), cellptrs_size_(0), cellptrs_size_(1),
-             map_center_index_(0), map_center_index_(1), cells_.size());
+  sprintf(c,
+          "cell size: %.2f\n"
+          "map center: (%.2f, %.2f)\n"
+          "map size: (%.2f, %.2f)\n"
+          "cellptrs size: (%d, %d)\n"
+          "center index: (%d, %d)\n"
+          "active cells: %ld\n",
+          cell_size_, map_center_(0), map_center_(1), map_size_(0),
+          map_size_(1), cellptrs_size_(0), cellptrs_size_(1),
+          map_center_index_(0), map_center_index_(1), cells_.size());
   std::string ret(c);
   for (size_t i = 0; i < cells_.size(); ++i) {
     auto idx = GetIndexForPoint(cells_[i]->GetCenter());
@@ -155,8 +166,10 @@ std::string SNDTMap::ToString() const {
 
 void SNDTMap::ShowCellDistri() const {
   int one = 0, two = 0, gau = 0;
-  int pnoinit = 0, pnopts = 0, pvalid = 0, prescale = 0, passign = 0, pinvalid = 0;
-  int nnoinit = 0, nnopts = 0, nvalid = 0, nrescale = 0, nassign = 0, ninvalid = 0;
+  int pnoinit = 0, pnopts = 0, pvalid = 0, prescale = 0, passign = 0,
+      pinvalid = 0;
+  int nnoinit = 0, nnopts = 0, nvalid = 0, nrescale = 0, nassign = 0,
+      ninvalid = 0;
   for (auto cell : cells_) {
     if (cell->GetPCellType() == SNDTCell::kNoInit) ++pnoinit;
     if (cell->GetNCellType() == SNDTCell::kNoInit) ++nnoinit;
@@ -177,15 +190,14 @@ void SNDTMap::ShowCellDistri() const {
   ::printf("%ld cells: %d one, %d two, %d gau\n", cells_.size(), one, two, gau);
   ::printf("p: nin: %d, npt: %d, reg: %d, res: %d, ass: %d, inv: %d\n", pnoinit,
            pnopts, pvalid, prescale, passign, pinvalid);
-  ::printf("n: nin: %d, npt: %d, reg: %d, res: %d, ass: %d, inv: %d\n\n", nnoinit,
-           nnopts, nvalid, nrescale, nassign, ninvalid);
+  ::printf("n: nin: %d, npt: %d, reg: %d, res: %d, ass: %d, inv: %d\n\n",
+           nnoinit, nnopts, nvalid, nrescale, nassign, ninvalid);
 }
 
 std::vector<Eigen::Vector2d> SNDTMap::GetPoints() const {
   std::vector<Eigen::Vector2d> ret;
   for (auto it = begin(); it != end(); ++it)
-    for (auto pt : (*it)->GetPoints())
-      ret.push_back(pt);
+    for (auto pt : (*it)->GetPoints()) ret.push_back(pt);
   return ret;
 }
 
@@ -193,16 +205,14 @@ std::vector<Eigen::Vector2d> SNDTMap::GetPointsWithGaussianCell() const {
   std::vector<Eigen::Vector2d> ret;
   for (auto it = begin(); it != end(); ++it)
     if ((*it)->HasGaussian())
-      for (auto pt : (*it)->GetPoints())
-        ret.push_back(pt);
+      for (auto pt : (*it)->GetPoints()) ret.push_back(pt);
   return ret;
 }
 
 std::vector<Eigen::Vector2d> SNDTMap::GetNormals() const {
   std::vector<Eigen::Vector2d> ret;
   for (auto it = begin(); it != end(); ++it)
-    for (auto nm : (*it)->GetNormals())
-      ret.push_back(nm);
+    for (auto nm : (*it)->GetNormals()) ret.push_back(nm);
   return ret;
 }
 

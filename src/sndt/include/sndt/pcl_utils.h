@@ -11,7 +11,8 @@
 #pragma once
 #include <pcl/search/kdtree.h>
 
-pcl::KdTreeFLANN<pcl::PointXY> MakeKDTree(const std::vector<Eigen::Vector2d> &points) {
+pcl::KdTreeFLANN<pcl::PointXY> MakeKDTree(
+    const std::vector<Eigen::Vector2d> &points) {
   pcl::PointCloud<pcl::PointXY>::Ptr pc(new pcl::PointCloud<pcl::PointXY>);
   for (const auto &pt : points) {
     pcl::PointXY p;

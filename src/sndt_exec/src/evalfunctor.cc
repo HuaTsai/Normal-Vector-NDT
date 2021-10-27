@@ -1,14 +1,15 @@
-#include <ros/ros.h>
-#include <sndt/matcher.h>
-#include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
-#include <pcl_ros/point_cloud.h>
 #include <pcl/filters/voxel_grid.h>
+#include <pcl_ros/point_cloud.h>
+#include <ros/ros.h>
 #include <rosbag/bag.h>
-#include <tqdm/tqdm.h>
+#include <sndt/cost_functors.h>
+#include <sndt/matcher.h>
 #include <sndt/visuals.h>
 #include <std_msgs/Int32.h>
-#include <sndt/cost_functors.h>
+#include <tqdm/tqdm.h>
+
+#include <boost/program_options.hpp>
+#include <sndt_exec/wrapper.hpp>
 
 using namespace std;
 using namespace Eigen;
@@ -20,7 +21,9 @@ double Avg(const vector<double> &c) {
 }
 
 double Stdev(const vector<double> &c, double m) {
-  return accumulate(c.begin(), c.end(), 0., [&m](auto a, auto b) { return a + (b - m) * (b - m); }) / (c.size() - 1);
+  return accumulate(c.begin(), c.end(), 0.,
+                    [&m](auto a, auto b) { return a + (b - m) * (b - m); }) /
+         (c.size() - 1);
 }
 
 Vector4d ComputeMean(const vector<Vector4d> &points) {
@@ -96,10 +99,10 @@ int main() {
   C.block<2, 2>(0, 0) = cp;
   C.block<2, 2>(2, 2) = cq;
   MatrixXd R(2, 4);
-  R << 1, 0, -1, 0,
-       0, 1, 0, -1;
+  R << 1, 0, -1, 0, 0, 1, 0, -1;
   cout << "R * C * R^T: " << endl << R * C * R.transpose() << endl;
-  cout << "R * C * R^T: " << endl << R * ComputeCov(pqs, ComputeMean(pqs)) * R.transpose() << endl;
+  cout << "R * C * R^T: " << endl
+       << R * ComputeCov(pqs, ComputeMean(pqs)) * R.transpose() << endl;
 }
 // cost: -5.11832
 // 0.5 * c * c: 13.0986

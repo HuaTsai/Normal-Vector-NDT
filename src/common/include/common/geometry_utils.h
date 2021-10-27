@@ -25,10 +25,8 @@ geometry_msgs::Pose PoseInterpolate(const geometry_msgs::PoseStamped &p1,
 geometry_msgs::Pose GetPose(
     const std::vector<geometry_msgs::PoseStamped> &poses,
     const ros::Time &time) {
-  if (poses.front().header.stamp == time)
-    return poses.front().pose;
-  if (poses.back().header.stamp == time)
-    return poses.back().pose;
+  if (poses.front().header.stamp == time) return poses.front().pose;
+  if (poses.back().header.stamp == time) return poses.back().pose;
   auto end =
       std::lower_bound(poses.begin(), poses.end(), time,
                        [](const geometry_msgs::PoseStamped &a,

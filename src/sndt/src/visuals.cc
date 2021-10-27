@@ -4,14 +4,14 @@
  * @brief Definition of Visual Utilities
  * @version 0.1
  * @date 2021-07-30
- * 
+ *
  * @copyright Copyright (c) 2021
- * 
+ *
  */
-#include <sndt/visuals.h>
-#include <sndt/helpers.h>
 #include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
+#include <sndt/helpers.h>
+#include <sndt/visuals.h>
 #include <tf2_eigen/tf2_eigen.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
@@ -75,21 +75,25 @@ std::vector<Eigen::Vector2d> FindTangentPoints(const Marker &ellipse,
   auto y0 = point2(1), y02 = y0 * y0;
   std::vector<Eigen::Vector2d> sols(2);
   if (x02 == rx2) {
-    auto msol = (-rx2 * ry2 * ry2 + rx2 * ry2 * y02) / (2 * rx2 * ry2 * x0 * y0);
+    auto msol =
+        (-rx2 * ry2 * ry2 + rx2 * ry2 * y02) / (2 * rx2 * ry2 * x0 * y0);
     sols[0](0) = (msol * rx2 * (msol * x0 - y0)) / (msol * msol * rx2 + ry2);
     sols[0](1) = y0 + msol * (sols[0](0) - x0);
     sols[1](0) = x0;
     sols[1](1) = 0;
   } else {
-    auto msol1 = (-x0 * y0 + sqrt(-rx2 * ry2 + rx2 * y02 + ry2 * x02)) / (rx2 - x02);
-    sols[0](0) = (msol1 * rx2 * (msol1 * x0 - y0)) / (msol1 * msol1 * rx2 + ry2);
+    auto msol1 =
+        (-x0 * y0 + sqrt(-rx2 * ry2 + rx2 * y02 + ry2 * x02)) / (rx2 - x02);
+    sols[0](0) =
+        (msol1 * rx2 * (msol1 * x0 - y0)) / (msol1 * msol1 * rx2 + ry2);
     sols[0](1) = y0 + msol1 * (sols[0](0) - x0);
-    auto msol2 = (-x0 * y0 - sqrt(-rx2 * ry2 + rx2 * y02 + ry2 * x02)) / (rx2 - x02);
-    sols[1](0) = (msol2 * rx2 * (msol2 * x0 - y0)) / (msol2 * msol2 * rx2 + ry2);
+    auto msol2 =
+        (-x0 * y0 - sqrt(-rx2 * ry2 + rx2 * y02 + ry2 * x02)) / (rx2 - x02);
+    sols[1](0) =
+        (msol2 * rx2 * (msol2 * x0 - y0)) / (msol2 * msol2 * rx2 + ry2);
     sols[1](1) = y0 + msol2 * (sols[1](0) - x0);
   }
-  for (auto &sol : sols)
-    sol = aff2 * sol;
+  for (auto &sol : sols) sol = aff2 * sol;
   return sols;
 }
 
@@ -140,8 +144,11 @@ MarkerArray JoinMarkerArraysAndMarkers(
   return ret;
 }
 
-Marker MarkerOfBoundary(const Eigen::Vector2d &center, double size,
-                        double skew_rad, const Color &color, double alpha) {
+Marker MarkerOfBoundary(const Eigen::Vector2d &center,
+                        double size,
+                        double skew_rad,
+                        const Color &color,
+                        double alpha) {
   Marker ret;
   ret.header.frame_id = "map";
   ret.header.stamp = GetROSTime();
@@ -171,7 +178,8 @@ Marker MarkerOfBoundary(const Eigen::Vector2d &center, double size,
   return ret;
 }
 
-Marker MarkerOfEllipse(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covariance,
+Marker MarkerOfEllipse(const Eigen::Vector2d &mean,
+                       const Eigen::Matrix2d &covariance,
                        const Color &color,
                        double alpha) {
   Marker ret;
@@ -197,7 +205,8 @@ Marker MarkerOfEllipse(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covar
   return ret;
 }
 
-Marker MarkerOfCircle(const Eigen::Vector2d &center, double radius,
+Marker MarkerOfCircle(const Eigen::Vector2d &center,
+                      double radius,
                       const Color &color,
                       double alpha) {
   Marker ret;
@@ -238,9 +247,9 @@ Marker MarkerOfLines(const std::vector<Eigen::Vector2d> &points,
   return ret;
 }
 
-Marker MarkerOfLinesByMiddlePoints(
-    const std::vector<Eigen::Vector2d> &points,
-    const Color &color, double alpha) {
+Marker MarkerOfLinesByMiddlePoints(const std::vector<Eigen::Vector2d> &points,
+                                   const Color &color,
+                                   double alpha) {
   Expects(points.size() >= 2);
   std::vector<Eigen::Vector2d> pts;
   pts.push_back(points.front());
@@ -252,7 +261,8 @@ Marker MarkerOfLinesByMiddlePoints(
   return MarkerOfLines(pts, color, alpha);
 }
 
-Marker MarkerOfPoints(const std::vector<Eigen::Vector2d> &points, double size,
+Marker MarkerOfPoints(const std::vector<Eigen::Vector2d> &points,
+                      double size,
                       const Color &color,
                       double alpha) {
   auto now = GetROSTime();
@@ -273,7 +283,8 @@ Marker MarkerOfPoints(const std::vector<Eigen::Vector2d> &points, double size,
   return ret;
 }
 
-Marker MarkerOfArrow(const Eigen::Vector2d &start, const Eigen::Vector2d &end,
+Marker MarkerOfArrow(const Eigen::Vector2d &start,
+                     const Eigen::Vector2d &end,
                      const Color &color,
                      double alpha) {
   Marker ret;
@@ -294,8 +305,10 @@ Marker MarkerOfArrow(const Eigen::Vector2d &start, const Eigen::Vector2d &end,
   return ret;
 }
 
-Marker MarkerOfText(std::string text, const Eigen::Vector2d &position,
-                    const Color &color, double alpha) {
+Marker MarkerOfText(std::string text,
+                    const Eigen::Vector2d &position,
+                    const Color &color,
+                    double alpha) {
   Marker ret;
   ret.header.frame_id = "map";
   ret.header.stamp = GetROSTime();
@@ -314,7 +327,8 @@ Marker MarkerOfText(std::string text, const Eigen::Vector2d &position,
 
 MarkerArray MarkerArrayOfArrows(const std::vector<Eigen::Vector2d> &starts,
                                 const std::vector<Eigen::Vector2d> &ends,
-                                const Color &color, double alpha) {
+                                const Color &color,
+                                double alpha) {
   Expects(starts.size() == ends.size());
   MarkerArray ret;
   Marker arrow;
@@ -343,7 +357,8 @@ MarkerArray MarkerArrayOfArrows(const std::vector<Eigen::Vector2d> &starts,
 
 MarkerArray MarkerArrayOfSNDTCell(const SNDTCell *cell) {
   std::vector<Marker> ms;
-  ms.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(), cell->GetSkewRad(), Color::kLime));
+  ms.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
+                                cell->GetSkewRad(), Color::kLime));
   ms.push_back(MarkerOfPoints(cell->GetPoints(), 0.1, Color::kFuchsia));
   std::vector<Eigen::Vector2d> starts, ends;
   for (int i = 0; i < cell->GetN(); ++i) {
@@ -356,17 +371,20 @@ MarkerArray MarkerArrayOfSNDTCell(const SNDTCell *cell) {
   if (cell->GetPHasGaussian())
     ms.push_back(MarkerOfEllipse(cell->GetPointMean(), cell->GetPointCov()));
   if (cell->GetNHasGaussian()) {
-    auto nell = MarkerOfEllipse(cell->GetPointMean() + cell->GetNormalMean(), cell->GetNormalCov(), Color::kGray);
+    auto nell = MarkerOfEllipse(cell->GetPointMean() + cell->GetNormalMean(),
+                                cell->GetNormalCov(), Color::kGray);
     ms.push_back(nell);
     auto points = FindTangentPoints(nell, cell->GetPointMean());
-    ms.push_back(MarkerOfLinesByMiddlePoints({points[0], cell->GetPointMean(), points[1]}, Color::kGray));
+    ms.push_back(MarkerOfLinesByMiddlePoints(
+        {points[0], cell->GetPointMean(), points[1]}, Color::kGray));
   }
   return JoinMarkerArraysAndMarkers({mnms}, ms);
 }
 
 MarkerArray MarkerArrayOfSNDTCell2(const SNDTCell *cell) {
   std::vector<Marker> ms;
-  ms.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(), cell->GetSkewRad(), Color::kRed));
+  ms.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
+                                cell->GetSkewRad(), Color::kRed));
   ms.push_back(MarkerOfPoints(cell->GetPoints(), 0.1, Color::kFuchsia));
   std::vector<Eigen::Vector2d> starts, ends;
   for (int i = 0; i < cell->GetN(); ++i) {
@@ -377,18 +395,20 @@ MarkerArray MarkerArrayOfSNDTCell2(const SNDTCell *cell) {
   }
   auto mnms = MarkerArrayOfArrows(starts, ends, Color::kBlack);
   if (cell->GetPHasGaussian())
-    ms.push_back(MarkerOfEllipse(cell->GetPointMean(), cell->GetPointCov(), Color::kRed));
+    ms.push_back(MarkerOfEllipse(cell->GetPointMean(), cell->GetPointCov(),
+                                 Color::kRed));
   if (cell->GetNHasGaussian()) {
-    auto nell = MarkerOfEllipse(cell->GetPointMean() + cell->GetNormalMean(), cell->GetNormalCov(), Color::kGray);
+    auto nell = MarkerOfEllipse(cell->GetPointMean() + cell->GetNormalMean(),
+                                cell->GetNormalCov(), Color::kGray);
     ms.push_back(nell);
     auto points = FindTangentPoints(nell, cell->GetPointMean());
-    ms.push_back(MarkerOfLinesByMiddlePoints({points[0], cell->GetPointMean(), points[1]}, Color::kGray));
+    ms.push_back(MarkerOfLinesByMiddlePoints(
+        {points[0], cell->GetPointMean(), points[1]}, Color::kGray));
   }
   return JoinMarkerArraysAndMarkers({mnms}, ms);
 }
 
-MarkerArray MarkerArrayOfSNDTMap(const SNDTMap &map,
-                                 bool use_target_color) {
+MarkerArray MarkerArrayOfSNDTMap(const SNDTMap &map, bool use_target_color) {
   std::vector<MarkerArray> vma;
   for (auto cell : map) {
     if (use_target_color)
@@ -399,8 +419,8 @@ MarkerArray MarkerArrayOfSNDTMap(const SNDTMap &map,
   return JoinMarkerArrays(vma);
 }
 
-MarkerArray MarkerArrayOfSNDTMap(const std::vector<std::shared_ptr<SNDTCell>> &map,
-                                 bool use_target_color) {
+MarkerArray MarkerArrayOfSNDTMap(
+    const std::vector<std::shared_ptr<SNDTCell>> &map, bool use_target_color) {
   std::vector<MarkerArray> vma;
   for (auto cell : map) {
     if (use_target_color)
@@ -413,19 +433,23 @@ MarkerArray MarkerArrayOfSNDTMap(const std::vector<std::shared_ptr<SNDTCell>> &m
 
 MarkerArray MarkerArrayOfCorrespondences(const SNDTCell *source_cell,
                                          const SNDTCell *target_cell,
-                                         std::string text, const Color &color) {
+                                         std::string text,
+                                         const Color &color) {
   auto mas = MarkerArrayOfSNDTCell(source_cell);
   auto mat = MarkerArrayOfSNDTCell2(target_cell);
   auto mline =
       MarkerOfLines({source_cell->GetPointMean(), target_cell->GetPointMean()},
                     Color::kBlack);
-  Eigen::Vector2d middle = (source_cell->GetPointMean() + target_cell->GetPointMean()) / 2;
+  Eigen::Vector2d middle =
+      (source_cell->GetPointMean() + target_cell->GetPointMean()) / 2;
   auto mtext = MarkerOfText(text, middle, color);
   return JoinMarkerArraysAndMarkers({mas, mat}, {mline, mtext});
 }
 
 MarkerArray MarkerArrayOfCorrespondences(
-    const SNDTMap &smap, const SNDTMap &tmap, const Eigen::Affine2d &aff,
+    const SNDTMap &smap,
+    const SNDTMap &tmap,
+    const Eigen::Affine2d &aff,
     const std::vector<std::pair<int, Eigen::Vector2d>> &corres) {
   std::vector<Marker> ms;
   std::vector<MarkerArray> mas;
@@ -435,7 +459,8 @@ MarkerArray MarkerArrayOfCorrespondences(
     auto tcell = tmap.GetCellForPoint(corr.second);
     mas.push_back(MarkerArrayOfSNDTCell(scell));
     mas.push_back(MarkerArrayOfSNDTCell2(tcell));
-    ms.push_back(MarkerOfLines({scell->GetPointMean(), tcell->GetPointMean()}, Color::kBlack));
+    ms.push_back(MarkerOfLines({scell->GetPointMean(), tcell->GetPointMean()},
+                               Color::kBlack));
   }
   return JoinMarkerArraysAndMarkers(mas, ms);
 }

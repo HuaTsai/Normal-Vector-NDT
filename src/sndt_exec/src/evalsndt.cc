@@ -1,15 +1,16 @@
 // Same Scans with Given Transformation Range
-#include <ros/ros.h>
-#include <sndt/matcher.h>
-#include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
-#include <pcl_ros/point_cloud.h>
+#include <pcl/filters/statistical_outlier_removal.h>
 #include <pcl/filters/voxel_grid.h>
+#include <pcl_ros/point_cloud.h>
+#include <ros/ros.h>
 #include <rosbag/bag.h>
-#include <tqdm/tqdm.h>
+#include <sndt/matcher.h>
 #include <sndt/visuals.h>
 #include <std_msgs/Int32.h>
-#include <pcl/filters/statistical_outlier_removal.h>
+#include <tqdm/tqdm.h>
+
+#include <boost/program_options.hpp>
+#include <sndt_exec/wrapper.hpp>
 
 using namespace std;
 using namespace Eigen;
@@ -23,7 +24,9 @@ double Avg(const T &c) {
 
 void Q1MedianQ3(vector<double> &data) {
   sort(data.begin(), data.end());
-  printf("[%g, %g, %g, %g, %g]\n", data[0], data[data.size() / 4], data[data.size() / 2], data[data.size() / 4 * 3], data[data.size() - 1]);
+  printf("[%g, %g, %g, %g, %g]\n", data[0], data[data.size() / 4],
+         data[data.size() / 2], data[data.size() / 4 * 3],
+         data[data.size() - 1]);
   // cout << "Min: " << data[0] << endl;
   // cout << " Q1: " << data[data.size() / 4] << endl;
   // cout << "Mid: " << data[data.size() / 2] << endl;
@@ -48,21 +51,24 @@ vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg, double voxel) {
   return ret;
 }
 
-double RMS(const vector<Vector2d> &tgt, const vector<Vector2d> &src,
+double RMS(const vector<Vector2d> &tgt,
+           const vector<Vector2d> &src,
            const Affine2d &aff = Affine2d::Identity()) {
   vector<Vector2d> src2(src.size());
-  transform(src.begin(), src.end(), src2.begin(), [&aff](auto p) { return aff * p; });
+  transform(src.begin(), src.end(), src2.begin(),
+            [&aff](auto p) { return aff * p; });
   double ret = 0;
   for (size_t i = 0; i < src2.size(); ++i)
     ret += (src2[i] - tgt[i]).squaredNorm();
   return sqrt(ret / src2.size());
 }
 
-void ShowRMS(const CommonParameters &params, const vector<Vector2d> &tgt, const vector<Vector2d> &src) {
+void ShowRMS(const CommonParameters &params,
+             const vector<Vector2d> &tgt,
+             const vector<Vector2d> &src) {
   cout << "[";
   for (auto sols : params._sols) {
-    for (auto T : sols)
-      cout << RMS(tgt, src, T) << ", ";
+    for (auto T : sols) cout << RMS(tgt, src, T) << ", ";
   }
   cout << " ]";
   cout << endl;
@@ -70,10 +76,8 @@ void ShowRMS(const CommonParameters &params, const vector<Vector2d> &tgt, const 
 
 void ShowAllSols(const CommonParameters &params) {
   for (size_t i = 0; i < params._sols.size(); ++i) {
-    cout << i << ": "
-         << params._sols[i].front().translation().transpose() << " -> "
-         << params._sols[i].back().translation().transpose()
-         << endl;
+    cout << i << ": " << params._sols[i].front().translation().transpose()
+         << " -> " << params._sols[i].back().translation().transpose() << endl;
   }
 }
 
@@ -94,8 +98,7 @@ void cb(const std_msgs::Int32 &idx) {
 
 void OutlierRemove(vector<Vector2d> &data) {
   pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
-  for (auto pt : data)
-    pc->push_back(pcl::PointXYZ(pt(0), pt(1), 0));
+  for (auto pt : data) pc->push_back(pcl::PointXYZ(pt(0), pt(1), 0));
   pcl::StatisticalOutlierRemoval<pcl::PointXYZ> filter(true);
   filter.setInputCloud(pc);
   filter.setMeanK(8);
@@ -103,23 +106,21 @@ void OutlierRemove(vector<Vector2d> &data) {
   vector<int> indices;
   filter.filter(indices);
   data.clear();
-  for (auto i : indices)
-    data.push_back(Vector2d(pc->at(i).x, pc->at(i).y));
+  for (auto i : indices) data.push_back(Vector2d(pc->at(i).x, pc->at(i).y));
 }
 
 int main(int argc, char **argv) {
-  Affine3d aff3 =
-      Translation3d(0.943713, 0.000000, 1.840230) *
-      Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
+  Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
+                  Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
   aff3 = Conserve2DFromAffine3d(aff3);
-  Affine2d aff2 =
-      Translation2d(aff3.translation()(0), aff3.translation()(1)) *
-      Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
+  Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
+                  Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
   int n, m;
   double cell_size, huber, voxel, x, y, t, r, radius;
   string data;
   po::options_description desc("Allowed options");
+  // clang-format off
   desc.add_options()
       ("help,h", "Produce help message")
       ("data,d", po::value<string>(&data)->required(), "Data (logxx)")
@@ -133,6 +134,7 @@ int main(int argc, char **argv) {
       ("t,t", po::value<double>(&t)->default_value(0), "t")
       ("r,r", po::value<double>(&r)->default_value(15), "r")
       ("m,m", po::value<int>(&m)->default_value(1), "r");
+  // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   if (vm.count("help")) {
@@ -156,7 +158,8 @@ int main(int argc, char **argv) {
   SerializationInput(JoinPath(GetDataPath(data), "lidar.ser"), vpc);
 
   auto tgt = PCMsgTo2D(vpc[n], voxel);
-  transform(tgt.begin(), tgt.end(), tgt.begin(), [&aff2](auto p) { return aff2 * p; });
+  transform(tgt.begin(), tgt.end(), tgt.begin(),
+            [&aff2](auto p) { return aff2 * p; });
   // OutlierRemove(tgt);
 
 #if 1
@@ -167,9 +170,12 @@ int main(int argc, char **argv) {
   // vector<double> rms6;
   for (auto aff : affs) {
     std::vector<Eigen::Vector2d> src(tgt.size());
-    transform(tgt.begin(), tgt.end(), src.begin(), [&aff](auto p) { return aff * p; });
-    vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, Eigen::Affine2d::Identity()}};
-    vector<pair<vector<Vector2d>, Affine2d>> datas{{src, Eigen::Affine2d::Identity()}};
+    transform(tgt.begin(), tgt.end(), src.begin(),
+              [&aff](auto p) { return aff * p; });
+    vector<pair<vector<Vector2d>, Affine2d>> datat{
+        {tgt, Eigen::Affine2d::Identity()}};
+    vector<pair<vector<Vector2d>, Affine2d>> datas{
+        {src, Eigen::Affine2d::Identity()}};
 
     CommonParameters *params;
     Affine2d T;
@@ -230,10 +236,12 @@ int main(int argc, char **argv) {
     }
 
     cout << (((aff * T).translation().isZero(1)) ? "success" : "fail") << ", ";
-    cout << "Iterations: " << params->_iteration << " & " << params->_ceres_iteration << endl;
+    cout << "Iterations: " << params->_iteration << " & "
+         << params->_ceres_iteration << endl;
     for (auto tf : params->_sols) {
       vector<Vector2d> src2(src.size());
-      transform(src.begin(), src.end(), src2.begin(), [&tf](auto p) { return tf.front() * p; });
+      transform(src.begin(), src.end(), src2.begin(),
+                [&tf](auto p) { return tf.front() * p; });
       pub1.publish(JoinMarkers({MarkerOfPoints(tgt, 0.5, Color::kRed)}));
       pub2.publish(JoinMarkers({MarkerOfPoints(src2)}));
       ros::Rate(10).sleep();
@@ -248,11 +256,11 @@ int main(int argc, char **argv) {
     // ms.back()[0] = JoinMarkers({MarkerOfPoints(tgt, 0.5, Color::kRed)});
     // ms.back()[1] = JoinMarkers({MarkerOfPoints(src)});
     // vector<Eigen::Vector2d> srcTx(src.size());
-    // transform(src.begin(), src.end(), srcTx.begin(), [&Tx](auto p) { return Tx * p; });
-    // ms.back()[2] = JoinMarkers({MarkerOfPoints(srcTx)});
+    // transform(src.begin(), src.end(), srcTx.begin(), [&Tx](auto p) { return
+    // Tx * p; }); ms.back()[2] = JoinMarkers({MarkerOfPoints(srcTx)});
     // vector<Eigen::Vector2d> srcT(src.size());
-    // transform(src.begin(), src.end(), srcT.begin(), [&T](auto p) { return T * p; });
-    // ms.back()[3] = JoinMarkers({MarkerOfPoints(srcT)});
+    // transform(src.begin(), src.end(), srcT.begin(), [&T](auto p) { return T *
+    // p; }); ms.back()[3] = JoinMarkers({MarkerOfPoints(srcT)});
   }
   cout << "Ready!" << endl;
 #endif

@@ -1,12 +1,13 @@
+#include <pcl/filters/voxel_grid.h>
+#include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
+#include <rosbag/bag.h>
+#include <sensor_msgs/CompressedImage.h>
 #include <sndt/matcher.h>
 #include <sndt/visuals.h>
-#include <sensor_msgs/CompressedImage.h>
+
 #include <boost/program_options.hpp>
 #include <sndt_exec/wrapper.hpp>
-#include <pcl_ros/point_cloud.h>
-#include <pcl/filters/voxel_grid.h>
-#include <rosbag/bag.h>
 
 using namespace std;
 using namespace Eigen;
@@ -29,10 +30,10 @@ vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg) {
   return ret;
 }
 
-sensor_msgs::PointCloud2 EigenToPC(const vector<Vector2d> &pts, const ros::Time &time) {
+sensor_msgs::PointCloud2 EigenToPC(const vector<Vector2d> &pts,
+                                   const ros::Time &time) {
   pcl::PointCloud<pcl::PointXYZ> pc;
-  for (auto pt : pts)
-    pc.push_back(pcl::PointXYZ(pt(0), pt(1), 0));
+  for (auto pt : pts) pc.push_back(pcl::PointXYZ(pt(0), pt(1), 0));
   sensor_msgs::PointCloud2 ret;
   pcl::toROSMsg(pc, ret);
   ret.header.frame_id = "map";
@@ -41,17 +42,16 @@ sensor_msgs::PointCloud2 EigenToPC(const vector<Vector2d> &pts, const ros::Time 
 }
 
 int main(int argc, char **argv) {
-  Affine3d aff3 =
-      Translation3d(0.943713, 0.000000, 1.840230) *
-      Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
+  Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
+                  Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
   aff3 = Conserve2DFromAffine3d(aff3);
-  Affine2d aff2 =
-      Translation2d(aff3.translation()(0), aff3.translation()(1)) *
-      Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
+  Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
+                  Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
   double huber, cell_size, radius;
   string data, outfolder;
   po::options_description desc("Allowed options");
+  // clang-format off
   desc.add_options()
       ("help,h", "Produce help message")
       ("data,d", po::value<string>(&data)->required(), "Data (logxx)")
@@ -59,6 +59,7 @@ int main(int argc, char **argv) {
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
       ("huber,u", po::value<double>(&huber)->default_value(1.0), "Use Huber loss");
+  // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
@@ -89,15 +90,14 @@ int main(int argc, char **argv) {
   vp3.push_back(MakePoseStampedMsg(vpc[0].header.stamp, Tr3));
 
   rosbag::Bag bag;
-  bag.open(JoinPath(outfolder, "replay" + data + ".bag"), rosbag::bagmode::Write);
-  for (const auto &im : imb)
-    bag.write("back/compressed", im.header.stamp, im);
+  bag.open(JoinPath(outfolder, "replay" + data + ".bag"),
+           rosbag::bagmode::Write);
+  for (const auto &im : imb) bag.write("back/compressed", im.header.stamp, im);
   for (const auto &im : imbl)
     bag.write("back_left/compressed", im.header.stamp, im);
   for (const auto &im : imbr)
     bag.write("back_right/compressed", im.header.stamp, im);
-  for (const auto &im : imf)
-    bag.write("front/compressed", im.header.stamp, im);
+  for (const auto &im : imf) bag.write("front/compressed", im.header.stamp, im);
   for (const auto &im : imfl)
     bag.write("front_left/compressed", im.header.stamp, im);
   for (const auto &im : imfr)
@@ -114,8 +114,10 @@ int main(int argc, char **argv) {
     auto tgt = PCMsgTo2D(vpc[i]);
     auto src = PCMsgTo2D(vpc[i + 1]);
     vector<Vector2d> tgt3(tgt.size()), src3(src.size());
-    transform(tgt.begin(), tgt.end(), tgt3.begin(), [&aff2](auto p) { return aff2 * p; });
-    transform(src.begin(), src.end(), src3.begin(), [&aff2](auto p) { return aff2 * p; });
+    transform(tgt.begin(), tgt.end(), tgt3.begin(),
+              [&aff2](auto p) { return aff2 * p; });
+    transform(src.begin(), src.end(), src3.begin(),
+              [&aff2](auto p) { return aff2 * p; });
     vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, aff2}};
     vector<pair<vector<Vector2d>, Affine2d>> datas{{src, aff2}};
     auto srctime = vpc[i + 1].header.stamp;
@@ -133,7 +135,8 @@ int main(int argc, char **argv) {
     Tr1 = Tr1 * Matrix4fFromMatrix3d(T1.matrix());
     vp1.push_back(MakePoseStampedMsg(vpc[i + 1].header.stamp, Tr1));
     vector<Vector2d> next1(tgt3.size());
-    transform(tgt3.begin(), tgt3.end(), next1.begin(), [&T1](auto p) { return T1.inverse() * p; });
+    transform(tgt3.begin(), tgt3.end(), next1.begin(),
+              [&T1](auto p) { return T1.inverse() * p; });
     bag.write("sndt", srctime, EigenToPC(next1, srctime));
     auto t2 = GetTime();
     avg1 += GetDiffTime(t1, t2);
@@ -148,7 +151,8 @@ int main(int argc, char **argv) {
     Tr2 = Tr2 * Matrix4fFromMatrix3d(T2.matrix());
     vp2.push_back(MakePoseStampedMsg(vpc[i + 1].header.stamp, Tr2));
     vector<Vector2d> next2(tgt3.size());
-    transform(tgt3.begin(), tgt3.end(), next2.begin(), [&T2](auto p) { return T2.inverse() * p; });
+    transform(tgt3.begin(), tgt3.end(), next2.begin(),
+              [&T2](auto p) { return T2.inverse() * p; });
     bag.write("ndt", srctime, EigenToPC(next2, srctime));
     auto t4 = GetTime();
     avg2 += GetDiffTime(t3, t4);
@@ -160,7 +164,8 @@ int main(int argc, char **argv) {
     Tr3 = Tr3 * Matrix4fFromMatrix3d(T3.matrix());
     vp3.push_back(MakePoseStampedMsg(vpc[i + 1].header.stamp, Tr3));
     vector<Vector2d> next3(tgt3.size());
-    transform(tgt3.begin(), tgt3.end(), next3.begin(), [&T3](auto p) { return T3.inverse() * p; });
+    transform(tgt3.begin(), tgt3.end(), next3.begin(),
+              [&T3](auto p) { return T3.inverse() * p; });
     bag.write("sicp", srctime, EigenToPC(next3, srctime));
     auto t6 = GetTime();
     avg3 += GetDiffTime(t5, t6);
@@ -182,20 +187,26 @@ int main(int argc, char **argv) {
   est1.poses = vp1;
   auto gt1 = gtpath;
   MakeGtLocal(gt1, est1.poses[0].header.stamp);
-  WriteToFile(est1, JoinPath(outfolder, "pc/sndt/pc_sndt_" + data, "stamped_traj_estimate.txt"));
-  WriteToFile(gt1, JoinPath(outfolder, "pc/sndt/pc_sndt_" + data, "stamped_groundtruth.txt"));
+  WriteToFile(est1, JoinPath(outfolder, "pc/sndt/pc_sndt_" + data,
+                             "stamped_traj_estimate.txt"));
+  WriteToFile(gt1, JoinPath(outfolder, "pc/sndt/pc_sndt_" + data,
+                            "stamped_groundtruth.txt"));
 
   auto est2 = estpath;
   est2.poses = vp2;
   auto gt2 = gtpath;
   MakeGtLocal(gt2, est2.poses[0].header.stamp);
-  WriteToFile(est2, JoinPath(outfolder, "pc/ndt/pc_ndt_" + data, "stamped_traj_estimate.txt"));
-  WriteToFile(gt2, JoinPath(outfolder, "pc/ndt/pc_ndt_" + data, "stamped_groundtruth.txt"));
+  WriteToFile(est2, JoinPath(outfolder, "pc/ndt/pc_ndt_" + data,
+                             "stamped_traj_estimate.txt"));
+  WriteToFile(gt2, JoinPath(outfolder, "pc/ndt/pc_ndt_" + data,
+                            "stamped_groundtruth.txt"));
 
   auto est3 = estpath;
   est3.poses = vp3;
   auto gt3 = gtpath;
   MakeGtLocal(gt3, est3.poses[0].header.stamp);
-  WriteToFile(est3, JoinPath(outfolder, "pc/sicp/pc_sicp_" + data, "stamped_traj_estimate.txt"));
-  WriteToFile(gt3, JoinPath(outfolder, "pc/sicp/pc_sicp_" + data, "stamped_groundtruth.txt"));
+  WriteToFile(est3, JoinPath(outfolder, "pc/sicp/pc_sicp_" + data,
+                             "stamped_traj_estimate.txt"));
+  WriteToFile(gt3, JoinPath(outfolder, "pc/sicp/pc_sicp_" + data,
+                            "stamped_groundtruth.txt"));
 }
