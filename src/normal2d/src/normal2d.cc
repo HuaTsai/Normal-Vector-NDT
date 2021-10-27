@@ -66,8 +66,7 @@ std::vector<Eigen::Vector2d> ComputeNormals(
       continue;
     }
     if (found == 2) {
-      Eigen::Vector2d diff = pc[indices[0]] - pc[indices[1]];
-      ret[i] = Eigen::Vector2d(-diff(1), diff(0)).normalized();
+      ret[i] = (pc[indices[0]] - pc[indices[1]]).unitOrthogonal();
     } else {
       Eigen::Vector2d mean = ComputeMeanWithIndices(pc, indices);
       Eigen::Matrix2d cov = ComputeCovWithIndices(pc, indices, mean);

@@ -1,4 +1,4 @@
-// Same Scans with Given Transformation Range
+// Different Scans
 #include <ros/ros.h>
 #include <sndt/matcher.h>
 #include <boost/program_options.hpp>
@@ -16,6 +16,9 @@ using namespace Eigen;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
 
+vector<vector<visualization_msgs::MarkerArray>> ms;
+ros::Publisher pub1, pub2, pub3, pub4;
+
 template <typename T>
 double Avg(const T &c) {
   return accumulate(c.begin(), c.end(), 0.) / c.size();
@@ -24,11 +27,6 @@ double Avg(const T &c) {
 void Q1MedianQ3(vector<double> &data) {
   sort(data.begin(), data.end());
   printf("[%g, %g, %g, %g, %g]\n", data[0], data[data.size() / 4], data[data.size() / 2], data[data.size() / 4 * 3], data[data.size() - 1]);
-  // cout << "Min: " << data[0] << endl;
-  // cout << " Q1: " << data[data.size() / 4] << endl;
-  // cout << "Mid: " << data[data.size() / 2] << endl;
-  // cout << " Q3: " << data[data.size() / 4 * 3] << endl;
-  // cout << "Max: " << data[data.size() - 1] << endl;
 }
 
 vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg, double voxel) {
@@ -58,39 +56,6 @@ double RMS(const vector<Vector2d> &tgt, const vector<Vector2d> &src,
   return sqrt(ret / src2.size());
 }
 
-void ShowRMS(const CommonParameters &params, const vector<Vector2d> &tgt, const vector<Vector2d> &src) {
-  cout << "[";
-  for (auto sols : params._sols) {
-    for (auto T : sols)
-      cout << RMS(tgt, src, T) << ", ";
-  }
-  cout << " ]";
-  cout << endl;
-}
-
-void ShowAllSols(const CommonParameters &params) {
-  for (size_t i = 0; i < params._sols.size(); ++i) {
-    cout << i << ": "
-         << params._sols[i].front().translation().transpose() << " -> "
-         << params._sols[i].back().translation().transpose()
-         << endl;
-  }
-}
-
-vector<vector<visualization_msgs::MarkerArray>> ms;
-ros::Publisher pub1, pub2, pub3, pub4, pub5, pub6, pub7, pub8;
-vector<Affine2d> Ts;
-vector<Affine2d> Txs;
-
-void cb(const std_msgs::Int32 &idx) {
-  int n = idx.data;
-  pub1.publish(ms[n][0]);
-  pub2.publish(ms[n][1]);
-  pub3.publish(ms[n][2]);
-  pub4.publish(ms[n][3]);
-  cout << Ts[n].translation().transpose() << endl;
-  cout << Txs[n].translation().transpose() << endl;
-}
 
 void OutlierRemove(vector<Vector2d> &data) {
   pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
@@ -107,6 +72,21 @@ void OutlierRemove(vector<Vector2d> &data) {
     data.push_back(Vector2d(pc->at(i).x, pc->at(i).y));
 }
 
+Affine2d GetGtPose(string data, ros::Time tt, ros::Time ts) {
+  nav_msgs::Path gtpath;
+  string base = "/home/ee904/Desktop/HuaTsai/NormalNDT/Analysis/1Data/" + data;
+  SerializationInput(base + "/gt.ser", gtpath);
+  Affine3d Tt, Ts;
+  tf2::fromMsg(GetPose(gtpath.poses, tt), Tt);
+  tf2::fromMsg(GetPose(gtpath.poses, ts), Ts);
+  Affine3d Tts = Conserve2DFromAffine3d(Tt.inverse() * Ts);
+  Affine2d ret = Translation2d(Tts.translation()(0), Tts.translation()(1)) *
+                 Rotation2Dd(Tts.rotation().block<2, 2>(0, 0));
+  cout << "td: " << (ts - tt).toSec() << ", ";
+  cout << "(r, t) = " << TransNormRotDegAbsFromAffine2d(ret).transpose() << endl;
+  return ret;
+}
+
 int main(int argc, char **argv) {
   Affine3d aff3 =
       Translation3d(0.943713, 0.000000, 1.840230) *
@@ -116,7 +96,7 @@ int main(int argc, char **argv) {
       Translation2d(aff3.translation()(0), aff3.translation()(1)) *
       Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
-  int n, m;
+  int n, m, o;
   double cell_size, huber, voxel, x, y, t, r, radius;
   string data;
   po::options_description desc("Allowed options");
@@ -132,7 +112,8 @@ int main(int argc, char **argv) {
       ("y,y", po::value<double>(&y)->default_value(0), "y")
       ("t,t", po::value<double>(&t)->default_value(0), "t")
       ("r,r", po::value<double>(&r)->default_value(15), "r")
-      ("m,m", po::value<int>(&m)->default_value(1), "r");
+      ("m,m", po::value<int>(&m)->default_value(1), "r")
+      ("o,o", po::value<int>(&o)->default_value(1), "offset");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   if (vm.count("help")) {
@@ -147,29 +128,29 @@ int main(int argc, char **argv) {
   pub2 = nh.advertise<MarkerArray>("markers2", 0, true);
   pub3 = nh.advertise<MarkerArray>("markers3", 0, true);
   pub4 = nh.advertise<MarkerArray>("markers4", 0, true);
-  // pub5 = nh.advertise<MarkerArray>("markers5", 0, true);
-  // pub6 = nh.advertise<MarkerArray>("markers6", 0, true);
-  // pub7 = nh.advertise<MarkerArray>("markers7", 0, true);
-  // pub8 = nh.advertise<MarkerArray>("markers8", 0, true);
 
   vector<sensor_msgs::PointCloud2> vpc;
   SerializationInput(JoinPath(GetDataPath(data), "lidar.ser"), vpc);
 
   auto tgt = PCMsgTo2D(vpc[n], voxel);
+  auto src = PCMsgTo2D(vpc[n + o], voxel);
   transform(tgt.begin(), tgt.end(), tgt.begin(), [&aff2](auto p) { return aff2 * p; });
+  transform(src.begin(), src.end(), src.begin(), [&aff2](auto p) { return aff2 * p; });
+  auto affgt = GetGtPose(data, vpc[n].header.stamp, vpc[n + o].header.stamp);
+  transform(src.begin(), src.end(), src.begin(), [&affgt](auto p) { return affgt * p; });
   // OutlierRemove(tgt);
+  // OutlierRemove(src);
+  pub1.publish(JoinMarkers({MarkerOfPoints(tgt, 0.5, Color::kRed)}));
+  pub4.publish(JoinMarkers({MarkerOfPoints(src)}));
 
-#if 1
-  // ros::Subscriber sub = nh.subscribe("idx", 0, cb);
   int samples = 15;
   auto affs = RandomTransformGenerator2D(r).Generate(samples);
   cout << "r = " << r << endl;
-  // vector<double> rms6;
   for (auto aff : affs) {
-    std::vector<Eigen::Vector2d> src(tgt.size());
-    transform(tgt.begin(), tgt.end(), src.begin(), [&aff](auto p) { return aff * p; });
+    vector<Vector2d> srcc(src.size());
+    transform(src.begin(), src.end(), srcc.begin(), [&aff](auto p) { return aff * p; });
     vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, Eigen::Affine2d::Identity()}};
-    vector<pair<vector<Vector2d>, Affine2d>> datas{{src, Eigen::Affine2d::Identity()}};
+    vector<pair<vector<Vector2d>, Affine2d>> datas{{srcc, Eigen::Affine2d::Identity()}};
 
     CommonParameters *params;
     Affine2d T;
@@ -229,105 +210,18 @@ int main(int argc, char **argv) {
       T = SNDTMatch2(tgt7, src7, params7);
     }
 
-    cout << (((aff * T).translation().isZero(1)) ? "success" : "fail") << ", ";
-    cout << "Iterations: " << params->_iteration << " & " << params->_ceres_iteration << endl;
+    if ((aff * T).translation().isZero(1)) {
+      cout << "s: " << TransNormRotDegAbsFromAffine2d(aff * T).transpose() << ", ";
+    } else {
+      cout << "f: " << TransNormRotDegAbsFromAffine2d(aff * T).transpose() << ", ";
+    }
+    cout << "Iter: " << params->_iteration << " & " << params->_ceres_iteration;
+    cout << ", " << int(params->_converge) << endl;
     for (auto tf : params->_sols) {
-      vector<Vector2d> src2(src.size());
-      transform(src.begin(), src.end(), src2.begin(), [&tf](auto p) { return tf.front() * p; });
-      pub1.publish(JoinMarkers({MarkerOfPoints(tgt, 0.5, Color::kRed)}));
+      vector<Vector2d> src2(srcc.size());
+      transform(srcc.begin(), srcc.end(), src2.begin(), [&tf](auto p) { return tf.front() * p; });
       pub2.publish(JoinMarkers({MarkerOfPoints(src2)}));
       ros::Rate(10).sleep();
     }
-    // for (size_t i = 0; i < params->_costs.size(); ++i) {
-    //   cout << "Iter " << i << " = ";
-    //   Q1MedianQ3(params->_costs[i]);
-    // }
-
-    // rms6.push_back(RMS(tgt, src, params._sols[0].back()));
-    // ms.push_back(vector<MarkerArray>(4));
-    // ms.back()[0] = JoinMarkers({MarkerOfPoints(tgt, 0.5, Color::kRed)});
-    // ms.back()[1] = JoinMarkers({MarkerOfPoints(src)});
-    // vector<Eigen::Vector2d> srcTx(src.size());
-    // transform(src.begin(), src.end(), srcTx.begin(), [&Tx](auto p) { return Tx * p; });
-    // ms.back()[2] = JoinMarkers({MarkerOfPoints(srcTx)});
-    // vector<Eigen::Vector2d> srcT(src.size());
-    // transform(src.begin(), src.end(), srcT.begin(), [&T](auto p) { return T * p; });
-    // ms.back()[3] = JoinMarkers({MarkerOfPoints(srcT)});
   }
-  cout << "Ready!" << endl;
-#endif
-
-#if 0
-  vector<Eigen::Vector2d> src(tgt.size());
-  transform(tgt.begin(), tgt.end(), src.begin(), [&x, &y, &t](auto p) { return Translation2d(x, y) * p; });
-  vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, Eigen::Affine2d::Identity()}};
-  vector<pair<vector<Vector2d>, Affine2d>> datas{{src, Eigen::Affine2d::Identity()}};
-
-  // SICP
-  // SICPParameters params;
-  // auto tgt6 = MakePoints(datat, params);
-  // auto src6 = MakePoints(datas, params);
-  // auto T = SICPMatch(tgt6, src6, params);
-  // auto Tx = params._sols[0].back();
-  // for (auto cost : params._costs) {
-  //   cout << Avg(cost) << ", ";
-  // }
-  // cout << endl;
-
-  // NDT
-  // NDTParameters params;
-  // params.r_variance = params.t_variance = 0;
-  // auto tgt6 = MakeNDTMap(datat, params);
-  // auto src6 = MakeNDTMap(datas, params);
-  // auto T = D2DNDTMatch(tgt6, src6, params);
-  // auto Tx = params._sols[0].back();
-  // for (auto cost : params._costs) {
-  //   cout << Avg(cost) << ", ";
-  // }
-  // cout << endl;
-
-  // PNDT
-  // NDTParameters params;
-  // params.r_variance = params.t_variance = 0;
-  // params.cell_size = cell_size, params.huber = huber;
-  // auto tgt6 = MakeNDTMap(datat, params);
-  // auto src6 = MakePoints(datas, params);
-  // auto T = P2DNDTMatch(tgt6, src6, params);
-  // auto Tx = params._sols[0].back();
-  // for (auto cost : params._costs) {
-  //   cout << Avg(cost) << ", ";
-  // }
-  // cout << endl;
-
-  // SNDT
-  SNDTParameters params;
-  params.r_variance = params.t_variance = 0;
-  params.cell_size = cell_size, params.huber = huber;
-  auto tgt6 = MakeSNDTMap(datat, params);
-  auto src6 = MakeSNDTMap(datas, params);
-  auto T = SNDTMatch(tgt6, src6, params);
-  auto Tx = params._sols[0].back();
-  cout << Avg(params._costs[0]) << endl;
-  Q1MedianQ3(params._costs[0]);
-
-  ShowAllSols(params);
-  pub1.publish(JoinMarkers({MarkerOfPoints(tgt, 0.5, Color::kRed)}));
-  pub2.publish(JoinMarkers({MarkerOfPoints(src)}));
-
-  vector<Eigen::Vector2d> srcTx(src.size());
-  transform(src.begin(), src.end(), srcTx.begin(), [&Tx](auto p) { return Tx * p; });
-  pub3.publish(JoinMarkers({MarkerOfPoints(srcTx)}));
-
-  vector<Eigen::Vector2d> srcT(src.size());
-  transform(src.begin(), src.end(), srcT.begin(), [&T](auto p) { return T * p; });
-  pub4.publish(JoinMarkers({MarkerOfPoints(srcT)}));
-
-  // SNDT
-  // pub5.publish(JoinMarkerArrays({MarkerArrayOfSNDTMap(tgt6, true)}));
-  // pub6.publish(JoinMarkerArrays({MarkerArrayOfSNDTMap(src6)}));
-  // pub7.publish(JoinMarkerArrays({MarkerArrayOfSNDTMap(src6.PseudoTransformCells(T, true))}));
-  // pub8.publish(JoinMarkerArrays({MarkerArrayOfSNDTMap(src6.PseudoTransformCells(Tx, true))}));
-
-  ros::spin();
-#endif
 }

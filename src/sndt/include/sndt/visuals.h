@@ -246,6 +246,9 @@ MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell,
                                          std::string text,
                                          const Color &color = Color::kBlack);
 
+MarkerArray MarkerArrayOfCorrespondences(
+    const SNDTMap &smap, const SNDTMap &tmap, const Eigen::Affine2d &aff,
+    const std::vector<std::pair<int, Eigen::Vector2d>> &corres);
 
 /**
  * @brief MarkerArray of the sensors

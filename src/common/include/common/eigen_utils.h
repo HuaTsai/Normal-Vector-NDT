@@ -50,35 +50,18 @@ Eigen::Matrix<double, 6, 1> XYZRPYFromMatrix4f(const Eigen::Matrix4f &mtx) {
   return XYZRPYFromAffine3d(Affine3dFromMatrix4f(mtx));
 }
 
-Eigen::Vector3d XYTRadianFromMatrix3d(const Eigen::Matrix3d &mtx) {
+Eigen::Vector3d XYTRadianFromAffine2d(const Eigen::Affine2d &aff) {
   Eigen::Vector3d ret;
-  Eigen::Affine2d aff(mtx);
   ret(0) = aff.translation()(0);
   ret(1) = aff.translation()(1);
   ret(2) = Eigen::Rotation2Dd(aff.rotation()).angle();
   return ret;
 }
 
-Eigen::Vector3d XYTDegreeFromMatrix3d(const Eigen::Matrix3d &mtx) {
-  Eigen::Vector3d ret = XYTRadianFromMatrix3d(mtx);
+Eigen::Vector3d XYTDegreeFromAffine2d(const Eigen::Affine2d &aff) {
+  Eigen::Vector3d ret = XYTRadianFromAffine2d(aff);
   ret(2) = ret(2) * 180. / M_PI;
   return ret;
-}
-
-// Matrix3d, Matrix4f
-Eigen::Matrix3d Matrix3dFromXYTRadian(const Eigen::Vector3d &xyt) {
-  Eigen::Affine2d aff = Eigen::Translation2d(xyt(0), xyt(1)) *
-                        Eigen::Rotation2Dd(xyt(2));
-  return aff.matrix();
-}
-
-Eigen::Matrix3d Matrix3dFromXYTDegree(const Eigen::Vector3d &xyt) {
-  return Matrix3dFromXYTRadian(Eigen::Vector3d(xyt(0), xyt(1), xyt(2) * M_PI / 180.));
-}
-
-Eigen::Matrix3d Matrix3dFromMatrix4f(const Eigen::Matrix4f &mtx) {
-  auto xyzrpy = XYZRPYFromMatrix4f(mtx);
-  return Matrix3dFromXYTRadian(Eigen::Vector3d(xyzrpy(0), xyzrpy(1), xyzrpy(5)));
 }
 
 Eigen::Matrix4f Matrix4fFromMatrix3d(const Eigen::Matrix3d &mtx) {
@@ -86,10 +69,6 @@ Eigen::Matrix4f Matrix4fFromMatrix3d(const Eigen::Matrix3d &mtx) {
   ret.block<2, 2>(0, 0) = mtx.block<2, 2>(0, 0).cast<float>();
   ret.block<2, 1>(0, 3) = mtx.block<2, 1>(0, 2).cast<float>();
   return ret;
-}
-
-Eigen::Matrix4f Matrix4fFromXYTRadian(const Eigen::Vector3d &xyt) {
-  return Matrix4fFromMatrix3d(Matrix3dFromXYTRadian(xyt));
 }
 
 geometry_msgs::TransformStamped TstFromAffine3d(
@@ -117,11 +96,10 @@ Eigen::Affine3d Conserve2DFromAffine3d(const Eigen::Affine3d &T) {
   return Affine3dFromXYZRPY(xyz, rpy);
 }
 
-Eigen::Vector2d TransNormRotDegAbsFromMatrix3d(const Eigen::Matrix3d &mtx) {
+Eigen::Vector2d TransNormRotDegAbsFromAffine2d(const Eigen::Affine2d &aff) {
   Eigen::Vector2d ret;
-  auto xyt = XYTDegreeFromMatrix3d(mtx);
-  ret(0) = xyt.block<2, 1>(0, 0).norm();
-  ret(1) = abs(xyt(2));
+  ret(0) = aff.translation().norm();
+  ret(1) = Eigen::Rotation2Dd(aff.rotation()).angle() * 180 / M_PI;
   return ret;
 }
 
@@ -130,5 +108,28 @@ geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time, const Eigen
   ret.header.frame_id = "map";
   ret.header.stamp = time;
   ret.pose = tf2::toMsg(Affine3dFromMatrix4f(mtx));
+  return ret;
+}
+
+std::vector<Eigen::Vector2d> TransformPoints(
+    const std::vector<Eigen::Vector2d> &points, const Eigen::Affine2d &aff) {
+  std::vector<Eigen::Vector2d> ret(points.size());
+  std::transform(points.begin(), points.end(), ret.begin(),
+                 [&aff](auto p) { return aff * p; });
+  return ret;
+}
+
+void TransformPointsInPlace(std::vector<Eigen::Vector2d> &points,
+                            const Eigen::Affine2d &aff) {
+  std::transform(points.begin(), points.end(), points.begin(),
+                 [&aff](auto p) { return aff * p; });
+}
+
+std::vector<Eigen::Vector2d> TransformNormals(
+    const std::vector<Eigen::Vector2d> &normals, const Eigen::Affine2d &aff) {
+  std::vector<Eigen::Vector2d> ret(normals.size());
+  std::transform(normals.begin(), normals.end(), ret.begin(), [&aff](auto p) {
+    return Eigen::Vector2d(aff.rotation() * p);
+  });
   return ret;
 }

@@ -146,7 +146,7 @@ int main(int argc, char **argv) {
     opt1.push_back(params1._usedtime.optimize / 1000.);
     oth1.push_back(params1._usedtime.others / 1000.);
     ttl1.push_back(params1._usedtime.total() / 1000.);
-    auto err1 = TransNormRotDegAbsFromMatrix3d((Tgt.inverse() * T1).matrix());
+    auto err1 = TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T1);
     terr1.push_back(err1(0));
     rerr1.push_back(err1(1));
     it1.push_back(params1._iteration);
@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
     opt2.push_back(params2._usedtime.optimize / 1000.);
     oth2.push_back(params2._usedtime.others / 1000.);
     ttl2.push_back(params2._usedtime.total() / 1000.);
-    auto err2 = TransNormRotDegAbsFromMatrix3d((Tgt.inverse() * T2).matrix());
+    auto err2 = TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T2);
     terr2.push_back(err2(0));
     rerr2.push_back(err2(1));
     it2.push_back(params2._iteration);
@@ -180,7 +180,7 @@ int main(int argc, char **argv) {
     opt3.push_back(params3._usedtime.optimize / 1000.);
     oth3.push_back(params3._usedtime.others / 1000.);
     ttl3.push_back(params3._usedtime.total() / 1000.);
-    auto err3 = TransNormRotDegAbsFromMatrix3d((Tgt.inverse() * T3).matrix());
+    auto err3 = TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T3);
     terr3.push_back(err3(0));
     rerr3.push_back(err3(1));
     it3.push_back(params3._iteration);
@@ -201,7 +201,7 @@ int main(int argc, char **argv) {
     opt4.push_back(params4._usedtime.optimize / 1000.);
     oth4.push_back(params4._usedtime.others / 1000.);
     ttl4.push_back(params4._usedtime.total() / 1000.);
-    auto err4 = TransNormRotDegAbsFromMatrix3d((Tgt.inverse() * T4).matrix());
+    auto err4 = TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T4);
     terr4.push_back(err4(0));
     rerr4.push_back(err4(1));
     it4.push_back(params4._iteration);
@@ -222,7 +222,7 @@ int main(int argc, char **argv) {
     opt5.push_back(params5._usedtime.optimize / 1000.);
     oth5.push_back(params5._usedtime.others / 1000.);
     ttl5.push_back(params5._usedtime.total() / 1000.);
-    auto err5 = TransNormRotDegAbsFromMatrix3d((Tgt.inverse() * T5).matrix());
+    auto err5 = TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T5);
     terr5.push_back(err5(0));
     rerr5.push_back(err5(1));
     it5.push_back(params5._iteration);
@@ -243,7 +243,7 @@ int main(int argc, char **argv) {
     opt6.push_back(params6._usedtime.optimize / 1000.);
     oth6.push_back(params6._usedtime.others / 1000.);
     ttl6.push_back(params6._usedtime.total() / 1000.);
-    auto err6 = TransNormRotDegAbsFromMatrix3d((Tgt.inverse() * T6).matrix());
+    auto err6 = TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T6);
     terr6.push_back(err6(0));
     rerr6.push_back(err6(1));
     it6.push_back(params6._iteration);

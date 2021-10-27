@@ -17,7 +17,8 @@ enum class Converge {
   kNotConverge,
   kThreshold,
   kMaxIterations,
-  kConsecutiveMinimum
+  kConsecutiveMinimum,
+  kBounce
 };
 
 struct UsedTime {
@@ -42,9 +43,9 @@ struct CommonParameters {
   }
   void InitializeInput() {
     method = kDUMMY;
-    max_iterations = 400;
-    ceres_max_iterations = 400;
-    threshold = 0.001;
+    max_iterations = 100;
+    ceres_max_iterations = 50;
+    threshold = 0.0001;
     huber = 1;
     verbose = false;
     solver = ceres::DENSE_QR;
@@ -67,7 +68,8 @@ struct CommonParameters {
   int _iteration;
   int _ceres_iteration;
   Converge _converge;
-  std::vector<std::vector<double>> _costs;
+  /**< Iteration, Correspondence, (Before, After) */
+  std::vector<std::vector<std::pair<double, double>>> _costs;
   UsedTime _usedtime;
   std::vector<std::vector<Eigen::Affine2d>> _sols;
 };
@@ -121,6 +123,7 @@ struct SNDTParameters : NDTParameters {
     radius = 1.5;
   }
   double radius;
+  std::vector<std::vector<std::pair<int, int>>> _corres;
 };
 
 Eigen::Affine2d ICPMatch(
@@ -162,3 +165,13 @@ Eigen::Affine2d SNDTMatch(
     const SNDTMap &target_map, const SNDTMap &source_map,
     SNDTParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
+
+Eigen::Affine2d SNDTMatch2(
+    const NDTMap &target_map, const NDTMap &source_map,
+    D2DNDTParameters &params,
+    const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
+
+Eigen::Affine2d SNDTCellMatch(
+    const SNDTCell *target_cell, const SNDTCell *source_cell,
+    SNDTParameters &params,
+    const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity(), int method = 0);

@@ -69,10 +69,10 @@ void cb(const std_msgs::Int32 &num) {
   cout << "start frame: " << i;
   auto res = SNDTMatch(mapt, maps, params, Tio);
 
-  // cout << "guess: " << XYTDegreeFromMatrix3d(Tio.matrix()).transpose() << endl;
-  // cout << "result: " << XYTDegreeFromMatrix3d(res.matrix()).transpose() << endl;
-  // cout << "grount truth: " << XYTDegreeFromMatrix3d(gtTio.matrix()).transpose() << endl;
-  auto err = TransNormRotDegAbsFromMatrix3d(res.inverse() * gtTio.matrix());
+  // cout << "guess: " << XYTDegreeFromAffine2d(Tio).transpose() << endl;
+  // cout << "result: " << XYTDegreeFromAffine2d(res).transpose() << endl;
+  // cout << "grount truth: " << XYTDegreeFromAffine2d(gtTio).transpose() << endl;
+  auto err = TransNormRotDegAbsFromAffine2d(res.inverse() * gtTio);
   cout << "err: " << err.transpose() << endl;
   auto maps2 = maps.PseudoTransformCells(res, true);
   auto mapsg = maps.PseudoTransformCells(gtTio, true);

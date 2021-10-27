@@ -9,7 +9,7 @@
  * 
  */
 #include <sndt/ndt_cell.h>
-#include <sndt/eigen_utils.h>
+#include <sndt/helpers.h>
 
 NDTCell::NDTCell() {
   celltype_ = kNoInit;

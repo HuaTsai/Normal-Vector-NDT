@@ -100,11 +100,20 @@ class SNDTMap : public MapInterface {
    */
   std::vector<Eigen::Vector2d> GetNormals() const;
 
+  int GetCellIndex(const SNDTCell *cell) const;
+
   size_t size() const { return cells_.size(); }
   std::vector<SNDTCell *>::iterator begin() { return cells_.begin(); }
   std::vector<SNDTCell *>::const_iterator begin() const { return cells_.begin(); }
   std::vector<SNDTCell *>::iterator end() { return cells_.end(); }
   std::vector<SNDTCell *>::const_iterator end() const { return cells_.end(); }
+  SNDTCell *&operator[](size_t i) {
+    if (i >= cells_.size()) {
+      std::cerr << "Index out of bound, exiting" << std::endl;
+      exit(1);
+    }
+    return cells_[i];
+  }
 
  private:
   /**
@@ -114,4 +123,5 @@ class SNDTMap : public MapInterface {
 
   std::vector<SNDTCell *> cells_;
   SNDTCell ***cellptrs_;
+  std::unordered_map<SNDTCell *, int> cell_idx_map_;
 };

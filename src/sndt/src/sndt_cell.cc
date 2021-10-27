@@ -9,7 +9,7 @@
  *
  */
 #include <sndt/sndt_cell.h>
-#include <sndt/eigen_utils.h>
+#include <sndt/helpers.h>
 #include <boost/functional/hash.hpp>
 
 SNDTCell::SNDTCell() {
@@ -73,6 +73,7 @@ void SNDTCell::ComputeNGaussian() {
     nevecs_.col(0) = nmean_.normalized();
     nevecs_.col(1) = Eigen::Vector2d(-nevecs_(1, 0), nevecs_(0, 0));
     nevals_ = Eigen::Vector2d(0.0005, 0.01);
+    // nevals_ = Eigen::Vector2d(0.00005, 0.001);
     ncov_ = nevecs_ * nevals_.asDiagonal() * nevecs_.transpose();
     ncelltype_ = kAssign;
     nhasgaussian_ = true;

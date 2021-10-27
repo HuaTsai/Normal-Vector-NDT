@@ -116,9 +116,9 @@ void cb(const std_msgs::Int32 &num) {
                    Rotation2Dd(gtTio3.rotation().block<2, 2>(0, 0));
 
   // Compute error
-  auto err0 = TransNormRotDegAbsFromMatrix3d((sicpT * gtTio.inverse()).matrix());
-  auto err1 = TransNormRotDegAbsFromMatrix3d((ndtT * gtTio.inverse()).matrix());
-  auto err2 = TransNormRotDegAbsFromMatrix3d((sndtT * gtTio.inverse()).matrix());
+  auto err0 = TransNormRotDegAbsFromAffine2d(sicpT * gtTio.inverse());
+  auto err1 = TransNormRotDegAbsFromAffine2d(ndtT * gtTio.inverse());
+  auto err2 = TransNormRotDegAbsFromAffine2d(sndtT * gtTio.inverse());
 
   errs.data.push_back(err0(1));
   errs.data.push_back(err1(1));

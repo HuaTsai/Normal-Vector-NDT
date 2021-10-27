@@ -160,7 +160,6 @@ std::vector<Eigen::Vector2d> MakePoints(
   return ret;
 }
 
-
 void MakeGtLocal(nav_msgs::Path &path, const ros::Time &start) {
   auto startpose = GetPose(path.poses, start);
   Eigen::Affine3d preT;
@@ -191,4 +190,19 @@ void WriteToFile(const nav_msgs::Path &path, std::string filename) {
     fprintf(fp, "%f %f %f %f %f %f %f %f\n", t, x, y, z, qx, qy, qz, qw);
   }
   fclose(fp);
+}
+
+std::vector<Eigen::Vector2d> GenerateGaussianSamples(
+    const Eigen::Vector2d &mean, const Eigen::Matrix2d &cov, int size) {
+  std::vector<Eigen::Vector2d> ret;
+  std::mt19937 rng(std::random_device{}());
+  std::normal_distribution<> dis;
+  auto gau = [&rng, &dis](){ return dis(rng); };
+  Eigen::Vector2d evals;
+  Eigen::Matrix2d evecs;
+  ComputeEvalEvec(cov, evals, evecs);
+  Eigen::Matrix2d R = evecs * evals.cwiseSqrt().asDiagonal();
+  for (int i = 0; i < size; ++i)
+    ret.push_back(R * Eigen::Vector2d::NullaryExpr(gau) + mean);
+  return ret;
 }

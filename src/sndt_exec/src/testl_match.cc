@@ -117,9 +117,9 @@ void cb(const std_msgs::Int32 &num) {
   auto src3 = MakePoints(datas, params3);
   auto T3 = SICPMatch(tgt3, src3, params3, Tg);
 
-  cout << "sndt: " << TransNormRotDegAbsFromMatrix3d((T1.inverse() * Tgt).matrix()).transpose() << endl;
-  cout << " ndt: " << TransNormRotDegAbsFromMatrix3d((T2.inverse() * Tgt).matrix()).transpose() << endl;
-  cout << "sicp: " << TransNormRotDegAbsFromMatrix3d((T3.inverse() * Tgt).matrix()).transpose() << endl;
+  cout << "sndt: " << TransNormRotDegAbsFromAffine2d(T1.inverse() * Tgt).transpose() << endl;
+  cout << " ndt: " << TransNormRotDegAbsFromAffine2d(T2.inverse() * Tgt).transpose() << endl;
+  cout << "sicp: " << TransNormRotDegAbsFromAffine2d(T3.inverse() * Tgt).transpose() << endl;
 
   pub1.publish(JoinMarkers({MarkerOfPoints(tgt3, 0.5, Color::kRed)}));
   pub2.publish(JoinMarkers({MarkerOfPoints(src3)}));

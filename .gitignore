@@ -1,4 +1,5 @@
 .catkin_tools
+.ipynb_checkpoints
 build
 devel
 logs

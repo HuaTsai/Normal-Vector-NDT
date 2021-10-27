@@ -9,7 +9,7 @@
  * 
  */
 #include <sndt/visuals.h>
-#include <sndt/eigen_utils.h>
+#include <sndt/helpers.h>
 #include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
 #include <tf2_eigen/tf2_eigen.h>
@@ -188,15 +188,12 @@ Marker MarkerOfEllipse(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covar
   R.block<2, 2>(0, 0) << evecs(0, 0), -evecs(1, 0), evecs(1, 0), evecs(0, 0);
   Eigen::Quaterniond q(R);
   ret.scale.x = 2 * sqrt(evals(0));  // +- 1σ
-  ret.scale.y = 2 * sqrt(evals(1));
+  ret.scale.y = 2 * sqrt(evals(1));  // +- 1σ
   ret.scale.z = 0.1;
   ret.pose.position.x = mean(0);
   ret.pose.position.y = mean(1);
   ret.pose.position.z = 0;
   ret.pose.orientation = tf2::toMsg(q);
-  if (ret.scale.x == 0 || ret.scale.y == 0) {
-    // std::cout << "bad covariance" << covariance << std::endl;
-  }
   return ret;
 }
 
@@ -425,6 +422,22 @@ MarkerArray MarkerArrayOfCorrespondences(const SNDTCell *source_cell,
   Eigen::Vector2d middle = (source_cell->GetPointMean() + target_cell->GetPointMean()) / 2;
   auto mtext = MarkerOfText(text, middle, color);
   return JoinMarkerArraysAndMarkers({mas, mat}, {mline, mtext});
+}
+
+MarkerArray MarkerArrayOfCorrespondences(
+    const SNDTMap &smap, const SNDTMap &tmap, const Eigen::Affine2d &aff,
+    const std::vector<std::pair<int, Eigen::Vector2d>> &corres) {
+  std::vector<Marker> ms;
+  std::vector<MarkerArray> mas;
+  auto smap2 = smap.PseudoTransformCells(aff, true);
+  for (auto corr : corres) {
+    auto scell = smap2[corr.first].get();
+    auto tcell = tmap.GetCellForPoint(corr.second);
+    mas.push_back(MarkerArrayOfSNDTCell(scell));
+    mas.push_back(MarkerArrayOfSNDTCell2(tcell));
+    ms.push_back(MarkerOfLines({scell->GetPointMean(), tcell->GetPointMean()}, Color::kBlack));
+  }
+  return JoinMarkerArraysAndMarkers(mas, ms);
 }
 
 MarkerArray MarkerArrayOfSensor(const std::vector<Eigen::Affine2d> &affs) {
