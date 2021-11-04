@@ -10,9 +10,9 @@
  */
 #pragma once
 #include <bits/stdc++.h>
+#include <pcl/search/kdtree.h>
 
 #include <Eigen/Dense>
-#include <gsl/gsl>
 
 /**
  * @brief Compute mean of points
@@ -166,28 +166,17 @@ inline std::vector<Eigen::Vector2d> ExcludeNaNInf(
   return ret;
 }
 
-/**
- * @brief Remove points and covariances that contain NaN or Inf
- *
- * @param points Input points
- * @param covariances Input covariances
- * @return Pair of result points and result covariances
- * @details This function keeps the entries that have both valid point and valid
- * covariance
- * @pre Arguments @c points and @c covariances should have the same size
- */
-inline std::pair<std::vector<Eigen::Vector2d>, std::vector<Eigen::Matrix2d>>
-ExcludeNaNInf2(const std::vector<Eigen::Vector2d> &points,
-               const std::vector<Eigen::Matrix2d> &covariances) {
-  Expects(points.size() == covariances.size());
-  std::pair<std::vector<Eigen::Vector2d>, std::vector<Eigen::Matrix2d>> ret;
+// TODO: document
+inline void ExcludeInfinite(const std::vector<Eigen::Vector2d> &points,
+                            const std::vector<Eigen::Matrix2d> &covariances,
+                            std::vector<Eigen::Vector2d> &valid_points,
+                            std::vector<Eigen::Matrix2d> &valid_covariances) {
   for (size_t i = 0; i < points.size(); ++i) {
     if (points[i].allFinite() && covariances[i].allFinite()) {
-      ret.first.push_back(points[i]);
-      ret.second.push_back(covariances[i]);
+      valid_points.push_back(points[i]);
+      valid_covariances.push_back(covariances[i]);
     }
   }
-  return ret;
 }
 
 // TODO: document and incorporate
@@ -207,6 +196,30 @@ inline std::vector<int> ExcludeNaNInf3(
   for (size_t i = 0; i < points.size(); ++i)
     if (points[i].allFinite() && covariances[i].allFinite()) ret.push_back(i);
   return ret;
+}
+
+inline pcl::KdTreeFLANN<pcl::PointXY> MakeKDTree(
+    const std::vector<Eigen::Vector2d> &points) {
+  pcl::PointCloud<pcl::PointXY>::Ptr pc(new pcl::PointCloud<pcl::PointXY>);
+  for (const auto &pt : points) {
+    pcl::PointXY p;
+    p.x = pt(0), p.y = pt(1);
+    pc->push_back(p);
+  }
+  pcl::KdTreeFLANN<pcl::PointXY> ret;
+  ret.setInputCloud(pc);
+  return ret;
+}
+
+inline int FindNearestNeighborIndex(const Eigen::Vector2d &query,
+                                    const pcl::KdTreeFLANN<pcl::PointXY> &kd) {
+  pcl::PointXY pt;
+  pt.x = query(0), pt.y = query(1);
+  std::vector<int> idx{0};
+  std::vector<float> dist2{0};
+  int found = kd.nearestKSearch(pt, 1, idx, dist2);
+  if (!found) return -1;
+  return idx[0];
 }
 
 class RandomTransformGenerator2D {

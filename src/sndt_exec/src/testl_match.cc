@@ -12,7 +12,7 @@
 #include <std_msgs/Int32.h>
 
 #include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
+#include <sndt_exec/wrapper.h>
 
 #define LIDAR
 
@@ -40,24 +40,6 @@ Affine2d GetBenchMark(const ros::Time &t1, const ros::Time &t2) {
   return ret;
 }
 
-vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg) {
-  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::fromROSMsg(msg, *pc);
-  if (voxel != 0) {
-    pcl::VoxelGrid<pcl::PointXYZ> vg;
-    vg.setInputCloud(pc);
-    vg.setLeafSize(voxel, voxel, voxel);
-    vg.filter(*pc);
-  }
-
-  vector<Vector2d> ret;
-  for (const auto &pt : *pc)
-    if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z))
-      ret.push_back(Vector2d(pt.x, pt.y));
-  return ret;
-  ;
-}
-
 void cb(const std_msgs::Int32 &num) {
   int i = num.data;
 #ifdef LIDAR
@@ -66,8 +48,8 @@ void cb(const std_msgs::Int32 &num) {
   aff3 = Conserve2DFromAffine3d(aff3);
   Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
                   Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
-  auto tgt = PCMsgTo2D(vpc[i]);
-  auto src = PCMsgTo2D(vpc[i + 1]);
+  auto tgt = PCMsgTo2D(vpc[i], voxel);
+  auto src = PCMsgTo2D(vpc[i + 1], voxel);
   vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, aff2}};
   vector<pair<vector<Vector2d>, Affine2d>> datas{{src, aff2}};
   auto Tgt = GetBenchMark(vpc[i].header.stamp, vpc[i + 1].header.stamp);

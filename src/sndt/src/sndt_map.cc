@@ -47,8 +47,11 @@ void SNDTMap::LoadPointsWithCovariancesAndNormals(
     const std::vector<Eigen::Vector2d> &points,
     const std::vector<Eigen::Matrix2d> &point_covs,
     const std::vector<Eigen::Vector2d> &normals) {
-  Expects(points.size() == point_covs.size() &&
-          points.size() == normals.size());
+  if (!(points.size() == point_covs.size() &&
+        points.size() == normals.size())) {
+    std::cerr << __FUNCTION__ << ": unmatched sizes\n";
+    std::exit(1);
+  }
   if (is_loaded_) {
     for (auto &cell : cells_) delete cell;
     for (int i = 0; i < cellptrs_size_(0); ++i) delete[] cellptrs_[i];
@@ -227,8 +230,8 @@ std::vector<Eigen::Vector2d> SNDTMap::GetNormals() const {
 int SNDTMap::GetCellIndex(const SNDTCell *cell) const {
   auto c = const_cast<SNDTCell *>(cell);
   if (!cell_idx_map_.count(c)) {
-    std::cerr << "Not find query cell, exiting" << std::endl;
-    exit(1);
+    std::cerr << __FUNCTION__ << ": not find query cell\n";
+    std::exit(1);
   }
   return cell_idx_map_.at(c);
 }

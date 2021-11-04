@@ -6,21 +6,17 @@
 #include <rosbag/bag.h>
 #include <sndt/matcher.h>
 #include <sndt/visuals.h>
+#include <sndt_exec/wrapper.h>
 #include <std_msgs/Int32.h>
 #include <tqdm/tqdm.h>
 
 #include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
 
 using namespace std;
 using namespace Eigen;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
-
-template <typename T>
-double Avg(const T &c) {
-  return accumulate(c.begin(), c.end(), 0.) / c.size();
-}
+const auto &Avg = Average;
 
 void Q1MedianQ3(vector<double> &data) {
   sort(data.begin(), data.end());
@@ -32,23 +28,6 @@ void Q1MedianQ3(vector<double> &data) {
   // cout << "Mid: " << data[data.size() / 2] << endl;
   // cout << " Q3: " << data[data.size() / 4 * 3] << endl;
   // cout << "Max: " << data[data.size() - 1] << endl;
-}
-
-vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg, double voxel) {
-  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::fromROSMsg(msg, *pc);
-  if (voxel != 0) {
-    pcl::VoxelGrid<pcl::PointXYZ> vg;
-    vg.setInputCloud(pc);
-    vg.setLeafSize(voxel, voxel, voxel);
-    vg.filter(*pc);
-  }
-
-  vector<Vector2d> ret;
-  for (const auto &pt : *pc)
-    if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z))
-      ret.push_back(Vector2d(pt.x, pt.y));
-  return ret;
 }
 
 double RMS(const vector<Vector2d> &tgt,
@@ -158,9 +137,7 @@ int main(int argc, char **argv) {
   SerializationInput(JoinPath(GetDataPath(data), "lidar.ser"), vpc);
 
   auto tgt = PCMsgTo2D(vpc[n], voxel);
-  transform(tgt.begin(), tgt.end(), tgt.begin(),
-            [&aff2](auto p) { return aff2 * p; });
-  // OutlierRemove(tgt);
+  TransformPointsInPlace(tgt, aff2);
 
 #if 1
   // ros::Subscriber sub = nh.subscribe("idx", 0, cb);
@@ -169,9 +146,7 @@ int main(int argc, char **argv) {
   cout << "r = " << r << endl;
   // vector<double> rms6;
   for (auto aff : affs) {
-    std::vector<Eigen::Vector2d> src(tgt.size());
-    transform(tgt.begin(), tgt.end(), src.begin(),
-              [&aff](auto p) { return aff * p; });
+    auto src = TransformPoints(tgt, aff);
     vector<pair<vector<Vector2d>, Affine2d>> datat{
         {tgt, Eigen::Affine2d::Identity()}};
     vector<pair<vector<Vector2d>, Affine2d>> datas{
@@ -235,13 +210,12 @@ int main(int argc, char **argv) {
       T = SNDTMatch2(tgt7, src7, params7);
     }
 
-    cout << (((aff * T).translation().isZero(1)) ? "success" : "fail") << ", ";
+    cout << (((aff * T).translation().isZero(1)) ? "s" : "f") << ", ";
+    cout << aff.translation().transpose() << ", ";
     cout << "Iterations: " << params->_iteration << " & "
          << params->_ceres_iteration << endl;
     for (auto tf : params->_sols) {
-      vector<Vector2d> src2(src.size());
-      transform(src.begin(), src.end(), src2.begin(),
-                [&tf](auto p) { return tf.front() * p; });
+      auto src2 = TransformPoints(src, tf.front());
       pub1.publish(JoinMarkers({MarkerOfPoints(tgt, 0.5, Color::kRed)}));
       pub2.publish(JoinMarkers({MarkerOfPoints(src2)}));
       ros::Rate(10).sleep();

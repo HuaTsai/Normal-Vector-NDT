@@ -10,43 +10,22 @@
 #include <tqdm/tqdm.h>
 
 #include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
+#include <sndt_exec/wrapper.h>
 
 using namespace std;
 using namespace Eigen;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
+const auto &Avg = Average;
 
 vector<vector<visualization_msgs::MarkerArray>> ms;
 ros::Publisher pub1, pub2, pub3, pub4;
-
-template <typename T>
-double Avg(const T &c) {
-  return accumulate(c.begin(), c.end(), 0.) / c.size();
-}
 
 void Q1MedianQ3(vector<double> &data) {
   sort(data.begin(), data.end());
   printf("[%g, %g, %g, %g, %g]\n", data[0], data[data.size() / 4],
          data[data.size() / 2], data[data.size() / 4 * 3],
          data[data.size() - 1]);
-}
-
-vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg, double voxel) {
-  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::fromROSMsg(msg, *pc);
-  if (voxel != 0) {
-    pcl::VoxelGrid<pcl::PointXYZ> vg;
-    vg.setInputCloud(pc);
-    vg.setLeafSize(voxel, voxel, voxel);
-    vg.filter(*pc);
-  }
-
-  vector<Vector2d> ret;
-  for (const auto &pt : *pc)
-    if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z))
-      ret.push_back(Vector2d(pt.x, pt.y));
-  return ret;
 }
 
 double RMS(const vector<Vector2d> &tgt,
@@ -229,9 +208,7 @@ int main(int argc, char **argv) {
     cout << "Iter: " << params->_iteration << " & " << params->_ceres_iteration;
     cout << ", " << int(params->_converge) << endl;
     for (auto tf : params->_sols) {
-      vector<Vector2d> src2(srcc.size());
-      transform(srcc.begin(), srcc.end(), src2.begin(),
-                [&tf](auto p) { return tf.front() * p; });
+      auto src2 = TransformPoints(srcc, tf.front());
       pub2.publish(JoinMarkers({MarkerOfPoints(src2)}));
       ros::Rate(10).sleep();
     }

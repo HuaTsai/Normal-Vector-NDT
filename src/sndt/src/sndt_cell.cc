@@ -29,31 +29,36 @@ void SNDTCell::ComputeGaussian() {
   n_ = points_.size();
   ComputePGaussian();
   ComputeNGaussian();
+  // ComputeNGaussian2();
 }
 
 void SNDTCell::ComputePGaussian() {
   pmean_.setZero(), pcov_.setZero();
-  auto valids = ExcludeNaNInf2(points_, point_covs_);
-  if (valids.first.size() == 0) {
+  std::vector<Eigen::Vector2d> pts;
+  std::vector<Eigen::Matrix2d> covs;
+  ExcludeInfinite(points_, point_covs_, pts, covs);
+  if (!pts.size()) {
     pcelltype_ = kNoPoints;
     return;
   }
-  pmean_ = ComputeMean(valids.first);
-  pcov_ = ComputeCov(valids.first, pmean_, valids.second);
-  if (!pcov_.isZero()) {
-    ComputeEvalEvec(pcov_, pevals_, pevecs_);
-    if (pevals_(0) <= tolerance_ || pevals_(1) <= tolerance_) {
-      pcelltype_ = kInvalid;
-      return;
-    }
-    pcelltype_ = kRegular;
-    phasgaussian_ = true;
-    if (pevals_(1) > rescale_ratio_ * pevals_(0)) {
-      pevals_(0) = pevals_(1) / rescale_ratio_;
-      pcov_ = pevecs_ * pevals_.asDiagonal() * pevecs_.transpose();
-      pcelltype_ = kRescale;
-    }
+  pmean_ = ComputeMean(pts);
+  pcov_ = ComputeCov(pts, pmean_, covs);
+  pcelltype_ = kRegular;
+  if (pcov_.isZero()) {
+    pcelltype_ = kInvalid;
+    return;
   }
+  ComputeEvalEvec(pcov_, pevals_, pevecs_);
+  if (pevals_(0) <= tolerance_ || pevals_(1) <= tolerance_) {
+    pcelltype_ = kInvalid;
+    return;
+  }
+  if (pevals_(1) > rescale_ratio_ * pevals_(0)) {
+    pevals_(0) = pevals_(1) / rescale_ratio_;
+    pcov_ = pevecs_ * pevals_.asDiagonal() * pevecs_.transpose();
+    pcelltype_ = kRescale;
+  }
+  phasgaussian_ = true;
 }
 
 void SNDTCell::ComputeNGaussian() {
@@ -92,64 +97,30 @@ void SNDTCell::ComputeNGaussian() {
     }
   }
 }
-// void SNDTCell::ComputePGaussian() {
-//   pmean_.setZero(), pcov_.setZero();
-//   auto indices = ExcludeNaNInf3(points_, point_covs_);
-//   if (!indices.size()) {
-//     pcelltype_ = kNoPoints;
-//     return;
-//   }
-//   ComputeMeanAndCov(points_, point_covs_, indices, pmean_, pcov_);
-//   if (pcov_.allFinite()) {
-//     ComputeEvalEvec(pcov_, pevals_, pevecs_);
-//     if (pevals_(0) <= 0 && pevals_(1) <= 0) {
-//       pcelltype_ = kInvalid;
-//       return;
-//     }
-//     pcelltype_ = kRegular;
-//     phasgaussian_ = true;
-//     int maxidx, minidx;
-//     double maxval = pevals_.maxCoeff(&maxidx);
-//     double minval = pevals_.minCoeff(&minidx);
-//     if (maxval > rescale_ratio_ * minval) {
-//       pevals_(minidx) = maxval / rescale_ratio_;
-//       pcov_ = pevecs_ * pevals_.asDiagonal() * pevecs_.transpose();
-//       pcelltype_ = kRescale;
-//     }
-//   }
-// }
 
-// void SNDTCell::ComputeNGaussian() {
-//   nmean_.setZero(), ncov_.setZero();
-//   auto indices = ExcludeNaNInf3(normals_);
-//   if (!indices.size()) {
-//     ncelltype_ = kNoPoints;
-//     return;
-//   }
-//   ComputeMeanAndCov(normals_, indices, nmean_, ncov_);
-//   if (ncov_.allFinite()) {
-//     ComputeEvalEvec(ncov_, nevals_, nevecs_);
-//     if (nevals_(0) <= 0 || nevals_(1) <= 0) {
-//       ncelltype_ = kInvalid;
-//       return;
-//     }
-//     ncelltype_ = kRegular;
-//     nhasgaussian_ = true;
-//     int maxidx, minidx;
-//     double maxval = nevals_.maxCoeff(&maxidx);
-//     double minval = nevals_.minCoeff(&minidx);
-//     if (maxval > rescale_ratio_ * minval) {
-//       nevals_(minidx) = maxval / rescale_ratio_;
-//       ncov_ = nevecs_ * nevals_.asDiagonal() * nevecs_.transpose();
-//       ncelltype_ = kRescale;
-//     }
-//   }
-//   if (ncov_.isZero() && indices.size() >= 3) {
-//     ncov_ = Eigen::Matrix2d::Identity() * 0.01;
-//     ncelltype_ = kAssign;
-//     nhasgaussian_ = true;
-//   }
-// }
+// XXX: Decide PCA from point covariance
+void SNDTCell::ComputeNGaussian2() {
+  nmean_.setZero(), ncov_.setZero();
+  if (pcelltype_ == kNoInit) {
+    std::cerr << ToString() << std::endl;
+    std::cerr << __FUNCTION__ << ": ComputePGaussian should be called first.\n";
+    std::exit(1);
+  } else if (pcelltype_ == kNoPoints) {
+    ncelltype_ = kNoPoints;
+    return;
+  }
+
+  nmean_ = pevecs_.col(0);
+  nevecs_.col(0) = nmean_.normalized();
+  nevecs_.col(1) = Eigen::Vector2d(-nevecs_(1, 0), nevecs_(0, 0));
+  // nevals_ = Eigen::Vector2d(0.0005, 0.01);
+  nevals_ = Eigen::Vector2d(0.00005, 0.0005);
+  // nevals_ = Eigen::Vector2d(0.005, 0.1);
+  ncov_ = nevecs_ * nevals_.asDiagonal() * nevecs_.transpose();
+  ncelltype_ = kAssign;
+  nhasgaussian_ = true;
+}
+
 bool SNDTCell::HasGaussian() const { return phasgaussian_ && nhasgaussian_; }
 
 std::string SNDTCell::ToString() const {

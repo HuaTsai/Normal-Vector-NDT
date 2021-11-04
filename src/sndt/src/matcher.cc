@@ -14,7 +14,6 @@
 #include <normal2d/normal2d.h>
 #include <sndt/cost_functors.h>
 #include <sndt/matcher.h>
-#include <sndt/pcl_utils.h>
 #include <sndt/visuals.h>
 
 class InspectCallback : public ceres::IterationCallback {
@@ -71,9 +70,8 @@ struct OptimizeObjects {
     // options.min_lm_diagonal = 5e-3;
     // options.use_inner_iterations = true;
     // options.minimizer_type = ceres::LINE_SEARCH;
-    // problem.SetParameterBlockConstant(&t);
+    problem.SetParameterBlockConstant(&t);
 
-    // Sense Solution
     options.update_state_every_iteration = true;
     auto inspectcb = std::make_shared<InspectCallback>(params, x, y, t, cur_tf);
     options.callbacks.push_back(inspectcb.get());
@@ -103,6 +101,8 @@ struct OptimizeObjects {
     ceres::Solve(options, &problem, &summary);
     auto t2 = GetTime();
 
+    params._initial_cost = summary.initial_cost;
+    params._all_cost.push_back(summary.initial_cost);
     for (size_t i = 0; i < vrbds.size(); ++i)
       problem.EvaluateResidualBlock(
           vrbds[i], false, &params._costs.back()[i].second, nullptr, nullptr);
@@ -155,33 +155,6 @@ class OutlierRejection {
   std::vector<double> distances_;
   double mul_;
 };
-
-Eigen::Vector2d FindNearestNeighbor(const Eigen::Vector2d &query,
-                                    const pcl::KdTreeFLANN<pcl::PointXY> &kd) {
-  pcl::PointXY pt;
-  pt.x = query(0), pt.y = query(1);
-  std::vector<int> idx{0};
-  std::vector<float> dist2{0};
-  int found = kd.nearestKSearch(pt, 1, idx, dist2);
-  if (!found) {
-    Eigen::Vector2d ret;
-    ret.fill(std::numeric_limits<double>::quiet_NaN());
-    return ret;
-  }
-  return Eigen::Vector2d(kd.getInputCloud()->at(idx[0]).x,
-                         kd.getInputCloud()->at(idx[0]).y);
-}
-
-int FindNearestNeighborIndex(const Eigen::Vector2d &query,
-                             const pcl::KdTreeFLANN<pcl::PointXY> &kd) {
-  pcl::PointXY pt;
-  pt.x = query(0), pt.y = query(1);
-  std::vector<int> idx{0};
-  std::vector<float> dist2{0};
-  int found = kd.nearestKSearch(pt, 1, idx, dist2);
-  if (!found) return -1;
-  return idx[0];
-}
 
 Eigen::Affine2d ICPMatch(const std::vector<Eigen::Vector2d> &tpts,
                          const std::vector<Eigen::Vector2d> &spts,

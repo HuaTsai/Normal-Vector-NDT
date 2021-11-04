@@ -90,6 +90,8 @@ class NDTMap : public MapInterface {
    */
   std::vector<Eigen::Vector2d> GetPointsWithGaussianCell() const;
 
+  int GetCellIndex(const NDTCell *cell) const;
+
   size_t size() const { return cells_.size(); }
   std::vector<NDTCell *>::iterator begin() { return cells_.begin(); }
   std::vector<NDTCell *>::const_iterator begin() const {
@@ -97,6 +99,13 @@ class NDTMap : public MapInterface {
   }
   std::vector<NDTCell *>::iterator end() { return cells_.end(); }
   std::vector<NDTCell *>::const_iterator end() const { return cells_.end(); }
+  NDTCell *&operator[](size_t i) {
+    if (i >= cells_.size()) {
+      std::cerr << __FUNCTION__ << ": Index out of bound" << std::endl;
+      std::exit(1);
+    }
+    return cells_[i];
+  }
 
  private:
   /**
@@ -107,4 +116,5 @@ class NDTMap : public MapInterface {
   std::vector<NDTCell *> cells_;
   NDTCell ***cellptrs_;
   std::vector<Eigen::Vector2d> points_;
+  std::unordered_map<NDTCell *, int> cell_idx_map_;
 };

@@ -44,7 +44,11 @@ void NDTMap::LoadPoints(const std::vector<Eigen::Vector2d> &points) {
 void NDTMap::LoadPointsWithCovariances(
     const std::vector<Eigen::Vector2d> &points,
     const std::vector<Eigen::Matrix2d> &point_covs) {
-  Expects(points.size() == point_covs.size());
+  if (points.size() != point_covs.size()) {
+    std::cerr << "Unmatched Sizes: " << points.size() << ", "
+              << point_covs.size() << std::endl;
+    std::exit(1);
+  }
   if (is_loaded_) {
     for (auto &cell : cells_) delete cell;
     for (int i = 0; i < cellptrs_size_(0); ++i) delete[] cellptrs_[i];
@@ -110,6 +114,7 @@ NDTCell *NDTMap::GetCellAndAllocate(const Eigen::Vector2d &point) {
     center(1) = map_center_(1) + (idx(1) - map_center_index_(1)) * cell_size_;
     cellptrs_[idx(0)][idx(1)]->SetCenter(center);
     cellptrs_[idx(0)][idx(1)]->SetSize(cell_size_);
+    cell_idx_map_[cellptrs_[idx(0)][idx(1)]] = cells_.size();
     cells_.push_back(cellptrs_[idx(0)][idx(1)]);
   }
   return cellptrs_[idx(0)][idx(1)];
@@ -175,6 +180,23 @@ std::vector<Eigen::Vector2d> NDTMap::GetPointsWithGaussianCell() const {
     if ((*it)->HasGaussian())
       for (auto pt : (*it)->GetPoints()) ret.push_back(pt);
   return ret;
+}
+
+/**
+ * XXX: there should exists better solution
+ *   1. const_cast is required to match the type of unordered_map key
+ *   2. at() rather than [] is used to return an rvalue, prevent CE
+ *      since the funciton is called by another const function
+ * TODO: probable solution
+ *   I may add a field called index or something in SNDTCell
+ */
+int NDTMap::GetCellIndex(const NDTCell *cell) const {
+  auto c = const_cast<NDTCell *>(cell);
+  if (!cell_idx_map_.count(c)) {
+    std::cerr << __FUNCTION__ << ": not find query cell\n";
+    std::exit(1);
+  }
+  return cell_idx_map_.at(c);
 }
 
 void NDTMap::Initialize() {

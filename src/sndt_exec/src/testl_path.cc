@@ -7,28 +7,12 @@
 #include <sndt/visuals.h>
 
 #include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
+#include <sndt_exec/wrapper.h>
 
 using namespace std;
 using namespace Eigen;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
-
-vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg) {
-  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::fromROSMsg(msg, *pc);
-  pcl::VoxelGrid<pcl::PointXYZ> vg;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr fpc(new pcl::PointCloud<pcl::PointXYZ>);
-  vg.setInputCloud(pc);
-  vg.setLeafSize(1, 1, 1);
-  vg.filter(*fpc);
-
-  vector<Vector2d> ret;
-  for (const auto &pt : *fpc)
-    if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z))
-      ret.push_back(Vector2d(pt.x, pt.y));
-  return ret;
-}
 
 sensor_msgs::PointCloud2 EigenToPC(const vector<Vector2d> &pts,
                                    const ros::Time &time) {
@@ -111,8 +95,8 @@ int main(int argc, char **argv) {
   double avg1 = 0, avg2 = 0, avg3 = 0;
   int n = vpc.size();
   for (int i = 0; i < n - 1; ++i) {
-    auto tgt = PCMsgTo2D(vpc[i]);
-    auto src = PCMsgTo2D(vpc[i + 1]);
+    auto tgt = PCMsgTo2D(vpc[i], 1);
+    auto src = PCMsgTo2D(vpc[i + 1], 1);
     vector<Vector2d> tgt3(tgt.size()), src3(src.size());
     transform(tgt.begin(), tgt.end(), tgt3.begin(),
               [&aff2](auto p) { return aff2 * p; });

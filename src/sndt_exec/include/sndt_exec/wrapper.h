@@ -1,5 +1,5 @@
 /**
- * @file wrapper.hpp
+ * @file wrapper.h
  * @author HuaTsai (huatsai.eed07g@nctu.edu.tw)
  * @brief
  * @version 0.1
@@ -13,8 +13,9 @@
 #include <common/common.h>
 #include <nav_msgs/Path.h>
 #include <normal2d/normal2d.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl_ros/point_cloud.h>
 #include <sndt/matcher.h>
-#include <sndt/pcl_utils.h>
 
 // start, ..., end, end+1
 // <<------- T -------->>
@@ -216,5 +217,23 @@ std::vector<Eigen::Vector2d> GenerateGaussianSamples(
   Eigen::Matrix2d R = evecs * evals.cwiseSqrt().asDiagonal();
   for (int i = 0; i < size; ++i)
     ret.push_back(R * Eigen::Vector2d::NullaryExpr(gau) + mean);
+  return ret;
+}
+
+std::vector<Eigen::Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg,
+                                       double voxel) {
+  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::fromROSMsg(msg, *pc);
+  if (voxel != 0) {
+    pcl::VoxelGrid<pcl::PointXYZ> vg;
+    vg.setInputCloud(pc);
+    vg.setLeafSize(voxel, voxel, voxel);
+    vg.filter(*pc);
+  }
+
+  std::vector<Eigen::Vector2d> ret;
+  for (const auto &pt : *pc)
+    if (std::isfinite(pt.x) && std::isfinite(pt.y) && std::isfinite(pt.z))
+      ret.push_back(Eigen::Vector2d(pt.x, pt.y));
   return ret;
 }

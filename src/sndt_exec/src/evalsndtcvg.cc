@@ -9,29 +9,12 @@
 #include <tqdm/tqdm.h>
 
 #include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
+#include <sndt_exec/wrapper.h>
 
 using namespace std;
 using namespace Eigen;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
-
-vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg, double voxel) {
-  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::fromROSMsg(msg, *pc);
-  if (voxel != 0) {
-    pcl::VoxelGrid<pcl::PointXYZ> vg;
-    vg.setInputCloud(pc);
-    vg.setLeafSize(voxel, voxel, voxel);
-    vg.filter(*pc);
-  }
-
-  vector<Vector2d> ret;
-  for (const auto &pt : *pc)
-    if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z))
-      ret.push_back(Vector2d(pt.x, pt.y));
-  return ret;
-}
 
 int main(int argc, char **argv) {
   Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *

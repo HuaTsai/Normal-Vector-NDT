@@ -318,6 +318,7 @@ struct D2DNDTCostFunctor2 {
   }
 };
 
+// TODO: DEPRECATED
 struct SNDTCostFunctor {
   const SNDTCell *p, *q;
   SNDTCostFunctor(const SNDTCell *p_, const SNDTCell *q_) : p(p_), q(q_) {}
@@ -400,7 +401,6 @@ struct SNDTCostFunctor2 {
 
     Eigen::Matrix<T, 2, 1> up2 = R * up.cast<T>() + t;
     Eigen::Matrix<T, 2, 1> unp2 = R * unp.cast<T>();
-    unp2 = unp2.dot(unp2) / ceres::abs(unp2.dot(unp2)) * unp2;
     Eigen::Matrix<T, 2, 2> cp2 = R * cp.cast<T>() * R.transpose();
     Eigen::Matrix<T, 2, 2> cnp2 = R * cnp.cast<T>() * R.transpose();
 
@@ -408,6 +408,7 @@ struct SNDTCostFunctor2 {
     Eigen::Matrix<T, 2, 1> unq2 = unq.cast<T>();
     Eigen::Matrix<T, 2, 2> cq2 = cq.cast<T>();
     Eigen::Matrix<T, 2, 2> cnq2 = cnq.cast<T>();
+    // unp2 = unp2.dot(unq2) / ceres::abs(unp2.dot(unq2)) * unp2;
 
     Eigen::Matrix<T, 2, 1> m1 = up2 - uq2;
     Eigen::Matrix<T, 2, 1> m2 = unp2 + unq2;
@@ -443,11 +444,25 @@ struct SNDTCostFunctor2 {
                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
     Eigen::Matrix2d R = T.linear();
     Eigen::Vector2d m1 = T * up - uq;
+    // Eigen::Vector2d unp2 = ((R * unp).dot(unq) > 0) ? unp : -unp;
     Eigen::Vector2d m2 = R * unp + unq;
     Eigen::Matrix2d c1 = R * cp * R.transpose() + cq;
     Eigen::Matrix2d c2 = R * cnp * R.transpose() + cnq;
     return m1.dot(m2) /
            sqrt(m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace());
+  }
+
+  static double Cost2(const Eigen::Vector2d &up,
+                      const Eigen::Matrix2d &cp,
+                      const Eigen::Vector2d &unp,
+                      const Eigen::Matrix2d &cnp,
+                      const Eigen::Vector2d &uq,
+                      const Eigen::Matrix2d &cq,
+                      const Eigen::Vector2d &unq,
+                      const Eigen::Matrix2d &cnq,
+                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
+    double cost = Cost(up, cp, unp, cnp, uq, cq, unq, cnq, T);
+    return 0.5 * cost * cost;
   }
 };
 
@@ -472,12 +487,12 @@ struct SNDTCostFunctor3 {
 
     Eigen::Matrix<T, 2, 1> up2 = R * up.cast<T>() + t;
     Eigen::Matrix<T, 2, 1> unp2 = R * unp.cast<T>();
-    unp2 = unp2.dot(unp2) / ceres::abs(unp2.dot(unp2)) * unp2;
     Eigen::Matrix<T, 2, 2> cp2 = R * cp.cast<T>() * R.transpose();
 
     Eigen::Matrix<T, 2, 1> uq2 = uq.cast<T>();
     Eigen::Matrix<T, 2, 1> unq2 = unq.cast<T>();
     Eigen::Matrix<T, 2, 2> cq2 = cq.cast<T>();
+    unp2 = unp2.dot(unq2) / ceres::abs(unp2.dot(unq2)) * unp2;
 
     Eigen::Matrix<T, 2, 1> m1 = up2 - uq2;
     Eigen::Matrix<T, 2, 1> m2 = unp2 + unq2;
@@ -511,5 +526,16 @@ struct SNDTCostFunctor3 {
     Eigen::Vector2d m2 = R * unp + unq;
     Eigen::Matrix2d c1 = R * cp * R.transpose() + cq;
     return m1.dot(m2) / sqrt(m2.dot(c1 * m2));
+  }
+
+  static double Cost2(const Eigen::Vector2d &up,
+                      const Eigen::Matrix2d &cp,
+                      const Eigen::Vector2d &unp,
+                      const Eigen::Vector2d &uq,
+                      const Eigen::Matrix2d &cq,
+                      const Eigen::Vector2d &unq,
+                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
+    double cost = Cost(up, cp, unp, uq, cq, unq, T);
+    return 0.5 * cost * cost;
   }
 };

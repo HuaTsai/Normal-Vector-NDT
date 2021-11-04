@@ -9,16 +9,13 @@
 #include <tqdm/tqdm.h>
 
 #include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
+#include <sndt_exec/wrapper.h>
 
 using namespace std;
 using namespace Eigen;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
-
-double Avg(const vector<double> &c) {
-  return accumulate(c.begin(), c.end(), 0.) / c.size();
-}
+const auto &Avg = Average;
 
 double Stdev(const vector<double> &c, double m) {
   return accumulate(c.begin(), c.end(), 0.,

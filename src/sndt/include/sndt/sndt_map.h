@@ -111,7 +111,7 @@ class SNDTMap : public MapInterface {
   std::vector<SNDTCell *>::const_iterator end() const { return cells_.end(); }
   SNDTCell *&operator[](size_t i) {
     if (i >= cells_.size()) {
-      std::cerr << "Index out of bound, exiting" << std::endl;
+      std::cerr << __FUNCTION__ << "Index out of bound" << std::endl;
       exit(1);
     }
     return cells_[i];

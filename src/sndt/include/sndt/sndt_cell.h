@@ -87,6 +87,7 @@ class SNDTCell : public CellInterface {
    * @brief Compute normals gaussian
    */
   void ComputeNGaussian();
+  void ComputeNGaussian2();
   CellType pcelltype_;     /**< Point cell type */
   CellType ncelltype_;     /**< Normal cell type */
   double rescale_ratio_;   /**< Rescale ratio */

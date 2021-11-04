@@ -1,4 +1,3 @@
-#include <pcl/filters/voxel_grid.h>
 #include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
 #include <rosbag/bag.h>
@@ -6,35 +5,14 @@
 #include <tqdm/tqdm.h>
 
 #include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
+#include <sndt_exec/wrapper.h>
 
 #define LIDAR
 
 using namespace std;
 using namespace Eigen;
 namespace po = boost::program_options;
-
-template <typename T>
-double Avg(const T &c) {
-  return accumulate(c.begin(), c.end(), 0.) / c.size();
-}
-
-vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg, double voxel) {
-  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::fromROSMsg(msg, *pc);
-  if (voxel != 0) {
-    pcl::VoxelGrid<pcl::PointXYZ> vg;
-    vg.setInputCloud(pc);
-    vg.setLeafSize(voxel, voxel, voxel);
-    vg.filter(*pc);
-  }
-
-  vector<Vector2d> ret;
-  for (const auto &pt : *pc)
-    if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z))
-      ret.push_back(Vector2d(pt.x, pt.y));
-  return ret;
-}
+const auto &Avg = Average;
 
 int main(int argc, char **argv) {
   Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *

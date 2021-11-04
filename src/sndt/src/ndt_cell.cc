@@ -20,27 +20,31 @@ NDTCell::NDTCell() {
 void NDTCell::ComputeGaussian() {
   n_ = points_.size();
   pmean_.setZero(), pcov_.setZero();
-  auto valids = ExcludeNaNInf2(points_, point_covs_);
-  if (valids.first.size() == 0) {
+  std::vector<Eigen::Vector2d> pts;
+  std::vector<Eigen::Matrix2d> covs;
+  ExcludeInfinite(points_, point_covs_, pts, covs);
+  if (!pts.size()) {
     celltype_ = kNoPoints;
     return;
   }
-  pmean_ = ComputeMean(valids.first);
-  pcov_ = ComputeCov(valids.first, pmean_, valids.second);
-  if (!pcov_.isZero()) {
-    ComputeEvalEvec(pcov_, pevals_, pevecs_);
-    if (pevals_(0) <= tolerance_ || pevals_(1) <= tolerance_) {
-      celltype_ = kInvalid;
-      return;
-    }
-    celltype_ = kRegular;
-    phasgaussian_ = true;
-    if (pevals_(1) > rescale_ratio_ * pevals_(0)) {
-      pevals_(0) = pevals_(1) / rescale_ratio_;
-      pcov_ = pevecs_ * pevals_.asDiagonal() * pevecs_.transpose();
-      celltype_ = kRescale;
-    }
+  pmean_ = ComputeMean(pts);
+  pcov_ = ComputeCov(pts, pmean_, covs);
+  celltype_ = kRegular;
+  if (pcov_.isZero()) {
+    celltype_ = kInvalid;
+    return;
   }
+  ComputeEvalEvec(pcov_, pevals_, pevecs_);
+  if (pevals_(0) <= tolerance_ || pevals_(1) <= tolerance_) {
+    celltype_ = kInvalid;
+    return;
+  }
+  if (pevals_(1) > rescale_ratio_ * pevals_(0)) {
+    pevals_(0) = pevals_(1) / rescale_ratio_;
+    pcov_ = pevecs_ * pevals_.asDiagonal() * pevecs_.transpose();
+    celltype_ = kRescale;
+  }
+  phasgaussian_ = true;
 }
 
 bool NDTCell::HasGaussian() const { return phasgaussian_; }

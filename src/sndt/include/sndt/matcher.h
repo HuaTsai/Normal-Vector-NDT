@@ -49,6 +49,7 @@ struct CommonParameters {
     solver = ceres::DENSE_QR;
   }
   void InitializeOutput() {
+    _initial_cost = 0;
     _iteration = 0;
     _ceres_iteration = 0;
     _converge = Converge::kNotConverge;
@@ -65,10 +66,13 @@ struct CommonParameters {
 
   int _iteration;
   int _ceres_iteration;
+  double _initial_cost;
+  std::vector<double> _all_cost;
   Converge _converge;
   /**< Iteration, Correspondence, (Before, After) */
   std::vector<std::vector<std::pair<double, double>>> _costs;
   UsedTime _usedtime;
+  /**< Iteration, Inneriteration, Solution */
   std::vector<std::vector<Eigen::Affine2d>> _sols;
 };
 

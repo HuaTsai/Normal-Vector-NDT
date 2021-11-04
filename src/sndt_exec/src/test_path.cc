@@ -22,7 +22,7 @@
 #include <std_msgs/Int32.h>
 
 #include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
+#include <sndt_exec/wrapper.h>
 
 using namespace std;
 using namespace Eigen;

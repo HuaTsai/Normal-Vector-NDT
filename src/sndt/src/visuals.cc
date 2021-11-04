@@ -229,7 +229,10 @@ Marker MarkerOfCircle(const Eigen::Vector2d &center,
 Marker MarkerOfLines(const std::vector<Eigen::Vector2d> &points,
                      const Color &color,
                      double alpha) {
-  Expects(points.size() % 2 == 0);
+  if (points.size() % 2 != 0) {
+    std::cerr << __FUNCTION__ << ": points are not even.\n";
+    std::exit(1);
+  }
   Marker ret;
   ret.header.frame_id = "map";
   ret.header.stamp = GetROSTime();
@@ -250,7 +253,10 @@ Marker MarkerOfLines(const std::vector<Eigen::Vector2d> &points,
 Marker MarkerOfLinesByMiddlePoints(const std::vector<Eigen::Vector2d> &points,
                                    const Color &color,
                                    double alpha) {
-  Expects(points.size() >= 2);
+  if (points.size() < 2) {
+    std::cerr << __FUNCTION__ << ": points are less than two.\n";
+    std::exit(1);
+  }
   std::vector<Eigen::Vector2d> pts;
   pts.push_back(points.front());
   for (size_t i = 1; i < points.size() - 1; ++i) {
@@ -329,7 +335,10 @@ MarkerArray MarkerArrayOfArrows(const std::vector<Eigen::Vector2d> &starts,
                                 const std::vector<Eigen::Vector2d> &ends,
                                 const Color &color,
                                 double alpha) {
-  Expects(starts.size() == ends.size());
+  if (starts.size() != ends.size()) {
+    std::cerr << __FUNCTION__ << ": unmatched sizes.\n";
+    std::exit(1);
+  }
   MarkerArray ret;
   Marker arrow;
   arrow.header.frame_id = "map";

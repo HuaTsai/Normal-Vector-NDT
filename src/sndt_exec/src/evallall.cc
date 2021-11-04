@@ -8,43 +8,21 @@
 #include <tqdm/tqdm.h>
 
 #include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.hpp>
+#include <sndt_exec/wrapper.h>
 
 // #define LIDAR
 
 using namespace std;
 using namespace Eigen;
 namespace po = boost::program_options;
-
+const auto &Avg = Average;
 nav_msgs::Path gtpath;
-
-template <typename T>
-double Avg(const T &c) {
-  return accumulate(c.begin(), c.end(), 0.) / c.size();
-}
 
 template <typename T>
 void PrintValues(const T &coll) {
   copy(coll.begin(), coll.end(),
        ostream_iterator<typename T::value_type>(cout, ", "));
   cout << endl;
-}
-
-vector<Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg, double voxel) {
-  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::fromROSMsg(msg, *pc);
-  if (voxel != 0) {
-    pcl::VoxelGrid<pcl::PointXYZ> vg;
-    vg.setInputCloud(pc);
-    vg.setLeafSize(voxel, voxel, voxel);
-    vg.filter(*pc);
-  }
-
-  vector<Vector2d> ret;
-  for (const auto &pt : *pc)
-    if (isfinite(pt.x) && isfinite(pt.y) && isfinite(pt.z))
-      ret.push_back(Vector2d(pt.x, pt.y));
-  return ret;
 }
 
 Affine2d GetBenchMark(const ros::Time &t1, const ros::Time &t2) {
@@ -101,8 +79,8 @@ int main(int argc, char **argv) {
   //         |- tgt -|- src -|
   //         <<----- T ----->>
   //           Tr(bf)  Tr(af)
-  vector<int> it1, it2, it3, it4, it5, it6;
-  vector<int> iit1, iit2, iit3, iit4, iit5, iit6;
+  vector<double> it1, it2, it3, it4, it5, it6;
+  vector<double> iit1, iit2, iit3, iit4, iit5, iit6;
   vector<double> ndt1, ndt2, ndt3, ndt4, ndt5, ndt6;
   vector<double> nm1, nm2, nm3, nm4, nm5, nm6;
   vector<double> bud1, bud2, bud3, bud4, bud5, bud6;
