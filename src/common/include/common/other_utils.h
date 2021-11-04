@@ -8,6 +8,14 @@
 #define WSPATH "/home/ee904/Desktop/HuaTsai/NormalNDT/Research"
 #define PYTHONPATH "/home/ee904/venv/com/bin/python"
 
+std::string GetCurrentTimeAsString() {
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  std::ostringstream oss;
+  oss << std::put_time(&tm, "%Y-%m-%d-%H-%M-%S");
+  return oss.str();
+}
+
 inline std::chrono::steady_clock::time_point GetTime() {
   return std::chrono::steady_clock::now();
 }
@@ -15,6 +23,10 @@ inline std::chrono::steady_clock::time_point GetTime() {
 inline int GetDiffTime(std::chrono::steady_clock::time_point t1,
                        std::chrono::steady_clock::time_point t2) {
   return std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+}
+
+inline double Average(const std::vector<double> &coll) {
+  return std::accumulate(coll.begin(), coll.end(), 0.) / coll.size();
 }
 
 std::string JoinPath() { return ""; }
@@ -101,12 +113,4 @@ std::vector<std::string> GetBagsPath(std::string data) {
   std::cerr << "No specified data " << data << std::endl;
   std::exit(-1);
   return {};
-}
-
-std::string GetCurrentTimeAsString() {
-  auto t = std::time(nullptr);
-  auto tm = *std::localtime(&t);
-  std::ostringstream oss;
-  oss << std::put_time(&tm, "%Y-%m-%d-%H-%M-%S");
-  return oss.str();
 }
