@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
                   Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
   int n;
-  double cell_size, radius, huber, voxel;
+  double cell_size, radius, voxel;
   string data;
   po::options_description desc("Allowed options");
   // clang-format off
@@ -31,7 +31,6 @@ int main(int argc, char **argv) {
       ("data,d", po::value<string>(&data)->required(), "Data (logxx)")
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
-      ("huber,u", po::value<double>(&huber)->default_value(1.0), "Use Huber loss")
       ("voxel,v", po::value<double>(&voxel)->default_value(0), "Downsample voxel")
       ("n,n", po::value<int>(&n)->default_value(0), "n");
   // clang-format on
@@ -113,12 +112,13 @@ int main(int argc, char **argv) {
       rms5.push_back((params5._sols[0].back() * aff).translation().norm());
 
       // Symmetric NDT Method
-      SNDTParameters params6;
+      // SNDTParameters params6;
+      D2DNDTParameters params6;
       params6.r_variance = params6.t_variance = 0;
       params6.cell_size = cell_size;
-      auto tgt6 = MakeSNDTMap(datat, params6);
-      auto src6 = MakeSNDTMap(datas, params6);
-      auto T6 = SNDTMatch(tgt6, src6, params6);
+      auto tgt6 = MakeNDTMap(datat, params6);
+      auto src6 = MakeNDTMap(datas, params6);
+      auto T6 = SNDTMatch2(tgt6, src6, params6);
       rms6.push_back((params6._sols[0].back() * aff).translation().norm());
     }
     bar.finish();

@@ -55,6 +55,12 @@ Eigen::Vector3d XYTDegreeFromAffine2d(const Eigen::Affine2d &aff) {
   return ret;
 }
 
+Eigen::Affine3d Affine3dFromAffine2d(const Eigen::Affine2d &aff) {
+  auto xyt = XYTRadianFromAffine2d(aff);
+  return Eigen::Translation3d(xyt(0), xyt(1), 0) *
+         Eigen::AngleAxisd(xyt(2), Eigen::Vector3d::UnitZ());
+}
+
 Eigen::Matrix4f Matrix4fFromMatrix3d(const Eigen::Matrix3d &mtx) {
   Eigen::Matrix4f ret = Eigen::Matrix4f::Identity();
   ret.block<2, 2>(0, 0) = mtx.block<2, 2>(0, 0).cast<float>();
@@ -94,17 +100,22 @@ Eigen::Affine3d Conserve2DFromAffine3d(const Eigen::Affine3d &T) {
 Eigen::Vector2d TransNormRotDegAbsFromAffine2d(const Eigen::Affine2d &aff) {
   Eigen::Vector2d ret;
   ret(0) = aff.translation().norm();
-  ret(1) = Eigen::Rotation2Dd(aff.rotation()).angle() * 180 / M_PI;
+  ret(1) = abs(Eigen::Rotation2Dd(aff.rotation()).angle() * 180 / M_PI);
+  return ret;
+}
+
+geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time,
+                                              const Eigen::Affine3d &aff) {
+  geometry_msgs::PoseStamped ret;
+  ret.header.frame_id = "map";
+  ret.header.stamp = time;
+  ret.pose = tf2::toMsg(aff);
   return ret;
 }
 
 geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time,
                                               const Eigen::Matrix4f &mtx) {
-  geometry_msgs::PoseStamped ret;
-  ret.header.frame_id = "map";
-  ret.header.stamp = time;
-  ret.pose = tf2::toMsg(Affine3dFromMatrix4f(mtx));
-  return ret;
+  return MakePoseStampedMsg(time, Affine3dFromMatrix4f(mtx));
 }
 
 std::vector<Eigen::Vector2d> TransformPoints(

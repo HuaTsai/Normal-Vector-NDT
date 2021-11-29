@@ -81,7 +81,7 @@ void cb(const std_msgs::Int32 &num) {
   auto datas0 = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
   auto mapt = MakeNDTMap(datat0, ndtparams);
   auto maps = MakeNDTMap(datas0, ndtparams);
-  auto ndtT = D2DNDTMatch(mapt, maps, ndtparams, Tio);
+  auto ndtT = D2DNDTMDMatch(mapt, maps, ndtparams, Tio);
   // corr1.push_back(ndtparams._corres[0]);
   auto t4 = GetTime();
   auto t34 = GetDiffTime(t3, t4);
@@ -97,7 +97,7 @@ void cb(const std_msgs::Int32 &num) {
   auto datas1 = Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs);
   auto smapt = MakeSNDTMap(datat1, sndtparams);
   auto smaps = MakeSNDTMap(datas1, sndtparams);
-  auto sndtT = SNDTMatch(smapt, smaps, sndtparams, Tio);
+  auto sndtT = SNDTMDMatch(smapt, smaps, sndtparams, Tio);
   // corr2.push_back(sndtparams._corres[0]);
   auto t6 = GetTime();
   auto t56 = GetDiffTime(t5, t6);

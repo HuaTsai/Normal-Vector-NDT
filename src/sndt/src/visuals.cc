@@ -364,6 +364,35 @@ MarkerArray MarkerArrayOfArrows(const std::vector<Eigen::Vector2d> &starts,
   return ret;
 }
 
+MarkerArray MarkerArrayOfNDTMap(const NDTMap &map, bool use_target_color) {
+  std::vector<Marker> ms;
+  auto color = use_target_color ? Color::kRed : Color::kLime;
+  for (auto cell : map) {
+    if (cell->HasGaussian()) {
+      ms.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
+                                    cell->GetSkewRad(), color));
+      ms.push_back(
+          MarkerOfEllipse(cell->GetPointMean(), cell->GetPointCov(), color));
+    }
+  }
+  return JoinMarkers(ms);
+}
+
+MarkerArray MarkerArrayOfNDTMap(
+    const std::vector<std::shared_ptr<NDTCell>> &map, bool use_target_color) {
+  std::vector<Marker> ms;
+  auto color = use_target_color ? Color::kRed : Color::kLime;
+  for (auto cell : map) {
+    if (cell->HasGaussian()) {
+      ms.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
+                                    cell->GetSkewRad(), color));
+      ms.push_back(
+          MarkerOfEllipse(cell->GetPointMean(), cell->GetPointCov(), color));
+    }
+  }
+  return JoinMarkers(ms);
+}
+
 MarkerArray MarkerArrayOfSNDTCell(const SNDTCell *cell) {
   std::vector<Marker> ms;
   ms.push_back(MarkerOfBoundary(cell->GetCenter(), cell->GetSize(),
@@ -438,6 +467,30 @@ MarkerArray MarkerArrayOfSNDTMap(
       vma.push_back(MarkerArrayOfSNDTCell(cell.get()));
   }
   return JoinMarkerArrays(vma);
+}
+
+MarkerArray MarkerArrayOfCorres(
+    const NDTMap &source_map,
+    const NDTMap &target_map,
+    const Eigen::Affine2d &aff,
+    const std::vector<std::pair<int, int>> &corres) {
+  std::vector<Marker> ms;
+  std::vector<MarkerArray> mas;
+  auto smap2 = source_map.PseudoTransformCells(aff, true);
+  for (auto corr : corres) {
+    auto scell = smap2[corr.first].get();
+    auto tcell = *(target_map.begin() + corr.second);
+    ms.push_back(MarkerOfBoundary(scell->GetCenter(), scell->GetSize(),
+                                  scell->GetSkewRad(), Color::kLime));
+    ms.push_back(MarkerOfEllipse(scell->GetPointMean(), scell->GetPointCov()));
+    ms.push_back(MarkerOfBoundary(tcell->GetCenter(), tcell->GetSize(),
+                                  tcell->GetSkewRad(), Color::kRed));
+    ms.push_back(MarkerOfEllipse(tcell->GetPointMean(), tcell->GetPointCov(),
+                                 Color::kRed));
+    ms.push_back(MarkerOfLines({scell->GetCenter(), tcell->GetCenter()},
+                               Color::kBlack));
+  }
+  return JoinMarkers(ms);
 }
 
 MarkerArray MarkerArrayOfCorrespondences(const SNDTCell *source_cell,

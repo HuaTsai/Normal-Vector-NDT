@@ -1,6 +1,6 @@
 /**
  * @file contour.cc
- * @brief Output to /tmp/contour.txt, and Input of contour.py
+ * @brief Output to /tmp/contour.txt
  * @version 0.1
  * @date 2021-10-25
  * @copyright Copyright (c) 2021
@@ -18,30 +18,91 @@ using namespace std;
 using namespace Eigen;
 namespace po = boost::program_options;
 
-template <typename T>
-vector<pair<int, int>> Corres(const T &target_map,
-                              const T &source_map,
-                              const Affine2d &guess_tf = Affine2d::Identity()) {
-  vector<pair<int, int>> ret;
-  auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
-  auto t1 = GetTime();
-  auto next_map = source_map.PseudoTransformCells(guess_tf, true);
-  for (size_t i = 0; i < next_map.size(); ++i) {
-    auto cellp = next_map[i];
-    if (!cellp->HasGaussian()) continue;
-    auto idx = FindNearestNeighborIndex(cellp->GetPointMean(), kd);
-    if (idx == -1) continue;
-    auto cellq = target_map.GetCellForPoint(Eigen::Vector2d(
-        kd.getInputCloud()->at(idx).x, kd.getInputCloud()->at(idx).y));
-    if (!cellq || !cellq->HasGaussian()) continue;
-    ret.push_back({i, target_map.GetCellIndex(cellq)});
-    // ret.push_back({i, i});
+double M3Cost(vector<Vector2d> &tgt,
+              vector<Vector2d> &tgtn,
+              vector<Vector2d> &src,
+              vector<Vector2d> &srcn,
+              vector<pair<int, int>> corres,
+              Affine2d T) {
+  double ret = 0;
+  for (auto corr : corres) {
+    auto p = src[corr.first];
+    auto np = srcn[corr.first];
+    auto q = tgt[corr.second];
+    auto nq = tgtn[corr.second];
+    ret += SICPCostFunctor::Cost(p, np, q, nq, T);
   }
   return ret;
 }
 
-void SF(string str, Affine2d T) {
-  cout << str << ((T.translation().isZero(1)) ? ": success" : ": fail") << endl;
+double M5Cost(NDTMap &tgt,
+              NDTMap &src,
+              vector<pair<int, int>> corres,
+              Affine2d T) {
+  double ret = 0;
+  for (auto corr : corres) {
+    auto cellp = src[corr.first];
+    auto cellq = tgt[corr.second];
+    auto up = cellp->GetPointMean();
+    auto cp = cellq->GetPointCov();
+    auto uq = cellq->GetPointMean();
+    auto cq = cellq->GetPointCov();
+    ret += D2DNDTMDCostFunctor::Cost2(up, cp, uq, cq, T);
+  }
+  return ret;
+}
+
+double M6Cost(SNDTMap &tgt,
+              SNDTMap &src,
+              vector<pair<int, int>> corres,
+              Affine2d T) {
+  double ret = 0;
+  for (auto corr : corres) {
+    auto up = src[corr.first]->GetPointMean();
+    auto cp = src[corr.first]->GetPointCov();
+    auto unp = src[corr.first]->GetNormalMean();
+    auto cnp = src[corr.first]->GetNormalCov();
+    auto uq = tgt[corr.second]->GetPointMean();
+    auto cq = tgt[corr.second]->GetPointCov();
+    auto unq = tgt[corr.second]->GetNormalMean();
+    auto cnq = tgt[corr.second]->GetNormalCov();
+    ret += SNDTMDCostFunctor::Cost2(up, cp, unp, cnp, uq, cq, unq, cnq, T);
+  }
+  return ret;
+}
+
+double M7Cost(NDTMap &tgt,
+              NDTMap &src,
+              vector<pair<int, int>> corres,
+              Affine2d T) {
+  double ret = 0;
+  for (auto corr : corres) {
+    auto up = src[corr.first]->GetPointMean();
+    auto cp = src[corr.first]->GetPointCov();
+    Vector2d unp = src[corr.first]->GetPointEvecs().col(0);
+    auto uq = tgt[corr.second]->GetPointMean();
+    auto cq = tgt[corr.second]->GetPointCov();
+    Vector2d unq = tgt[corr.second]->GetPointEvecs().col(0);
+    ret += SNDTMDCostFunctor2::Cost2(up, cp, unp, uq, cq, unq, T);
+  }
+  return ret;
+}
+
+double M8Cost(SNDTMap &tgt,
+              SNDTMap &src,
+              vector<pair<int, int>> corres,
+              Affine2d T) {
+  double ret = 0;
+  for (auto corr : corres) {
+    auto up = src[corr.first]->GetPointMean();
+    auto cp = src[corr.first]->GetPointCov();
+    Vector2d unp = src[corr.first]->GetPointEvecs().col(0);
+    auto uq = tgt[corr.second]->GetPointMean();
+    auto cq = tgt[corr.second]->GetPointCov();
+    Vector2d unq = tgt[corr.second]->GetPointEvecs().col(0);
+    ret += SNDTMDCostFunctor2::Cost2(up, cp, unp, uq, cq, unq, T);
+  }
+  return ret;
 }
 
 int main(int argc, char **argv) {
@@ -79,162 +140,106 @@ int main(int argc, char **argv) {
   auto tgt = PCMsgTo2D(vpc[n], voxel);
   TransformPointsInPlace(tgt, aff2);
 
-  VectorXd xs = VectorXd::LinSpaced(16, 0, 15);
-  VectorXd ys = VectorXd::LinSpaced(16, 0, 15);
-  constexpr int sz = 81;
-  VectorXd x = VectorXd::LinSpaced(sz, -40, 40);
-  VectorXd y = VectorXd::LinSpaced(sz, -40, 40);
+  constexpr int sz = 41;
+  Vector3d gt;
+  VectorXd x = VectorXd::LinSpaced(sz, -20, 20);
+  VectorXd y = VectorXd::LinSpaced(sz, -20, 20);
   MatrixXd zz(sz, sz);
 
-  for (int i = 15; i < xs.size(); ++i) {
-    cout << "aff: " << xs[i] << ", " << ys[i] << endl;
-    // auto aff = Translation2d(xs[i], ys[i]) * Rotation2Dd(0);
-    auto aff = Translation2d(14.4966, -3.85344) * Rotation2Dd(0);
-    auto src = TransformPoints(tgt, aff);
-    vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, Affine2d::Identity()}};
-    vector<pair<vector<Vector2d>, Affine2d>> datas{{src, Affine2d::Identity()}};
+  double xs = 14.4966, ys = -3.85344;
+  auto aff = Translation2d(xs, ys) * Rotation2Dd(0);
+  gt << -xs, -ys, 0;
+  auto src = TransformPoints(tgt, aff);
+  vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, Affine2d::Identity()}};
+  vector<pair<vector<Vector2d>, Affine2d>> datas{{src, Affine2d::Identity()}};
 
-    D2DNDTParameters params7;
-    params7.cell_size = cell_size;
-    params7.r_variance = params7.t_variance = 0;
-    auto tgt7 = MakeNDTMap(datat, params7);
-    auto src7 = MakeNDTMap(datas, params7);
-    auto corres7 = Corres(tgt7, src7);
-    auto T7 = SNDTMatch2(tgt7, src7, params7);
-    SF("m7", aff * T7);
+  SICPParameters params3;
+  params3.radius = radius;
+  params3.fixstrategy = FixStrategy::kFixTheta;
+  auto tgt3 = MakePoints(datat, params3);
+  auto src3 = MakePoints(datas, params3);
+  auto T3 = SICPMatch(tgt3, src3, params3);
 
-    SNDTParameters params6;
-    params6.cell_size = cell_size;
-    params6.radius = radius;
-    params6.r_variance = params6.t_variance = 0;
-    auto tgt6 = MakeSNDTMap(datat, params6);
-    auto src6 = MakeSNDTMap(datas, params6);
-    auto corres6 = Corres(tgt6, src6);
-    auto T6 = SNDTMatch(tgt6, src6, params6);
-    SF("m6", aff * T6);
+  D2DNDTParameters params5;
+  params5.cell_size = cell_size;
+  params5.r_variance = params5.t_variance = 0;
+  params5.fixstrategy = FixStrategy::kFixTheta;
+  auto tgt5 = MakeNDTMap(datat, params5);
+  auto src5 = MakeNDTMap(datas, params5);
+  auto T5 = D2DNDTMDMatch(tgt5, src5, params5);
 
-    double ini = 0, fin = 0;
-    for (auto corr : corres6) {
-      auto up = src6[corr.first]->GetPointMean();
-      auto cp = src6[corr.first]->GetPointCov();
-      auto unp = src6[corr.first]->GetNormalMean();
-      auto cnp = src6[corr.first]->GetNormalCov();
-      auto uq = tgt6[corr.second]->GetPointMean();
-      auto cq = tgt6[corr.second]->GetPointCov();
-      auto unq = tgt6[corr.second]->GetNormalMean();
-      auto cnq = tgt6[corr.second]->GetNormalCov();
-      ini += SNDTCostFunctor2::Cost2(up, cp, unp, cnp, uq, cq, unq, cnq);
-      fin += SNDTCostFunctor2::Cost2(up, cp, unp, cnp, uq, cq, unq, cnq, aff.inverse());
+  SNDTParameters params6;
+  params6.cell_size = cell_size;
+  params6.radius = radius;
+  params6.r_variance = params6.t_variance = 0;
+  params6.fixstrategy = FixStrategy::kFixTheta;
+  auto tgt6 = MakeSNDTMap(datat, params6);
+  auto src6 = MakeSNDTMap(datas, params6);
+  auto T6 = SNDTMDMatch(tgt6, src6, params6);
+
+  D2DNDTParameters params7;
+  params7.cell_size = cell_size;
+  params7.r_variance = params7.t_variance = 0;
+  params7.fixstrategy = FixStrategy::kFixTheta;
+  auto tgt7 = MakeNDTMap(datat, params7);
+  auto src7 = MakeNDTMap(datas, params7);
+  auto T7 = SNDTMDMatch2(tgt7, src7, params7);
+
+  string filepath = "/tmp/contour.txt";
+  ofstream fout(filepath);
+  for (int i = 0; i < 3; ++i) fout << gt[i] << ((i + 1 == 3) ? "\n" : ", ");
+  for (int i = 0; i < sz; ++i) fout << x[i] << ((i + 1 == sz) ? "\n" : ", ");
+  for (int i = 0; i < sz; ++i) fout << y[i] << ((i + 1 == sz) ? "\n" : ", ");
+  if (m == 3) {
+    auto tnms = ComputeNormals(tgt, radius);
+    auto snms = ComputeNormals(src, radius);
+    for (size_t iter = 0; iter < params3._corres.size(); ++iter) {
+      Vector2d xy = params3._sols[iter][0].translation();
+      fout << xy(0) << ", " << xy(1) << ", 0\n";
+      for (int j = 0; j < sz; ++j) {
+        for (int k = 0; k < sz; ++k) {
+          auto ges = Translation2d(x(k), y(j)) * Rotation2Dd(0);
+          zz(j, k) = M3Cost(tgt3, tnms, src3, snms, params3._corres[iter], ges);
+          fout << zz(j, k) << ((k + 1 == sz) ? "\n" : ", ");
+        }
+      }
     }
-    cout << "m6: " << ini << " -> " << fin << endl;
-    ini = fin = 0;
-    for (auto corr : corres7) {
-      auto up = src7[corr.first]->GetPointMean();
-      auto cp = src7[corr.first]->GetPointCov();
-      Vector2d unp = src7[corr.first]->GetPointEvecs().col(0);
-      auto uq = tgt7[corr.second]->GetPointMean();
-      auto cq = tgt7[corr.second]->GetPointCov();
-      Vector2d unq = tgt7[corr.second]->GetPointEvecs().col(0);
-      ini += SNDTCostFunctor3::Cost2(up, cp, unp, uq, cq, unq);
-      fin += SNDTCostFunctor3::Cost2(up, cp, unp, uq, cq, unq, aff.inverse());
+  } else if (m == 5) {
+    for (size_t iter = 0; iter < params5._corres.size(); ++iter) {
+      Vector2d xy = params5._sols[iter][0].translation();
+      fout << xy(0) << ", " << xy(1) << ", 0\n";
+      for (int j = 0; j < sz; ++j) {
+        for (int k = 0; k < sz; ++k) {
+          auto ges = Translation2d(x(k), y(j)) * Rotation2Dd(0);
+          zz(j, k) = M5Cost(tgt5, src5, params5._corres[iter], ges);
+          fout << zz(j, k) << ((k + 1 == sz) ? "\n" : ", ");
+        }
+      }
     }
-    cout << "m7: " << ini << " -> " << fin << endl;
-    ini = fin = 0;
-    for (auto corr : corres6) {
-      auto up = src6[corr.first]->GetPointMean();
-      auto cp = src6[corr.first]->GetPointCov();
-      Vector2d unp = src6[corr.first]->GetPointEvecs().col(0);
-      auto uq = tgt6[corr.second]->GetPointMean();
-      auto cq = tgt6[corr.second]->GetPointCov();
-      Vector2d unq = tgt6[corr.second]->GetPointEvecs().col(0);
-      ini += SNDTCostFunctor3::Cost2(up, cp, unp, uq, cq, unq);
-      fin += SNDTCostFunctor3::Cost2(up, cp, unp, uq, cq, unq, aff.inverse());
+  } else if (m == 6) {
+    for (size_t iter = 0; iter < params6._corres.size(); ++iter) {
+      Vector2d xy = params6._sols[iter][0].translation();
+      fout << xy(0) << ", " << xy(1) << ", 0\n";
+      for (int j = 0; j < sz; ++j) {
+        for (int k = 0; k < sz; ++k) {
+          auto ges = Translation2d(x(k), y(j)) * Rotation2Dd(0);
+          zz(j, k) = M6Cost(tgt6, src6, params6._corres[iter], ges);
+          fout << zz(j, k) << ((k + 1 == sz) ? "\n" : ", ");
+        }
+      }
     }
-    cout << "m8: " << ini << " -> " << fin << endl;
-
-    for (int j = 0; j < sz; ++j) {
-      for (int k = 0; k < sz; ++k) {
-        auto ges = Translation2d(x(k), y(j)) * Rotation2Dd(0);
-        zz(j, k) = 0;
-        if (m == 6) {
-          for (auto corr : corres6) {
-            auto up = src6[corr.first]->GetPointMean();
-            auto cp = src6[corr.first]->GetPointCov();
-            auto unp = src6[corr.first]->GetNormalMean();
-            auto cnp = src6[corr.first]->GetNormalCov();
-            auto uq = tgt6[corr.second]->GetPointMean();
-            auto cq = tgt6[corr.second]->GetPointCov();
-            auto unq = tgt6[corr.second]->GetNormalMean();
-            auto cnq = tgt6[corr.second]->GetNormalCov();
-            zz(j, k) += SNDTCostFunctor2::Cost2(up, cp, unp, cnp, uq, cq, unq, cnq, ges);
-          }
-        } else if (m == 7) {
-          for (auto corr : corres7) {
-            auto up = src7[corr.first]->GetPointMean();
-            auto cp = src7[corr.first]->GetPointCov();
-            Vector2d unp = src7[corr.first]->GetPointEvecs().col(0);
-            auto uq = tgt7[corr.second]->GetPointMean();
-            auto cq = tgt7[corr.second]->GetPointCov();
-            Vector2d unq = tgt7[corr.second]->GetPointEvecs().col(0);
-            zz(j, k) += SNDTCostFunctor3::Cost2(up, cp, unp, uq, cq, unq, ges);
-          }
-        } else if (m == 8) {
-          for (auto corr : corres6) {
-            auto up = src6[corr.first]->GetPointMean();
-            auto cp = src6[corr.first]->GetPointCov();
-            Vector2d unp = src6[corr.first]->GetPointEvecs().col(0);
-            auto uq = tgt6[corr.second]->GetPointMean();
-            auto cq = tgt6[corr.second]->GetPointCov();
-            Vector2d unq = tgt6[corr.second]->GetPointEvecs().col(0);
-            zz(j, k) += SNDTCostFunctor3::Cost2(up, cp, unp, uq, cq, unq, ges);
-          }
+  } else if (m == 7) {
+    for (size_t iter = 0; iter < params7._corres.size(); ++iter) {
+      Vector2d xy = params7._sols[iter][0].translation();
+      fout << xy(0) << ", " << xy(1) << ", 0\n";
+      for (int j = 0; j < sz; ++j) {
+        for (int k = 0; k < sz; ++k) {
+          auto ges = Translation2d(x(k), y(j)) * Rotation2Dd(0);
+          zz(j, k) = M7Cost(tgt7, src7, params7._corres[iter], ges);
+          fout << zz(j, k) << ((k + 1 == sz) ? "\n" : ", ");
         }
       }
     }
   }
-
-  string filepath = "/tmp/contour.txt";
-  ofstream fout(filepath);
-  for (int i = 0; i < sz; ++i) fout << x[i] << ((i + 1 == sz) ? "\n" : ", ");
-  for (int i = 0; i < sz; ++i) fout << y[i] << ((i + 1 == sz) ? "\n" : ", ");
-  for (int i = 0; i < sz; ++i) {
-    for (int j = 0; j < sz; ++j) {
-      fout << zz(i, j) << ((j + 1 == sz) ? "\n" : ", ");
-    }
-  }
   fout.close();
-
-  /*int samples = 15;
-  auto affs = RandomTransformGenerator2D(r).Generate(samples);
-
-  for (auto aff : affs) {
-    auto src = TransformPoints(tgt, aff);
-    vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, Affine2d::Identity()}};
-    vector<pair<vector<Vector2d>, Affine2d>> datas{{src, Affine2d::Identity()}};
-
-    SNDTParameters params;
-    params.cell_size = cell_size;
-    params.radius = radius;
-    params.r_variance = params.t_variance = 0;
-    auto tgt6 = MakeSNDTMap(datat, params);
-    auto src6 = MakeSNDTMap(datas, params);
-    auto T = SNDTMatch(tgt6, src6, params);
-
-    D2DNDTParameters params;
-    params.cell_size = cell_size;
-    params.r_variance = params.t_variance = 0;
-    auto tgt7 = MakeNDTMap(datat, params);
-    auto src7 = MakeNDTMap(datas, params);
-    auto T = SNDTMatch2(tgt7, src7, params);
-
-    if ((aff * T).translation().isZero(1)) {
-      cout << "s: " << TransNormRotDegAbsFromAffine2d(aff * T).transpose()
-           << ", ";
-    } else {
-      cout << "f: " << TransNormRotDegAbsFromAffine2d(aff * T).transpose()
-           << ", ";
-    }
-    cout << "Iter: " << params._iteration << " & " << params._ceres_iteration;
-    cout << ", " << int(params._converge) << endl;
-  }*/
 }

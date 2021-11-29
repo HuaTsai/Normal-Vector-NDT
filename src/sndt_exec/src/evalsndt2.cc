@@ -172,14 +172,14 @@ int main(int argc, char **argv) {
       params4.r_variance = params4.t_variance = 0;
       auto tgt4 = MakeNDTMap(datat, params4);
       auto src4 = MakePoints(datas, params4);
-      T = P2DNDTMatch(tgt4, src4, params4);
+      T = P2DNDTMDMatch(tgt4, src4, params4);
     } else if (m == 5) {
       params = &params5;
       params5.cell_size = cell_size;
       params5.r_variance = params5.t_variance = 0;
       auto tgt5 = MakeNDTMap(datat, params5);
       auto src5 = MakeNDTMap(datas, params5);
-      T = D2DNDTMatch(tgt5, src5, params5);
+      T = D2DNDTMDMatch(tgt5, src5, params5);
     } else if (m == 6) {
       params = &params6;
       params6.cell_size = cell_size;
@@ -187,7 +187,7 @@ int main(int argc, char **argv) {
       params6.r_variance = params6.t_variance = 0;
       auto tgt6 = MakeSNDTMap(datat, params6);
       auto src6 = MakeSNDTMap(datas, params6);
-      T = SNDTMatch(tgt6, src6, params6);
+      T = SNDTMDMatch(tgt6, src6, params6);
       pub3.publish(MarkerArrayOfSNDTMap(tgt6, true));
     } else if (m == 7) {
       params = &params7;
@@ -195,7 +195,7 @@ int main(int argc, char **argv) {
       params7.r_variance = params7.t_variance = 0;
       auto tgt7 = MakeNDTMap(datat, params7);
       auto src7 = MakeNDTMap(datas, params7);
-      T = SNDTMatch2(tgt7, src7, params7);
+      T = SNDTMDMatch2(tgt7, src7, params7);
     }
 
     if ((aff * T).translation().isZero(1)) {

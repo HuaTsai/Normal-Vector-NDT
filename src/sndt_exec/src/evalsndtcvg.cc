@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
                   Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
   int n;
-  double cell_size, huber, voxel, r, radius;
+  double cell_size, voxel, r, radius;
   string data;
   po::options_description desc("Allowed options");
   // clang-format off
@@ -93,21 +93,21 @@ int main(int argc, char **argv) {
       params4.r_variance = params4.t_variance = 0;
       auto tgt4 = MakeNDTMap(datat, params4);
       auto src4 = MakePoints(datas, params4);
-      auto T4 = P2DNDTMatch(tgt4, src4, params4);
+      auto T4 = P2DNDTMDMatch(tgt4, src4, params4);
       s4 += ((aff * T4).translation().isZero(1) ? 1 : 0);
 
       D2DNDTParameters params5;
       params5.r_variance = params5.t_variance = 0;
       auto tgt5 = MakeNDTMap(datat, params5);
       auto src5 = MakeNDTMap(datas, params5);
-      auto T5 = D2DNDTMatch(tgt5, src5, params5);
+      auto T5 = D2DNDTMDMatch(tgt5, src5, params5);
       s5 += ((aff * T5).translation().isZero(1) ? 1 : 0);
 
       SNDTParameters params6;
       params6.r_variance = params6.t_variance = 0;
       auto tgt6 = MakeSNDTMap(datat, params6);
       auto src6 = MakeSNDTMap(datas, params6);
-      auto T6 = SNDTMatch(tgt6, src6, params6);
+      auto T6 = SNDTMDMatch(tgt6, src6, params6);
       s6 += ((aff * T6).translation().isZero(1) ? 1 : 0);
 
       ss[0].push_back(s1);

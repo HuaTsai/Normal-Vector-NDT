@@ -13,6 +13,10 @@
 #include <sndt/ndt_map.h>
 #include <sndt/sndt_map.h>
 
+enum class Method { kDUMMY, kICP, kPt2PlICP, kSICP, kP2DNDT, kD2DNDT, kSNDT };
+
+enum class FixStrategy { kNoFix, kFixX, kFixY, kFixTheta };
+
 enum class Converge {
   kNotConverge,
   kThreshold,
@@ -24,7 +28,7 @@ enum class Converge {
 struct UsedTime {
   UsedTime() { Initialize(); }
   void Initialize() { normal = ndt = build = optimize = others = 0; }
-  int total() { return normal + ndt + build + optimize + others; }
+  int total() const { return normal + ndt + build + optimize + others; }
   int normal;
   int ndt;
   int build;
@@ -34,55 +38,68 @@ struct UsedTime {
 
 // Variables started with "_" are output parameters
 struct CommonParameters {
-  enum Method { kDUMMY, kICP, kPt2PlICP, kSICP, kP2DNDT, kD2DNDT, kSNDT };
   CommonParameters() {
     InitializeInput();
     InitializeOutput();
   }
+
   void InitializeInput() {
-    method = kDUMMY;
+    method = Method::kDUMMY;
+    fixstrategy = FixStrategy::kNoFix;
+    solver = ceres::DENSE_QR;
     max_iterations = 100;
     ceres_max_iterations = 50;
     threshold = 0.0001;
-    huber = 1;
     verbose = false;
-    solver = ceres::DENSE_QR;
+    inspect = true;
+    save_costs = true;
+    reject = true;
   }
+
   void InitializeOutput() {
-    _initial_cost = 0;
     _iteration = 0;
     _ceres_iteration = 0;
+    _initial_cost = 0;
+    _final_cost = 0;
     _converge = Converge::kNotConverge;
     _usedtime.Initialize();
   }
+
   Method method;
+  FixStrategy fixstrategy;
+  ceres::LinearSolverType solver;
   int max_iterations;
   int ceres_max_iterations;
-  int threads;
   double threshold;
-  double huber;
   bool verbose;
-  ceres::LinearSolverType solver;
+  bool inspect;
+  bool save_costs;
+  bool reject;
 
   int _iteration;
   int _ceres_iteration;
   double _initial_cost;
-  std::vector<double> _all_cost;
+  double _final_cost;
   Converge _converge;
-  /**< Iteration, Correspondence, (Before, After) */
-  std::vector<std::vector<std::pair<double, double>>> _costs;
   UsedTime _usedtime;
-  /**< Iteration, Inneriteration, Solution */
+
+  /**< Iteration, (Before, After), works when save_costs is true */
+  std::vector<std::pair<double, double>> _all_costs;
+  /**< Iteration, Correspondence, (Before, After), works when save_costs is true */
+  std::vector<std::vector<std::pair<double, double>>> _costs;
+  /**< Iteration, Inneriteration, Solution, works when inspect is true */
   std::vector<std::vector<Eigen::Affine2d>> _sols;
+  /**< Iteration, Correspondence, (Source, Target) */
+  std::vector<std::vector<std::pair<int, int>>> _corres;
 };
 
 struct ICPParameters : CommonParameters {
-  ICPParameters() { method = kICP; }
+  ICPParameters() { method = Method::kICP; }
 };
 
 struct Pt2plICPParameters : CommonParameters {
   Pt2plICPParameters() {
-    method = kPt2PlICP;
+    method = Method::kPt2PlICP;
     radius = 1.5;
   }
   double radius;
@@ -92,7 +109,7 @@ struct Pt2plICPParameters : CommonParameters {
 
 struct SICPParameters : CommonParameters {
   SICPParameters() {
-    method = kSICP;
+    method = Method::kSICP;
     radius = 1.5;
   }
   double radius;
@@ -110,20 +127,19 @@ struct NDTParameters : CommonParameters {
 };
 
 struct P2DNDTParameters : NDTParameters {
-  P2DNDTParameters() { method = kP2DNDT; }
+  P2DNDTParameters() { method = Method::kP2DNDT; }
 };
 
 struct D2DNDTParameters : NDTParameters {
-  D2DNDTParameters() { method = kP2DNDT; }
+  D2DNDTParameters() { method = Method::kP2DNDT; }
 };
 
 struct SNDTParameters : NDTParameters {
   SNDTParameters() {
-    method = kSNDT;
+    method = Method::kSNDT;
     radius = 1.5;
   }
   double radius;
-  std::vector<std::vector<std::pair<int, int>>> _corres;
 };
 
 Eigen::Affine2d ICPMatch(
@@ -151,10 +167,23 @@ Eigen::Affine2d SICPMatch(
     SICPParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
+// BUG: This match does not work and it is awful.
+Eigen::Affine2d P2DNDTMDMatch(
+    const NDTMap &target_map,
+    const std::vector<Eigen::Vector2d> &source_points,
+    P2DNDTParameters &params,
+    const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
+
 Eigen::Affine2d P2DNDTMatch(
     const NDTMap &target_map,
     const std::vector<Eigen::Vector2d> &source_points,
     P2DNDTParameters &params,
+    const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
+
+Eigen::Affine2d D2DNDTMDMatch(
+    const NDTMap &target_map,
+    const NDTMap &source_map,
+    D2DNDTParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 Eigen::Affine2d D2DNDTMatch(
@@ -163,10 +192,16 @@ Eigen::Affine2d D2DNDTMatch(
     D2DNDTParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
-Eigen::Affine2d SNDTMatch(
+Eigen::Affine2d SNDTMDMatch(
     const SNDTMap &target_map,
     const SNDTMap &source_map,
     SNDTParameters &params,
+    const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
+
+Eigen::Affine2d SNDTMDMatch2(
+    const NDTMap &target_map,
+    const NDTMap &source_map,
+    D2DNDTParameters &params,
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 Eigen::Affine2d SNDTMatch2(

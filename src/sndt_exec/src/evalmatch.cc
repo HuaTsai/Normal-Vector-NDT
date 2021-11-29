@@ -53,13 +53,13 @@ void cb(const std_msgs::Int32 &num) {
   auto uq = us[n][0], unq = uns[n][0];
   auto cq = cs[n][0], cnq = cns[n][0];
   auto aff = Translation2d(13.7548, -5.98377) * Rotation2Dd(0);
-  double cost = SNDTCostFunctor2::Cost(up, cp, unp, cnp, uq, cq, unq, cnq);
+  double cost = SNDTMDCostFunctor::Cost(up, cp, unp, cnp, uq, cq, unq, cnq);
   double cost2 =
-      SNDTCostFunctor2::Cost(up, cp, unp, cnp, uq, cq, unq, cnq, aff);
-  double cost3 = SNDTCostFunctor3::Cost(up, cp, unp, uq, cq, unq);
-  double cost4 = SNDTCostFunctor3::Cost(up, cp, unp, uq, cq, unq, aff);
-  double cost5 = D2DNDTCostFunctor2::Cost(up, cp, uq, cq);
-  double cost6 = D2DNDTCostFunctor2::Cost(up, cp, uq, cq, aff);
+      SNDTMDCostFunctor::Cost(up, cp, unp, cnp, uq, cq, unq, cnq, aff);
+  double cost3 = SNDTMDCostFunctor2::Cost(up, cp, unp, uq, cq, unq);
+  double cost4 = SNDTMDCostFunctor2::Cost(up, cp, unp, uq, cq, unq, aff);
+  double cost5 = D2DNDTMDCostFunctor::Cost(up, cp, uq, cq);
+  double cost6 = D2DNDTMDCostFunctor::Cost(up, cp, uq, cq, aff);
   // printf("up = np.array([[%f], [%f]])\n", up(0), up(1));
   // printf("cp = np.array([[%f, %f], [%f, %f]])\n", cp(0, 0), cp(0, 1), cp(1,
   // 0), cp(1, 1)); printf("unp = np.array([[%f], [%f]])\n", unp(0), unp(1));
@@ -157,7 +157,7 @@ int main(int argc, char **argv) {
     params6.r_variance = params6.t_variance = 0;
     auto tgt6 = MakeSNDTMap(datat, params6);
     auto src6 = MakeSNDTMap(datas, params6);
-    // auto T = SNDTMatch(tgt6, src6, params6);
+    // auto T = SNDTMDMatch(tgt6, src6, params6);
     // pub3.publish(MarkerArrayOfSNDTMap(tgt6, true));
     // cout << "Result: " << XYTDegreeFromAffine2d(aff * T).transpose() << endl;
 

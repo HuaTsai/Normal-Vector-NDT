@@ -202,6 +202,14 @@ MarkerArray MarkerArrayOfArrows(const std::vector<Eigen::Vector2d> &starts,
                                 const Color &color = Color::kLime,
                                 double alpha = 1.0);
 
+// TODO: document
+MarkerArray MarkerArrayOfNDTMap(const NDTMap &map,
+                                bool use_target_color = false);
+
+MarkerArray MarkerArrayOfNDTMap(
+    const std::vector<std::shared_ptr<NDTCell>> &map,
+    bool use_target_color = false);
+
 /**
  * @brief General MarkerArray of SNDTCell
  *
@@ -273,3 +281,9 @@ MarkerArray MarkerArrayOfCorrespondences(
  * @return MarkerArray of the sensors
  */
 MarkerArray MarkerArrayOfSensor(const std::vector<Eigen::Affine2d> &affs);
+
+MarkerArray MarkerArrayOfCorres(
+    const NDTMap &source_map,
+    const NDTMap &target_map,
+    const Eigen::Affine2d &aff,
+    const std::vector<std::pair<int, int>> &corres);

@@ -78,6 +78,7 @@ void SNDTCell::ComputeNGaussian() {
     nevecs_.col(1) = Eigen::Vector2d(-nevecs_(1, 0), nevecs_(0, 0));
     nevals_ = Eigen::Vector2d(0.0005, 0.01);
     // nevals_ = Eigen::Vector2d(0.00005, 0.001);
+    // nevals_ = Eigen::Vector2d(0.0, 0.0);
     ncov_ = nevecs_ * nevals_.asDiagonal() * nevecs_.transpose();
     ncelltype_ = kAssign;
     nhasgaussian_ = true;

@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
     params1.r_variance = params1.t_variance = 0;
     auto tgt1 = MakeSNDTMap(datat, params1);
     auto src1 = MakeSNDTMap(datas, params1);
-    auto T1 = SNDTMatch(tgt1, src1, params1, Tg);
+    auto T1 = SNDTMDMatch(tgt1, src1, params1, Tg);
     Tr1 = Tr1 * Matrix4fFromMatrix3d(T1.matrix());
     vp1.push_back(MakePoseStampedMsg(vpc[i + 1].header.stamp, Tr1));
     vector<Vector2d> next1(tgt3.size());
@@ -131,7 +131,7 @@ int main(int argc, char **argv) {
     params2.r_variance = params2.t_variance = 0;
     auto tgt2 = MakeNDTMap(datat, params2);
     auto src2 = MakeNDTMap(datas, params2);
-    auto T2 = D2DNDTMatch(tgt2, src2, params2, Tg);
+    auto T2 = D2DNDTMDMatch(tgt2, src2, params2, Tg);
     Tr2 = Tr2 * Matrix4fFromMatrix3d(T2.matrix());
     vp2.push_back(MakePoseStampedMsg(vpc[i + 1].header.stamp, Tr2));
     vector<Vector2d> next2(tgt3.size());

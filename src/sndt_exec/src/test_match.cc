@@ -65,10 +65,9 @@ void cb(const std_msgs::Int32 &num) {
       Rotation2Dd(gtTio3.rotation().block<2, 2>(0, 0));
   /********* Compute End Here     *********/
 
-  params.huber = huber;
   // params.verbose = true;
   cout << "start frame: " << i;
-  auto res = SNDTMatch(mapt, maps, params, Tio);
+  auto res = SNDTMDMatch(mapt, maps, params, Tio);
 
   // cout << "guess: " << XYTDegreeFromAffine2d(Tio).transpose() << endl;
   // cout << "result: " << XYTDegreeFromAffine2d(res).transpose() << endl;

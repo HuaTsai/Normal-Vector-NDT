@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
     params4.cell_size = cell_size;
     auto tgt4 = MakeNDTMap(datat, params4);
     auto src4 = MakePoints(datas, params4);
-    auto T4 = P2DNDTMatch(tgt4, src4, params4, Tg);
+    auto T4 = P2DNDTMDMatch(tgt4, src4, params4, Tg);
     ndt4.push_back(params4._usedtime.ndt / 1000.);
     nm4.push_back(params4._usedtime.normal / 1000.);
     bud4.push_back(params4._usedtime.build / 1000.);
@@ -194,7 +194,7 @@ int main(int argc, char **argv) {
     params5.cell_size = cell_size;
     auto tgt5 = MakeNDTMap(datat, params5);
     auto src5 = MakeNDTMap(datas, params5);
-    auto T5 = D2DNDTMatch(tgt5, src5, params5, Tg);
+    auto T5 = D2DNDTMDMatch(tgt5, src5, params5, Tg);
     ndt5.push_back(params5._usedtime.ndt / 1000.);
     nm5.push_back(params5._usedtime.normal / 1000.);
     bud5.push_back(params5._usedtime.build / 1000.);
@@ -212,10 +212,10 @@ int main(int argc, char **argv) {
 #ifdef LIDAR
     params6.r_variance = params6.t_variance = 0;
 #endif
-    params6.cell_size = cell_size, params6.huber = huber;
+    params6.cell_size = cell_size;
     auto tgt6 = MakeSNDTMap(datat, params6);
     auto src6 = MakeSNDTMap(datas, params6);
-    auto T6 = SNDTMatch(tgt6, src6, params6, Tg);
+    auto T6 = SNDTMDMatch(tgt6, src6, params6, Tg);
     ndt6.push_back(params6._usedtime.ndt / 1000.);
     nm6.push_back(params6._usedtime.normal / 1000.);
     bud6.push_back(params6._usedtime.build / 1000.);

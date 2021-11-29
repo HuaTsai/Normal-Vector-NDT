@@ -4,7 +4,9 @@
  * @brief Eigen Utilities
  * @version 0.1
  * @date 2021-07-29
- *
+ * @details All functions are defined inline to prevent compile error of
+ * multiple definition in different compilation units. It is the same reason
+ * that we implement function in the class definition.
  * @copyright Copyright (c) 2021
  *
  */
@@ -244,4 +246,51 @@ class RandomTransformGenerator2D {
  private:
   std::shared_ptr<std::default_random_engine> dre_;
   double radius_;
+};
+
+class RandomTransformGenerator {
+ public:
+  RandomTransformGenerator(double radius, double angle_deg)
+      : dre_(new std::default_random_engine()),
+        radius_(radius),
+        angle_rad_(angle_deg * M_PI / 180.) {}
+  std::vector<Eigen::Affine2d> Generate(int sizes) {
+    std::vector<Eigen::Affine2d> ret;
+    std::uniform_real_distribution<> urd(-M_PI, M_PI);
+    std::bernoulli_distribution ber;
+    for (int i = 0; i < sizes; ++i) {
+      double angle = urd(*dre_);
+      double x = radius_ * cos(angle);
+      double y = radius_ * sin(angle);
+      double t = ber(*dre_) ? angle_rad_ : -angle_rad_;
+      ret.push_back(Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t));
+    }
+    return ret;
+  }
+
+ private:
+  std::shared_ptr<std::default_random_engine> dre_;
+  double radius_;
+  double angle_rad_;
+};
+
+class UniformTransformGenerator {
+ public:
+  UniformTransformGenerator(double radius, double angle_deg)
+      : radius_(radius), angle_rad_(angle_deg * M_PI / 180.) {}
+  std::vector<Eigen::Affine2d> Generate(int sizes) {
+    std::vector<Eigen::Affine2d> ret;
+    for (int i = 0; i < sizes; ++i) {
+      double angle = 2 * M_PI * i / sizes;
+      double x = radius_ * cos(angle);
+      double y = radius_ * sin(angle);
+      double t = (i % 2) ? angle_rad_ : -angle_rad_;
+      ret.push_back(Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t));
+    }
+    return ret;
+  }
+
+ private:
+  double radius_;
+  double angle_rad_;
 };

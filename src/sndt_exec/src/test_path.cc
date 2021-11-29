@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
     auto tgt1 = MakeSNDTMap(Augment(vepcs, i, i + f - 1, Tio, Tios), params1);
     auto src1 =
         MakeSNDTMap(Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs), params1);
-    auto T1 = SNDTMatch(tgt1, src1, params1, Tio);
+    auto T1 = SNDTMDMatch(tgt1, src1, params1, Tio);
     Tr1 = Tr1 * Matrix4fFromMatrix3d(T1.matrix());
     vp1.push_back(MakePoseStampedMsg(vepcs[i + f].stamp, Tr1));
     vector<Vector2d> next1(tgt3.size());
@@ -145,7 +145,7 @@ int main(int argc, char **argv) {
     auto tgt2 = MakeNDTMap(Augment(vepcs, i, i + f - 1, Tio, Tios), params2);
     auto src2 =
         MakeNDTMap(Augment(vepcs, i + f, i + 2 * f - 1, Toq, Toqs), params2);
-    auto T2 = D2DNDTMatch(tgt2, src2, params2, Tio);
+    auto T2 = D2DNDTMDMatch(tgt2, src2, params2, Tio);
     Tr2 = Tr2 * Matrix4fFromMatrix3d(T2.matrix());
     vp2.push_back(MakePoseStampedMsg(vepcs[i + f].stamp, Tr2));
     vector<Vector2d> next2(tgt3.size());

@@ -26,7 +26,7 @@ vector<common::EgoPointClouds> vepcs;
 vector<sensor_msgs::PointCloud2> vpc;
 ros::Publisher pub1, pub2, pub3, pub4, pub5, pub6, pub7, pub8, pubd, pube;
 ros::Publisher pb1, pb2, pb3, pb4, pb5, pb6, pbs, pbt;
-double cell_size, radius, huber, voxel;
+double cell_size, radius, voxel;
 nav_msgs::Path gtpath;
 bool image;
 
@@ -69,31 +69,28 @@ void cb(const std_msgs::Int32 &num) {
 #ifdef LIDAR
   params1.r_variance = params1.t_variance = 0;
 #endif
-  params1.huber = huber;
   params1.radius = radius;
   auto mapt1 = MakeSNDTMap(datat, params1);
   auto maps1 = MakeSNDTMap(datas, params1);
   cout << "SNDT: " << endl;
   mapt1.ShowCellDistri();
   maps1.ShowCellDistri();
-  auto T1 = SNDTMatch(mapt1, maps1, params1, Tg);
+  auto T1 = SNDTMDMatch(mapt1, maps1, params1, Tg);
 
   // NDTD2D method
   D2DNDTParameters params2;
 #ifdef LIDAR
   params2.r_variance = params2.t_variance = 0;
 #endif
-  params2.huber = huber;
   auto mapt2 = MakeNDTMap(datat, params2);
   auto maps2 = MakeNDTMap(datas, params2);
   cout << "NDT: " << endl;
   mapt2.ShowCellDistri();
   maps2.ShowCellDistri();
-  auto T2 = D2DNDTMatch(mapt2, maps2, params2, Tg);
+  auto T2 = D2DNDTMDMatch(mapt2, maps2, params2, Tg);
 
   // SICP method
   SICPParameters params3;
-  params3.huber = huber;
   auto tgt3 = MakePoints(datat, params3);
   auto src3 = MakePoints(datas, params3);
   auto T3 = SICPMatch(tgt3, src3, params3, Tg);
@@ -168,7 +165,6 @@ int main(int argc, char **argv) {
       ("data,d", po::value<string>(&data)->required(), "Data (logxx)")
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("radius,r", po::value<double>(&radius)->default_value(1.5), "Radius")
-      ("huber,u", po::value<double>(&huber)->default_value(1), "Huber")
       ("voxel,v", po::value<double>(&voxel)->default_value(0), "Voxel")
       ("image,i", po::value<bool>(&image)->default_value(false)->implicit_value(true), "Image")
       ("run", po::value<bool>(&run)->default_value(false)->implicit_value(true), "Run");
