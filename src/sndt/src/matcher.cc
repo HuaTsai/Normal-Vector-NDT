@@ -384,7 +384,7 @@ Eigen::Affine2d SICPMatch(const std::vector<Eigen::Vector2d> &tpts,
       if (idx == -1) continue;
       Eigen::Vector2d q = tpts[idx], nq = tnms[idx];
       if (!q.allFinite() || !nq.allFinite()) continue;
-      if (np.dot(nq) < 0) nq = -nq;
+      // if (np.dot(nq) < 0) nq = -nq;
       corres.push_back({i, idx});
       orj.AddCorrespondence(p, q);
       residuals.push_back(SICPCostFunctor::Create(p, np, q, nq));
@@ -691,6 +691,66 @@ Eigen::Affine2d SNDTMDMatch(const SNDTMap &target_map,
   params._usedtime.others =
       GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
   return cur_tf;
+}
+
+// TODO: finish it
+Eigen::Affine2d SNDTMatch(const SNDTMap &target_map,
+                          const SNDTMap &source_map,
+                          SNDTParameters &params,
+                          const Eigen::Affine2d &guess_tf) {
+  // auto t1 = GetTime();
+  // auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
+
+  // auto cur_tf = guess_tf;
+  // while (params._converge == Converge::kNotConverge) {
+  //   LeastSquareOptimize opt;
+  //   opt.set_cur_tf(cur_tf);
+  //   auto t1 = GetTime();
+  //   auto next_map = source_map.PseudoTransformCells(opt.cur_tf(), true);
+
+  //   OutlierRejection orj;
+  //   orj.set_reject(params.reject);
+  //   std::vector<ceres::CostFunction *> residuals;
+  //   std::vector<std::pair<int, int>> corres;
+  //   for (size_t i = 0; i < next_map.size(); ++i) {
+  //     auto cellp = next_map[i];
+  //     if (!cellp->HasGaussian()) continue;
+  //     auto idx = FindNearestNeighborIndex(cellp->GetPointMean(), kd);
+  //     if (idx == -1) continue;
+  //     auto cellq = target_map.GetCellForPoint(Eigen::Vector2d(
+  //         kd.getInputCloud()->at(idx).x, kd.getInputCloud()->at(idx).y));
+  //     if (!cellq || !cellq->HasGaussian()) continue;
+  //     corres.push_back({i, target_map.GetCellIndex(cellq)});
+  //     auto up = cellp->GetPointMean();
+  //     auto cp = cellp->GetPointCov();
+  //     auto unp = cellp->GetNormalMean();
+  //     auto cnp = cellp->GetNormalCov();
+  //     auto uq = cellq->GetPointMean();
+  //     auto cq = cellq->GetPointCov();
+  //     auto unq = cellq->GetNormalMean();
+  //     auto cnq = cellq->GetNormalCov();
+  //     orj.AddCorrespondence(up, uq);
+  //     residuals.push_back(
+  //         SNDTMDCostFunctor::Create(up, cp, unp, cnp, uq, cq, unq, cnq));
+  //   }
+  //   params._corres.push_back({});
+  //   auto indices = orj.GetIndices();
+  //   for (size_t i = 0; i < indices.size(); ++i) {
+  //     opt.AddResidualBlock(residuals[indices[i]]);
+  //     params._corres.back().push_back(corres[i]);
+  //   }
+
+  //   auto t2 = GetTime();
+  //   params._usedtime.build += GetDiffTime(t1, t2);
+
+  //   opt.Optimize(params);
+  //   opt.CheckConverge(params);
+  //   cur_tf = opt.cur_tf();
+  // }
+  // auto t2 = GetTime();
+  // params._usedtime.others =
+  //     GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
+  // return cur_tf;
 }
 
 Eigen::Affine2d SNDTMDMatch2(const NDTMap &target_map,

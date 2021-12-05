@@ -178,8 +178,7 @@ void MakeGtLocal(nav_msgs::Path &path, const ros::Time &start) {
   Eigen::Affine3d preT;
   tf2::fromMsg(startpose, preT);
   preT = preT.inverse();
-  path.poses[0].pose = tf2::toMsg(Eigen::Affine3d::Identity());
-  for (size_t i = 1; i < path.poses.size(); ++i) {
+  for (size_t i = 0; i < path.poses.size(); ++i) {
     Eigen::Affine3d T;
     tf2::fromMsg(path.poses[i].pose, T);
     Eigen::Affine3d newT = preT * T;

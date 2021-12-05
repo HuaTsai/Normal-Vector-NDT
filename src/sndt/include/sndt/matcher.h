@@ -26,9 +26,17 @@ enum class Converge {
 };
 
 struct UsedTime {
-  UsedTime() { Initialize(); }
-  void Initialize() { normal = ndt = build = optimize = others = 0; }
+  UsedTime() : normal(0), ndt(0), build(0), optimize(0), others(0) {}
   int total() const { return normal + ndt + build + optimize + others; }
+  UsedTime operator+(const UsedTime &a) const {
+    UsedTime ret;
+    ret.normal = normal + a.normal;
+    ret.ndt = ndt + a.ndt;
+    ret.build = build + a.build;
+    ret.optimize = optimize + a.optimize;
+    ret.others = others + a.others;
+    return ret;
+  }
   int normal;
   int ndt;
   int build;
@@ -53,7 +61,7 @@ struct CommonParameters {
     verbose = false;
     inspect = true;
     save_costs = true;
-    reject = true;
+    reject = false;
   }
 
   void InitializeOutput() {
@@ -62,7 +70,6 @@ struct CommonParameters {
     _initial_cost = 0;
     _final_cost = 0;
     _converge = Converge::kNotConverge;
-    _usedtime.Initialize();
   }
 
   Method method;
@@ -193,6 +200,12 @@ Eigen::Affine2d D2DNDTMatch(
     const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
 
 Eigen::Affine2d SNDTMDMatch(
+    const SNDTMap &target_map,
+    const SNDTMap &source_map,
+    SNDTParameters &params,
+    const Eigen::Affine2d &guess_tf = Eigen::Affine2d::Identity());
+
+Eigen::Affine2d SNDTMatch(
     const SNDTMap &target_map,
     const SNDTMap &source_map,
     SNDTParameters &params,

@@ -14,22 +14,6 @@ Eigen::Matrix<T, 2, 2> RotationMatrix2D(T yaw) {
   return ret;
 }
 
-// Note: It seems that we do not need this feature.
-class AngleLocalParameterization {
- public:
-  template <typename T>
-  bool operator()(const T *t, const T *dt, T *t_add_dt) const {
-    T pi(M_PI), twopi(2. * M_PI), sum(*t + *dt);
-    *t_add_dt = sum - twopi * ceres::floor((sum + pi) / twopi);
-    return true;
-  }
-
-  static ceres::LocalParameterization *Create() {
-    return new ceres::AutoDiffLocalParameterization<AngleLocalParameterization,
-                                                    1, 1>;
-  }
-};
-
 class ICPCostFunctor {
  public:
   ICPCostFunctor(const Eigen::Vector2d &p, const Eigen::Vector2d &q)
@@ -141,9 +125,10 @@ class SICPCostFunctor {
     Eigen::Matrix<T, 2, 1> np = R * np_.cast<T>();
     Eigen::Matrix<T, 2, 1> q = q_.cast<T>();
     Eigen::Matrix<T, 2, 1> nq = nq_.cast<T>();
-    // FIXME: normalize np + nq or not
+    Eigen::Matrix<T, 2, 1> npq = np + nq;
+    npq = npq / npq.norm();
 
-    *e = (p - q).dot(np + nq);
+    *e = (p - q).dot(npq);
     return true;
   }
 
@@ -195,8 +180,7 @@ class P2DNDTMDCostFunctor {
     Eigen::Matrix<T, 2, 2> cq = cq_.cast<T>();
     Eigen::Matrix<T, 2, 1> pq = p - uq;
 
-    // TODO: check if .dot( * ) is okay or not
-    *e = sqrt((pq.transpose() * cq.inverse() * pq)[0]);
+    *e = sqrt(pq.dot(cq.inverse() * pq));
     return true;
   }
 
@@ -246,7 +230,9 @@ class P2DNDTCostFunctor {
       Eigen::Matrix<T, 2, 1> q = qs_[i].cast<T>();
       Eigen::Matrix<T, 2, 2> cq = cqs_[i].cast<T>();
       Eigen::Matrix<T, 2, 1> pq = p - q;
-      e[0] += -ceres::exp(-0.5 * (pq.transpose() * cq.inverse() * pq)[0]);
+      // 0.000005 not okay
+      // 0.00005 see rate-2021-12-02-22-06-06.png
+      e[0] += -ceres::exp(-0.00005 * pq.dot(cq.inverse() * pq));
     }
     return true;
   }
@@ -267,7 +253,7 @@ class P2DNDTCostFunctor {
     for (size_t i = 0; i < ps.size(); ++i) {
       Eigen::Vector2d pq = T * ps[i] - qs[i];
       Eigen::Matrix2d cinv = cqs[i].inverse();
-      cost += -ceres::exp(-0.5 * (pq.dot(cinv * pq)));
+      cost += -ceres::exp(-0.0005 * (pq.dot(cinv * pq)));
     }
     return cost;
   }
@@ -300,7 +286,7 @@ class D2DNDTMDCostFunctor {
     Eigen::Matrix<T, 2, 1> m = up - uq;
     Eigen::Matrix<T, 2, 2> c = cp + cq;
 
-    *e = sqrt((m.transpose() * c.inverse() * m)[0]);
+    *e = sqrt(m.dot(c.inverse() * m));
     return true;
   }
 
@@ -359,7 +345,7 @@ class D2DNDTCostFunctor {
       Eigen::Matrix<T, 2, 2> cq = cqs_[i].cast<T>();
       Eigen::Matrix<T, 2, 1> m = up - uq;
       Eigen::Matrix<T, 2, 2> c = cp + cq;
-      e[0] += -ceres::exp(-0.5 * (m.transpose() * c.inverse() * m)[0]);
+      e[0] += -ceres::exp(-0.005 * m.dot(c.inverse() * m));
     }
     return true;
   }
@@ -494,6 +480,101 @@ class SNDTMDCostFunctor {
   const Eigen::Matrix2d cp_, cnp_, cq_, cnq_;
 };
 
+class SNDTCostFunctor {
+ public:
+  SNDTCostFunctor(const std::vector<Eigen::Vector2d> &ups,
+                  const std::vector<Eigen::Matrix2d> &cps,
+                  const std::vector<Eigen::Vector2d> &unps,
+                  const std::vector<Eigen::Matrix2d> &cnps,
+                  const std::vector<Eigen::Vector2d> &uqs,
+                  const std::vector<Eigen::Matrix2d> &cqs,
+                  const std::vector<Eigen::Vector2d> &unqs,
+                  const std::vector<Eigen::Matrix2d> &cnqs)
+      : ups_(ups),
+        unps_(unps),
+        uqs_(uqs),
+        unqs_(unqs),
+        cps_(cps),
+        cnps_(cnps),
+        cqs_(cqs),
+        cnqs_(cnqs),
+        n_(ups.size()),
+        d2_(0.0005) {}
+
+  template <typename T>
+  bool operator()(const T *const xyt, T *e) const {
+    e[0] = T(0);
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
+
+    for (int i = 0; i < n_; ++i) {
+      Eigen::Matrix<T, 2, 1> up = R * ups_[i].cast<T>() + t;
+      Eigen::Matrix<T, 2, 1> unp = R * unps_[i].cast<T>();
+      Eigen::Matrix<T, 2, 2> cp = R * cps_[i].cast<T>() * R.transpose();
+      Eigen::Matrix<T, 2, 2> cnp = R * cnps_[i].cast<T>() * R.transpose();
+      Eigen::Matrix<T, 2, 1> uq = uqs_[i].cast<T>();
+      Eigen::Matrix<T, 2, 1> unq = unqs_[i].cast<T>();
+      Eigen::Matrix<T, 2, 2> cq = cqs_[i].cast<T>();
+      Eigen::Matrix<T, 2, 2> cnq = cnqs_[i].cast<T>();
+      // FIXME: normalize normal
+      // unp2 = unp2.dot(unq2) / ceres::abs(unp2.dot(unq2)) * unp2;
+
+      Eigen::Matrix<T, 2, 1> m1 = up - uq;
+      Eigen::Matrix<T, 2, 1> m2 = unp + unq;
+      Eigen::Matrix<T, 2, 2> c1 = cp + cq;
+      Eigen::Matrix<T, 2, 2> c2 = cnp + cnq;
+
+      T num2 = m1.dot(m2) * m1.dot(m2);
+      T den2 = m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace();
+      e[0] += -ceres::exp(-d2_ * num2 / den2);
+    }
+    return true;
+  }
+
+  static ceres::CostFunction *Create(const Eigen::Vector2d &up,
+                                     const Eigen::Matrix2d &cp,
+                                     const Eigen::Vector2d &unp,
+                                     const Eigen::Matrix2d &cnp,
+                                     const Eigen::Vector2d &uq,
+                                     const Eigen::Matrix2d &cq,
+                                     const Eigen::Vector2d &unq,
+                                     const Eigen::Matrix2d &cnq) {
+    return new ceres::AutoDiffCostFunction<SNDTMDCostFunctor, 1, 1, 1, 1>(
+        new SNDTMDCostFunctor(up, cp, unp, cnp, uq, cq, unq, cnq));
+  }
+
+  static double Cost(const std::vector<Eigen::Vector2d> &ups,
+                     const std::vector<Eigen::Matrix2d> &cps,
+                     const std::vector<Eigen::Vector2d> &unps,
+                     const std::vector<Eigen::Matrix2d> &cnps,
+                     const std::vector<Eigen::Vector2d> &uqs,
+                     const std::vector<Eigen::Matrix2d> &cqs,
+                     const std::vector<Eigen::Vector2d> &unqs,
+                     const std::vector<Eigen::Matrix2d> &cnqs,
+                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity(),
+                     double d2 = 0.0005) {
+    double cost = 0;
+    Eigen::Matrix2d R = T.rotation();
+    for (size_t i = 0; i < ups.size(); ++i) {
+      Eigen::Vector2d m1 = T * ups[i] - uqs[i];
+      // Eigen::Vector2d unp2 = ((R * unp).dot(unq) > 0) ? unp : -unp;
+      Eigen::Vector2d m2 = R * unps[i] + unqs[i];
+      Eigen::Matrix2d c1 = R * cps[i] * R.transpose() + cqs[i];
+      Eigen::Matrix2d c2 = R * cnps[i] * R.transpose() + cnqs[i];
+      double num2 = m1.dot(m2) * m1.dot(m2);
+      double den2 = m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace();
+      cost += -ceres::exp(-d2 * num2 / den2);
+    }
+    return cost;
+  }
+
+ private:
+  const std::vector<Eigen::Vector2d> ups_, unps_, uqs_, unqs_;
+  const std::vector<Eigen::Matrix2d> cps_, cnps_, cqs_, cnqs_;
+  const int n_;
+  const double d2_;
+};
+
 class SNDTMDCostFunctor2 {
  public:
   SNDTMDCostFunctor2(const Eigen::Vector2d &up,
@@ -599,7 +680,7 @@ class SNDTCostFunctor2 {
       Eigen::Matrix<T, 2, 1> uq = uqs_[i].cast<T>();
       Eigen::Matrix<T, 2, 1> unq = unqs_[i].cast<T>();
       Eigen::Matrix<T, 2, 2> cq = cqs_[i].cast<T>();
-      unp = unp.dot(unq) / ceres::abs(unp.dot(unq)) * unp;
+      // unp = unp.dot(unq) / ceres::abs(unp.dot(unq)) * unp;
 
       Eigen::Matrix<T, 2, 1> m1 = up - uq;
       Eigen::Matrix<T, 2, 1> m2 = unp + unq;
@@ -636,7 +717,7 @@ class SNDTCostFunctor2 {
       Eigen::Vector2d m1 = T * ups[i] - uqs[i];
       Eigen::Vector2d m2 = R * unps[i] + unqs[i];
       Eigen::Matrix2d c1 = R * cps[i] * R.transpose() + cqs[i];
-      cost += -ceres::exp(-0.5 * m1.dot(m2) * m1.dot(m2) / m2.dot(c1 * m2));
+      cost += -ceres::exp(-0.00005 * m1.dot(m2) * m1.dot(m2) / m2.dot(c1 * m2));
     }
     return cost;
   }

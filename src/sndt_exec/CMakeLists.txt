@@ -10,6 +10,7 @@ find_package(catkin REQUIRED
     roscpp
     sndt
     pcl_ros
+    metric
 )
 
 catkin_package()

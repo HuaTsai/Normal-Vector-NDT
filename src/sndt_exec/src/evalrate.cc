@@ -16,19 +16,58 @@ using namespace visualization_msgs;
 namespace po = boost::program_options;
 const auto &Avg = Average;
 
-// BUG: RERUN, Function changed
+string filepath = "/tmp/evalrate.txt";
+int samples = 10;
+int scans = 1;
+
 bool SF(Affine2d T) {
   auto rt = TransNormRotDegAbsFromAffine2d(T);
   return rt(0) < 1 && rt(1) < 3;
 }
 
-void Output(ofstream &fout, string str, const vector<vector<double>> &data) {
-  fout << str << "\n[";
-  for (auto d : data) {
-    fout << "[";
-    for (int i = 0; i < d.size(); ++i)
-      fout << d[i] * 100 << ((i + 1 == d.size()) ? "]\n" : ", ");
+void Output(int m,
+            const vector<double> rs,
+            const vector<double> &ts,
+            const vector<vector<double>> &data) {
+  ofstream fout(filepath);
+  fout.setf(ios::fixed);
+  fout.precision(2);
+  string str;
+  if (m == 1) {
+    str = "ICP";
+  } else if (m == 2) {
+    str = "Point-to-Plane ICP";
+  } else if (m == 3) {
+    str = "Symmetric ICP";
+  } else if (m == 4) {
+    str = "Point-to-Distribution NDT";
+  } else if (m == 42) {
+    str = "Point-to-Distribution NDT (MD)";
+  } else if (m == 5) {
+    str = "Distribution-to-Distribution NDT";
+  } else if (m == 52) {
+    str = "Distribution-to-Distribution NDT (MD)";
+  } else if (m == 6) {
+    str = "Symmetric NDT";
+  } else if (m == 62) {
+    str = "Symmetric NDT (MD)";
+  } else if (m == 7) {
+    str = "Symmetric NDT 2";
+  } else if (m == 72) {
+    str = "Symmetric NDT 2 (MD)";
   }
+  str += " with " + to_string(samples) + " (tfs) x " + to_string(scans) +
+         " (scenes) Trials Each Tile\n";
+  fout << str;
+  for (size_t i = 0; i < rs.size(); ++i)
+    fout << rs[i] << ((i + 1 == rs.size()) ? "\n" : ", ");
+  for (size_t i = 0; i < ts.size(); ++i)
+    fout << ts[i] << ((i + 1 == ts.size()) ? "\n" : ", ");
+
+  for (auto d : data)
+    for (int i = 0; i < d.size(); ++i)
+      fout << d[i] * 100 << ((i + 1 == d.size()) ? "\n" : ", ");
+  fout.close();
 }
 
 int main(int argc, char **argv) {
@@ -66,18 +105,12 @@ int main(int argc, char **argv) {
   vector<double> ts{0, 5, 10, 15, 20, 25, 30, 35, 40};
   vector<vector<double>> s(rs.size(), vector<double>(ts.size()));
 
-  string filepath = "/tmp/evalrate.txt";
-  ofstream fout(filepath);
-
-  int samples = 50;
-  for (int n = 100; n <= 3000; n += 100) {
-    fout << "n = " << n << endl;
+  for (int n = 100; n <= scans * 100; ++n) {
     auto tgt = PCMsgTo2D(vpc[n], voxel);
     TransformPointsInPlace(tgt, aff2);
     for (int i = 0; i < rs.size(); ++i) {
       for (int j = 0; j < ts.size(); ++j) {
         auto affs = UniformTransformGenerator(rs[i], ts[j]).Generate(samples);
-        int sf3 = 0, sf5 = 0, sf6 = 0, sf7 = 0;
         vector<pair<vector<Vector2d>, Affine2d>> datat{
             {tgt, Affine2d::Identity()}};
         for (auto aff : affs) {
@@ -87,20 +120,43 @@ int main(int argc, char **argv) {
 
           Affine2d T;
 
-          if (m == 3) {
+          if (m == 1) {
+            ICPParameters params1;
+            auto tgt1 = MakePoints(datat, params1);
+            auto src1 = MakePoints(datas, params1);
+            T = ICPMatch(tgt1, src1, params1);
+          } else if (m == 2) {
+            Pt2plICPParameters params2;
+            auto tgt2 = MakePoints(datat, params2);
+            auto src2 = MakePoints(datas, params2);
+            T = Pt2plICPMatch(tgt2, src2, params2);      
+          } else if (m == 3) {
             SICPParameters params3;
             params3.radius = radius;
             auto tgt3 = MakePoints(datat, params3);
             auto src3 = MakePoints(datas, params3);
             T = SICPMatch(tgt3, src3, params3);
-          } else if (m == 5) {
+          } else if (m == 4 || m == 42) {
+            P2DNDTParameters params4;
+            params4.cell_size = cell_size;
+            params4.r_variance = params4.t_variance = 0;
+            auto tgt4 = MakeNDTMap(datat, params4);
+            auto src4 = MakePoints(datas, params4);
+            if (m == 4)
+              T = P2DNDTMatch(tgt4, src4, params4);
+            else
+              T = P2DNDTMDMatch(tgt4, src4, params4);
+          } else if (m == 5 || m == 52) {
             D2DNDTParameters params5;
             params5.cell_size = cell_size;
             params5.r_variance = params5.t_variance = 0;
             auto tgt5 = MakeNDTMap(datat, params5);
             auto src5 = MakeNDTMap(datas, params5);
-            T = D2DNDTMDMatch(tgt5, src5, params5);
-          } else if (m == 6) {
+            if (m == 5)
+              T = D2DNDTMatch(tgt5, src5, params5);
+            else
+              T = D2DNDTMDMatch(tgt5, src5, params5);
+          } else if (m == 6 || m == 62) {
             SNDTParameters params6;
             params6.cell_size = cell_size;
             params6.radius = radius;
@@ -108,7 +164,7 @@ int main(int argc, char **argv) {
             auto tgt6 = MakeSNDTMap(datat, params6);
             auto src6 = MakeSNDTMap(datas, params6);
             T = SNDTMDMatch(tgt6, src6, params6);
-          } else if (m == 7) {
+          } else if (m == 7 || m == 72) {
             D2DNDTParameters params7;
             params7.cell_size = cell_size;
             params7.r_variance = params7.t_variance = 0;
@@ -122,14 +178,17 @@ int main(int argc, char **argv) {
       }
     }
   }
-  for (int i = 0; i < rs.size(); ++i) {
-    for (int j = 0; j < ts.size(); ++j) {
-      s[i][j] /= (30 * samples);
-    }
-  }
+  for (int i = 0; i < rs.size(); ++i)
+    for (int j = 0; j < ts.size(); ++j)
+      s[i][j] /= (scans * samples);
 
-  fout.setf(ios::fixed);
-  fout.precision(2);
-  Output(fout, to_string(m), s);
-  fout.close();
+  Output(m, rs, ts, s);
+
+  std::cerr << "Generate Figure...";
+  string python = PYTHONPATH;
+  string script = JoinPath(WSPATH, "src/sndt_exec/scripts/evalrate.py");
+  string output = JoinPath(
+      WSPATH, "src/sndt_exec/output/rate-" + GetCurrentTimeAsString() + ".png");
+  std::system((python + " " + script + " " + filepath + " " + output).c_str());
+  std::cerr << " Done!" << endl;
 }

@@ -1,9 +1,11 @@
 #include <bits/stdc++.h>
 #include <common/common.h>
+#include <metric/metric.h>
+#include <sndt/visuals.h>
 #include <sndt_exec/wrapper.h>
 #include <tqdm/tqdm.h>
+
 #include <boost/program_options.hpp>
-#include <sndt/visuals.h>
 
 using namespace std;
 using namespace Eigen;
@@ -18,7 +20,6 @@ void AddTime(vector<double> &t, const UsedTime &time) {
   t[5] += time.total() / 1000.;
 }
 
-
 vector<double> CompactTime(const UsedTime &time) {
   vector<double> ret;
   ret.push_back(time.ndt / 1000.);
@@ -30,22 +31,29 @@ vector<double> CompactTime(const UsedTime &time) {
   return ret;
 }
 
-Affine2d GetBenchMark(const nav_msgs::Path &gtpath,
-                      const ros::Time &t1,
-                      const ros::Time &t2) {
-  Affine3d To, Ti;
-  tf2::fromMsg(GetPose(gtpath.poses, t2), To);
-  tf2::fromMsg(GetPose(gtpath.poses, t1), Ti);
-  Affine3d Tgt3 = Conserve2DFromAffine3d(Ti.inverse() * To);
-  Affine2d ret = Translation2d(Tgt3.translation()(0), Tgt3.translation()(1)) *
-                 Rotation2Dd(Tgt3.rotation().block<2, 2>(0, 0));
-  return ret;
-}
-
-void InitFirstPose(nav_msgs::Path &path, const ros::Time &time) {
+nav_msgs::Path InitFirstPose(const ros::Time &time) {
+  nav_msgs::Path path;
   path.header.frame_id = "map";
   path.header.stamp = time;
   path.poses.push_back(MakePoseStampedMsg(time, Eigen::Affine3d::Identity()));
+  return path;
+}
+
+void PrintResult(string str,
+                 const nav_msgs::Path &est,
+                 const nav_msgs::Path &gt) {
+  TrajectoryEvaluation te;
+  te.set_evaltype(TrajectoryEvaluation::EvalType::kRelativeBySingle);
+  // te.set_evaltype(TrajectoryEvaluation::EvalType::kRelativeByLength);
+  // te.set_length(100);
+  te.set_estpath(est);
+  te.set_gtpath(gt);
+  auto res = te.ComputeRMSError2D();
+  cout << str << endl;
+  cout << " tl: ";
+  res.first.PrintResult();
+  cout << "rot: ";
+  res.second.PrintResult();
 }
 
 int main(int argc, char **argv) {
@@ -55,7 +63,8 @@ int main(int argc, char **argv) {
   Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
                   Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
-  int n, m;
+  int n;
+  vector<int> m;
   double cell_size, voxel, radius = 1.5;
   string data;
   po::options_description desc("Allowed options");
@@ -66,7 +75,7 @@ int main(int argc, char **argv) {
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("voxel,v", po::value<double>(&voxel)->default_value(0), "Downsample voxel")
       ("n,n", po::value<int>(&n)->default_value(-1), "To where")
-      ("m,m", po::value<int>(&m)->default_value(0), "Method");
+      ("m,m", po::value<vector<int>>(&m)->required()->multitoken(), "Method");
   // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -75,153 +84,168 @@ int main(int argc, char **argv) {
     return 1;
   }
   po::notify(vm);
+  unordered_set<int> ms(m.begin(), m.end());
 
   nav_msgs::Path gtpath;
   SerializationInput(JoinPath(GetDataPath(data), "gt.ser"), gtpath);
   vector<sensor_msgs::PointCloud2> vpc;
   SerializationInput(JoinPath(GetDataPath(data), "lidar.ser"), vpc);
 
-  Affine3d Tr3, Tr4, Tr5, Tr5_2, Tr7;
-  Tr3.setIdentity(), Tr4.setIdentity(), Tr5.setIdentity(), Tr5_2.setIdentity(), Tr7.setIdentity();
-  nav_msgs::Path path3, path4, path5, path5_2, path7;
-  InitFirstPose(path3, vpc[0].header.stamp);
-  InitFirstPose(path4, vpc[0].header.stamp);
-  InitFirstPose(path5, vpc[0].header.stamp);
-  InitFirstPose(path5_2, vpc[0].header.stamp);
-  InitFirstPose(path7, vpc[0].header.stamp);
-  double terr3 = 0, terr4 = 0, terr5 = 0, terr5_2 = 0, terr7 = 0;
-  double aerr3 = 0, aerr4 = 0, aerr5 = 0, aerr5_2 = 0, aerr7 = 0;
-  vector<double> t3(6), t4(6), t5(6), t5_2(6), t7(6);
+  unordered_map<int, Affine3d> Tr{
+      {1, Affine3d::Identity()},  {2, Affine3d::Identity()},
+      {3, Affine3d::Identity()},  {4, Affine3d::Identity()},
+      {42, Affine3d::Identity()}, {5, Affine3d::Identity()},
+      {52, Affine3d::Identity()}, {6, Affine3d::Identity()},
+      {62, Affine3d::Identity()}, {7, Affine3d::Identity()},
+      {72, Affine3d::Identity()}};
+  auto t0 = vpc[0].header.stamp;
+  unordered_map<int, nav_msgs::Path> path{
+      {1, InitFirstPose(t0)},  {2, InitFirstPose(t0)},  {3, InitFirstPose(t0)},
+      {4, InitFirstPose(t0)},  {42, InitFirstPose(t0)}, {5, InitFirstPose(t0)},
+      {52, InitFirstPose(t0)}, {6, InitFirstPose(t0)},  {62, InitFirstPose(t0)},
+      {7, InitFirstPose(t0)},  {72, InitFirstPose(t0)}};
+  unordered_map<int, UsedTime> usedtime{
+      {1, UsedTime()},  {2, UsedTime()}, {3, UsedTime()},  {4, UsedTime()},
+      {42, UsedTime()}, {5, UsedTime()}, {52, UsedTime()}, {6, UsedTime()},
+      {62, UsedTime()}, {7, UsedTime()}, {72, UsedTime()}};
 
   ros::init(argc, argv, "evaltime");
   ros::NodeHandle nh;
-  auto pubt = nh.advertise<Marker>("tgt", 0, true);
-  auto pubs = nh.advertise<Marker>("src", 0, true);
-  auto pubg = nh.advertise<Marker>("gt", 0, true);
 
-  Affine2d Tg3, Tg4, Tg5, Tg5_2, Tg7;
-  Tg3.setIdentity(), Tg4.setIdentity(), Tg5.setIdentity(), Tg5_2.setIdentity(), Tg7.setIdentity();
   tqdm bar;
   if (n == -1) n = vpc.size() - 1;
   for (int i = 0; i < n; ++i) {
     bar.progress(i, n);
     auto tgt = PCMsgTo2D(vpc[i], voxel);
     auto src = PCMsgTo2D(vpc[i + 1], voxel);
-    auto Tgt =
-        GetBenchMark(gtpath, vpc[i].header.stamp, vpc[i + 1].header.stamp);
+    auto tj = vpc[i + 1].header.stamp;
 
     vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, aff2}};
     vector<pair<vector<Vector2d>, Affine2d>> datas{{src, aff2}};
 
-    SICPParameters params3;
-    params3.radius = radius;
-    auto tgt3 = MakePoints(datat, params3);
-    auto src3 = MakePoints(datas, params3);
-    auto T3 = SICPMatch(tgt3, src3, params3, Tg3);
-    Tg3 = T3;
-    AddTime(t3, params3._usedtime);
-    Tr3 = Tr3 * Affine3dFromAffine2d(T3);
-    path3.poses.push_back(MakePoseStampedMsg(vpc[i + 1].header.stamp, Tr3));
-    terr3 += TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T3)(0);
-    aerr3 += TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T3)(1);
+    if (ms.count(1)) {
+      ICPParameters params1;
+      auto tgt1 = MakePoints(datat, params1);
+      auto src1 = MakePoints(datas, params1);
+      auto T1 = ICPMatch(tgt1, src1, params1);
+      Tr[1] = Tr[1] * Affine3dFromAffine2d(T1);
+      path[1].poses.push_back(MakePoseStampedMsg(tj, Tr[1]));
+    }
 
-    P2DNDTParameters params4;
-    params4.cell_size = cell_size;
-    params4.r_variance = params4.t_variance = 0;
-    auto tgt4 = MakeNDTMap(datat, params4);
-    auto src4 = MakePoints(datas, params4);
-    auto T4 = P2DNDTMatch(tgt4, src4, params4);
-    Tg4 = T4;
-    AddTime(t4, params4._usedtime);
-    Tr4 = Tr4 * Affine3dFromAffine2d(T4);
-    path4.poses.push_back(MakePoseStampedMsg(vpc[i + 1].header.stamp, Tr4));
-    terr4 += TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T4)(0);
-    aerr4 += TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T4)(1);
+    if (ms.count(2)) {
+      Pt2plICPParameters params2;
+      auto tgt2 = MakePoints(datat, params2);
+      auto src2 = MakePoints(datas, params2);
+      auto T2 = Pt2plICPMatch(tgt2, src2, params2);
+      Tr[2] = Tr[2] * Affine3dFromAffine2d(T2);
+      path[2].poses.push_back(MakePoseStampedMsg(tj, Tr[2]));
+    }
 
-    D2DNDTParameters params5;
-    params5.cell_size = cell_size;
-    params5.r_variance = params5.t_variance = 0;
-    auto tgt5 = MakeNDTMap(datat, params5);
-    auto src5 = MakeNDTMap(datas, params5);
-    auto T5 = D2DNDTMDMatch(tgt5, src5, params5, Tg5);
-    Tg5 = T5;
-    AddTime(t5, params5._usedtime);
-    Tr5 = Tr5 * Affine3dFromAffine2d(T5);
-    path5.poses.push_back(MakePoseStampedMsg(vpc[i + 1].header.stamp, Tr5));
-    terr5 += TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T5)(0);
-    aerr5 += TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T5)(1);
+    if (ms.count(3)) {
+      SICPParameters params3;
+      params3.radius = radius;
+      auto tgt3 = MakePoints(datat, params3);
+      auto src3 = MakePoints(datas, params3);
+      auto T3 = SICPMatch(tgt3, src3, params3);
+      Tr[3] = Tr[3] * Affine3dFromAffine2d(T3);
+      path[3].poses.push_back(MakePoseStampedMsg(tj, Tr[3]));
+    }
 
-    D2DNDTParameters params5_2;
-    params5_2.cell_size = cell_size;
-    params5_2.r_variance = params5_2.t_variance = 0;
-    auto tgt5_2 = MakeNDTMap(datat, params5_2);
-    auto src5_2 = MakeNDTMap(datas, params5_2);
-    auto T5_2 = D2DNDTMatch(tgt5_2, src5_2, params5_2, Tg5_2);
-    Tg5_2 = T5_2;
-    AddTime(t5_2, params5_2._usedtime);
-    Tr5_2 = Tr5_2 * Affine3dFromAffine2d(T5_2);
-    path5_2.poses.push_back(MakePoseStampedMsg(vpc[i + 1].header.stamp, Tr5_2));
-    terr5_2 += TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T5_2)(0);
-    aerr5_2 += TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T5_2)(1);
+    if (ms.count(4)) {
+      P2DNDTParameters params4;
+      params4.cell_size = cell_size;
+      params4.r_variance = params4.t_variance = 0;
+      auto tgt4 = MakeNDTMap(datat, params4);
+      auto src4 = MakePoints(datas, params4);
+      auto T4 = P2DNDTMatch(tgt4, src4, params4);
+      Tr[4] = Tr[4] * Affine3dFromAffine2d(T4);
+      path[4].poses.push_back(MakePoseStampedMsg(tj, Tr[4]));
+    }
 
-    D2DNDTParameters params7;
-    params7.cell_size = cell_size;
-    params7.r_variance = params7.t_variance = 0;
-    auto tgt7 = MakeNDTMap(datat, params7);
-    auto src7 = MakeNDTMap(datas, params7);
-    auto T7 = SNDTMatch2(tgt7, src7, params7, Tg7);
-    Tg7 = T7;
-    AddTime(t7, params7._usedtime);
-    Tr7 = Tr7 * Affine3dFromAffine2d(T7);
-    path7.poses.push_back(MakePoseStampedMsg(vpc[i + 1].header.stamp, Tr7));
-    terr7 += TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T7)(0);
-    aerr7 += TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T7)(1);
+    if (ms.count(42)) {
+      P2DNDTParameters params4;
+      params4.cell_size = cell_size;
+      params4.r_variance = params4.t_variance = 0;
+      auto tgt4 = MakeNDTMap(datat, params4);
+      auto src4 = MakePoints(datas, params4);
+      auto T4 = P2DNDTMDMatch(tgt4, src4, params4);
+      Tr[42] = Tr[42] * Affine3dFromAffine2d(T4);
+      path[42].poses.push_back(MakePoseStampedMsg(tj, Tr[42]));
+    }
+
+    if (ms.count(5)) {
+      D2DNDTParameters params5;
+      params5.cell_size = cell_size;
+      params5.r_variance = params5.t_variance = 0;
+      auto tgt5 = MakeNDTMap(datat, params5);
+      auto src5 = MakeNDTMap(datas, params5);
+      auto T5 = D2DNDTMatch(tgt5, src5, params5);
+      Tr[5] = Tr[5] * Affine3dFromAffine2d(T5);
+      path[5].poses.push_back(MakePoseStampedMsg(tj, Tr[5]));
+    }
+
+    if (ms.count(52)) {
+      D2DNDTParameters params52;
+      params52.cell_size = cell_size;
+      params52.r_variance = params52.t_variance = 0;
+      auto tgt52 = MakeNDTMap(datat, params52);
+      auto src52 = MakeNDTMap(datas, params52);
+      auto T52 = D2DNDTMDMatch(tgt52, src52, params52);
+      Tr[52] = Tr[52] * Affine3dFromAffine2d(T52);
+      path[52].poses.push_back(MakePoseStampedMsg(tj, Tr[52]));
+    }
+
+    if (ms.count(7)) {
+      D2DNDTParameters params7;
+      params7.cell_size = cell_size;
+      params7.r_variance = params7.t_variance = 0;
+      auto tgt7 = MakeNDTMap(datat, params7);
+      auto src7 = MakeNDTMap(datas, params7);
+      auto T7 = SNDTMatch2(tgt7, src7, params7);
+      Tr[7] = Tr[7] * Affine3dFromAffine2d(T7);
+      path[7].poses.push_back(MakePoseStampedMsg(tj, Tr[7]));
+    }
   }
   bar.finish();
-  cout << "err3: " << terr3 / n << ", " << aerr3 / n << endl;
-  cout << "err4: " << terr4 / n << ", " << aerr4 / n << endl;
-  cout << "err5: " << terr5 / n << ", " << aerr5 / n << endl;
-  cout << "e5_2: " << terr5_2 / n << ", " << aerr5_2 / n << endl;
-  cout << "err7: " << terr7 / n << ", " << aerr7 / n << endl;
-  for (auto &t : t3) t /= n;
-  for (auto &t : t4) t /= n;
-  for (auto &t : t5) t /= n;
-  for (auto &t : t5_2) t /= n;
-  for (auto &t : t7) t /= n;
-  printf("3: %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\n", t3[0], t3[1], t3[2], t3[3], t3[4], t3[5]);
-  printf("4: %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\n", t4[0], t4[1], t4[2], t4[3], t4[4], t4[5]);
-  printf("5: %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\n", t5[0], t5[1], t5[2], t5[3], t5[4], t5[5]);
-  printf("5: %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\n", t5_2[0], t5_2[1], t5_2[2], t5_2[3], t5_2[4], t5_2[5]);
-  printf("7: %.2f, %.2f, %.2f, %.2f, %.2f, %.2f\n", t7[0], t7[1], t7[2], t7[3], t7[4], t7[5]);
 
-  /*
-  err3: 0.0447029, -0.00688182
-  err5: 0.0471102, -0.00487229
-  err7: 0.0397519, -0.00395374
-  0.00, 4.35, 36.57, 14.26, 4.54, 59.72
-  3.48, 0.00, 3.56, 6.26, 0.84, 14.14
-  3.42, 0.00, 4.90, 2.23, 1.04, 11.59
-  */
+  auto pub1 = nh.advertise<nav_msgs::Path>("path1", 0, true);
+  auto pub2 = nh.advertise<nav_msgs::Path>("path2", 0, true);
   auto pub3 = nh.advertise<nav_msgs::Path>("path3", 0, true);
   auto pub4 = nh.advertise<nav_msgs::Path>("path4", 0, true);
+  auto pub42 = nh.advertise<nav_msgs::Path>("path42", 0, true);
   auto pub5 = nh.advertise<nav_msgs::Path>("path5", 0, true);
-  auto pub5_2 = nh.advertise<nav_msgs::Path>("path5_2", 0, true);
+  auto pub52 = nh.advertise<nav_msgs::Path>("path52", 0, true);
+  auto pub6 = nh.advertise<nav_msgs::Path>("path6", 0, true);
+  auto pub62 = nh.advertise<nav_msgs::Path>("path62", 0, true);
   auto pub7 = nh.advertise<nav_msgs::Path>("path7", 0, true);
+  auto pub72 = nh.advertise<nav_msgs::Path>("path72", 0, true);
   auto pubgt = nh.advertise<nav_msgs::Path>("pathg", 0, true);
-  auto pubm = nh.advertise<visualization_msgs::MarkerArray>("marker", 0, true);
-  vector<Marker> ms;
-  for (int i = 0; i < path5.poses.size(); i += 10) {
-    Vector2d p(path5.poses[i].pose.position.x, path5.poses[i].pose.position.y);
-    ms.push_back(MarkerOfText(to_string(i), p));
-  }
-  auto ma = JoinMarkers(ms);
-  MakeGtLocal(gtpath, path3.poses[0].header.stamp);
-  pubm.publish(ma);
-  pub3.publish(path3);
-  pub4.publish(path4);
-  pub5.publish(path5);
-  pub5_2.publish(path5_2);
-  pub7.publish(path7);
+
+  MakeGtLocal(gtpath, t0);
+  if (ms.count(1)) pub1.publish(path[1]);
+  if (ms.count(2)) pub2.publish(path[2]);
+  if (ms.count(3)) pub3.publish(path[3]);
+  if (ms.count(4)) pub4.publish(path[4]);
+  if (ms.count(42)) pub42.publish(path[42]);
+  if (ms.count(5)) pub5.publish(path[5]);
+  if (ms.count(52)) pub52.publish(path[52]);
+  if (ms.count(6)) pub6.publish(path[6]);
+  if (ms.count(62)) pub62.publish(path[62]);
+  if (ms.count(7)) pub7.publish(path[7]);
+  if (ms.count(72)) pub7.publish(path[72]);
   pubgt.publish(gtpath);
+
+  if (ms.count(1)) PrintResult("method 1", path[1], gtpath);
+  if (ms.count(2)) PrintResult("method 2", path[2], gtpath);
+  if (ms.count(3)) PrintResult("method 3", path[3], gtpath);
+  if (ms.count(4)) PrintResult("method 4", path[4], gtpath);
+  if (ms.count(42)) PrintResult("method 42", path[42], gtpath);
+  if (ms.count(5)) PrintResult("method 5", path[5], gtpath);
+  if (ms.count(52)) PrintResult("method 52", path[52], gtpath);
+  if (ms.count(6)) PrintResult("method 6", path[6], gtpath);
+  if (ms.count(62)) PrintResult("method 62", path[62], gtpath);
+  if (ms.count(7)) PrintResult("method 7", path[7], gtpath);
+  if (ms.count(72)) PrintResult("method 72", path[72], gtpath);
+
   ros::spin();
 }
