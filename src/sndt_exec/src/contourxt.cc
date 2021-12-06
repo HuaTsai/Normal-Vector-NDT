@@ -52,7 +52,7 @@ double M5Cost(NDTMap &tgt,
     auto cp = cellq->GetPointCov();
     auto uq = cellq->GetPointMean();
     auto cq = cellq->GetPointCov();
-    ret += D2DNDTMDCostFunctor::Cost2(up, cp, uq, cq, T);
+    ret += D2DNDTMDCostFunctor::Cost(up, cp, uq, cq, T);
   }
   return ret;
 }
@@ -71,7 +71,7 @@ double M6Cost(SNDTMap &tgt,
     auto cq = tgt[corr.second]->GetPointCov();
     auto unq = tgt[corr.second]->GetNormalMean();
     auto cnq = tgt[corr.second]->GetNormalCov();
-    ret += SNDTMDCostFunctor::Cost2(up, cp, unp, cnp, uq, cq, unq, cnq, T);
+    ret += SNDTMDCostFunctor::Cost(up, cp, unp, cnp, uq, cq, unq, cnq, T);
   }
   return ret;
 }
@@ -88,7 +88,7 @@ double M7Cost(NDTMap &tgt,
     auto uq = tgt[corr.second]->GetPointMean();
     auto cq = tgt[corr.second]->GetPointCov();
     Vector2d unq = tgt[corr.second]->GetPointEvecs().col(0);
-    ret += SNDTMDCostFunctor2::Cost2(up, cp, unp, uq, cq, unq, T);
+    ret += SNDTMDCostFunctor2::Cost(up, cp, unp, uq, cq, unq, T);
   }
   return ret;
 }
@@ -105,7 +105,7 @@ double M8Cost(SNDTMap &tgt,
     auto uq = tgt[corr.second]->GetPointMean();
     auto cq = tgt[corr.second]->GetPointCov();
     Vector2d unq = tgt[corr.second]->GetPointEvecs().col(0);
-    ret += SNDTMDCostFunctor2::Cost2(up, cp, unp, uq, cq, unq, T);
+    ret += SNDTMDCostFunctor2::Cost(up, cp, unp, uq, cq, unq, T);
   }
   return ret;
 }

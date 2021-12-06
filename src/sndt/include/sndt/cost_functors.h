@@ -44,13 +44,7 @@ class ICPCostFunctor {
   static double Cost(const Eigen::Vector2d &p,
                      const Eigen::Vector2d &q,
                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    return (T * p - q).norm();
-  }
-
-  static double Cost2(const Eigen::Vector2d &p,
-                      const Eigen::Vector2d &q,
-                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    double cost = Cost(p, q, T);
+    double cost = (T * p - q).norm();
     return 0.5 * cost * cost;
   }
 
@@ -91,14 +85,7 @@ class Pt2plICPCostFunctor {
                      const Eigen::Vector2d &q,
                      const Eigen::Vector2d &nq,
                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    return std::abs((T * p - q).dot(nq));
-  }
-
-  static double Cost2(const Eigen::Vector2d &p,
-                      const Eigen::Vector2d &q,
-                      const Eigen::Vector2d &nq,
-                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    double cost = Cost(p, q, nq, T);
+    double cost = (T * p - q).dot(nq);
     return 0.5 * cost * cost;
   }
 
@@ -145,15 +132,7 @@ class SICPCostFunctor {
                      const Eigen::Vector2d &q,
                      const Eigen::Vector2d &nq,
                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    return std::abs((T * p - q).dot(T.rotation() * np + nq));
-  }
-
-  static double Cost2(const Eigen::Vector2d &p,
-                      const Eigen::Vector2d &np,
-                      const Eigen::Vector2d &q,
-                      const Eigen::Vector2d &nq,
-                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    double cost = Cost(p, np, q, nq, T);
+    double cost = (T * p - q).dot(T.rotation() * np + nq);
     return 0.5 * cost * cost;
   }
 
@@ -197,15 +176,7 @@ class P2DNDTMDCostFunctor {
                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
     Eigen::Vector2d pq = T * p - uq;
     Eigen::Matrix2d cinv = cq.inverse();
-    return sqrt(pq.dot(cinv * pq));
-  }
-
-  static double Cost2(const Eigen::Vector2d &p,
-                      const Eigen::Vector2d &uq,
-                      const Eigen::Matrix2d &cq,
-                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    double cost = Cost(p, uq, cq, T);
-    return 0.5 * cost * cost;
+    return 0.5 * pq.dot(cinv * pq);
   }
 
  private:
@@ -215,10 +186,11 @@ class P2DNDTMDCostFunctor {
 
 class P2DNDTCostFunctor {
  public:
-  P2DNDTCostFunctor(const std::vector<Eigen::Vector2d> &ps,
+  P2DNDTCostFunctor(double d2,
+                    const std::vector<Eigen::Vector2d> &ps,
                     const std::vector<Eigen::Vector2d> &qs,
                     const std::vector<Eigen::Matrix2d> &cqs)
-      : ps_(ps), qs_(qs), cqs_(cqs), n_(ps.size()) {}
+      : d2_(d2), ps_(ps), qs_(qs), cqs_(cqs), n_(ps.size()) {}
   template <typename T>
   bool operator()(const T *const xyt, T *e) const {
     e[0] = T(0);
@@ -230,22 +202,22 @@ class P2DNDTCostFunctor {
       Eigen::Matrix<T, 2, 1> q = qs_[i].cast<T>();
       Eigen::Matrix<T, 2, 2> cq = cqs_[i].cast<T>();
       Eigen::Matrix<T, 2, 1> pq = p - q;
-      // 0.000005 not okay
-      // 0.00005 see rate-2021-12-02-22-06-06.png
-      e[0] += -ceres::exp(-0.00005 * pq.dot(cq.inverse() * pq));
+      e[0] += -ceres::exp(-d2_ * pq.dot(cq.inverse() * pq));
     }
     return true;
   }
 
   static ceres::FirstOrderFunction *Create(
+      double d2,
       const std::vector<Eigen::Vector2d> &ps,
       const std::vector<Eigen::Vector2d> &qs,
       const std::vector<Eigen::Matrix2d> &cqs) {
     return new ceres::AutoDiffFirstOrderFunction<P2DNDTCostFunctor, 3>(
-        new P2DNDTCostFunctor(ps, qs, cqs));
+        new P2DNDTCostFunctor(d2, ps, qs, cqs));
   }
 
-  static double Cost(const std::vector<Eigen::Vector2d> &ps,
+  static double Cost(double d2,
+                     const std::vector<Eigen::Vector2d> &ps,
                      const std::vector<Eigen::Vector2d> &qs,
                      const std::vector<Eigen::Matrix2d> &cqs,
                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
@@ -253,12 +225,13 @@ class P2DNDTCostFunctor {
     for (size_t i = 0; i < ps.size(); ++i) {
       Eigen::Vector2d pq = T * ps[i] - qs[i];
       Eigen::Matrix2d cinv = cqs[i].inverse();
-      cost += -ceres::exp(-0.0005 * (pq.dot(cinv * pq)));
+      cost += -ceres::exp(-d2 * (pq.dot(cinv * pq)));
     }
     return cost;
   }
 
  private:
+  const double d2_;
   const std::vector<Eigen::Vector2d> ps_, qs_;
   const std::vector<Eigen::Matrix2d> cqs_;
   const int n_;
@@ -306,16 +279,7 @@ class D2DNDTMDCostFunctor {
     Eigen::Matrix2d R = T.rotation();
     Eigen::Vector2d pq = T * up - uq;
     Eigen::Matrix2d cinv = (R * cp * R.transpose() + cq).inverse();
-    return sqrt(pq.dot(cinv * pq));
-  }
-
-  static double Cost2(const Eigen::Vector2d &up,
-                      const Eigen::Matrix2d &cp,
-                      const Eigen::Vector2d &uq,
-                      const Eigen::Matrix2d &cq,
-                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    double cost = Cost(up, cp, uq, cq, T);
-    return 0.5 * cost * cost;
+    return 0.5 * pq.dot(cinv * pq);
   }
 
  private:
@@ -327,11 +291,12 @@ class D2DNDTMDCostFunctor {
 
 class D2DNDTCostFunctor {
  public:
-  D2DNDTCostFunctor(const std::vector<Eigen::Vector2d> &ups,
+  D2DNDTCostFunctor(double d2,
+                    const std::vector<Eigen::Vector2d> &ups,
                     const std::vector<Eigen::Matrix2d> &cps,
                     const std::vector<Eigen::Vector2d> &uqs,
                     const std::vector<Eigen::Matrix2d> &cqs)
-      : ups_(ups), cps_(cps), uqs_(uqs), cqs_(cqs), n_(ups.size()) {}
+      : d2_(d2), ups_(ups), cps_(cps), uqs_(uqs), cqs_(cqs), n_(ups.size()) {}
   template <typename T>
   bool operator()(const T *const xyt, T *e) const {
     e[0] = T(0);
@@ -345,21 +310,23 @@ class D2DNDTCostFunctor {
       Eigen::Matrix<T, 2, 2> cq = cqs_[i].cast<T>();
       Eigen::Matrix<T, 2, 1> m = up - uq;
       Eigen::Matrix<T, 2, 2> c = cp + cq;
-      e[0] += -ceres::exp(-0.005 * m.dot(c.inverse() * m));
+      e[0] += -ceres::exp(-d2_ * m.dot(c.inverse() * m));
     }
     return true;
   }
 
   static ceres::FirstOrderFunction *Create(
+      double d2,
       const std::vector<Eigen::Vector2d> &ups,
       const std::vector<Eigen::Matrix2d> &cps,
       const std::vector<Eigen::Vector2d> &uqs,
       const std::vector<Eigen::Matrix2d> &cqs) {
     return new ceres::AutoDiffFirstOrderFunction<D2DNDTCostFunctor, 3>(
-        new D2DNDTCostFunctor(ups, cps, uqs, cqs));
+        new D2DNDTCostFunctor(d2, ups, cps, uqs, cqs));
   }
 
-  static double Cost(const std::vector<Eigen::Vector2d> &ups,
+  static double Cost(double d2,
+                     const std::vector<Eigen::Vector2d> &ups,
                      const std::vector<Eigen::Matrix2d> &cps,
                      const std::vector<Eigen::Vector2d> &uqs,
                      const std::vector<Eigen::Matrix2d> &cqs,
@@ -369,12 +336,13 @@ class D2DNDTCostFunctor {
     for (size_t i = 0; i < ups.size(); ++i) {
       Eigen::Vector2d pq = T * ups[i] - uqs[i];
       Eigen::Matrix2d cinv = (R * cps[i] * R.transpose() + cqs[i]).inverse();
-      cost += -ceres::exp(-0.5 * (pq.dot(cinv * pq)));
+      cost += -ceres::exp(-d2 * (pq.dot(cinv * pq)));
     }
     return cost;
   }
 
  private:
+  const double d2_;
   const std::vector<Eigen::Vector2d> ups_;
   const std::vector<Eigen::Matrix2d> cps_;
   const std::vector<Eigen::Vector2d> uqs_;
@@ -458,21 +426,9 @@ class SNDTMDCostFunctor {
     Eigen::Vector2d m2 = R * unp + unq;
     Eigen::Matrix2d c1 = R * cp * R.transpose() + cq;
     Eigen::Matrix2d c2 = R * cnp * R.transpose() + cnq;
-    return m1.dot(m2) /
-           sqrt(m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace());
-  }
-
-  static double Cost2(const Eigen::Vector2d &up,
-                      const Eigen::Matrix2d &cp,
-                      const Eigen::Vector2d &unp,
-                      const Eigen::Matrix2d &cnp,
-                      const Eigen::Vector2d &uq,
-                      const Eigen::Matrix2d &cq,
-                      const Eigen::Vector2d &unq,
-                      const Eigen::Matrix2d &cnq,
-                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    double cost = Cost(up, cp, unp, cnp, uq, cq, unq, cnq, T);
-    return 0.5 * cost * cost;
+    double num = m1.dot(m2) * m1.dot(m2);
+    double den = m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace();
+    return 0.5 * num / den;
   }
 
  private:
@@ -482,7 +438,8 @@ class SNDTMDCostFunctor {
 
 class SNDTCostFunctor {
  public:
-  SNDTCostFunctor(const std::vector<Eigen::Vector2d> &ups,
+  SNDTCostFunctor(double d2,
+                  const std::vector<Eigen::Vector2d> &ups,
                   const std::vector<Eigen::Matrix2d> &cps,
                   const std::vector<Eigen::Vector2d> &unps,
                   const std::vector<Eigen::Matrix2d> &cnps,
@@ -490,7 +447,8 @@ class SNDTCostFunctor {
                   const std::vector<Eigen::Matrix2d> &cqs,
                   const std::vector<Eigen::Vector2d> &unqs,
                   const std::vector<Eigen::Matrix2d> &cnqs)
-      : ups_(ups),
+      : d2_(d2),
+        ups_(ups),
         unps_(unps),
         uqs_(uqs),
         unqs_(unqs),
@@ -498,8 +456,7 @@ class SNDTCostFunctor {
         cnps_(cnps),
         cqs_(cqs),
         cnqs_(cnqs),
-        n_(ups.size()),
-        d2_(0.0005) {}
+        n_(ups.size()) {}
 
   template <typename T>
   bool operator()(const T *const xyt, T *e) const {
@@ -531,19 +488,22 @@ class SNDTCostFunctor {
     return true;
   }
 
-  static ceres::CostFunction *Create(const Eigen::Vector2d &up,
-                                     const Eigen::Matrix2d &cp,
-                                     const Eigen::Vector2d &unp,
-                                     const Eigen::Matrix2d &cnp,
-                                     const Eigen::Vector2d &uq,
-                                     const Eigen::Matrix2d &cq,
-                                     const Eigen::Vector2d &unq,
-                                     const Eigen::Matrix2d &cnq) {
-    return new ceres::AutoDiffCostFunction<SNDTMDCostFunctor, 1, 1, 1, 1>(
-        new SNDTMDCostFunctor(up, cp, unp, cnp, uq, cq, unq, cnq));
+  static ceres::FirstOrderFunction *Create(
+      double d2,
+      const std::vector<Eigen::Vector2d> &ups,
+      const std::vector<Eigen::Matrix2d> &cps,
+      const std::vector<Eigen::Vector2d> &unps,
+      const std::vector<Eigen::Matrix2d> &cnps,
+      const std::vector<Eigen::Vector2d> &uqs,
+      const std::vector<Eigen::Matrix2d> &cqs,
+      const std::vector<Eigen::Vector2d> &unqs,
+      const std::vector<Eigen::Matrix2d> &cnqs) {
+    return new ceres::AutoDiffFirstOrderFunction<SNDTCostFunctor, 3>(
+        new SNDTCostFunctor(d2, ups, cps, unps, cnps, uqs, cqs, unqs, cnqs));
   }
 
-  static double Cost(const std::vector<Eigen::Vector2d> &ups,
+  static double Cost(double d2,
+                     const std::vector<Eigen::Vector2d> &ups,
                      const std::vector<Eigen::Matrix2d> &cps,
                      const std::vector<Eigen::Vector2d> &unps,
                      const std::vector<Eigen::Matrix2d> &cnps,
@@ -551,8 +511,7 @@ class SNDTCostFunctor {
                      const std::vector<Eigen::Matrix2d> &cqs,
                      const std::vector<Eigen::Vector2d> &unqs,
                      const std::vector<Eigen::Matrix2d> &cnqs,
-                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity(),
-                     double d2 = 0.0005) {
+                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
     double cost = 0;
     Eigen::Matrix2d R = T.rotation();
     for (size_t i = 0; i < ups.size(); ++i) {
@@ -569,10 +528,10 @@ class SNDTCostFunctor {
   }
 
  private:
+  const double d2_;
   const std::vector<Eigen::Vector2d> ups_, unps_, uqs_, unqs_;
   const std::vector<Eigen::Matrix2d> cps_, cnps_, cqs_, cnqs_;
   const int n_;
-  const double d2_;
 };
 
 class SNDTMDCostFunctor2 {
@@ -632,18 +591,9 @@ class SNDTMDCostFunctor2 {
     Eigen::Vector2d m1 = T * up - uq;
     Eigen::Vector2d m2 = R * unp + unq;
     Eigen::Matrix2d c1 = R * cp * R.transpose() + cq;
-    return m1.dot(m2) / sqrt(m2.dot(c1 * m2));
-  }
-
-  static double Cost2(const Eigen::Vector2d &up,
-                      const Eigen::Matrix2d &cp,
-                      const Eigen::Vector2d &unp,
-                      const Eigen::Vector2d &uq,
-                      const Eigen::Matrix2d &cq,
-                      const Eigen::Vector2d &unq,
-                      const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    double cost = Cost(up, cp, unp, uq, cq, unq, T);
-    return 0.5 * cost * cost;
+    double num = m1.dot(m2) * m1.dot(m2);
+    double den = m2.dot(c1 * m2);
+    return 0.5 * num / den;
   }
 
  private:
@@ -653,13 +603,15 @@ class SNDTMDCostFunctor2 {
 
 class SNDTCostFunctor2 {
  public:
-  SNDTCostFunctor2(const std::vector<Eigen::Vector2d> &ups,
+  SNDTCostFunctor2(double d2,
+                   const std::vector<Eigen::Vector2d> &ups,
                    const std::vector<Eigen::Matrix2d> &cps,
                    const std::vector<Eigen::Vector2d> &unps,
                    const std::vector<Eigen::Vector2d> &uqs,
                    const std::vector<Eigen::Matrix2d> &cqs,
                    const std::vector<Eigen::Vector2d> &unqs)
-      : ups_(ups),
+      : d2_(d2),
+        ups_(ups),
         unps_(unps),
         uqs_(uqs),
         unqs_(unqs),
@@ -688,12 +640,13 @@ class SNDTCostFunctor2 {
 
       T num = m1.dot(m2);
       T den = sqrt(m2.dot(c1 * m2));
-      *e += -ceres::exp(-0.5 * ceres::pow(num / den, 2));
+      *e += -ceres::exp(-d2_ * ceres::pow(num / den, 2));
     }
     return true;
   }
 
   static ceres::FirstOrderFunction *Create(
+      double d2,
       const std::vector<Eigen::Vector2d> &ups,
       const std::vector<Eigen::Matrix2d> &cps,
       const std::vector<Eigen::Vector2d> &unps,
@@ -701,10 +654,11 @@ class SNDTCostFunctor2 {
       const std::vector<Eigen::Matrix2d> &cqs,
       const std::vector<Eigen::Vector2d> &unqs) {
     return new ceres::AutoDiffFirstOrderFunction<SNDTCostFunctor2, 3>(
-        new SNDTCostFunctor2(ups, cps, unps, uqs, cqs, unqs));
+        new SNDTCostFunctor2(d2, ups, cps, unps, uqs, cqs, unqs));
   }
 
-  static double Cost(const std::vector<Eigen::Vector2d> &ups,
+  static double Cost(double d2,
+                     const std::vector<Eigen::Vector2d> &ups,
                      const std::vector<Eigen::Matrix2d> &cps,
                      const std::vector<Eigen::Vector2d> &unps,
                      const std::vector<Eigen::Vector2d> &uqs,
@@ -717,12 +671,13 @@ class SNDTCostFunctor2 {
       Eigen::Vector2d m1 = T * ups[i] - uqs[i];
       Eigen::Vector2d m2 = R * unps[i] + unqs[i];
       Eigen::Matrix2d c1 = R * cps[i] * R.transpose() + cqs[i];
-      cost += -ceres::exp(-0.00005 * m1.dot(m2) * m1.dot(m2) / m2.dot(c1 * m2));
+      cost += -ceres::exp(-d2 * m1.dot(m2) * m1.dot(m2) / m2.dot(c1 * m2));
     }
     return cost;
   }
 
  private:
+  const double d2_;
   const std::vector<Eigen::Vector2d> ups_, unps_, uqs_, unqs_;
   const std::vector<Eigen::Matrix2d> cps_, cqs_;
   const int n_;

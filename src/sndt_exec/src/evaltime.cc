@@ -11,24 +11,11 @@ using namespace std;
 using namespace Eigen;
 namespace po = boost::program_options;
 
-void AddTime(vector<double> &t, const UsedTime &time) {
-  t[0] += time.ndt / 1000.;
-  t[1] += time.normal / 1000.;
-  t[2] += time.build / 1000.;
-  t[3] += time.optimize / 1000.;
-  t[4] += time.others / 1000.;
-  t[5] += time.total() / 1000.;
-}
-
-vector<double> CompactTime(const UsedTime &time) {
-  vector<double> ret;
-  ret.push_back(time.ndt / 1000.);
-  ret.push_back(time.normal / 1000.);
-  ret.push_back(time.build / 1000.);
-  ret.push_back(time.optimize / 1000.);
-  ret.push_back(time.others / 1000.);
-  ret.push_back(time.total() / 1000.);
-  return ret;
+void PrintTime(string str, const UsedTime &ut) {
+  double den = 3169000.;
+  std::printf("%s\nnm: %.2f, ndt: %.2f, bud: %.2f, opt: %.2f, oth: %.2f\n",
+              str.c_str(), ut.normal / den, ut.ndt / den, ut.build / den,
+              ut.optimize / den, ut.others / den);
 }
 
 nav_msgs::Path InitFirstPose(const ros::Time &time) {
@@ -49,11 +36,12 @@ void PrintResult(string str,
   te.set_estpath(est);
   te.set_gtpath(gt);
   auto res = te.ComputeRMSError2D();
-  cout << str << endl;
-  cout << " tl: ";
-  res.first.PrintResult();
-  cout << "rot: ";
-  res.second.PrintResult();
+  cout << str << ": [" << res.first.rms << ", " << res.second.rms << "],"
+       << endl;
+  // cout << " tl: ";
+  // res.first.PrintResult();
+  // cout << "rot: ";
+  // res.second.PrintResult();
 }
 
 int main(int argc, char **argv) {
@@ -65,7 +53,7 @@ int main(int argc, char **argv) {
 
   int n;
   vector<int> m;
-  double cell_size, voxel, radius = 1.5;
+  double cell_size, voxel, radius = 1.5, d2;
   string data;
   po::options_description desc("Allowed options");
   // clang-format off
@@ -75,7 +63,8 @@ int main(int argc, char **argv) {
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("voxel,v", po::value<double>(&voxel)->default_value(0), "Downsample voxel")
       ("n,n", po::value<int>(&n)->default_value(-1), "To where")
-      ("m,m", po::value<vector<int>>(&m)->required()->multitoken(), "Method");
+      ("m,m", po::value<vector<int>>(&m)->required()->multitoken(), "Method")
+      ("d2", po::value<double>(&d2)->required(), "d2");
   // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -177,9 +166,11 @@ int main(int argc, char **argv) {
       D2DNDTParameters params5;
       params5.cell_size = cell_size;
       params5.r_variance = params5.t_variance = 0;
+      params5.d2 = d2;
       auto tgt5 = MakeNDTMap(datat, params5);
       auto src5 = MakeNDTMap(datas, params5);
       auto T5 = D2DNDTMatch(tgt5, src5, params5);
+      usedtime[5] = usedtime[5] + params5._usedtime;
       Tr[5] = Tr[5] * Affine3dFromAffine2d(T5);
       path[5].poses.push_back(MakePoseStampedMsg(tj, Tr[5]));
     }
@@ -188,9 +179,11 @@ int main(int argc, char **argv) {
       D2DNDTParameters params52;
       params52.cell_size = cell_size;
       params52.r_variance = params52.t_variance = 0;
+      params52.reject = true;
       auto tgt52 = MakeNDTMap(datat, params52);
       auto src52 = MakeNDTMap(datas, params52);
       auto T52 = D2DNDTMDMatch(tgt52, src52, params52);
+      usedtime[52] = usedtime[52] + params52._usedtime;
       Tr[52] = Tr[52] * Affine3dFromAffine2d(T52);
       path[52].poses.push_back(MakePoseStampedMsg(tj, Tr[52]));
     }
@@ -199,11 +192,27 @@ int main(int argc, char **argv) {
       D2DNDTParameters params7;
       params7.cell_size = cell_size;
       params7.r_variance = params7.t_variance = 0;
+      params7.d2 = d2;
       auto tgt7 = MakeNDTMap(datat, params7);
       auto src7 = MakeNDTMap(datas, params7);
       auto T7 = SNDTMatch2(tgt7, src7, params7);
+      usedtime[7] = usedtime[7] + params7._usedtime;
       Tr[7] = Tr[7] * Affine3dFromAffine2d(T7);
       path[7].poses.push_back(MakePoseStampedMsg(tj, Tr[7]));
+    }
+
+    if (ms.count(72)) {
+      D2DNDTParameters params7;
+      params7.cell_size = cell_size;
+      params7.r_variance = params7.t_variance = 0;
+      params7.d2 = d2;
+      params7.reject = true;
+      auto tgt7 = MakeNDTMap(datat, params7);
+      auto src7 = MakeNDTMap(datas, params7);
+      auto T7 = SNDTMDMatch2(tgt7, src7, params7);
+      usedtime[72] = usedtime[72] + params7._usedtime;
+      Tr[72] = Tr[72] * Affine3dFromAffine2d(T7);
+      path[72].poses.push_back(MakePoseStampedMsg(tj, Tr[72]));
     }
   }
   bar.finish();
@@ -247,5 +256,9 @@ int main(int argc, char **argv) {
   if (ms.count(7)) PrintResult("method 7", path[7], gtpath);
   if (ms.count(72)) PrintResult("method 72", path[72], gtpath);
 
-  ros::spin();
+  if (ms.count(5)) PrintTime("method 5", usedtime[5]);
+  if (ms.count(52)) PrintTime("method 52", usedtime[52]);
+  if (ms.count(7)) PrintTime("method 7", usedtime[7]);
+  if (ms.count(72)) PrintTime("method 72", usedtime[72]);
+  // ros::spin();
 }

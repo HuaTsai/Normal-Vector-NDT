@@ -195,6 +195,9 @@ class GeneralOptimize {
     // FIXME: iteration count api???
     // params._ceres_iteration += summary.iterations;
     ++params._iteration;
+    if (params.verbose) {
+      std::cout << summary.FullReport() << std::endl;
+    }
 
     cur_tf_ = Eigen::Translation2d(xyt_[0], xyt_[1]) *
               Eigen::Rotation2Dd(xyt_[2]) * cur_tf_;
@@ -505,7 +508,7 @@ Eigen::Affine2d P2DNDTMatch(const NDTMap &target_map,
       params._corres.back().push_back(corres[i]);
     }
 
-    opt.BuildProblem(P2DNDTCostFunctor::Create(ps2, uqs2, cqs2));
+    opt.BuildProblem(P2DNDTCostFunctor::Create(params.d2, ps2, uqs2, cqs2));
     auto t2 = GetTime();
     params._usedtime.build += GetDiffTime(t1, t2);
 
@@ -525,6 +528,7 @@ Eigen::Affine2d D2DNDTMDMatch(const NDTMap &target_map,
                               const Eigen::Affine2d &guess_tf) {
   auto t1 = GetTime();
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
+  // auto kd = MakeKDTree(target_map.GetPoints());
 
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
@@ -620,7 +624,7 @@ Eigen::Affine2d D2DNDTMatch(const NDTMap &target_map,
       params._corres.back().push_back(corres[i]);
     }
 
-    opt.BuildProblem(D2DNDTCostFunctor::Create(ups2, cps2, uqs2, cqs2));
+    opt.BuildProblem(D2DNDTCostFunctor::Create(params.d2, ups2, cps2, uqs2, cqs2));
     auto t2 = GetTime();
     params._usedtime.build += GetDiffTime(t1, t2);
 
@@ -640,6 +644,7 @@ Eigen::Affine2d SNDTMDMatch(const SNDTMap &target_map,
                             const Eigen::Affine2d &guess_tf) {
   auto t1 = GetTime();
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
+  // auto kd = MakeKDTree(target_map.GetPoints());
 
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
@@ -751,6 +756,7 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map,
   // params._usedtime.others =
   //     GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
   // return cur_tf;
+  return Eigen::Affine2d::Identity();
 }
 
 Eigen::Affine2d SNDTMDMatch2(const NDTMap &target_map,
@@ -861,7 +867,7 @@ Eigen::Affine2d SNDTMatch2(const NDTMap &target_map,
     }
 
     opt.BuildProblem(
-        SNDTCostFunctor2::Create(ups2, cps2, unps2, uqs2, cqs2, unqs2));
+        SNDTCostFunctor2::Create(params.d2, ups2, cps2, unps2, uqs2, cqs2, unqs2));
     auto t2 = GetTime();
     params._usedtime.build += GetDiffTime(t1, t2);
 

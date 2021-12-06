@@ -105,32 +105,23 @@ struct ICPParameters : CommonParameters {
 };
 
 struct Pt2plICPParameters : CommonParameters {
-  Pt2plICPParameters() {
-    method = Method::kPt2PlICP;
-    radius = 1.5;
-  }
+  Pt2plICPParameters() : radius(1.5) { method = Method::kPt2PlICP; }
   double radius;
 };
 
 // struct GICPParameters : CommonParameters { };
 
 struct SICPParameters : CommonParameters {
-  SICPParameters() {
-    method = Method::kSICP;
-    radius = 1.5;
-  }
+  SICPParameters() : radius(1.5) { method = Method::kSICP; }
   double radius;
 };
 
 struct NDTParameters : CommonParameters {
-  NDTParameters() {
-    cell_size = 1.5;
-    r_variance = 0.0625;
-    t_variance = 0.0001;
-  }
+  NDTParameters() : cell_size(1.5), r_variance(0.0625), t_variance(0.0001) {}
   double cell_size;
   double r_variance; /**< radius variance, i.e., +-r -> (r / 3)^2 */
   double t_variance; /**< angle variance, i.e., +-t -> (t / 3)^2 */
+  double d2;
 };
 
 struct P2DNDTParameters : NDTParameters {
@@ -142,10 +133,7 @@ struct D2DNDTParameters : NDTParameters {
 };
 
 struct SNDTParameters : NDTParameters {
-  SNDTParameters() {
-    method = Method::kSNDT;
-    radius = 1.5;
-  }
+  SNDTParameters() : radius(1.5) { method = Method::kSNDT; }
   double radius;
 };
 
