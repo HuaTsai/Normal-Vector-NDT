@@ -112,6 +112,14 @@ std::pair<Stat, Stat> TrajectoryEvaluation::ComputeRMSError2D() {
     gtsync_.poses.push_back(pst);
   }
 
+  gtlength_ = 0;
+  for (size_t i = 0; i < gtsync_.poses.size() - 1; ++i) {
+    Eigen::Vector3d p1, p2;
+    tf2::fromMsg(estpath_.poses[i].pose.position, p1);
+    tf2::fromMsg(estpath_.poses[i + 1].pose.position, p2);
+    gtlength_ += (p1 - p2).norm();
+  }
+
   if (evaltype_ == kAbsolute) {
     return AbsoluteTrajectoryError();
   } else if (evaltype_ == kRelativeBySingle) {

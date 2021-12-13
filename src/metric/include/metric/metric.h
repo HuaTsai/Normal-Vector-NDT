@@ -44,6 +44,7 @@ class TrajectoryEvaluation {
   nav_msgs::Path estpath() const { return estpath_; }
   nav_msgs::Path gtpath() const { return gtpath_; }
   nav_msgs::Path align_estpath() const { return align_estpath_; }
+  double gtlength() const { return gtlength_; }
 
  private:
   /**
@@ -73,6 +74,7 @@ class TrajectoryEvaluation {
   nav_msgs::Path align_estpath_;
   nav_msgs::Path gtsync_;
   double length_;
+  double gtlength_;
 };
 
 class TimeEvaluation {
