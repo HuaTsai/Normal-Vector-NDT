@@ -2,7 +2,7 @@
 #include <normal2d/normal2d.h>
 #include <pcl/search/kdtree.h>
 
-#define USE_OMP
+// #define USE_OMP
 
 #ifdef USE_OMP
 #define THREADS 8
@@ -43,6 +43,7 @@ inline Eigen::Matrix2d ComputeCovWithIndices(
   ret = mp * mp.transpose() / (n - 1);
   return ret;
 }
+
 
 std::vector<Eigen::Vector2d> ComputeNormals(
     const std::vector<Eigen::Vector2d> &pc, double radius) {

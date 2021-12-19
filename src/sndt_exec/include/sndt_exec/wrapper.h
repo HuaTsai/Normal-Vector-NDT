@@ -91,7 +91,7 @@ NDTMap MakeNDTMap(
     const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>>
         &data,
     NDTParameters &params) {
-  auto t1 = GetTime();
+  params._usedtime.ProcedureStart(Procedure::kNDT);
   double cell_size = params.cell_size;
   double rvar = params.r_variance;
   double tvar = params.t_variance;
@@ -114,8 +114,7 @@ NDTMap MakeNDTMap(
   }
   NDTMap ret(cell_size);
   ret.LoadPointsWithCovariances(points, point_covs);
-  auto t2 = GetTime();
-  params._usedtime.ndt += GetDiffTime(t1, t2);
+  params._usedtime.ProcedureFinish();
   return ret;
 }
 
@@ -123,12 +122,7 @@ SNDTMap MakeSNDTMap(
     const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>>
         &data,
     SNDTParameters &params) {
-  auto t1 = GetTime();
-  double cell_size = params.cell_size;
-  double radius = params.radius;
-  double rvar = params.r_variance;
-  double tvar = params.t_variance;
-
+  params._usedtime.ProcedureStart(Procedure::kNDT);
   std::vector<Eigen::Vector2d> points;
   std::vector<Eigen::Matrix2d> point_covs;
 
@@ -139,20 +133,22 @@ SNDTMap MakeSNDTMap(
       double r2 = pt.squaredNorm();
       double theta = atan2(pt(1), pt(0));
       Eigen::Matrix2d J = Eigen::Rotation2Dd(theta).matrix();
-      Eigen::Matrix2d S = Eigen::Vector2d(rvar, r2 * tvar).asDiagonal();
+      Eigen::Matrix2d S = Eigen::Vector2d(params.r_variance, r2 * params.t_variance).asDiagonal();
       points.push_back(T * pt);
       point_covs.push_back(T.rotation() * J * S * J.transpose() *
                            T.rotation().transpose());
     }
   }
-  auto t2 = GetTime();
-  auto normals = ComputeNormals(points, radius);
-  auto t3 = GetTime();
-  SNDTMap ret(cell_size);
+  params._usedtime.ProcedureFinish();
+
+  params._usedtime.ProcedureStart(Procedure::kNormal);
+  auto normals = ComputeNormals(points, params.radius);
+  params._usedtime.ProcedureFinish();
+
+  params._usedtime.ProcedureStart(Procedure::kNDT);
+  SNDTMap ret(params.cell_size);
   ret.LoadPointsWithCovariancesAndNormals(points, point_covs, normals);
-  auto t4 = GetTime();
-  params._usedtime.ndt += GetDiffTime(t1, t2) + GetDiffTime(t3, t4);
-  params._usedtime.normal += GetDiffTime(t2, t3);
+  params._usedtime.ProcedureFinish();
   return ret;
 }
 
@@ -160,7 +156,6 @@ std::vector<Eigen::Vector2d> MakePoints(
     const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>>
         &data,
     CommonParameters &params) {
-  auto t1 = GetTime();
   std::vector<Eigen::Vector2d> ret;
   for (const auto &elem : data) {
     auto pts = elem.first;
@@ -168,8 +163,6 @@ std::vector<Eigen::Vector2d> MakePoints(
     for (size_t i = 0; i < pts.size(); ++i)
       if (pts[i].allFinite()) ret.push_back(aff * pts[i]);
   }
-  auto t2 = GetTime();
-  params._usedtime.others += GetDiffTime(t1, t2);
   return ret;
 }
 

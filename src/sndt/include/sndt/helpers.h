@@ -173,10 +173,26 @@ inline void ExcludeInfinite(const std::vector<Eigen::Vector2d> &points,
                             const std::vector<Eigen::Matrix2d> &covariances,
                             std::vector<Eigen::Vector2d> &valid_points,
                             std::vector<Eigen::Matrix2d> &valid_covariances) {
+  valid_points.clear();
+  valid_covariances.clear();
   for (size_t i = 0; i < points.size(); ++i) {
     if (points[i].allFinite() && covariances[i].allFinite()) {
       valid_points.push_back(points[i]);
       valid_covariances.push_back(covariances[i]);
+    }
+  }
+}
+
+inline void ExcludeInfinite(const std::vector<Eigen::Vector2d> &points,
+                            const std::vector<Eigen::Vector2d> &normals,
+                            std::vector<Eigen::Vector2d> &valid_points,
+                            std::vector<Eigen::Vector2d> &valid_normals) {
+  valid_points.clear();
+  valid_normals.clear();
+  for (size_t i = 0; i < points.size(); ++i) {
+    if (points[i].allFinite() && normals[i].allFinite()) {
+      valid_points.push_back(points[i]);
+      valid_normals.push_back(normals[i]);
     }
   }
 }
@@ -222,6 +238,16 @@ inline int FindNearestNeighborIndex(const Eigen::Vector2d &query,
   int found = kd.nearestKSearch(pt, 1, idx, dist2);
   if (!found) return -1;
   return idx[0];
+}
+
+inline std::vector<int> GetCommonFiniteIndices(
+    const std::vector<Eigen::Vector2d> &pts,
+    const std::vector<Eigen::Vector2d> &nms) {
+  std::vector<int> ret;
+  int n = pts.size();
+  for (int i = 0; i < n; ++i)
+    if (pts[i].allFinite() && nms[i].allFinite()) ret.push_back(i);
+  return ret;
 }
 
 class RandomTransformGenerator2D {

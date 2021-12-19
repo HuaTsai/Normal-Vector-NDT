@@ -19,12 +19,9 @@ class ICPCostFunctor {
   ICPCostFunctor(const Eigen::Vector2d &p, const Eigen::Vector2d &q)
       : p_(p), q_(q) {}
   template <typename T>
-  bool operator()(const T *const x,
-                  const T *const y,
-                  const T *const yaw,
-                  T *e) const {
-    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(*yaw);
-    Eigen::Matrix<T, 2, 1> t(*x, *y);
+  bool operator()(const T *const xyt, T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
 
     Eigen::Matrix<T, 2, 1> p = R * p_.cast<T>() + t;
     Eigen::Matrix<T, 2, 1> q = q_.cast<T>();
@@ -37,7 +34,7 @@ class ICPCostFunctor {
 
   static ceres::CostFunction *Create(const Eigen::Vector2d &p,
                                      const Eigen::Vector2d &q) {
-    return new ceres::AutoDiffCostFunction<ICPCostFunctor, 2, 1, 1, 1>(
+    return new ceres::AutoDiffCostFunction<ICPCostFunctor, 2, 3>(
         new ICPCostFunctor(p, q));
   }
 
@@ -59,12 +56,9 @@ class Pt2plICPCostFunctor {
                       const Eigen::Vector2d &nq)
       : p_(p), q_(q), nq_(nq) {}
   template <typename T>
-  bool operator()(const T *const x,
-                  const T *const y,
-                  const T *const yaw,
-                  T *e) const {
-    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(*yaw);
-    Eigen::Matrix<T, 2, 1> t(*x, *y);
+  bool operator()(const T *const xyt, T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
 
     Eigen::Matrix<T, 2, 1> p = R * p_.cast<T>() + t;
     Eigen::Matrix<T, 2, 1> q = q_.cast<T>();
@@ -77,7 +71,7 @@ class Pt2plICPCostFunctor {
   static ceres::CostFunction *Create(const Eigen::Vector2d &p,
                                      const Eigen::Vector2d &q,
                                      const Eigen::Vector2d &nq) {
-    return new ceres::AutoDiffCostFunction<Pt2plICPCostFunctor, 1, 1, 1, 1>(
+    return new ceres::AutoDiffCostFunction<Pt2plICPCostFunctor, 1, 3>(
         new Pt2plICPCostFunctor(p, q, nq));
   }
 
@@ -101,12 +95,9 @@ class SICPCostFunctor {
                   const Eigen::Vector2d &nq)
       : p_(p), np_(np), q_(q), nq_(nq) {}
   template <typename T>
-  bool operator()(const T *const x,
-                  const T *const y,
-                  const T *const yaw,
-                  T *e) const {
-    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(*yaw);
-    Eigen::Matrix<T, 2, 1> t(*x, *y);
+  bool operator()(const T *const xyt, T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
 
     Eigen::Matrix<T, 2, 1> p = R * p_.cast<T>() + t;
     Eigen::Matrix<T, 2, 1> np = R * np_.cast<T>();
@@ -123,7 +114,7 @@ class SICPCostFunctor {
                                      const Eigen::Vector2d &np,
                                      const Eigen::Vector2d &q,
                                      const Eigen::Vector2d &nq) {
-    return new ceres::AutoDiffCostFunction<SICPCostFunctor, 1, 1, 1, 1>(
+    return new ceres::AutoDiffCostFunction<SICPCostFunctor, 1, 3>(
         new SICPCostFunctor(p, np, q, nq));
   }
 
@@ -147,12 +138,9 @@ class P2DNDTMDCostFunctor {
                       const Eigen::Matrix2d &cq)
       : p_(p), uq_(uq), cq_(cq) {}
   template <typename T>
-  bool operator()(const T *const x,
-                  const T *const y,
-                  const T *const yaw,
-                  T *e) const {
-    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(*yaw);
-    Eigen::Matrix<T, 2, 1> t(*x, *y);
+  bool operator()(const T *const xyt, T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
 
     Eigen::Matrix<T, 2, 1> p = R * p_.cast<T>() + t;
     Eigen::Matrix<T, 2, 1> uq = uq_.cast<T>();
@@ -166,7 +154,7 @@ class P2DNDTMDCostFunctor {
   static ceres::CostFunction *Create(const Eigen::Vector2d &p,
                                      const Eigen::Vector2d &uq,
                                      const Eigen::Matrix2d &cq) {
-    return new ceres::AutoDiffCostFunction<P2DNDTMDCostFunctor, 1, 1, 1, 1>(
+    return new ceres::AutoDiffCostFunction<P2DNDTMDCostFunctor, 1, 3>(
         new P2DNDTMDCostFunctor(p, uq, cq));
   }
 
@@ -245,12 +233,10 @@ class D2DNDTMDCostFunctor {
                       const Eigen::Matrix2d &cq)
       : up_(up), cp_(cp), uq_(uq), cq_(cq) {}
   template <typename T>
-  bool operator()(const T *const x,
-                  const T *const y,
-                  const T *const yaw,
+  bool operator()(const T *const xyt,
                   T *e) const {
-    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(*yaw);
-    Eigen::Matrix<T, 2, 1> t(*x, *y);
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
 
     Eigen::Matrix<T, 2, 1> up = R * up_.cast<T>() + t;
     Eigen::Matrix<T, 2, 2> cp = R * cp_.cast<T>() * R.transpose();
@@ -267,7 +253,7 @@ class D2DNDTMDCostFunctor {
                                      const Eigen::Matrix2d &cp,
                                      const Eigen::Vector2d &uq,
                                      const Eigen::Matrix2d &cq) {
-    return new ceres::AutoDiffCostFunction<D2DNDTMDCostFunctor, 1, 1, 1, 1>(
+    return new ceres::AutoDiffCostFunction<D2DNDTMDCostFunctor, 1, 3>(
         new D2DNDTMDCostFunctor(up, cp, uq, cq));
   }
 
@@ -370,12 +356,9 @@ class SNDTMDCostFunctor {
         cnq_(cnq) {}
 
   template <typename T>
-  bool operator()(const T *const x,
-                  const T *const y,
-                  const T *const yaw,
-                  T *e) const {
-    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(*yaw);
-    Eigen::Matrix<T, 2, 1> t(*x, *y);
+  bool operator()(const T *const xyt, T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
 
     Eigen::Matrix<T, 2, 1> up = R * up_.cast<T>() + t;
     Eigen::Matrix<T, 2, 1> unp = R * unp_.cast<T>();
@@ -407,7 +390,7 @@ class SNDTMDCostFunctor {
                                      const Eigen::Matrix2d &cq,
                                      const Eigen::Vector2d &unq,
                                      const Eigen::Matrix2d &cnq) {
-    return new ceres::AutoDiffCostFunction<SNDTMDCostFunctor, 1, 1, 1, 1>(
+    return new ceres::AutoDiffCostFunction<SNDTMDCostFunctor, 1, 3>(
         new SNDTMDCostFunctor(up, cp, unp, cnp, uq, cq, unq, cnq));
   }
 
@@ -545,12 +528,9 @@ class SNDTMDCostFunctor2 {
       : up_(up), unp_(unp), uq_(uq), unq_(unq), cp_(cp), cq_(cq) {}
 
   template <typename T>
-  bool operator()(const T *const x,
-                  const T *const y,
-                  const T *const yaw,
-                  T *e) const {
-    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(*yaw);
-    Eigen::Matrix<T, 2, 1> t(*x, *y);
+  bool operator()(const T *const xyt, T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
 
     Eigen::Matrix<T, 2, 1> up = R * up_.cast<T>() + t;
     Eigen::Matrix<T, 2, 1> unp = R * unp_.cast<T>();
@@ -576,7 +556,7 @@ class SNDTMDCostFunctor2 {
                                      const Eigen::Vector2d &uq,
                                      const Eigen::Matrix2d &cq,
                                      const Eigen::Vector2d &unq) {
-    return new ceres::AutoDiffCostFunction<SNDTMDCostFunctor2, 1, 1, 1, 1>(
+    return new ceres::AutoDiffCostFunction<SNDTMDCostFunctor2, 1, 3>(
         new SNDTMDCostFunctor2(up, cp, unp, uq, cq, unq));
   }
 

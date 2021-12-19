@@ -16,6 +16,55 @@
 #include <sndt/matcher.h>
 #include <sndt/visuals.h>
 
+void UsedTime::Start() {
+  if (!(state_ == kInit)) {
+    std::cerr << __FUNCTION__ << ": invalid state " << state_ << std::endl;
+    return;
+  }
+  start_ = GetTime();
+  state_ = kStart;
+}
+
+void UsedTime::ProcedureStart(Procedure procedure) {
+  if (!(state_ == kStart || state_ == kSubFinish)) {
+    std::cerr << __FUNCTION__ << ": invalid state " << state_ << std::endl;
+    return;
+  }
+  current_start_ = GetTime();
+  current_procedure_ = procedure;
+  state_ = kSubStart;
+}
+
+void UsedTime::ProcedureFinish() {
+  if (!(state_ == kSubStart)) {
+    std::cerr << __FUNCTION__ << ": invalid state " << state_ << std::endl;
+    return;
+  }
+  current_end_ = GetTime();
+  int ms = GetDiffTime(current_start_, current_end_);
+  if (current_procedure_ == Procedure::kNormal) {
+    normal_ += ms;
+  } else if (current_procedure_ == Procedure::kNDT) {
+    ndt_ += ms;
+  } else if (current_procedure_ == Procedure::kBuild) {
+    build_ += ms;
+  } else if (current_procedure_ == Procedure::kOptimize) {
+    optimize_ += ms;
+  }
+  state_ = kSubFinish;
+}
+
+void UsedTime::Finish() {
+  if (!(state_ == kStart || state_ == kSubFinish)) {
+    std::cerr << __FUNCTION__ << ": invalid state " << state_ << std::endl;
+    return;
+  }
+  end_ = GetTime();
+  total_ = GetDiffTime(start_, end_);
+  others_ = total_ - normal_ - ndt_ - build_ - optimize_;
+  state_ = kFinish;
+}
+
 class InspectCallback : public ceres::IterationCallback {
  public:
   InspectCallback(CommonParameters &params,
@@ -50,43 +99,16 @@ class InspectCallback : public ceres::IterationCallback {
   const Eigen::Affine2d cur_tf_;
 };
 
-// class InspectCallback2 : public ceres::IterationCallback {
-//  public:
-//   InspectCallback2(CommonParameters &params,
-//                    double *xyt,
-//                    const Eigen::Affine2d &cur_tf)
-//       : needinit_(true), params_(params), xyt_(xyt), cur_tf_(cur_tf) {}
-//   ceres::CallbackReturnType operator()(const ceres::IterationSummary &summary) {
-//     if (needinit_) {
-//       params_._sols.push_back({cur_tf_});
-//       needinit_ = false;
-//     } else {
-//       auto next_tf = Eigen::Translation2d(xyt_[0], xyt_[1]) *
-//                      Eigen::Rotation2Dd(xyt_[2]) * cur_tf_;
-//       params_._sols.back().push_back(next_tf);
-//     }
-//     return ceres::SOLVER_CONTINUE;
-//   }
-
-//  private:
-//   bool needinit_;
-//   CommonParameters &params_;
-//   double *xyt_;
-//   const Eigen::Affine2d cur_tf_;
-// };
-
 class LeastSquareOptimize {
  public:
-  // Note that loss_ need not be deleted since ceres takes the ownership
   LeastSquareOptimize()
-      : x_(0),
-        y_(0),
-        t_(0),
-        loss_(new ceres::LossFunctionWrapper(nullptr, ceres::TAKE_OWNERSHIP)),
-        cur_tf_(Eigen::Affine2d::Identity()) {}
+      : loss_(new ceres::LossFunctionWrapper(nullptr, ceres::TAKE_OWNERSHIP)),
+        cur_tf_(Eigen::Affine2d::Identity()) {
+    memset(xyt_, 0, sizeof(xyt_));
+  }
 
   void AddResidualBlock(ceres::CostFunction *cost_function) {
-    problem_.AddResidualBlock(cost_function, loss_, &x_, &y_, &t_);
+    problem_.AddResidualBlock(cost_function, loss_, xyt_);
   }
 
   void Optimize(CommonParameters &params) {
@@ -95,18 +117,10 @@ class LeastSquareOptimize {
     options.linear_solver_type = params.solver;
     options.max_num_iterations = params.ceres_max_iterations;
 
-    // BUG: Due to transform multiplications, fix x or y will not work
-    if (params.fixstrategy == FixStrategy::kFixX) {
-      problem_.SetParameterBlockConstant(&x_);
-    } else if (params.fixstrategy == FixStrategy::kFixY) {
-      problem_.SetParameterBlockConstant(&y_);
-    } else if (params.fixstrategy == FixStrategy::kFixTheta) {
-      problem_.SetParameterBlockConstant(&t_);
-    }
-
     options.update_state_every_iteration = params.inspect;
     if (params.inspect) {
-      auto cb = std::make_shared<InspectCallback>(params, x_, y_, t_, cur_tf_);
+      auto cb = std::make_shared<InspectCallback>(params, xyt_[0], xyt_[1],
+                                                  xyt_[2], cur_tf_);
       options.callbacks.push_back(cb.get());
     }
 
@@ -121,10 +135,7 @@ class LeastSquareOptimize {
     }
 
     ceres::Solver::Summary summary;
-    auto t1 = GetTime();
     ceres::Solve(options, &problem_, &summary);
-    auto t2 = GetTime();
-    params._usedtime.optimize += GetDiffTime(t1, t2);
     params._initial_cost = summary.initial_cost;
     params._final_cost = summary.final_cost;
     ++params._iteration;
@@ -137,11 +148,12 @@ class LeastSquareOptimize {
             rbids[i], false, &params._costs.back()[i].second, nullptr, nullptr);
     }
 
-    cur_tf_ = Eigen::Translation2d(x_, y_) * Eigen::Rotation2Dd(t_) * cur_tf_;
+    cur_tf_ = Eigen::Translation2d(xyt_[0], xyt_[1]) *
+              Eigen::Rotation2Dd(xyt_[2]) * cur_tf_;
   }
 
   void CheckConverge(CommonParameters &params) {
-    Eigen::Vector2d xy = Eigen::Vector2d(x_, y_);
+    Eigen::Vector2d xy = Eigen::Vector2d(xyt_[0], xyt_[1]);
     if (xy.norm() < params.threshold)
       params._converge = Converge::kThreshold;
     else if (params._iteration > params.max_iterations)
@@ -152,7 +164,7 @@ class LeastSquareOptimize {
   Eigen::Affine2d cur_tf() const { return cur_tf_; }
 
  private:
-  double x_, y_, t_;
+  double xyt_[3];
   ceres::LossFunctionWrapper *loss_;
   Eigen::Affine2d cur_tf_;
   ceres::Problem problem_;
@@ -179,21 +191,19 @@ class GeneralOptimize {
     // BUG: Inspect not work now.
     // options.update_state_every_iteration = params.inspect;
     // if (params.inspect) {
-    //   auto cb = std::make_shared<InspectCallback>(params, xyt_[0], xyt_[1], xyt_[2], cur_tf_);
-    //   options.callbacks.push_back(cb.get());
+    //   auto cb = std::make_shared<InspectCallback>(params, xyt_[0], xyt_[1],
+    //   xyt_[2], cur_tf_); options.callbacks.push_back(cb.get());
     // }
     if (params.inspect) {
       params._sols.push_back({cur_tf_});
     }
 
-    auto t1 = GetTime();
     ceres::Solve(options, *problem_, xyt_, &summary);
-    auto t2 = GetTime();
-    params._usedtime.optimize += GetDiffTime(t1, t2);
     params._initial_cost = summary.initial_cost;
     params._final_cost = summary.final_cost;
+
     // FIXME: iteration count api???
-    // params._ceres_iteration += summary.iterations;
+    params._ceres_iteration += summary.iterations.size();
     ++params._iteration;
     if (params.verbose) {
       std::cout << summary.FullReport() << std::endl;
@@ -260,14 +270,13 @@ Eigen::Affine2d ICPMatch(const std::vector<Eigen::Vector2d> &tpts,
                          const std::vector<Eigen::Vector2d> &spts,
                          ICPParameters &params,
                          const Eigen::Affine2d &guess_tf) {
-  auto t1 = GetTime();
   auto kd = MakeKDTree(tpts);
 
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
+    params._usedtime.ProcedureStart(Procedure::kBuild);
     LeastSquareOptimize opt;
     opt.set_cur_tf(cur_tf);
-    auto t1 = GetTime();
     auto next_pts = TransformPoints(spts, opt.cur_tf());
 
     OutlierRejection orj;
@@ -291,35 +300,36 @@ Eigen::Affine2d ICPMatch(const std::vector<Eigen::Vector2d> &tpts,
       opt.AddResidualBlock(residuals[indices[i]]);
       params._corres.back().push_back(corres[i]);
     }
+    params._usedtime.ProcedureFinish();
 
-    auto t2 = GetTime();
-    params._usedtime.build += GetDiffTime(t1, t2);
-
+    params._usedtime.ProcedureStart(Procedure::kOptimize);
     opt.Optimize(params);
+    params._usedtime.ProcedureFinish();
+
     opt.CheckConverge(params);
     cur_tf = opt.cur_tf();
   }
-  auto t2 = GetTime();
-  params._usedtime.others =
-      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
+  params._usedtime.Finish();
   return cur_tf;
 }
 
-Eigen::Affine2d Pt2plICPMatch(const std::vector<Eigen::Vector2d> &tpts,
+Eigen::Affine2d Pt2plICPMatch(const std::vector<Eigen::Vector2d> &target_points,
                               const std::vector<Eigen::Vector2d> &spts,
                               Pt2plICPParameters &params,
                               const Eigen::Affine2d &guess_tf) {
-  auto t1 = GetTime();
-  auto tnms = ComputeNormals(tpts, params.radius);
-  auto t2 = GetTime();
-  params._usedtime.normal = GetDiffTime(t1, t2);
+  params._usedtime.ProcedureStart(Procedure::kNormal);
+  auto target_normals = ComputeNormals(target_points, params.radius);
+  params._usedtime.ProcedureFinish();
+  std::vector<Eigen::Vector2d> tpts, tnms;
+  ExcludeInfinite(target_points, target_normals, tpts, tnms);
+
   auto kd = MakeKDTree(tpts);
 
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
+    params._usedtime.ProcedureStart(Procedure::kBuild);
     LeastSquareOptimize opt;
     opt.set_cur_tf(cur_tf);
-    auto t1 = GetTime();
     auto next_pts = TransformPoints(spts, opt.cur_tf());
 
     OutlierRejection orj;
@@ -343,36 +353,46 @@ Eigen::Affine2d Pt2plICPMatch(const std::vector<Eigen::Vector2d> &tpts,
       opt.AddResidualBlock(residuals[indices[i]]);
       params._corres.back().push_back(corres[i]);
     }
+    params._usedtime.ProcedureFinish();
 
-    auto t2 = GetTime();
-    params._usedtime.build += GetDiffTime(t1, t2);
-
+    params._usedtime.ProcedureStart(Procedure::kOptimize);
     opt.Optimize(params);
+    params._usedtime.ProcedureFinish();
+
     opt.CheckConverge(params);
     cur_tf = opt.cur_tf();
   }
-  auto t3 = GetTime();
-  params._usedtime.others =
-      GetDiffTime(t2, t3) - params._usedtime.optimize - params._usedtime.build;
+  params._usedtime.Finish();
   return cur_tf;
 }
 
-Eigen::Affine2d SICPMatch(const std::vector<Eigen::Vector2d> &tpts,
-                          const std::vector<Eigen::Vector2d> &spts,
+Eigen::Affine2d SICPMatch(const std::vector<Eigen::Vector2d> &target_points,
+                          const std::vector<Eigen::Vector2d> &source_points,
                           SICPParameters &params,
                           const Eigen::Affine2d &guess_tf) {
-  auto t1 = GetTime();
-  auto tnms = ComputeNormals(tpts, params.radius);
-  auto snms = ComputeNormals(spts, params.radius);
-  auto t2 = GetTime();
-  params._usedtime.normal = GetDiffTime(t1, t2);
+  // TODO: make getindex nq valid
+  params._usedtime.ProcedureStart(Procedure::kNormal);
+  auto target_normals = ComputeNormals(target_points, params.radius);
+  auto source_normals = ComputeNormals(source_points, params.radius);
+  params._usedtime.ProcedureFinish();
+
+  std::vector<Eigen::Vector2d> tpts, spts, tnms, snms;
+  ExcludeInfinite(target_points, target_normals, tpts, tnms);
+  ExcludeInfinite(source_points, source_normals, spts, snms);
+  // for (auto &nm : tnms) if(nm(0) < 0) nm = -nm;
+  // for (auto &nm : snms) if(nm(0) < 0) nm = -nm;
+  // std::cout << "tnm" << std::endl;
+  // for (auto pt : tnms) { std::cout << pt.transpose() << std::endl; }
+  // std::cout << "snm" << std::endl;
+  // for (auto pt : snms) { std::cout << pt.transpose() << std::endl; }
+
   auto kd = MakeKDTree(tpts);
 
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
+    params._usedtime.ProcedureStart(Procedure::kBuild);
     LeastSquareOptimize opt;
     opt.set_cur_tf(cur_tf);
-    auto t1 = GetTime();
     auto next_pts = TransformPoints(spts, opt.cur_tf());
     auto next_nms = TransformNormals(snms, opt.cur_tf());
 
@@ -398,17 +418,15 @@ Eigen::Affine2d SICPMatch(const std::vector<Eigen::Vector2d> &tpts,
       opt.AddResidualBlock(residuals[indices[i]]);
       params._corres.back().push_back(corres[i]);
     }
+    params._usedtime.ProcedureFinish();
 
-    auto t2 = GetTime();
-    params._usedtime.build += GetDiffTime(t1, t2);
-
+    params._usedtime.ProcedureStart(Procedure::kOptimize);
     opt.Optimize(params);
+    params._usedtime.ProcedureFinish();
     opt.CheckConverge(params);
     cur_tf = opt.cur_tf();
   }
-  auto t3 = GetTime();
-  params._usedtime.others =
-      GetDiffTime(t2, t3) - params._usedtime.optimize - params._usedtime.build;
+  params._usedtime.Finish();
   return cur_tf;
 }
 
@@ -416,14 +434,13 @@ Eigen::Affine2d P2DNDTMDMatch(const NDTMap &target_map,
                               const std::vector<Eigen::Vector2d> &spts,
                               P2DNDTParameters &params,
                               const Eigen::Affine2d &guess_tf) {
-  auto t1 = GetTime();
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
 
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
+    params._usedtime.ProcedureStart(Procedure::kBuild);
     LeastSquareOptimize opt;
     opt.set_cur_tf(cur_tf);
-    auto t1 = GetTime();
     auto next_pts = TransformPoints(spts, opt.cur_tf());
 
     OutlierRejection orj;
@@ -450,17 +467,15 @@ Eigen::Affine2d P2DNDTMDMatch(const NDTMap &target_map,
       opt.AddResidualBlock(residuals[indices[i]]);
       params._corres.back().push_back(corres[i]);
     }
+    params._usedtime.ProcedureFinish();
 
-    auto t2 = GetTime();
-    params._usedtime.build += GetDiffTime(t1, t2);
-
+    params._usedtime.ProcedureStart(Procedure::kOptimize);
     opt.Optimize(params);
+    params._usedtime.ProcedureFinish();
     opt.CheckConverge(params);
     cur_tf = opt.cur_tf();
   }
-  auto t2 = GetTime();
-  params._usedtime.others =
-      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
+  params._usedtime.Finish();
   return cur_tf;
 }
 
@@ -468,14 +483,13 @@ Eigen::Affine2d P2DNDTMatch(const NDTMap &target_map,
                             const std::vector<Eigen::Vector2d> &spts,
                             P2DNDTParameters &params,
                             const Eigen::Affine2d &guess_tf) {
-  auto t1 = GetTime();
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
 
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
+    params._usedtime.ProcedureStart(Procedure::kBuild);
     GeneralOptimize opt;
     opt.set_cur_tf(cur_tf);
-    auto t1 = GetTime();
     auto next_pts = TransformPoints(spts, opt.cur_tf());
 
     OutlierRejection orj;
@@ -509,16 +523,15 @@ Eigen::Affine2d P2DNDTMatch(const NDTMap &target_map,
     }
 
     opt.BuildProblem(P2DNDTCostFunctor::Create(params.d2, ps2, uqs2, cqs2));
-    auto t2 = GetTime();
-    params._usedtime.build += GetDiffTime(t1, t2);
+    params._usedtime.ProcedureFinish();
 
+    params._usedtime.ProcedureStart(Procedure::kOptimize);
     opt.Optimize(params);
+    params._usedtime.ProcedureFinish();
     opt.CheckConverge(params);
     cur_tf = opt.cur_tf();
   }
-  auto t2 = GetTime();
-  params._usedtime.others =
-      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
+  params._usedtime.Finish();
   return cur_tf;
 }
 
@@ -526,15 +539,13 @@ Eigen::Affine2d D2DNDTMDMatch(const NDTMap &target_map,
                               const NDTMap &source_map,
                               D2DNDTParameters &params,
                               const Eigen::Affine2d &guess_tf) {
-  auto t1 = GetTime();
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
-  // auto kd = MakeKDTree(target_map.GetPoints());
 
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
+    params._usedtime.ProcedureStart(Procedure::kBuild);
     LeastSquareOptimize opt;
     opt.set_cur_tf(cur_tf);
-    auto t1 = GetTime();
     auto next_map = source_map.PseudoTransformCells(opt.cur_tf());
 
     OutlierRejection orj;
@@ -563,17 +574,15 @@ Eigen::Affine2d D2DNDTMDMatch(const NDTMap &target_map,
       opt.AddResidualBlock(residuals[indices[i]]);
       params._corres.back().push_back(corres[i]);
     }
+    params._usedtime.ProcedureFinish();
 
-    auto t2 = GetTime();
-    params._usedtime.build += GetDiffTime(t1, t2);
-
+    params._usedtime.ProcedureStart(Procedure::kOptimize);
     opt.Optimize(params);
+    params._usedtime.ProcedureFinish();
     opt.CheckConverge(params);
     cur_tf = opt.cur_tf();
   }
-  auto t2 = GetTime();
-  params._usedtime.others =
-      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
+  params._usedtime.Finish();
   return cur_tf;
 }
 
@@ -581,14 +590,13 @@ Eigen::Affine2d D2DNDTMatch(const NDTMap &target_map,
                             const NDTMap &source_map,
                             D2DNDTParameters &params,
                             const Eigen::Affine2d &guess_tf) {
-  auto t1 = GetTime();
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
 
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
+    params._usedtime.ProcedureStart(Procedure::kBuild);
     GeneralOptimize opt;
     opt.set_cur_tf(cur_tf);
-    auto t1 = GetTime();
     auto next_map = source_map.PseudoTransformCells(cur_tf);
 
     OutlierRejection orj;
@@ -624,17 +632,17 @@ Eigen::Affine2d D2DNDTMatch(const NDTMap &target_map,
       params._corres.back().push_back(corres[i]);
     }
 
-    opt.BuildProblem(D2DNDTCostFunctor::Create(params.d2, ups2, cps2, uqs2, cqs2));
-    auto t2 = GetTime();
-    params._usedtime.build += GetDiffTime(t1, t2);
+    opt.BuildProblem(
+        D2DNDTCostFunctor::Create(params.d2, ups2, cps2, uqs2, cqs2));
+    params._usedtime.ProcedureFinish();
 
+    params._usedtime.ProcedureStart(Procedure::kOptimize);
     opt.Optimize(params);
+    params._usedtime.ProcedureFinish();
     opt.CheckConverge(params);
     cur_tf = opt.cur_tf();
   }
-  auto t2 = GetTime();
-  params._usedtime.others =
-      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
+  params._usedtime.Finish();
   return cur_tf;
 }
 
@@ -642,15 +650,13 @@ Eigen::Affine2d SNDTMDMatch(const SNDTMap &target_map,
                             const SNDTMap &source_map,
                             SNDTParameters &params,
                             const Eigen::Affine2d &guess_tf) {
-  auto t1 = GetTime();
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
-  // auto kd = MakeKDTree(target_map.GetPoints());
 
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
+    params._usedtime.ProcedureStart(Procedure::kBuild);
     LeastSquareOptimize opt;
     opt.set_cur_tf(cur_tf);
-    auto t1 = GetTime();
     auto next_map = source_map.PseudoTransformCells(opt.cur_tf(), true);
 
     OutlierRejection orj;
@@ -684,93 +690,97 @@ Eigen::Affine2d SNDTMDMatch(const SNDTMap &target_map,
       opt.AddResidualBlock(residuals[indices[i]]);
       params._corres.back().push_back(corres[i]);
     }
+    params._usedtime.ProcedureFinish();
 
-    auto t2 = GetTime();
-    params._usedtime.build += GetDiffTime(t1, t2);
-
+    params._usedtime.ProcedureStart(Procedure::kOptimize);
     opt.Optimize(params);
+    params._usedtime.ProcedureFinish();
     opt.CheckConverge(params);
     cur_tf = opt.cur_tf();
   }
-  auto t2 = GetTime();
-  params._usedtime.others =
-      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
+  params._usedtime.Finish();
   return cur_tf;
 }
 
-// TODO: finish it
 Eigen::Affine2d SNDTMatch(const SNDTMap &target_map,
                           const SNDTMap &source_map,
                           SNDTParameters &params,
                           const Eigen::Affine2d &guess_tf) {
-  // auto t1 = GetTime();
-  // auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
+  auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
 
-  // auto cur_tf = guess_tf;
-  // while (params._converge == Converge::kNotConverge) {
-  //   LeastSquareOptimize opt;
-  //   opt.set_cur_tf(cur_tf);
-  //   auto t1 = GetTime();
-  //   auto next_map = source_map.PseudoTransformCells(opt.cur_tf(), true);
+  auto cur_tf = guess_tf;
+  while (params._converge == Converge::kNotConverge) {
+    params._usedtime.ProcedureStart(Procedure::kBuild);
+    GeneralOptimize opt;
+    opt.set_cur_tf(cur_tf);
+    auto next_map = source_map.PseudoTransformCells(opt.cur_tf(), true);
 
-  //   OutlierRejection orj;
-  //   orj.set_reject(params.reject);
-  //   std::vector<ceres::CostFunction *> residuals;
-  //   std::vector<std::pair<int, int>> corres;
-  //   for (size_t i = 0; i < next_map.size(); ++i) {
-  //     auto cellp = next_map[i];
-  //     if (!cellp->HasGaussian()) continue;
-  //     auto idx = FindNearestNeighborIndex(cellp->GetPointMean(), kd);
-  //     if (idx == -1) continue;
-  //     auto cellq = target_map.GetCellForPoint(Eigen::Vector2d(
-  //         kd.getInputCloud()->at(idx).x, kd.getInputCloud()->at(idx).y));
-  //     if (!cellq || !cellq->HasGaussian()) continue;
-  //     corres.push_back({i, target_map.GetCellIndex(cellq)});
-  //     auto up = cellp->GetPointMean();
-  //     auto cp = cellp->GetPointCov();
-  //     auto unp = cellp->GetNormalMean();
-  //     auto cnp = cellp->GetNormalCov();
-  //     auto uq = cellq->GetPointMean();
-  //     auto cq = cellq->GetPointCov();
-  //     auto unq = cellq->GetNormalMean();
-  //     auto cnq = cellq->GetNormalCov();
-  //     orj.AddCorrespondence(up, uq);
-  //     residuals.push_back(
-  //         SNDTMDCostFunctor::Create(up, cp, unp, cnp, uq, cq, unq, cnq));
-  //   }
-  //   params._corres.push_back({});
-  //   auto indices = orj.GetIndices();
-  //   for (size_t i = 0; i < indices.size(); ++i) {
-  //     opt.AddResidualBlock(residuals[indices[i]]);
-  //     params._corres.back().push_back(corres[i]);
-  //   }
+    OutlierRejection orj;
+    orj.set_reject(params.reject);
+    std::vector<Eigen::Vector2d> ups, unps, uqs, unqs;
+    std::vector<Eigen::Matrix2d> cps, cnps, cqs, cnqs;
+    std::vector<std::pair<int, int>> corres;
+    for (size_t i = 0; i < next_map.size(); ++i) {
+      auto cellp = next_map[i];
+      if (!cellp->HasGaussian()) continue;
+      auto idx = FindNearestNeighborIndex(cellp->GetPointMean(), kd);
+      if (idx == -1) continue;
+      auto cellq = target_map.GetCellForPoint(Eigen::Vector2d(
+          kd.getInputCloud()->at(idx).x, kd.getInputCloud()->at(idx).y));
+      if (!cellq || !cellq->HasGaussian()) continue;
+      corres.push_back({i, target_map.GetCellIndex(cellq)});
+      ups.push_back(cellp->GetPointMean());
+      cps.push_back(cellp->GetPointCov());
+      unps.push_back(cellp->GetNormalMean());
+      cnps.push_back(cellp->GetNormalCov());
+      uqs.push_back(cellq->GetPointMean());
+      cqs.push_back(cellq->GetPointCov());
+      unqs.push_back(cellq->GetNormalMean());
+      cnqs.push_back(cellq->GetNormalCov());
+      orj.AddCorrespondence(cellp->GetPointMean(), cellq->GetPointMean());
+    }
+    params._corres.push_back({});
+    auto indices = orj.GetIndices();
+    // XXX: we should change in place...
+    std::vector<Eigen::Vector2d> ups2, unps2, uqs2, unqs2;
+    std::vector<Eigen::Matrix2d> cps2, cnps2, cqs2, cnqs2;
+    for (size_t i = 0; i < indices.size(); ++i) {
+      ups2.push_back(ups[i]);
+      cps2.push_back(cps[i]);
+      unps2.push_back(unps[i]);
+      cnps2.push_back(cnps[i]);
+      uqs2.push_back(uqs[i]);
+      cqs2.push_back(cqs[i]);
+      unqs2.push_back(unqs[i]);
+      cnqs2.push_back(cnqs[i]);
+      params._corres.back().push_back(corres[i]);
+    }
 
-  //   auto t2 = GetTime();
-  //   params._usedtime.build += GetDiffTime(t1, t2);
+    opt.BuildProblem(SNDTCostFunctor::Create(params.d2, ups2, cps2, unps2,
+                                             cnps2, uqs2, cqs2, unqs2, cnqs2));
+    params._usedtime.ProcedureFinish();
 
-  //   opt.Optimize(params);
-  //   opt.CheckConverge(params);
-  //   cur_tf = opt.cur_tf();
-  // }
-  // auto t2 = GetTime();
-  // params._usedtime.others =
-  //     GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
-  // return cur_tf;
-  return Eigen::Affine2d::Identity();
+    params._usedtime.ProcedureStart(Procedure::kOptimize);
+    opt.Optimize(params);
+    params._usedtime.ProcedureFinish();
+    opt.CheckConverge(params);
+    cur_tf = opt.cur_tf();
+  }
+  params._usedtime.Finish();
+  return cur_tf;
 }
 
 Eigen::Affine2d SNDTMDMatch2(const NDTMap &target_map,
                              const NDTMap &source_map,
                              D2DNDTParameters &params,
                              const Eigen::Affine2d &guess_tf) {
-  auto t1 = GetTime();
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
 
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
+    params._usedtime.ProcedureStart(Procedure::kBuild);
     LeastSquareOptimize opt;
     opt.set_cur_tf(cur_tf);
-    auto t1 = GetTime();
     auto next_map = source_map.PseudoTransformCells(opt.cur_tf(), true);
 
     OutlierRejection orj;
@@ -801,17 +811,15 @@ Eigen::Affine2d SNDTMDMatch2(const NDTMap &target_map,
       opt.AddResidualBlock(residuals[indices[i]]);
       params._corres.back().push_back(corres[i]);
     }
+    params._usedtime.ProcedureFinish();
 
-    auto t2 = GetTime();
-    params._usedtime.build += GetDiffTime(t1, t2);
-
+    params._usedtime.ProcedureStart(Procedure::kOptimize);
     opt.Optimize(params);
+    params._usedtime.ProcedureFinish();
     opt.CheckConverge(params);
     cur_tf = opt.cur_tf();
   }
-  auto t2 = GetTime();
-  params._usedtime.others =
-      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
+  params._usedtime.Finish();
   return cur_tf;
 }
 
@@ -819,14 +827,13 @@ Eigen::Affine2d SNDTMatch2(const NDTMap &target_map,
                            const NDTMap &source_map,
                            D2DNDTParameters &params,
                            const Eigen::Affine2d &guess_tf) {
-  auto t1 = GetTime();
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
 
   auto cur_tf = guess_tf;
   while (params._converge == Converge::kNotConverge) {
+    params._usedtime.ProcedureStart(Procedure::kBuild);
     GeneralOptimize opt;
     opt.set_cur_tf(cur_tf);
-    auto t1 = GetTime();
     auto next_map = source_map.PseudoTransformCells(opt.cur_tf(), true);
 
     OutlierRejection orj;
@@ -866,18 +873,17 @@ Eigen::Affine2d SNDTMatch2(const NDTMap &target_map,
       params._corres.back().push_back(corres[i]);
     }
 
-    opt.BuildProblem(
-        SNDTCostFunctor2::Create(params.d2, ups2, cps2, unps2, uqs2, cqs2, unqs2));
-    auto t2 = GetTime();
-    params._usedtime.build += GetDiffTime(t1, t2);
+    opt.BuildProblem(SNDTCostFunctor2::Create(params.d2, ups2, cps2, unps2,
+                                              uqs2, cqs2, unqs2));
+    params._usedtime.ProcedureFinish();
 
+    params._usedtime.ProcedureStart(Procedure::kOptimize);
     opt.Optimize(params);
+    params._usedtime.ProcedureFinish();
     opt.CheckConverge(params);
     cur_tf = opt.cur_tf();
   }
-  auto t2 = GetTime();
-  params._usedtime.others =
-      GetDiffTime(t1, t2) - params._usedtime.optimize - params._usedtime.build;
+  params._usedtime.Finish();
   return cur_tf;
 }
 

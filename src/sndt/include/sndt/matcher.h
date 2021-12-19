@@ -25,23 +25,63 @@ enum class Converge {
   kBounce
 };
 
-struct UsedTime {
-  UsedTime() : normal(0), ndt(0), build(0), optimize(0), others(0) {}
-  int total() const { return normal + ndt + build + optimize + others; }
-  UsedTime operator+(const UsedTime &a) const {
-    UsedTime ret;
-    ret.normal = normal + a.normal;
-    ret.ndt = ndt + a.ndt;
-    ret.build = build + a.build;
-    ret.optimize = optimize + a.optimize;
-    ret.others = others + a.others;
-    return ret;
+enum class Procedure { kNormal, kNDT, kBuild, kOptimize };
+
+class UsedTime {
+  typedef std::chrono::steady_clock::time_point TP;
+  enum State { kInit, kStart, kSubStart, kSubFinish, kFinish };
+
+ public:
+  UsedTime()
+      : state_(kInit),
+        normal_(0),
+        ndt_(0),
+        build_(0),
+        optimize_(0),
+        others_(0),
+        total_(0) {}
+
+  UsedTime &operator+=(const UsedTime &rhs) {
+    normal_ += rhs.normal();
+    ndt_ += rhs.ndt();
+    build_ += rhs.build();
+    optimize_ += rhs.optimize();
+    others_ += rhs.others();
+    total_ += rhs.total();
+    return *this;
   }
-  int normal;
-  int ndt;
-  int build;
-  int optimize;
-  int others;
+
+  const UsedTime operator+(const UsedTime &rhs) {
+    return UsedTime(*this) += rhs;
+  }
+
+  void Start();
+  void ProcedureStart(Procedure procedure);
+  void ProcedureFinish();
+  void Finish();
+  void Show() {
+    std::cout << "nm: " << normal_ << ", ndt: " << ndt_ << ", bud: " << build_
+              << ", opt: " << optimize_ << ", oth: " << others_
+              << ", ttl: " << total_ << std::endl;
+  }
+
+  int normal() const { return normal_; }
+  int ndt() const { return ndt_; }
+  int build() const { return build_; }
+  int optimize() const { return optimize_; }
+  int others() const { return others_; }
+  int total() const { return total_; }
+
+ private:
+  State state_;
+  Procedure current_procedure_;
+  TP start_, end_, current_start_, current_end_;
+  int normal_;
+  int ndt_;
+  int build_;
+  int optimize_;
+  int others_;
+  int total_;
 };
 
 // Variables started with "_" are output parameters
@@ -60,7 +100,7 @@ struct CommonParameters {
     threshold = 0.0001;
     verbose = false;
     inspect = true;
-    save_costs = true;
+    save_costs = false;
     reject = false;
   }
 
@@ -92,7 +132,8 @@ struct CommonParameters {
 
   /**< Iteration, (Before, After), works when save_costs is true */
   std::vector<std::pair<double, double>> _all_costs;
-  /**< Iteration, Correspondence, (Before, After), works when save_costs is true */
+  /**< Iteration, Correspondence, (Before, After), works when save_costs is true
+   */
   std::vector<std::vector<std::pair<double, double>>> _costs;
   /**< Iteration, Inneriteration, Solution, works when inspect is true */
   std::vector<std::vector<Eigen::Affine2d>> _sols;

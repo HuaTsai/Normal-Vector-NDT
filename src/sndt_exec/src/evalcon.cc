@@ -2,12 +2,10 @@
 #include <ros/ros.h>
 #include <rosbag/bag.h>
 #include <sndt/matcher.h>
+#include <sndt_exec/wrapper.h>
 #include <tqdm/tqdm.h>
 
 #include <boost/program_options.hpp>
-#include <sndt_exec/wrapper.h>
-
-#define LIDAR
 
 using namespace std;
 using namespace Eigen;
