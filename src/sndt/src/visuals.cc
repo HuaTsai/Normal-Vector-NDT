@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2021
  *
  */
+#include <nav_msgs/OccupancyGrid.h>
 #include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
 #include <sndt/helpers.h>
@@ -487,8 +488,8 @@ MarkerArray MarkerArrayOfCorres(
                                   tcell->GetSkewRad(), Color::kRed));
     ms.push_back(MarkerOfEllipse(tcell->GetPointMean(), tcell->GetPointCov(),
                                  Color::kRed));
-    ms.push_back(MarkerOfLines({scell->GetCenter(), tcell->GetCenter()},
-                               Color::kBlack));
+    ms.push_back(
+        MarkerOfLines({scell->GetCenter(), tcell->GetCenter()}, Color::kBlack));
   }
   return JoinMarkers(ms);
 }
@@ -549,5 +550,16 @@ MarkerArray MarkerArrayOfSensor(const std::vector<Eigen::Affine2d> &affs) {
     m.scale.z = 0.5;
     ret.markers.push_back(m);
   }
+  return ret;
+}
+
+// TODO: Finish this complicated function
+nav_msgs::OccupancyGrid OccupancyGridOfNDTMap(const SNDTMap &map) {
+  nav_msgs::OccupancyGrid ret;
+  ret.info.map_load_time = ros::Time(0);
+  ret.info.width = ret.info.height;
+  ret.info.resolution = 1;
+  double cell_size = map.GetCellSize();
+  for (auto cell : map) {}
   return ret;
 }

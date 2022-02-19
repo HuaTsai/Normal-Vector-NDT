@@ -91,7 +91,7 @@ NDTMap MakeNDTMap(
     const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>>
         &data,
     NDTParameters &params) {
-  params._usedtime.ProcedureStart(Procedure::kNDT);
+  params._usedtime.ProcedureStart(UsedTime::Procedure::kNDT);
   double cell_size = params.cell_size;
   double rvar = params.r_variance;
   double tvar = params.t_variance;
@@ -122,7 +122,7 @@ SNDTMap MakeSNDTMap(
     const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>>
         &data,
     SNDTParameters &params) {
-  params._usedtime.ProcedureStart(Procedure::kNDT);
+  params._usedtime.ProcedureStart(UsedTime::Procedure::kNDT);
   std::vector<Eigen::Vector2d> points;
   std::vector<Eigen::Matrix2d> point_covs;
 
@@ -141,11 +141,11 @@ SNDTMap MakeSNDTMap(
   }
   params._usedtime.ProcedureFinish();
 
-  params._usedtime.ProcedureStart(Procedure::kNormal);
+  params._usedtime.ProcedureStart(UsedTime::Procedure::kNormal);
   auto normals = ComputeNormals(points, params.radius);
   params._usedtime.ProcedureFinish();
 
-  params._usedtime.ProcedureStart(Procedure::kNDT);
+  params._usedtime.ProcedureStart(UsedTime::Procedure::kNDT);
   SNDTMap ret(params.cell_size);
   ret.LoadPointsWithCovariancesAndNormals(points, point_covs, normals);
   params._usedtime.ProcedureFinish();

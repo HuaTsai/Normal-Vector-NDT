@@ -33,9 +33,21 @@ catkin_package(
   CATKIN_DEPENDS
     message_runtime
     tf2_eigen
+  LIBRARIES
+    ${PROJECT_NAME}
 )
 
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
+
+set(ALL_SRCS
+  src/eigen_utils.cc
+  src/geometry_utils.cc
+  src/other_utils.cc
+)
+
+add_library(${PROJECT_NAME} ${ALL_SRCS})
+
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})

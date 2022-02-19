@@ -12,6 +12,7 @@
 #include <sndt/ndt_map.h>
 #include <sndt/sndt_map.h>
 #include <visualization_msgs/MarkerArray.h>
+#include <nav_msgs/OccupancyGrid.h>
 
 using visualization_msgs::Marker;
 using visualization_msgs::MarkerArray;
@@ -287,3 +288,5 @@ MarkerArray MarkerArrayOfCorres(
     const NDTMap &target_map,
     const Eigen::Affine2d &aff,
     const std::vector<std::pair<int, int>> &corres);
+
+nav_msgs::OccupancyGrid OccupancyGridOfNDTMap(const SNDTMap &map);

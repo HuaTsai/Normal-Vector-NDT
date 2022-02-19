@@ -41,6 +41,8 @@ set(ALL_SRCS
   src/sndt_map.cc
   src/matcher.cc
   src/visuals.cc
+  src/outlier_reject.cc
+  src/used_time.cc
 )
 
 set(ALLLIBS

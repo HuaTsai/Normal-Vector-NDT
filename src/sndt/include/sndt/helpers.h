@@ -257,13 +257,15 @@ class RandomTransformGenerator2D {
   std::vector<Eigen::Affine2d> Generate(int sizes) {
     std::vector<Eigen::Affine2d> ret;
     std::uniform_real_distribution<> urd(-M_PI, M_PI);
-    std::uniform_real_distribution<> urd2(-M_PI / 4, M_PI / 4);
+    // std::uniform_real_distribution<> urd2(-M_PI / 4, M_PI / 4);
+    std::uniform_real_distribution<> urd2(-10. * M_PI / 180.,
+                                          10. * M_PI / 180.);
     for (int i = 0; i < sizes; ++i) {
       double angle = urd(*dre_);
       double x = radius_ * cos(angle);
       double y = radius_ * sin(angle);
-      // double t = urd2(*dre_);
-      double t = 0;
+      double t = urd2(*dre_);
+      // double t = 0;
       ret.push_back(Eigen::Translation2d(x, y) * Eigen::Rotation2Dd(t));
     }
     return ret;
@@ -272,6 +274,45 @@ class RandomTransformGenerator2D {
  private:
   std::shared_ptr<std::default_random_engine> dre_;
   double radius_;
+};
+
+class RandomTranslationGenerator {
+ public:
+  explicit RandomTranslationGenerator(double radius)
+      : dre_(new std::default_random_engine()), radius_(radius) {}
+  std::vector<Eigen::Affine2d> Generate(int sizes) {
+    std::vector<Eigen::Affine2d> ret;
+    std::uniform_real_distribution<> urd(-M_PI, M_PI);
+    for (int i = 0; i < sizes; ++i) {
+      double angle = urd(*dre_);
+      double x = radius_ * cos(angle);
+      double y = radius_ * sin(angle);
+      ret.push_back(Eigen::Affine2d(Eigen::Translation2d(x, y)));
+    }
+    return ret;
+  }
+
+ private:
+  std::shared_ptr<std::default_random_engine> dre_;
+  double radius_;
+};
+
+class RandomRotationGenerator {
+ public:
+  explicit RandomRotationGenerator(double angle_deg)
+      : dre_(new std::default_random_engine()),
+        angle_rad_(angle_deg * M_PI / 180.) {}
+  std::vector<Eigen::Affine2d> Generate(int sizes) {
+    std::vector<Eigen::Affine2d> ret;
+    std::uniform_real_distribution<> urd(-angle_rad_, angle_rad_);
+    for (int i = 0; i < sizes; ++i)
+      ret.push_back(Eigen::Affine2d(Eigen::Rotation2Dd(urd(*dre_))));
+    return ret;
+  }
+
+ private:
+  std::shared_ptr<std::default_random_engine> dre_;
+  double angle_rad_;
 };
 
 class RandomTransformGenerator {
@@ -302,7 +343,7 @@ class RandomTransformGenerator {
 
 class UniformTransformGenerator {
  public:
-  UniformTransformGenerator(double radius, double angle_deg)
+  explicit UniformTransformGenerator(double radius, double angle_deg)
       : radius_(radius), angle_rad_(angle_deg * M_PI / 180.) {}
   std::vector<Eigen::Affine2d> Generate(int sizes) {
     std::vector<Eigen::Affine2d> ret;

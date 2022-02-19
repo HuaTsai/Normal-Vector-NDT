@@ -36,3 +36,6 @@ target_link_libraries(seetfs ${catkin_LIBRARIES})
 
 add_executable(seelidar src/seelidar.cc)
 target_link_libraries(seelidar ${catkin_LIBRARIES})
+
+add_executable(occtest src/occtest.cc)
+target_link_libraries(occtest ${catkin_LIBRARIES})

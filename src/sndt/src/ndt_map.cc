@@ -146,7 +146,7 @@ std::string NDTMap::ToString() const {
   std::string ret(c);
   for (size_t i = 0; i < cells_.size(); ++i) {
     auto idx = GetIndexForPoint(cells_[i]->GetCenter());
-    char s[20];
+    char s[30];
     sprintf(s, "[#%ld, (%d, %d)] ", i, idx(0), idx(1));
     ret += std::string(s) + cells_[i]->ToString();
   }

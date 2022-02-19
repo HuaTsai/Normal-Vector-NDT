@@ -22,8 +22,6 @@ Affine2d GetBenchMark(const nav_msgs::Path &gtpath,
   return ret;
 }
 
-// TODO: Fix devel/lib/sndt_exec/evalsingle -d log35-1 -v 1 -m 2 -n 289 forword
-// and back problem
 int main(int argc, char **argv) {
   Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
                   Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
@@ -31,7 +29,7 @@ int main(int argc, char **argv) {
   Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
                   Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
-  int n, m;
+  int n, f;
   double cell_size, voxel, radius = 1.5;
   string data;
   po::options_description desc("Allowed options");
@@ -42,7 +40,7 @@ int main(int argc, char **argv) {
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("voxel,v", po::value<double>(&voxel)->default_value(0), "Downsample voxel")
       ("n,n", po::value<int>(&n)->required(), "To where")
-      ("m,m", po::value<int>(&m)->required(), "Method");
+      ("f,f", po::value<int>(&f)->default_value(1), "Frames");
   // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -68,71 +66,85 @@ int main(int argc, char **argv) {
   auto pub4 = nh.advertise<MarkerArray>("markers4", 0, true);
 
   auto tgt = PCMsgTo2D(vpc[n], voxel);
-  auto src = PCMsgTo2D(vpc[n + 1], voxel);
-  auto Tgt = GetBenchMark(gtpath, vpc[n].header.stamp, vpc[n + 1].header.stamp);
+  auto src = PCMsgTo2D(vpc[n + f], voxel);
+  auto Tgt = GetBenchMark(gtpath, vpc[n].header.stamp, vpc[n + f].header.stamp);
+  cout << "Interval: " << (vpc[n + f].header.stamp - vpc[n].header.stamp).toSec() << endl;
+  cout << "Bench Mark: " << XYTDegreeFromAffine2d(Tgt).transpose() << endl;
 
   vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, aff2}};
   vector<pair<vector<Vector2d>, Affine2d>> datas{{src, aff2}};
 
-  Affine2d T;
+  ICPParameters params1;
+  params1.reject = true;
+  params1._usedtime.Start();
+  auto tgt1 = MakePoints(datat, params1);
+  auto src1 = MakePoints(datas, params1);
+  auto T1 = ICPMatch(tgt1, src1, params1);
+  cout << "m1: " << params1._ceres_iteration << ", ";
+  cout << TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T1).transpose() << endl;
 
-  if (m == 1) {
-    ICPParameters params1;
-    params1.reject = true;
-    params1._usedtime.Start();
-    auto tgt1 = MakePoints(datat, params1);
-    auto src1 = MakePoints(datas, params1);
-    T = ICPMatch(tgt1, src1, params1);
-  } else if (m == 2) {
-    Pt2plICPParameters params2;
-    params2.reject = true;
-    params2.inspect = true;
-    params2.max_iterations = 20;
-    params2._usedtime.Start();
-    auto tgt2 = MakePoints(datat, params2);
-    auto src2 = MakePoints(datas, params2);
-    T = Pt2plICPMatch(tgt2, src2, params2);
-    cout << params2._ceres_iteration << endl;
-    for (auto sols : params2._sols) {
-      for (auto sol : sols) {
-        cout << XYTDegreeFromAffine2d(sol).transpose() << endl;
-      }
-      cout << endl;
-    }
-  } else if (m == 3) {
-    SICPParameters params3;
-    params3.radius = radius;
-    params3.reject = true;
-    params3._usedtime.Start();
-    auto tgt3 = MakePoints(datat, params3);
-    auto src3 = MakePoints(datas, params3);
-    T = SICPMatch(tgt3, src3, params3);
-  } else if (m == 5) {
-    D2DNDTParameters params5;
-    params5.cell_size = cell_size;
-    params5.r_variance = params5.t_variance = 0;
-    params5.d2 = 0.05;
-    params5._usedtime.Start();
-    auto tgt5 = MakeNDTMap(datat, params5);
-    auto src5 = MakeNDTMap(datas, params5);
-    T = D2DNDTMatch(tgt5, src5, params5);
-  } else if (m == 7) {
-    D2DNDTParameters params7;
-    params7.cell_size = cell_size;
-    params7.r_variance = params7.t_variance = 0;
-    params7.d2 = 0.05;
-    params7._usedtime.Start();
-    auto tgt7 = MakeNDTMap(datat, params7);
-    auto src7 = MakeNDTMap(datas, params7);
-    T = SNDTMatch2(tgt7, src7, params7);
-  }
+  Pt2plICPParameters params2;
+  params2.reject = true;
+  params2._usedtime.Start();
+  auto tgt2 = MakePoints(datat, params2);
+  auto src2 = MakePoints(datas, params2);
+  auto T2 = Pt2plICPMatch(tgt2, src2, params2);
+  cout << "m2: " << params2._ceres_iteration << ", ";
+  cout << TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T2).transpose() << endl;
 
-  cout << XYTDegreeFromAffine2d(Tgt.inverse() * T).transpose() << endl;
+  SICPParameters params3;
+  params3.radius = radius;
+  params3.reject = true;
+  params3._usedtime.Start();
+  auto tgt3 = MakePoints(datat, params3);
+  auto src3 = MakePoints(datas, params3);
+  auto T3 = SICPMatch(tgt3, src3, params3);
+  cout << "m3: " << params3._ceres_iteration << ", ";
+  cout << TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T3).transpose() << endl;
+
+  D2DNDTParameters params5;
+  params5.cell_size = cell_size;
+  params5.r_variance = params5.t_variance = 0;
+  params5.d2 = 0.05;
+  params5._usedtime.Start();
+  auto tgt5 = MakeNDTMap(datat, params5);
+  auto src5 = MakeNDTMap(datas, params5);
+  auto T5 = D2DNDTMatch(tgt5, src5, params5);
+  cout << "m5: " << params5._ceres_iteration << ", ";
+  cout << TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T5).transpose() << endl;
+
+  D2DNDTParameters params7;
+  params7.cell_size = cell_size;
+  params7.r_variance = params7.t_variance = 0;
+  params7.d2 = 0.05;
+  params7.inspect = true;
+  params7._usedtime.Start();
+  auto tgt7 = MakeNDTMap(datat, params7);
+  auto src7 = MakeNDTMap(datas, params7);
+  cout << tgt7.ToString() << endl;
+  cout << src7.ToString() << endl;
+  auto T7 = SNDTMatch2(tgt7, src7, params7);
+  params5._usedtime.Show();
+  params7._usedtime.Show();
+  // for (auto sols : params7._sols) {
+  //   for (auto sol : sols) {
+  //     cout << XYTDegreeFromAffine2d(sol).transpose() << endl;
+  //   }
+  //   cout << endl;
+  // }
+  cout << endl;
+  cout << "m7: " << params7._ceres_iteration << ", ";
+  cout << TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T7).transpose() << endl;
+  for (int i = 0; i < 10; ++i) cout << params5._corres[0][i].first << " - " << params5._corres[0][i].second << ", ";
+  cout << endl;
+  for (int i = 0; i < 10; ++i) cout << params7._corres[0][i].first << " - " << params7._corres[0][i].second << ", ";
+  cout << endl << params5._corres[0].size() << " - " << params7._corres[0].size() << endl;
 
   TransformPointsInPlace(tgt, aff2);
   TransformPointsInPlace(src, aff2);
   pubt.publish(MarkerOfPoints(tgt, 0.5, Color::kRed));
-  pubs.publish(MarkerOfPoints(TransformPoints(src, T)));
+  // pubs.publish(MarkerOfPoints(src));
+  pubs.publish(MarkerOfPoints(TransformPoints(src, T7)));
   pubg.publish(MarkerOfPoints(TransformPoints(src, Tgt)));
 
   ros::spin();

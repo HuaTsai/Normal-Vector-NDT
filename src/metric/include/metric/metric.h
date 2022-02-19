@@ -4,6 +4,10 @@
 
 struct Stat {
   explicit Stat(std::vector<double> data) {
+    if (data.empty()) {
+      min = max = median = mean = stdev = rms = 0;
+      return;
+    }
     int n = data.size();
     std::sort(data.begin(), data.end());
     min = data.front();
@@ -18,8 +22,9 @@ struct Stat {
     rms = std::sqrt(sum / n);
   }
   void PrintResult() {
-    std::printf("min: %f, max: %f, med: %f, mean: %f, std: %f, rms: %f\n", min,
-                max, median, mean, stdev, rms);
+    std::printf(
+        "min: %.2f, max: %.2f, med: %.2f, mean: %.2f, std: %.2f, rms: %.2f\n",
+        min, max, median, mean, stdev, rms);
   }
   double min;
   double max;
@@ -81,4 +86,3 @@ class TimeEvaluation {
  public:
  private:
 };
-

@@ -6,6 +6,7 @@
 #include <tqdm/tqdm.h>
 
 #include <boost/program_options.hpp>
+#include <sndt/visuals.h>
 
 using namespace std;
 using namespace Eigen;
@@ -83,6 +84,8 @@ int main() {
   cout << params3._ceres_iteration << endl;
   params3._usedtime.Show();
   cout << T3.matrix() << endl;
+
+  // TODO: print to rviz
 
   // if (ms.count(5)) {
   //   D2DNDTParameters params5;
