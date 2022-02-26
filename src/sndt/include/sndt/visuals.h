@@ -14,6 +14,7 @@
 #include <visualization_msgs/MarkerArray.h>
 #include <nav_msgs/OccupancyGrid.h>
 
+// Note: When include this header, Marker and MarkerArray become accessible.
 using visualization_msgs::Marker;
 using visualization_msgs::MarkerArray;
 

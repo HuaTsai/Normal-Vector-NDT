@@ -134,27 +134,6 @@ inline Eigen::Matrix2d ComputeCov(const std::vector<Eigen::Vector2d> &points,
 }
 
 /**
- * @brief Compute eigenvalues and eigenvectors from covariance
- *
- * @param[in] covariance Input covariance
- * @param[out] evals Output eigenvalues
- * @param[out] evecs Output eigenvectors
- * @details The function computeDirect() uses closed-form algorithm to perform
- * eigenvalue decomposition for a symmetric real matrix. This method is
- * significantly faster than the QR iterative algorithm. Besides, evals(0) will
- * be smaller than or equal to evals(1).
- * @see Eigen::SelfAdjointEigenSolver and Catalogue of dense decompositions
- */
-inline void ComputeEvalEvec(const Eigen::Matrix2d &covariance,
-                            Eigen::Vector2d &evals,
-                            Eigen::Matrix2d &evecs) {
-  Eigen::SelfAdjointEigenSolver<Eigen::Matrix2d> evd;
-  evd.computeDirect(covariance);
-  evals = evd.eigenvalues();
-  evecs = evd.eigenvectors();
-}
-
-/**
  * @brief Remove points that contain NaN or Inf
  *
  * @param points Input points

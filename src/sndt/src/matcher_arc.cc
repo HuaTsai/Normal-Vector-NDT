@@ -43,8 +43,7 @@ Eigen::Affine2d Pt2plICPMatch(const std::vector<Eigen::Vector2d> &target_points,
     params._usedtime.ProcedureFinish();
 
     opt.Optimize(params);
-    opt.CheckConverge2(params, tfs);
-    // opt.CheckConverge(params);
+    opt.CheckConverge(params, tfs);
     cur_tf = opt.cur_tf();
     tfs.push_back(cur_tf);
   }
@@ -59,6 +58,8 @@ Eigen::Affine2d P2DNDTMDMatch(const NDTMap &target_map,
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
 
   auto cur_tf = guess_tf;
+  std::vector<Eigen::Affine2d> tfs;
+  tfs.push_back(cur_tf);
   while (params._converge == Converge::kNotConverge) {
     params._usedtime.ProcedureStart(UsedTime::Procedure::kBuild);
     LeastSquareOptimize opt;
@@ -94,8 +95,9 @@ Eigen::Affine2d P2DNDTMDMatch(const NDTMap &target_map,
     params._usedtime.ProcedureStart(UsedTime::Procedure::kOptimize);
     opt.Optimize(params);
     params._usedtime.ProcedureFinish();
-    opt.CheckConverge(params);
+    opt.CheckConverge(params, tfs);
     cur_tf = opt.cur_tf();
+    tfs.push_back(cur_tf);
   }
   params._usedtime.Finish();
   return cur_tf;
@@ -108,6 +110,8 @@ Eigen::Affine2d P2DNDTMatch(const NDTMap &target_map,
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
 
   auto cur_tf = guess_tf;
+  std::vector<Eigen::Affine2d> tfs;
+  tfs.push_back(cur_tf);
   while (params._converge == Converge::kNotConverge) {
     params._usedtime.ProcedureStart(UsedTime::Procedure::kBuild);
     GeneralOptimize opt;
@@ -150,8 +154,9 @@ Eigen::Affine2d P2DNDTMatch(const NDTMap &target_map,
     params._usedtime.ProcedureStart(UsedTime::Procedure::kOptimize);
     opt.Optimize(params);
     params._usedtime.ProcedureFinish();
-    opt.CheckConverge(params);
+    opt.CheckConverge(params, tfs);
     cur_tf = opt.cur_tf();
+    tfs.push_back(cur_tf);
   }
   params._usedtime.Finish();
   return cur_tf;
@@ -164,6 +169,8 @@ Eigen::Affine2d D2DNDTMDMatch(const NDTMap &target_map,
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
 
   auto cur_tf = guess_tf;
+  std::vector<Eigen::Affine2d> tfs;
+  tfs.push_back(cur_tf);
   while (params._converge == Converge::kNotConverge) {
     params._usedtime.ProcedureStart(UsedTime::Procedure::kBuild);
     LeastSquareOptimize opt;
@@ -201,8 +208,9 @@ Eigen::Affine2d D2DNDTMDMatch(const NDTMap &target_map,
     params._usedtime.ProcedureStart(UsedTime::Procedure::kOptimize);
     opt.Optimize(params);
     params._usedtime.ProcedureFinish();
-    opt.CheckConverge(params);
+    opt.CheckConverge(params, tfs);
     cur_tf = opt.cur_tf();
+    tfs.push_back(cur_tf);
   }
   params._usedtime.Finish();
   return cur_tf;
@@ -215,6 +223,8 @@ Eigen::Affine2d SNDTMDMatch(const SNDTMap &target_map,
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
 
   auto cur_tf = guess_tf;
+  std::vector<Eigen::Affine2d> tfs;
+  tfs.push_back(cur_tf);
   while (params._converge == Converge::kNotConverge) {
     params._usedtime.ProcedureStart(UsedTime::Procedure::kBuild);
     LeastSquareOptimize opt;
@@ -257,8 +267,9 @@ Eigen::Affine2d SNDTMDMatch(const SNDTMap &target_map,
     params._usedtime.ProcedureStart(UsedTime::Procedure::kOptimize);
     opt.Optimize(params);
     params._usedtime.ProcedureFinish();
-    opt.CheckConverge(params);
+    opt.CheckConverge(params, tfs);
     cur_tf = opt.cur_tf();
+    tfs.push_back(cur_tf);
   }
   params._usedtime.Finish();
   return cur_tf;
@@ -271,6 +282,8 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map,
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
 
   auto cur_tf = guess_tf;
+  std::vector<Eigen::Affine2d> tfs;
+  tfs.push_back(cur_tf);
   while (params._converge == Converge::kNotConverge) {
     params._usedtime.ProcedureStart(UsedTime::Procedure::kBuild);
     GeneralOptimize opt;
@@ -325,8 +338,9 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map,
     params._usedtime.ProcedureStart(UsedTime::Procedure::kOptimize);
     opt.Optimize(params);
     params._usedtime.ProcedureFinish();
-    opt.CheckConverge(params);
+    opt.CheckConverge(params, tfs);
     cur_tf = opt.cur_tf();
+    tfs.push_back(cur_tf);
   }
   params._usedtime.Finish();
   return cur_tf;
@@ -339,6 +353,8 @@ Eigen::Affine2d SNDTMDMatch2(const NDTMap &target_map,
   auto kd = MakeKDTree(target_map.GetPointsWithGaussianCell());
 
   auto cur_tf = guess_tf;
+  std::vector<Eigen::Affine2d> tfs;
+  tfs.push_back(cur_tf);
   while (params._converge == Converge::kNotConverge) {
     params._usedtime.ProcedureStart(UsedTime::Procedure::kBuild);
     LeastSquareOptimize opt;
@@ -378,83 +394,10 @@ Eigen::Affine2d SNDTMDMatch2(const NDTMap &target_map,
     params._usedtime.ProcedureStart(UsedTime::Procedure::kOptimize);
     opt.Optimize(params);
     params._usedtime.ProcedureFinish();
-    opt.CheckConverge(params);
+    opt.CheckConverge(params, tfs);
     cur_tf = opt.cur_tf();
+    tfs.push_back(cur_tf);
   }
   params._usedtime.Finish();
-  return cur_tf;
-}
-
-Eigen::Affine2d SNDTCellMatch(const SNDTCell *target_cell,
-                              const SNDTCell *source_cell,
-                              SNDTParameters &params,
-                              const Eigen::Affine2d &guess_tf,
-                              int method) {
-  auto cellq = target_cell;
-  auto cur_tf = guess_tf;
-  while (params._converge == Converge::kNotConverge) {
-    Eigen::Matrix2d R = cur_tf.rotation();
-    Eigen::Vector2d t = cur_tf.translation();
-    double skew_rad = Eigen::Rotation2Dd(R).angle();
-    SNDTCell *cellp = new SNDTCell();
-    cellp->SetN(source_cell->GetN());
-    cellp->SetPHasGaussian(source_cell->GetPHasGaussian());
-    cellp->SetNHasGaussian(source_cell->GetNHasGaussian());
-    cellp->SetSkewRad(skew_rad);
-    cellp->SetCenter(R * source_cell->GetCenter() + t);
-    cellp->SetSize(source_cell->GetSize());
-    cellp->SetPointMean(R * source_cell->GetPointMean() + t);
-    if (source_cell->GetPHasGaussian()) {
-      cellp->SetPointCov(R * source_cell->GetPointCov() * R.transpose());
-      cellp->SetPointEvals(source_cell->GetPointEvals());
-      cellp->SetPointEvecs(R * source_cell->GetPointEvecs());
-    }
-    cellp->SetNormalMean(R * source_cell->GetNormalMean());
-    if (source_cell->GetNHasGaussian()) {
-      cellp->SetNormalCov(R * source_cell->GetNormalCov() * R.transpose());
-      cellp->SetNormalEvals(source_cell->GetNormalEvals());
-      cellp->SetNormalEvecs(R * source_cell->GetNormalEvecs());
-    }
-    for (auto pt : source_cell->GetPoints()) {
-      if (pt.allFinite()) pt = R * pt + t;
-      cellp->AddPoint(pt);
-    }
-    for (auto nm : source_cell->GetNormals()) {
-      if (nm.allFinite()) nm = R * nm;
-      cellp->AddNormal(nm);
-    }
-
-    LeastSquareOptimize opt;
-    opt.set_cur_tf(cur_tf);
-    if (!cellp->HasGaussian() || !cellq->HasGaussian()) continue;
-    auto up = cellp->GetPointMean();
-    auto cp = cellp->GetPointCov();
-    auto unp = cellp->GetNormalMean();
-    auto cnp = cellp->GetNormalCov();
-    auto uq = cellq->GetPointMean();
-    auto cq = cellq->GetPointCov();
-    auto unq = cellq->GetNormalMean();
-    auto cnq = cellq->GetNormalCov();
-    if (method == 1)
-      opt.AddResidualBlock(ICPCostFunctor::Create(up, uq));
-    else if (method == 2)
-      opt.AddResidualBlock(Pt2plICPCostFunctor::Create(up, uq, unq));
-    else if (method == 3)
-      opt.AddResidualBlock(SICPCostFunctor::Create(up, unp, uq, unq));
-    else if (method == 4)
-      opt.AddResidualBlock(P2DNDTMDCostFunctor::Create(up, uq, cq));
-    else if (method == 5)
-      opt.AddResidualBlock(D2DNDTMDCostFunctor::Create(up, cp, uq, cq));
-    else if (method == 6)
-      opt.AddResidualBlock(
-          SNDTMDCostFunctor::Create(up, cp, unp, cnp, uq, cq, unq, cnq));
-    else if (method == 7)
-      opt.AddResidualBlock(
-          SNDTMDCostFunctor2::Create(up, cp, unp, uq, cq, unq));
-    opt.Optimize(params);
-    opt.CheckConverge(params);
-    cur_tf = opt.cur_tf();
-    delete cellp;
-  }
   return cur_tf;
 }

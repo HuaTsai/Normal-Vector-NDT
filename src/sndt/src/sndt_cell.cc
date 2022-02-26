@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2021
  *
  */
+#include <common/eigen_utils.h>
 #include <sndt/helpers.h>
 #include <sndt/sndt_cell.h>
 

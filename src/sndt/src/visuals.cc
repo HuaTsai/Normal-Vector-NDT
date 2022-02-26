@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2021
  *
  */
+#include <common/eigen_utils.h>
 #include <nav_msgs/OccupancyGrid.h>
 #include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
@@ -15,9 +16,6 @@
 #include <sndt/visuals.h>
 #include <tf2_eigen/tf2_eigen.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-
-using visualization_msgs::Marker;
-using visualization_msgs::MarkerArray;
 
 /**
  * @brief Get current ros time. If it throws, catch it and set to @c
@@ -560,6 +558,7 @@ nav_msgs::OccupancyGrid OccupancyGridOfNDTMap(const SNDTMap &map) {
   ret.info.width = ret.info.height;
   ret.info.resolution = 1;
   double cell_size = map.GetCellSize();
-  for (auto cell : map) {}
+  for (auto cell : map) {
+  }
   return ret;
 }

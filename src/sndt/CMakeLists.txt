@@ -43,6 +43,7 @@ set(ALL_SRCS
   src/visuals.cc
   src/outlier_reject.cc
   src/used_time.cc
+  src/optimizer.cc
 )
 
 set(ALLLIBS

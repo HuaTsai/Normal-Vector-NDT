@@ -1,3 +1,33 @@
+class Pt2plICPCostFunctor {
+ public:
+  Pt2plICPCostFunctor(const Eigen::Vector2d &p,
+                      const Eigen::Vector2d &q,
+                      const Eigen::Vector2d &nq)
+      : p_(p), q_(q), nq_(nq) {}
+  template <typename T>
+  bool operator()(const T *const xyt, T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
+
+    Eigen::Matrix<T, 2, 1> p = R * p_.cast<T>() + t;
+    Eigen::Matrix<T, 2, 1> q = q_.cast<T>();
+    Eigen::Matrix<T, 2, 1> nq = nq_.cast<T>();
+
+    *e = (p - q).dot(nq);  // Unit is meter since |nq| = 1
+    return true;
+  }
+
+  static ceres::CostFunction *Create(const Eigen::Vector2d &p,
+                                     const Eigen::Vector2d &q,
+                                     const Eigen::Vector2d &nq) {
+    return new ceres::AutoDiffCostFunction<Pt2plICPCostFunctor, 1, 3>(
+        new Pt2plICPCostFunctor(p, q, nq));
+  }
+
+ private:
+  const Eigen::Vector2d p_, q_, nq_;
+};
+
 class P2DNDTMDCostFunctor {
  public:
   P2DNDTMDCostFunctor(const Eigen::Vector2d &p,
@@ -23,15 +53,6 @@ class P2DNDTMDCostFunctor {
                                      const Eigen::Matrix2d &cq) {
     return new ceres::AutoDiffCostFunction<P2DNDTMDCostFunctor, 1, 3>(
         new P2DNDTMDCostFunctor(p, uq, cq));
-  }
-
-  static double Cost(const Eigen::Vector2d &p,
-                     const Eigen::Vector2d &uq,
-                     const Eigen::Matrix2d &cq,
-                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    Eigen::Vector2d pq = T * p - uq;
-    Eigen::Matrix2d cinv = cq.inverse();
-    return 0.5 * pq.dot(cinv * pq);
   }
 
  private:
@@ -71,20 +92,6 @@ class P2DNDTCostFunctor {
         new P2DNDTCostFunctor(d2, ps, qs, cqs));
   }
 
-  static double Cost(double d2,
-                     const std::vector<Eigen::Vector2d> &ps,
-                     const std::vector<Eigen::Vector2d> &qs,
-                     const std::vector<Eigen::Matrix2d> &cqs,
-                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    double cost = 0;
-    for (size_t i = 0; i < ps.size(); ++i) {
-      Eigen::Vector2d pq = T * ps[i] - qs[i];
-      Eigen::Matrix2d cinv = cqs[i].inverse();
-      cost += -ceres::exp(-d2 * (pq.dot(cinv * pq)));
-    }
-    return cost;
-  }
-
  private:
   const double d2_;
   const std::vector<Eigen::Vector2d> ps_, qs_;
@@ -122,17 +129,6 @@ class D2DNDTMDCostFunctor {
                                      const Eigen::Matrix2d &cq) {
     return new ceres::AutoDiffCostFunction<D2DNDTMDCostFunctor, 1, 3>(
         new D2DNDTMDCostFunctor(up, cp, uq, cq));
-  }
-
-  static double Cost(const Eigen::Vector2d &up,
-                     const Eigen::Matrix2d &cp,
-                     const Eigen::Vector2d &uq,
-                     const Eigen::Matrix2d &cq,
-                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    Eigen::Matrix2d R = T.rotation();
-    Eigen::Vector2d pq = T * up - uq;
-    Eigen::Matrix2d cinv = (R * cp * R.transpose() + cq).inverse();
-    return 0.5 * pq.dot(cinv * pq);
   }
 
  private:
@@ -198,26 +194,6 @@ class SNDTMDCostFunctor {
                                      const Eigen::Matrix2d &cnq) {
     return new ceres::AutoDiffCostFunction<SNDTMDCostFunctor, 1, 3>(
         new SNDTMDCostFunctor(up, cp, unp, cnp, uq, cq, unq, cnq));
-  }
-
-  static double Cost(const Eigen::Vector2d &up,
-                     const Eigen::Matrix2d &cp,
-                     const Eigen::Vector2d &unp,
-                     const Eigen::Matrix2d &cnp,
-                     const Eigen::Vector2d &uq,
-                     const Eigen::Matrix2d &cq,
-                     const Eigen::Vector2d &unq,
-                     const Eigen::Matrix2d &cnq,
-                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    Eigen::Matrix2d R = T.rotation();
-    Eigen::Vector2d m1 = T * up - uq;
-    // Eigen::Vector2d unp2 = ((R * unp).dot(unq) > 0) ? unp : -unp;
-    Eigen::Vector2d m2 = R * unp + unq;
-    Eigen::Matrix2d c1 = R * cp * R.transpose() + cq;
-    Eigen::Matrix2d c2 = R * cnp * R.transpose() + cnq;
-    double num = m1.dot(m2) * m1.dot(m2);
-    double den = m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace();
-    return 0.5 * num / den;
   }
 
  private:
@@ -291,31 +267,6 @@ class SNDTCostFunctor {
         new SNDTCostFunctor(d2, ups, cps, unps, cnps, uqs, cqs, unqs, cnqs));
   }
 
-  static double Cost(double d2,
-                     const std::vector<Eigen::Vector2d> &ups,
-                     const std::vector<Eigen::Matrix2d> &cps,
-                     const std::vector<Eigen::Vector2d> &unps,
-                     const std::vector<Eigen::Matrix2d> &cnps,
-                     const std::vector<Eigen::Vector2d> &uqs,
-                     const std::vector<Eigen::Matrix2d> &cqs,
-                     const std::vector<Eigen::Vector2d> &unqs,
-                     const std::vector<Eigen::Matrix2d> &cnqs,
-                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    double cost = 0;
-    Eigen::Matrix2d R = T.rotation();
-    for (size_t i = 0; i < ups.size(); ++i) {
-      Eigen::Vector2d m1 = T * ups[i] - uqs[i];
-      // Eigen::Vector2d unp2 = ((R * unp).dot(unq) > 0) ? unp : -unp;
-      Eigen::Vector2d m2 = R * unps[i] + unqs[i];
-      Eigen::Matrix2d c1 = R * cps[i] * R.transpose() + cqs[i];
-      Eigen::Matrix2d c2 = R * cnps[i] * R.transpose() + cnqs[i];
-      double num2 = m1.dot(m2) * m1.dot(m2);
-      double den2 = m1.dot(c2 * m1) + m2.dot(c1 * m2) + (c1 * c2).trace();
-      cost += -ceres::exp(-d2 * num2 / den2);
-    }
-    return cost;
-  }
-
  private:
   const double d2_;
   const std::vector<Eigen::Vector2d> ups_, unps_, uqs_, unqs_;
@@ -364,22 +315,6 @@ class SNDTMDCostFunctor2 {
                                      const Eigen::Vector2d &unq) {
     return new ceres::AutoDiffCostFunction<SNDTMDCostFunctor2, 1, 3>(
         new SNDTMDCostFunctor2(up, cp, unp, uq, cq, unq));
-  }
-
-  static double Cost(const Eigen::Vector2d &up,
-                     const Eigen::Matrix2d &cp,
-                     const Eigen::Vector2d &unp,
-                     const Eigen::Vector2d &uq,
-                     const Eigen::Matrix2d &cq,
-                     const Eigen::Vector2d &unq,
-                     const Eigen::Affine2d &T = Eigen::Affine2d::Identity()) {
-    Eigen::Matrix2d R = T.rotation();
-    Eigen::Vector2d m1 = T * up - uq;
-    Eigen::Vector2d m2 = R * unp + unq;
-    Eigen::Matrix2d c1 = R * cp * R.transpose() + cq;
-    double num = m1.dot(m2) * m1.dot(m2);
-    double den = m2.dot(c1 * m2);
-    return 0.5 * num / den;
   }
 
  private:

@@ -137,6 +137,15 @@ std::vector<Eigen::Vector2d> TransformNormals(
   return ret;
 }
 
+void ComputeEvalEvec(const Eigen::Matrix2d &covariance,
+                     Eigen::Vector2d &evals,
+                     Eigen::Matrix2d &evecs) {
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix2d> evd;
+  evd.computeDirect(covariance);
+  evals = evd.eigenvalues();
+  evecs = evd.eigenvectors();
+}
+
 Mvn::Mvn(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covariance)
     : mean_(mean), covariance_(covariance) {}
 

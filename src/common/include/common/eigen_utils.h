@@ -55,6 +55,22 @@ void TransformPointsInPlace(std::vector<Eigen::Vector2d> &points,
 std::vector<Eigen::Vector2d> TransformNormals(
     const std::vector<Eigen::Vector2d> &normals, const Eigen::Affine2d &aff);
 
+/**
+ * @brief Compute eigenvalues and eigenvectors from covariance
+ *
+ * @param[in] covariance Input covariance
+ * @param[out] evals Output eigenvalues
+ * @param[out] evecs Output eigenvectors
+ * @details The function computeDirect() uses closed-form algorithm to perform
+ * eigenvalue decomposition for a symmetric real matrix. This method is
+ * significantly faster than the QR iterative algorithm. Besides, evals(0) will
+ * be smaller than or equal to evals(1).
+ * @see Eigen::SelfAdjointEigenSolver and Catalogue of dense decompositions
+ */
+void ComputeEvalEvec(const Eigen::Matrix2d &covariance,
+                     Eigen::Vector2d &evals,
+                     Eigen::Matrix2d &evecs);
+
 class Mvn {
  public:
   explicit Mvn(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covariance);
