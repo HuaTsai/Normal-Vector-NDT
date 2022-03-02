@@ -45,8 +45,7 @@ void NDTMap::LoadPointsWithCovariances(
     const std::vector<Eigen::Vector2d> &points,
     const std::vector<Eigen::Matrix2d> &point_covs) {
   if (points.size() != point_covs.size()) {
-    std::cerr << "Unmatched Sizes: " << points.size() << ", "
-              << point_covs.size() << std::endl;
+    std::cerr << __FUNCTION__ << ": unmatched sizes\n";
     std::exit(1);
   }
   if (is_loaded_) {

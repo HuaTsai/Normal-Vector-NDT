@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
   cout << "valid n = " << ids.size() << endl;
 
   vector<pair<int, double>> res;
-  for (int i = 0; i < ids.size() - 1; ++i) {
+  for (size_t i = 0; i < ids.size() - 1; ++i) {
     auto tgt = PCMsgTo2D(vpc[ids[i]], v);
     auto src = PCMsgTo2D(vpc[ids[i + 1]], v);
     auto tj = vpc[ids[i + 1]].header.stamp;

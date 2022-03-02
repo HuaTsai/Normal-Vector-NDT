@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
   vector<double> its1, its2;
 
   tqdm bar;
-  for (int i = 0; i < ids.size() - 1; ++i) {
+  for (size_t i = 0; i < ids.size() - 1; ++i) {
     bar.progress(i, ids.size());
     auto tgt = PCMsgTo2D(vpc[ids[i]], v);
     auto src = PCMsgTo2D(vpc[ids[i + 1]], v);

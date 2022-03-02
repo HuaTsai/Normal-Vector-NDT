@@ -65,7 +65,7 @@ void Output(int m,
     fout << ts[i] << ((i + 1 == ts.size()) ? "\n" : ", ");
 
   for (auto d : data)
-    for (int i = 0; i < d.size(); ++i)
+    for (size_t i = 0; i < d.size(); ++i)
       fout << d[i] * 100 << ((i + 1 == d.size()) ? "\n" : ", ");
   fout.close();
 }
@@ -108,8 +108,8 @@ int main(int argc, char **argv) {
   for (int n = 100; n <= scans * 100; ++n) {
     auto tgt = PCMsgTo2D(vpc[n], voxel);
     TransformPointsInPlace(tgt, aff2);
-    for (int i = 0; i < rs.size(); ++i) {
-      for (int j = 0; j < ts.size(); ++j) {
+    for (size_t i = 0; i < rs.size(); ++i) {
+      for (size_t j = 0; j < ts.size(); ++j) {
         auto affs = UniformTransformGenerator(rs[i], ts[j]).Generate(samples);
         vector<pair<vector<Vector2d>, Affine2d>> datat{
             {tgt, Affine2d::Identity()}};
@@ -178,8 +178,8 @@ int main(int argc, char **argv) {
       }
     }
   }
-  for (int i = 0; i < rs.size(); ++i)
-    for (int j = 0; j < ts.size(); ++j)
+  for (size_t i = 0; i < rs.size(); ++i)
+    for (size_t j = 0; j < ts.size(); ++j)
       s[i][j] /= (scans * samples);
 
   Output(m, rs, ts, s);

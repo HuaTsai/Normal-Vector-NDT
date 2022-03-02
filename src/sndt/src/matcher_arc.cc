@@ -34,12 +34,8 @@ Eigen::Affine2d Pt2plICPMatch(const std::vector<Eigen::Vector2d> &target_points,
       orj.AddCorrespondence(p, q);
       residuals.push_back(Pt2plICPCostFunctor::Create(p, q, nq));
     }
-    params._corres.push_back({});
-    auto indices = orj.GetIndices();
-    for (size_t i = 0; i < indices.size(); ++i) {
-      opt.AddResidualBlock(residuals[indices[i]]);
-      params._corres.back().push_back(corres[i]);
-    }
+    auto ids = orj.GetIndices();
+    for (auto id : ids) opt.AddResidualBlock(residuals[id]);
     params._usedtime.ProcedureFinish();
 
     opt.Optimize(params);
@@ -84,12 +80,8 @@ Eigen::Affine2d P2DNDTMDMatch(const NDTMap &target_map,
       auto cq = cellq->GetPointCov();
       residuals.push_back(P2DNDTMDCostFunctor::Create(p, q, cq));
     }
-    params._corres.push_back({});
-    auto indices = orj.GetIndices();
-    for (size_t i = 0; i < indices.size(); ++i) {
-      opt.AddResidualBlock(residuals[indices[i]]);
-      params._corres.back().push_back(corres[i]);
-    }
+    auto ids = orj.GetIndices();
+    for (auto id : ids) opt.AddResidualBlock(residuals[id]);
     params._usedtime.ProcedureFinish();
 
     params._usedtime.ProcedureStart(UsedTime::Procedure::kOptimize);
@@ -137,18 +129,14 @@ Eigen::Affine2d P2DNDTMatch(const NDTMap &target_map,
       cqs.push_back(cellq->GetPointCov());
       orj.AddCorrespondence(p, cellq->GetPointMean());
     }
-    params._corres.push_back({});
-    auto indices = orj.GetIndices();
+    auto ids = orj.GetIndices();
     std::vector<Eigen::Vector2d> ps2, uqs2;
     std::vector<Eigen::Matrix2d> cqs2;
-    for (size_t i = 0; i < indices.size(); ++i) {
-      ps2.push_back(ps[i]);
-      uqs2.push_back(uqs[i]);
-      cqs2.push_back(cqs[i]);
-      params._corres.back().push_back(corres[i]);
-    }
+    RetainIndices(ps, ids);
+    RetainIndices(uqs, ids);
+    RetainIndices(cqs, ids);
 
-    opt.BuildProblem(P2DNDTCostFunctor::Create(params.d2, ps2, uqs2, cqs2));
+    opt.BuildProblem(P2DNDTCostFunctor::Create(params.d2, ps, uqs, cqs));
     params._usedtime.ProcedureFinish();
 
     params._usedtime.ProcedureStart(UsedTime::Procedure::kOptimize);
@@ -197,12 +185,8 @@ Eigen::Affine2d D2DNDTMDMatch(const NDTMap &target_map,
       orj.AddCorrespondence(up, uq);
       residuals.push_back(D2DNDTMDCostFunctor::Create(up, cp, uq, cq));
     }
-    params._corres.push_back({});
-    auto indices = orj.GetIndices();
-    for (size_t i = 0; i < indices.size(); ++i) {
-      opt.AddResidualBlock(residuals[indices[i]]);
-      params._corres.back().push_back(corres[i]);
-    }
+    auto ids = orj.GetIndices();
+    for (auto id : ids) opt.AddResidualBlock(residuals[id]);
     params._usedtime.ProcedureFinish();
 
     params._usedtime.ProcedureStart(UsedTime::Procedure::kOptimize);
@@ -256,12 +240,8 @@ Eigen::Affine2d SNDTMDMatch(const SNDTMap &target_map,
       residuals.push_back(
           SNDTMDCostFunctor::Create(up, cp, unp, cnp, uq, cq, unq, cnq));
     }
-    params._corres.push_back({});
-    auto indices = orj.GetIndices();
-    for (size_t i = 0; i < indices.size(); ++i) {
-      opt.AddResidualBlock(residuals[indices[i]]);
-      params._corres.back().push_back(corres[i]);
-    }
+    auto ids = orj.GetIndices();
+    for (auto id : ids) opt.AddResidualBlock(residuals[id]);
     params._usedtime.ProcedureFinish();
 
     params._usedtime.ProcedureStart(UsedTime::Procedure::kOptimize);
@@ -314,25 +294,19 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map,
       cnqs.push_back(cellq->GetNormalCov());
       orj.AddCorrespondence(cellp->GetPointMean(), cellq->GetPointMean());
     }
-    params._corres.push_back({});
-    auto indices = orj.GetIndices();
+    auto ids = orj.GetIndices();
     // XXX: we should change in place...
-    std::vector<Eigen::Vector2d> ups2, unps2, uqs2, unqs2;
-    std::vector<Eigen::Matrix2d> cps2, cnps2, cqs2, cnqs2;
-    for (size_t i = 0; i < indices.size(); ++i) {
-      ups2.push_back(ups[i]);
-      cps2.push_back(cps[i]);
-      unps2.push_back(unps[i]);
-      cnps2.push_back(cnps[i]);
-      uqs2.push_back(uqs[i]);
-      cqs2.push_back(cqs[i]);
-      unqs2.push_back(unqs[i]);
-      cnqs2.push_back(cnqs[i]);
-      params._corres.back().push_back(corres[i]);
-    }
+    RetainIndices(ups, ids);
+    RetainIndices(cps, ids);
+    RetainIndices(unps, ids);
+    RetainIndices(cnps, ids);
+    RetainIndices(uqs, ids);
+    RetainIndices(cqs, ids);
+    RetainIndices(unqs, ids);
+    RetainIndices(cnqs, ids);
 
-    opt.BuildProblem(SNDTCostFunctor::Create(params.d2, ups2, cps2, unps2,
-                                             cnps2, uqs2, cqs2, unqs2, cnqs2));
+    opt.BuildProblem(SNDTCostFunctor::Create(params.d2, ups, cps, unps, cnps,
+                                             uqs, cqs, unqs, cnqs));
     params._usedtime.ProcedureFinish();
 
     params._usedtime.ProcedureStart(UsedTime::Procedure::kOptimize);
@@ -383,12 +357,8 @@ Eigen::Affine2d SNDTMDMatch2(const NDTMap &target_map,
       orj.AddCorrespondence(up, uq);
       residuals.push_back(SNDTMDCostFunctor2::Create(up, cp, unp, uq, cq, unq));
     }
-    params._corres.push_back({});
-    auto indices = orj.GetIndices();
-    for (size_t i = 0; i < indices.size(); ++i) {
-      opt.AddResidualBlock(residuals[indices[i]]);
-      params._corres.back().push_back(corres[i]);
-    }
+    auto ids = orj.GetIndices();
+    for (auto id : ids) opt.AddResidualBlock(residuals[id]);
     params._usedtime.ProcedureFinish();
 
     params._usedtime.ProcedureStart(UsedTime::Procedure::kOptimize);

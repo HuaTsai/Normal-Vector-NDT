@@ -62,8 +62,6 @@ nav_msgs::Path AlignPoses2D(const nav_msgs::Path &gt,
   ceres::Solver::Options options;
   ceres::Solver::Summary summary;
   ceres::Solve(options, &problem, &summary);
-  std::printf("Align estimation to ground truth: %.2f, %.2f, %.2f\n", xyt[0],
-              xyt[1], xyt[2]);
   nav_msgs::Path ret = GetInitPath();
   for (const auto &p : est.poses) {
     Eigen::Affine3d aff;

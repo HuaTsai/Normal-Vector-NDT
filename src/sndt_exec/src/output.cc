@@ -19,8 +19,7 @@ int main(int argc, char **argv) {
                   Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
   vector<int> m;
-  int f;
-  double cell_size, voxel, radius = 1.5, d2 = -1;
+  double voxel;
   string data;
   po::options_description desc("Allowed options");
   // clang-format off

@@ -22,7 +22,9 @@ struct CommonParameters {
   }
 
   void InitializeInput() {
-    solver = ceres::DENSE_QR;
+    // solver = ceres::DENSE_QR;
+    solver = ceres::SPARSE_NORMAL_CHOLESKY;
+    minimize = ceres::TRUST_REGION;
     max_iterations = 100;
     ceres_max_iterations = 50;
     threshold = 0.0001;
@@ -43,6 +45,7 @@ struct CommonParameters {
   }
 
   ceres::LinearSolverType solver;
+  ceres::MinimizerType minimize;
   int max_iterations;
   int ceres_max_iterations;
   double threshold;

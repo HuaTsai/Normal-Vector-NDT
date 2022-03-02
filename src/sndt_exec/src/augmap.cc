@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
   bar.finish();
 
   while (1) {
-    for (int i = 0; i < nums.size(); ++i) {
+    for (size_t i = 0; i < nums.size(); ++i) {
       auto tgt = PCMsgTo2D(vpc[nums[i]], voxel);
       TransformPointsInPlace(tgt, Trs[i] * aff2);
       pubt.publish(MarkerOfPoints(tgt, 0.5));

@@ -76,44 +76,6 @@ class SICPCostFunctor {
   const Eigen::Vector2d p_, np_, q_, nq_;
 };
 
-// BUG: Generalized Optimizer is needed here.
-class SICPCostFunctor2 {
- public:
-  SICPCostFunctor2(const std::vector<Eigen::Vector2d> &ps,
-                   const std::vector<Eigen::Vector2d> &nps,
-                   const std::vector<Eigen::Vector2d> &qs,
-                   const std::vector<Eigen::Vector2d> &nqs)
-      : ps_(ps), nps_(nps), qs_(qs), nqs_(nqs) {}
-  template <typename T>
-  bool operator()(const T *const xyt, T *e) const {
-    e[0] = T(0);
-    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
-    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
-
-    for (size_t i = 0; i < ps_.size(); ++i) {
-      Eigen::Matrix<T, 2, 1> p = R * ps_[i].cast<T>() + t;
-      Eigen::Matrix<T, 2, 1> np = R * nps_[i].cast<T>();
-      Eigen::Matrix<T, 2, 1> q = qs_[i].cast<T>();
-      Eigen::Matrix<T, 2, 1> nq = nqs_[i].cast<T>();
-      Eigen::Matrix<T, 2, 1> npq = (np + nq).normalized();
-
-      e[0] += (p - q).dot(npq);
-    }
-    return true;
-  }
-
-  static ceres::CostFunction *Create(const std::vector<Eigen::Vector2d> &ps,
-                                     const std::vector<Eigen::Vector2d> &nps,
-                                     const std::vector<Eigen::Vector2d> &qs,
-                                     const std::vector<Eigen::Vector2d> &nqs) {
-    return new ceres::AutoDiffCostFunction<SICPCostFunctor2, 1, 3>(
-        new SICPCostFunctor2(ps, nps, qs, nqs));
-  }
-
- private:
-  const std::vector<Eigen::Vector2d> ps_, nps_, qs_, nqs_;
-};
-
 class D2DNDTCostFunctor {
  public:
   D2DNDTCostFunctor(const std::vector<Eigen::Vector2d> &ups,
@@ -271,6 +233,160 @@ class SNDTCostFunctor2 {
  private:
   const std::vector<Eigen::Vector2d> ups_, unps_, uqs_, unqs_;
   const std::vector<Eigen::Matrix2d> cps_, cqs_;
+  const double d2_;
+};
+
+class ICPCost {
+ public:
+  ICPCost(const std::vector<Eigen::Vector2d> &ps,
+          const std::vector<Eigen::Vector2d> &qs)
+      : ps_(ps), qs_(qs) {}
+  template <typename T>
+  bool operator()(const T *const xyt, T *e) const {
+    e[0] = T(0);
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
+
+    for (size_t i = 0; i < ps_.size(); ++i) {
+      Eigen::Matrix<T, 2, 1> p = R * ps_[i].cast<T>() + t;
+      Eigen::Matrix<T, 2, 1> q = qs_[i].cast<T>();
+      e[0] += (p - q).squaredNorm();
+    }
+    return true;
+  }
+
+  static ceres::FirstOrderFunction *Create(
+      const std::vector<Eigen::Vector2d> &ps,
+      const std::vector<Eigen::Vector2d> &qs) {
+    return new ceres::AutoDiffFirstOrderFunction<ICPCost, 3>(
+        new ICPCost(ps, qs));
+  }
+
+ private:
+  const std::vector<Eigen::Vector2d> ps_, qs_;
+};
+
+class SICPCost {
+ public:
+  SICPCost(const std::vector<Eigen::Vector2d> &ps,
+           const std::vector<Eigen::Vector2d> &nps,
+           const std::vector<Eigen::Vector2d> &qs,
+           const std::vector<Eigen::Vector2d> &nqs)
+      : ps_(ps), nps_(nps), qs_(qs), nqs_(nqs) {}
+  template <typename T>
+  bool operator()(const T *const xyt, T *e) const {
+    e[0] = T(0);
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
+
+    for (size_t i = 0; i < ps_.size(); ++i) {
+      Eigen::Matrix<T, 2, 1> p = R * ps_[i].cast<T>() + t;
+      Eigen::Matrix<T, 2, 1> np = R * nps_[i].cast<T>();
+      Eigen::Matrix<T, 2, 1> q = qs_[i].cast<T>();
+      Eigen::Matrix<T, 2, 1> nq = nqs_[i].cast<T>();
+      Eigen::Matrix<T, 2, 1> npq = (np + nq).normalized();
+      e[0] += ceres::pow((p - q).dot(npq), 2);
+    }
+
+    return true;
+  }
+
+  static ceres::FirstOrderFunction *Create(
+      const std::vector<Eigen::Vector2d> &ps,
+      const std::vector<Eigen::Vector2d> &nps,
+      const std::vector<Eigen::Vector2d> &qs,
+      const std::vector<Eigen::Vector2d> &nqs) {
+    return new ceres::AutoDiffFirstOrderFunction<SICPCost, 3>(
+        new SICPCost(ps, nps, qs, nqs));
+  }
+
+ private:
+  const std::vector<Eigen::Vector2d> ps_, nps_, qs_, nqs_;
+};
+
+class D2DNDTCost {
+ public:
+  D2DNDTCost(const Eigen::Vector2d &up,
+             const Eigen::Matrix2d &cp,
+             const Eigen::Vector2d &uq,
+             const Eigen::Matrix2d &cq,
+             double d2)
+      : up_(up), uq_(uq), cp_(cp), cq_(cq), d2_(d2) {}
+  template <typename T>
+  bool operator()(const T *const xyt, T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
+
+    Eigen::Matrix<T, 2, 1> up = R * up_.cast<T>() + t;
+    Eigen::Matrix<T, 2, 2> cp = R * cp_.cast<T>() * R.transpose();
+    Eigen::Matrix<T, 2, 1> uq = uq_.cast<T>();
+    Eigen::Matrix<T, 2, 2> cq = cq_.cast<T>();
+    Eigen::Matrix<T, 2, 1> m = up - uq;
+    Eigen::Matrix<T, 2, 2> c = cp + cq;
+    e[0] = T(1) - ceres::exp(-d2_ * m.dot(c.inverse() * m));
+    return true;
+  }
+
+  static ceres::CostFunction *Create(const Eigen::Vector2d &up,
+                                     const Eigen::Matrix2d &cp,
+                                     const Eigen::Vector2d &uq,
+                                     const Eigen::Matrix2d &cq,
+                                     double d2) {
+    return new ceres::AutoDiffCostFunction<D2DNDTCost, 1, 3>(
+        new D2DNDTCost(up, cp, uq, cq, d2));
+  }
+
+ private:
+  const Eigen::Vector2d up_, uq_;
+  const Eigen::Matrix2d cp_, cq_;
+  const double d2_;
+};
+
+class SNDTCost {
+ public:
+  SNDTCost(const Eigen::Vector2d &up,
+           const Eigen::Matrix2d &cp,
+           const Eigen::Vector2d &unp,
+           const Eigen::Vector2d &uq,
+           const Eigen::Matrix2d &cq,
+           const Eigen::Vector2d &unq,
+           double d2)
+      : up_(up), unp_(unp), uq_(uq), unq_(unq), cp_(cp), cq_(cq), d2_(d2) {}
+
+  template <typename T>
+  bool operator()(const T *const xyt, T *e) const {
+    Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
+    Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
+
+    Eigen::Matrix<T, 2, 1> up = R * up_.cast<T>() + t;
+    Eigen::Matrix<T, 2, 1> unp = R * unp_.cast<T>();
+    Eigen::Matrix<T, 2, 2> cp = R * cp_.cast<T>() * R.transpose();
+    Eigen::Matrix<T, 2, 1> uq = uq_.cast<T>();
+    Eigen::Matrix<T, 2, 1> unq = unq_.cast<T>();
+    Eigen::Matrix<T, 2, 2> cq = cq_.cast<T>();
+
+    Eigen::Matrix<T, 2, 1> m1 = up - uq;
+    Eigen::Matrix<T, 2, 1> m2 = (unp + unq).normalized();
+    Eigen::Matrix<T, 2, 2> c1 = cp + cq;
+
+    e[0] = T(1) - ceres::exp(-d2_ * m1.dot(m2) * m1.dot(m2) / m2.dot(c1 * m2));
+    return true;
+  }
+
+  static ceres::CostFunction *Create(const Eigen::Vector2d &up,
+                                     const Eigen::Matrix2d &cp,
+                                     const Eigen::Vector2d &unp,
+                                     const Eigen::Vector2d &uq,
+                                     const Eigen::Matrix2d &cq,
+                                     const Eigen::Vector2d &unq,
+                                     double d2) {
+    return new ceres::AutoDiffCostFunction<SNDTCost, 1, 3>(
+        new SNDTCost(up, cp, unp, uq, cq, unq, d2));
+  }
+
+ private:
+  const Eigen::Vector2d up_, unp_, uq_, unq_;
+  const Eigen::Matrix2d cp_, cq_;
   const double d2_;
 };
 

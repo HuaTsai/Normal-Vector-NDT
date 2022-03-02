@@ -8,11 +8,15 @@
  * @copyright Copyright (c) 2021
  *
  */
+// XXX: This header file contains implementations. When including it, make sure
+// that there is only one compilation unit includes it.
 #pragma once
 #include <common/EgoPointClouds.h>
 #include <common/common.h>
 #include <nav_msgs/Path.h>
 #include <normal2d/normal2d.h>
+#include <pcl/filters/random_sample.h>
+#include <pcl/filters/uniform_sampling.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl_ros/point_cloud.h>
 #include <sndt/matcher.h>
@@ -87,6 +91,22 @@ std::vector<Eigen::Vector2d> AugmentPoints(
   return ret;
 }
 
+// TODO: this function does not need any covs, fix the name
+NDTMap MakeNDT(
+    const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>>
+        &data,
+    NDTParameters &params) {
+  params._usedtime.ProcedureStart(UsedTime::Procedure::kNDT);
+  std::vector<Eigen::Vector2d> points;
+  for (const auto &elem : data)
+    for (const auto &pt : elem.first)
+      points.push_back(elem.second * pt);
+  NDTMap ret(params.cell_size);
+  ret.LoadPoints(points);
+  params._usedtime.ProcedureFinish();
+  return ret;
+}
+
 NDTMap MakeNDTMap(
     const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>>
         &data,
@@ -133,7 +153,9 @@ SNDTMap MakeSNDTMap(
       double r2 = pt.squaredNorm();
       double theta = atan2(pt(1), pt(0));
       Eigen::Matrix2d J = Eigen::Rotation2Dd(theta).matrix();
-      Eigen::Matrix2d S = Eigen::Vector2d(params.r_variance, r2 * params.t_variance).asDiagonal();
+      Eigen::Matrix2d S =
+          Eigen::Vector2d(params.r_variance, r2 * params.t_variance)
+              .asDiagonal();
       points.push_back(T * pt);
       point_covs.push_back(T.rotation() * J * S * J.transpose() *
                            T.rotation().transpose());
@@ -212,6 +234,7 @@ std::vector<Eigen::Vector2d> GenerateGaussianSamples(
   return ret;
 }
 
+// Voxel: recompute mean in voxel
 std::vector<Eigen::Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg,
                                        double voxel) {
   pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
@@ -221,6 +244,44 @@ std::vector<Eigen::Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg,
     vg.setInputCloud(pc);
     vg.setLeafSize(voxel, voxel, voxel);
     vg.filter(*pc);
+  }
+
+  std::vector<Eigen::Vector2d> ret;
+  for (const auto &pt : *pc)
+    if (std::isfinite(pt.x) && std::isfinite(pt.y) && std::isfinite(pt.z))
+      ret.push_back(Eigen::Vector2d(pt.x, pt.y));
+  return ret;
+}
+
+// Uniform: nearest point to center in voxel
+std::vector<Eigen::Vector2d> PCMsgTo2D2(const sensor_msgs::PointCloud2 &msg,
+                                        double voxel) {
+  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::fromROSMsg(msg, *pc);
+  if (voxel != 0) {
+    pcl::UniformSampling<pcl::PointXYZ> us;
+    us.setInputCloud(pc);
+    us.setRadiusSearch(voxel);
+    us.filter(*pc);
+  }
+
+  std::vector<Eigen::Vector2d> ret;
+  for (const auto &pt : *pc)
+    if (std::isfinite(pt.x) && std::isfinite(pt.y) && std::isfinite(pt.z))
+      ret.push_back(Eigen::Vector2d(pt.x, pt.y));
+  return ret;
+}
+
+// Random: just random
+std::vector<Eigen::Vector2d> PCMsgTo2D3(const sensor_msgs::PointCloud2 &msg,
+                                        int points) {
+  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::fromROSMsg(msg, *pc);
+  if (points != 0) {
+    pcl::RandomSample<pcl::PointXYZ> rs;
+    rs.setInputCloud(pc);
+    rs.setSample(points);
+    rs.filter(*pc);
   }
 
   std::vector<Eigen::Vector2d> ret;

@@ -43,6 +43,7 @@ void LeastSquareOptimize::AddResidualBlock(ceres::CostFunction *cost_function) {
 
 void LeastSquareOptimize::Optimize(CommonParameters &params) {
   ceres::Solver::Options options;
+  options.minimizer_type = params.minimize;
   options.minimizer_progress_to_stdout = params.verbose;
   options.linear_solver_type = params.solver;
   options.max_num_iterations = params.ceres_max_iterations;
@@ -147,14 +148,14 @@ void GeneralOptimize::Optimize(CommonParameters &params) {
 
   // FIXME: iteration count api???
   // std::cout << summary.message << std::endl;
-  printf("r: %d, %.4f, g: %d, %.4f (%.4f), it:%ld\n",
-         summary.num_cost_evaluations,
-         summary.cost_evaluation_time_in_seconds * 1000.,
-         summary.num_gradient_evaluations,
-         summary.gradient_evaluation_time_in_seconds * 1000.,
-         summary.gradient_evaluation_time_in_seconds * 1000. /
-             summary.num_gradient_evaluations,
-         summary.iterations.size());
+  // printf("r: %d, %.4f, g: %d, %.4f (%.4f), it:%ld\n",
+  //        summary.num_cost_evaluations,
+  //        summary.cost_evaluation_time_in_seconds * 1000.,
+  //        summary.num_gradient_evaluations,
+  //        summary.gradient_evaluation_time_in_seconds * 1000.,
+  //        summary.gradient_evaluation_time_in_seconds * 1000. /
+  //            summary.num_gradient_evaluations,
+  //        summary.iterations.size());
   params._ceres_iteration += summary.iterations.size();
   ++params._iteration;
   if (params.verbose) {

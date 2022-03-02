@@ -20,22 +20,29 @@
  * @brief Compute mean of points
  *
  * @param points Input points
- * @param indices Input indices ({} means using all the points)
  * @return Mean of points
- * @note This function does not check the validity of its elements
+ */
+inline Eigen::Vector2d ComputeMean(const std::vector<Eigen::Vector2d> &points) {
+  Eigen::Vector2d ret = Eigen::Vector2d::Zero();
+  ret = std::accumulate(points.begin(), points.end(), ret);
+  ret /= points.size();
+  return ret;
+}
+
+/**
+ * @brief Compute mean of points
+ *
+ * @param points Input points
+ * @param indices Input indices
+ * @return Mean of points
  */
 inline Eigen::Vector2d ComputeMean(const std::vector<Eigen::Vector2d> &points,
-                                   const std::vector<int> &indices = {}) {
+                                   const std::vector<int> &indices) {
   Eigen::Vector2d ret = Eigen::Vector2d::Zero();
-  if (indices.size()) {
-    ret = std::accumulate(
-        indices.begin(), indices.end(), ret,
-        [&points](const auto &a, int b) { return a + points[b]; });
-    ret /= indices.size();
-  } else {
-    ret = std::accumulate(points.begin(), points.end(), ret);
-    ret /= points.size();
-  }
+  ret = std::accumulate(
+      indices.begin(), indices.end(), ret,
+      [&points](const auto &a, int b) { return a + points[b]; });
+  ret /= indices.size();
   return ret;
 }
 
@@ -45,7 +52,6 @@ inline Eigen::Vector2d ComputeMean(const std::vector<Eigen::Vector2d> &points,
  * @param matrices Input matrices
  * @param indices Input indices
  * @return Mean of matrices
- * @note This function does not check the validity of its elements
  */
 inline Eigen::Matrix2d ComputeMean(const std::vector<Eigen::Matrix2d> &matrices,
                                    const std::vector<int> &indices = {}) {
@@ -176,25 +182,6 @@ inline void ExcludeInfinite(const std::vector<Eigen::Vector2d> &points,
   }
 }
 
-// TODO: document and incorporate
-inline std::vector<int> ExcludeNaNInf3(
-    const std::vector<Eigen::Vector2d> &points) {
-  std::vector<int> ret;
-  for (size_t i = 0; i < points.size(); ++i)
-    if (points[i].allFinite()) ret.push_back(i);
-  return ret;
-}
-
-// TODO: document and incorporate
-inline std::vector<int> ExcludeNaNInf3(
-    const std::vector<Eigen::Vector2d> &points,
-    const std::vector<Eigen::Matrix2d> &covariances) {
-  std::vector<int> ret;
-  for (size_t i = 0; i < points.size(); ++i)
-    if (points[i].allFinite() && covariances[i].allFinite()) ret.push_back(i);
-  return ret;
-}
-
 inline pcl::KdTreeFLANN<pcl::PointXY> MakeKDTree(
     const std::vector<Eigen::Vector2d> &points) {
   pcl::PointCloud<pcl::PointXY>::Ptr pc(new pcl::PointCloud<pcl::PointXY>);
@@ -219,16 +206,6 @@ inline int FindNearestNeighborIndex(const Eigen::Vector2d &query,
   return idx[0];
 }
 
-inline std::vector<int> GetCommonFiniteIndices(
-    const std::vector<Eigen::Vector2d> &pts,
-    const std::vector<Eigen::Vector2d> &nms) {
-  std::vector<int> ret;
-  int n = pts.size();
-  for (int i = 0; i < n; ++i)
-    if (pts[i].allFinite() && nms[i].allFinite()) ret.push_back(i);
-  return ret;
-}
-
 class RandomTransformGenerator2D {
  public:
   RandomTransformGenerator2D(double radius)
@@ -237,8 +214,7 @@ class RandomTransformGenerator2D {
     std::vector<Eigen::Affine2d> ret;
     std::uniform_real_distribution<> urd(-M_PI, M_PI);
     // std::uniform_real_distribution<> urd2(-M_PI / 4, M_PI / 4);
-    std::uniform_real_distribution<> urd2(-10. * M_PI / 180.,
-                                          10. * M_PI / 180.);
+    std::uniform_real_distribution<> urd2(-5. * M_PI / 180., 5. * M_PI / 180.);
     for (int i = 0; i < sizes; ++i) {
       double angle = urd(*dre_);
       double x = radius_ * cos(angle);

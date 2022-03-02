@@ -40,6 +40,7 @@ set(ALL_SRCS
   src/sndt_cell.cc
   src/sndt_map.cc
   src/matcher.cc
+  src/matcher_pcl.cc
   src/visuals.cc
   src/outlier_reject.cc
   src/used_time.cc
