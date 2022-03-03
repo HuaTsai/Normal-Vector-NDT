@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
   int n = (int)cs / res;
   double ares = cs / n;
   Vector2d bl = cen + Eigen::Rotation2Dd(skew) * Vector2d(-cs / 2, -cs / 2);
-  Vector2d tl = cen + Eigen::Rotation2Dd(skew) * Vector2d(-cs / 2, cs / 2);
+  // Vector2d tl = cen + Eigen::Rotation2Dd(skew) * Vector2d(-cs / 2, cs / 2);
 
   nav_msgs::MapMetaData mmd;
   mmd.map_load_time = ros::Time(1, 0);

@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
   for (size_t i = 0; i < ids.size() - 1; ++i) {
     auto tgt = PCMsgTo2D(vpc[ids[i]], v);
     auto src = PCMsgTo2D(vpc[ids[i + 1]], v);
-    auto tj = vpc[ids[i + 1]].header.stamp;
+    // auto tj = vpc[ids[i + 1]].header.stamp;
     auto Tgt = GetBenchMark(gtpath, vpc[ids[i]].header.stamp,
                             vpc[ids[i + 1]].header.stamp);
 

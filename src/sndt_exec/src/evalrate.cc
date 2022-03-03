@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
   Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
                   Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
-  int n, m;
+  int m;
   double cell_size, voxel, radius;
   string data;
   po::options_description desc("Allowed options");
@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
             Pt2plICPParameters params2;
             auto tgt2 = MakePoints(datat, params2);
             auto src2 = MakePoints(datas, params2);
-            T = Pt2plICPMatch(tgt2, src2, params2);      
+            T = Pt2plICPMatch(tgt2, src2, params2);
           } else if (m == 3) {
             SICPParameters params3;
             params3.radius = radius;
@@ -179,8 +179,7 @@ int main(int argc, char **argv) {
     }
   }
   for (size_t i = 0; i < rs.size(); ++i)
-    for (size_t j = 0; j < ts.size(); ++j)
-      s[i][j] /= (scans * samples);
+    for (size_t j = 0; j < ts.size(); ++j) s[i][j] /= (scans * samples);
 
   Output(m, rs, ts, s);
 
@@ -189,6 +188,7 @@ int main(int argc, char **argv) {
   string script = JoinPath(WSPATH, "src/sndt_exec/scripts/evalrate.py");
   string output = JoinPath(
       WSPATH, "src/sndt_exec/output/rate-" + GetCurrentTimeAsString() + ".png");
-  std::system((python + " " + script + " " + filepath + " " + output).c_str());
-  std::cerr << " Done!" << endl;
+  if (std::system(
+      (python + " " + script + " " + filepath + " " + output).c_str()))
+    std::cerr << " Done!" << endl;
 }

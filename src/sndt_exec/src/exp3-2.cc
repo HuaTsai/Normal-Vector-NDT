@@ -54,7 +54,6 @@ int main(int argc, char **argv) {
     auto tgt = PCMsgTo2D(vpc[n], voxel);
     TransformPointsInPlace(tgt, aff2);
     printf("n = %d, ", n);
-    bool isf = false;
 
     for (double r : {1, 2, 4, 6, 8, 10, 12, 14, 16}) {
       int cf = 0;

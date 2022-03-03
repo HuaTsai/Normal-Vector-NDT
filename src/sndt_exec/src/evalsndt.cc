@@ -152,8 +152,8 @@ int main(int argc, char **argv) {
     vector<pair<vector<Vector2d>, Affine2d>> datas{
         {src, Eigen::Affine2d::Identity()}};
 
-    CommonParameters *params;
     Affine2d T;
+    CommonParameters *params = nullptr;
     ICPParameters params1;
     Pt2plICPParameters params2;
     SICPParameters params3;

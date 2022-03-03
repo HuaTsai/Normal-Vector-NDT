@@ -74,21 +74,21 @@ int main(int argc, char **argv) {
       ICPParameters params1;
       auto tgt1 = MakePoints(datat, params1);
       auto src1 = MakePoints(datas, params1);
-      auto T1 = ICPMatch(tgt1, src1, params1);
+      ICPMatch(tgt1, src1, params1);
       rms1.push_back((params1._sols[0].back() * aff).translation().norm());
 
       // Pt2pl ICP Method
       Pt2plICPParameters params2;
       auto tgt2 = MakePoints(datat, params2);
       auto src2 = MakePoints(datas, params2);
-      auto T2 = Pt2plICPMatch(tgt2, src2, params2);
+      Pt2plICPMatch(tgt2, src2, params2);
       rms2.push_back((params2._sols[0].back() * aff).translation().norm());
 
       // Symmetric ICP Method
       SICPParameters params3;
       auto tgt3 = MakePoints(datat, params3);
       auto src3 = MakePoints(datas, params3);
-      auto T3 = SICPMatch(tgt3, src3, params3);
+      SICPMatch(tgt3, src3, params3);
       rms3.push_back((params3._sols[0].back() * aff).translation().norm());
 
       // P2D-NDT Method
@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
       params4.cell_size = cell_size;
       auto tgt4 = MakeNDTMap(datat, params4);
       auto src4 = MakePoints(datas, params4);
-      auto T4 = P2DNDTMatch(tgt4, src4, params4);
+      P2DNDTMatch(tgt4, src4, params4);
       rms4.push_back((params4._sols[0].back() * aff).translation().norm());
 
       // D2D-NDT Method
@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
       params5.cell_size = cell_size;
       auto tgt5 = MakeNDTMap(datat, params5);
       auto src5 = MakeNDTMap(datas, params5);
-      auto T5 = D2DNDTMatch(tgt5, src5, params5);
+      D2DNDTMatch(tgt5, src5, params5);
       rms5.push_back((params5._sols[0].back() * aff).translation().norm());
 
       // Symmetric NDT Method
@@ -116,7 +116,7 @@ int main(int argc, char **argv) {
       params6.cell_size = cell_size;
       auto tgt6 = MakeNDTMap(datat, params6);
       auto src6 = MakeNDTMap(datas, params6);
-      auto T6 = SNDTMatch2(tgt6, src6, params6);
+      SNDTMatch2(tgt6, src6, params6);
       rms6.push_back((params6._sols[0].back() * aff).translation().norm());
     }
     bar.finish();
@@ -154,6 +154,6 @@ int main(int argc, char **argv) {
   string script = JoinPath(WSPATH, "src/sndt_exec/scripts/evalcon.py");
   string output = JoinPath(
       WSPATH, "src/sndt_exec/output/cvg-" + GetCurrentTimeAsString() + ".png");
-  system((python + " " + script + " " + filepath + " " + output).c_str());
-  cerr << " Done!" << endl;
+  if (system((python + " " + script + " " + filepath + " " + output).c_str()))
+    cerr << " Done!" << endl;
 }
