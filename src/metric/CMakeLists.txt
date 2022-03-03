@@ -42,4 +42,10 @@ target_link_libraries(${PROJECT_NAME} ${ALLLIBS})
 
 add_executable(metric_test src/metric_test.cc)
 
-target_link_libraries(metric_test ${PROJECT_NAME})
+target_link_libraries(metric_test ${PROJECT_NAME} gtest_main)
+
+enable_testing()
+
+include(GoogleTest)
+
+gtest_discover_tests(metric_test)

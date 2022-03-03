@@ -53,7 +53,7 @@ void PrintResult(string str,
 
 int main(int argc, char **argv) {
   vector<int> m;
-  double cell_size, voxel, radius = 1.5, d2 = -1;
+  double cell_size, radius = 1.5, d2 = -1;
   int f;
   string data;
   po::options_description desc("Allowed options");

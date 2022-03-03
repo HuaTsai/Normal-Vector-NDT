@@ -50,21 +50,30 @@ inline Eigen::Vector2d ComputeMean(const std::vector<Eigen::Vector2d> &points,
  * @brief Compute mean of matrices
  *
  * @param matrices Input matrices
+ * @return Mean of matrices
+ */
+inline Eigen::Matrix2d ComputeMean(
+    const std::vector<Eigen::Matrix2d> &matrices) {
+  Eigen::Matrix2d ret = Eigen::Matrix2d::Zero();
+  ret = std::accumulate(matrices.begin(), matrices.end(), ret);
+  ret /= matrices.size();
+  return ret;
+}
+
+/**
+ * @brief Compute mean of matrices
+ *
+ * @param matrices Input matrices
  * @param indices Input indices
  * @return Mean of matrices
  */
 inline Eigen::Matrix2d ComputeMean(const std::vector<Eigen::Matrix2d> &matrices,
-                                   const std::vector<int> &indices = {}) {
+                                   const std::vector<int> &indices) {
   Eigen::Matrix2d ret = Eigen::Matrix2d::Zero();
-  if (indices.size()) {
-    ret = std::accumulate(
-        indices.begin(), indices.end(), ret,
-        [&matrices](const auto &a, int b) { return a + matrices[b]; });
-    ret /= indices.size();
-  } else {
-    ret = std::accumulate(matrices.begin(), matrices.end(), ret);
-    ret /= matrices.size();
-  }
+  ret = std::accumulate(
+      indices.begin(), indices.end(), ret,
+      [&matrices](const auto &a, int b) { return a + matrices[b]; });
+  ret /= indices.size();
   return ret;
 }
 
@@ -136,7 +145,10 @@ inline Eigen::Matrix2d ComputeCov(
 inline Eigen::Matrix2d ComputeCov(const std::vector<Eigen::Vector2d> &points,
                                   const Eigen::Vector2d &mean,
                                   const std::vector<Eigen::Matrix2d> &offsets) {
-  return ComputeCov(points, mean, ComputeMean(offsets));
+  if (offsets.size())
+    return ComputeCov(points, mean, ComputeMean(offsets));
+  else
+    return ComputeCov(points, mean);
 }
 
 /**
@@ -154,6 +166,13 @@ inline std::vector<Eigen::Vector2d> ExcludeNaNInf(
 }
 
 // TODO: document
+inline void ExcludeInfinite(const std::vector<Eigen::Vector2d> &points,
+                            std::vector<Eigen::Vector2d> &valid_points) {
+  valid_points.clear();
+  for (const auto &pt : points)
+    if (pt.allFinite()) valid_points.push_back(pt);
+}
+
 inline void ExcludeInfinite(const std::vector<Eigen::Vector2d> &points,
                             const std::vector<Eigen::Matrix2d> &covariances,
                             std::vector<Eigen::Vector2d> &valid_points,
@@ -214,7 +233,8 @@ class RandomTransformGenerator2D {
     std::vector<Eigen::Affine2d> ret;
     std::uniform_real_distribution<> urd(-M_PI, M_PI);
     // std::uniform_real_distribution<> urd2(-M_PI / 4, M_PI / 4);
-    std::uniform_real_distribution<> urd2(-5. * M_PI / 180., 5. * M_PI / 180.);
+    std::uniform_real_distribution<> urd2(-10. * M_PI / 180.,
+                                          10. * M_PI / 180.);
     for (int i = 0; i < sizes; ++i) {
       double angle = urd(*dre_);
       double x = radius_ * cos(angle);

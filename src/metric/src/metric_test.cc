@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <metric/metric.h>
 #include <common/common.h>
+#include <gtest/gtest.h>
 
 using namespace std;
 
@@ -25,34 +26,23 @@ nav_msgs::Path GetPath(string file) {
   return ret;
 }
 
-int main(int argc, char **argv) {
-  ros::init(argc, argv, "metric_test");
-  ros::NodeHandle nh;
-  auto pub1 = nh.advertise<nav_msgs::Path>("path1", 0, true);
-  auto pub2 = nh.advertise<nav_msgs::Path>("path2", 0, true);
-  auto pubg = nh.advertise<nav_msgs::Path>("pathg", 0, true);
-
+TEST(TrajectoryEvaluation, TrajectoryEvaluation) {
+  ros::Time::init();
+  double toler = 0.01;
   TrajectoryEvaluation te;
   te.set_evaltype(TrajectoryEvaluation::EvalType::kAbsolute);
   te.set_estpath(GetPath("src/metric/data/estndt.txt"));
   te.set_gtpath(GetPath("src/metric/data/gt.txt"));
   auto ate = te.ComputeRMSError2D();
-  pub1.publish(te.estpath());
-  pub2.publish(te.align_estpath());
-  pubg.publish(te.gtpath());
-  cout << "tlATE: " << ate.first.mean << ", " << ate.first.rms << endl;
-  cout << "rotATE: " << ate.second.mean << ", " << ate.second.rms << endl;
-
+  EXPECT_NEAR(ate.first.rms, 9.5176, toler);
+  EXPECT_NEAR(ate.second.rms, 5.9714, toler);
   te.set_evaltype(TrajectoryEvaluation::EvalType::kRelativeBySingle);
   auto rte = te.ComputeRMSError2D();
-  cout << "tlRTE: " << rte.first.mean << ", " << rte.first.rms << endl;
-  cout << "rotRTE: " << rte.second.mean << ", " << rte.second.rms << endl;
-
+  EXPECT_NEAR(rte.first.rms, 0.0861, toler);
+  EXPECT_NEAR(rte.second.rms, 0.3118, toler);
   te.set_evaltype(TrajectoryEvaluation::EvalType::kRelativeByLength);
   te.set_length(30);
   auto rte2 = te.ComputeRMSError2D();
-  cout << "tlRTE: " << rte2.first.mean << ", " << rte2.first.rms << endl;
-  cout << "rotRTE: " << rte2.second.mean << ", " << rte2.second.rms << endl;
-
-  ros::spin();
+  EXPECT_NEAR(rte2.first.rms, 0.7915, toler);
+  EXPECT_NEAR(rte2.second.rms, 2.0352, toler);
 }

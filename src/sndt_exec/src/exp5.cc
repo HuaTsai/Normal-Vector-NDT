@@ -1,5 +1,6 @@
 // Koide Benchmark
 #include <common/other_utils.h>
+#include <metric/metric.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_cloud.h>
@@ -7,12 +8,14 @@
 #include <pcl/registration/gicp.h>
 #include <pcl/registration/ndt.h>
 #include <pcl/registration/ndt_2d.h>
+#include <pcl/registration/transformation_estimation_point_to_plane_lls.h>
 #include <ros/ros.h>
 #include <sndt/matcher.h>
 #include <sndt_exec/wrapper.h>
-#include <metric/metric.h>
+
 #include <iostream>
 using namespace pcl;
+using namespace pcl::registration;
 using namespace std;
 using namespace Eigen;
 
@@ -95,6 +98,20 @@ int main(int argc, char** argv) {
   GeneralizedIterativeClosestPoint<PointXYZ, PointXYZ>::Ptr gicp2(
       new GeneralizedIterativeClosestPoint<PointXYZ, PointXYZ>());
   aligned = align(gicp2, target_cloud, source_cloud);
+
+  cout << "--- ICP ---" << endl;
+  IterativeClosestPoint<PointXYZ, PointXYZ>::Ptr icp2(
+      new IterativeClosestPoint<PointXYZ, PointXYZ>());
+  aligned = align(icp2, target_cloud, source_cloud);
+
+  // Postpone: Need compute normal
+  // cout << "--- Point-to-Plane ICP ---" << endl;
+  // IterativeClosestPoint<PointXYZ, PointXYZ>::Ptr icp3(
+  //     new IterativeClosestPoint<PointXYZ, PointXYZ>());
+  // TransformationEstimationPointToPlaneLLS<PointXYZ, PointXYZ>::Ptr trans_lls(
+  //     new TransformationEstimationPointToPlaneLLS<PointXYZ, PointXYZ>);
+  // icp3->setTransformationEstimation(trans_lls);
+  // aligned = align(icp3, target_cloud, source_cloud);
 
   cout << "--- NDT ---" << endl;
   NormalDistributionsTransform<PointXYZ, PointXYZ>::Ptr ndt2(

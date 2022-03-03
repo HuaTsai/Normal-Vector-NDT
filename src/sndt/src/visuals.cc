@@ -557,8 +557,6 @@ nav_msgs::OccupancyGrid OccupancyGridOfNDTMap(const SNDTMap &map) {
   ret.info.map_load_time = ros::Time(0);
   ret.info.width = ret.info.height;
   ret.info.resolution = 1;
-  double cell_size = map.GetCellSize();
-  for (auto cell : map) {
-  }
+  // ...
   return ret;
 }

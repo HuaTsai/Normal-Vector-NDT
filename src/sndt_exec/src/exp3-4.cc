@@ -1,13 +1,13 @@
-// Error Before vs. After @ Fake Ellipse Data
+// Error Before vs. After @ Real Data
 #include <metric/metric.h>
 #include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
 #include <rosbag/bag.h>
 #include <sndt/matcher.h>
+#include <sndt/matcher_pcl.h>
 #include <sndt/visuals.h>
 #include <sndt_exec/wrapper.h>
 #include <tqdm/tqdm.h>
-#include <sndt/matcher_pcl.h>
 
 #include <boost/program_options.hpp>
 
@@ -15,8 +15,9 @@ using namespace std;
 using namespace Eigen;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
+
 // HACK
-#define USETR
+// #define USETR
 
 struct Res {
   Res() : n(0) {}
@@ -31,16 +32,6 @@ struct Res {
         Stat(ttl).mean / 1000., n);
   }
 };
-
-vector<Vector2d> EllipseData() {
-  double x = 10, y = 6, xc = 0, yc = 0;
-  vector<Vector2d> ret;
-  for (int i = 0; i < 360; ++i) {
-    double th = i * M_PI / 180.;
-    ret.push_back(Vector2d(xc + x * cos(th), yc + y * sin(th)));
-  }
-  return ret;
-}
 
 void NPArray(string str, vector<double> data) {
   printf("%s = np.array([", str.c_str());
@@ -74,6 +65,12 @@ void Updates(const Affine2d &Tf,
 }
 
 int main(int argc, char **argv) {
+  Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
+                  Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
+  aff3 = Conserve2DFromAffine3d(aff3);
+  Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
+                  Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
+
   int samples;
   double cell_size, voxel, d2;
   po::options_description desc("Allowed options");
@@ -93,7 +90,11 @@ int main(int argc, char **argv) {
   }
   po::notify(vm);
 
-  auto tgt = EllipseData();
+  vector<sensor_msgs::PointCloud2> vpc;
+  SerializationInput(JoinPath(GetDataPath("log35-1"), "lidar.ser"), vpc);
+  auto tgt = PCMsgTo2D(vpc[725], voxel);
+  TransformPointsInPlace(tgt, aff2);
+
   vector<double> y1, y3, y5, y7;
   vector<double> xs(21);
   for (int i = 0; i < 21; ++i) xs[i] = pow(10, -2.0 + 0.1 * i);
@@ -101,7 +102,6 @@ int main(int argc, char **argv) {
 
   for (size_t i = 0; i < xs.size(); ++i) {
     auto affs = RandomTransformGenerator2D(xs[i] * rmax).Generate(samples);
-    vector<double> e2tl, e2rot;
     Res r1, r3, r5, r7;
     for (auto aff : affs) {
       auto src = TransformPoints(tgt, aff);
@@ -123,16 +123,9 @@ int main(int argc, char **argv) {
 #endif
       Updates(T1, params1, aff, r1);
 
-      // PCL-ICP
-      auto T2 = PCLNDT(tgt1, src1);
-      if (SuccessMatch(T2 * aff)) {
-        auto diff = TransNormRotDegAbsFromAffine2d(T2 * aff);
-        e2tl.push_back(diff(0));
-        e2rot.push_back(diff(1));
-      }
-
       // Symmetric ICP Method
       SICPParameters params3;
+      params3.radius = 1.5;
       params3.reject = true;
       params3._usedtime.Start();
       auto tgt3 = MakePoints(datat, params3);
@@ -147,12 +140,11 @@ int main(int argc, char **argv) {
       // D2D-NDT Method
       D2DNDTParameters params5;
       params5.reject = true;
-      params5.r_variance = params5.t_variance = 0;
       params5.cell_size = cell_size;
       params5.d2 = d2;
       params5._usedtime.Start();
-      auto tgt5 = MakeNDTMap(datat, params5);
-      auto src5 = MakeNDTMap(datas, params5);
+      auto tgt5 = MakeNDT(datat, params5);
+      auto src5 = MakeNDT(datas, params5);
 #ifdef USETR
       auto T5 = DMatch(tgt5, src5, params5);
 #else
@@ -163,12 +155,11 @@ int main(int argc, char **argv) {
       // Symmetric NDT Method
       D2DNDTParameters params7;
       params7.reject = true;
-      params7.r_variance = params7.t_variance = 0;
       params7.cell_size = cell_size;
       params7.d2 = d2;
       params7._usedtime.Start();
-      auto tgt7 = MakeNDTMap(datat, params7);
-      auto src7 = MakeNDTMap(datas, params7);
+      auto tgt7 = MakeNDT(datat, params7);
+      auto src7 = MakeNDT(datas, params7);
 #ifdef USETR
       auto T7 = SMatch(tgt7, src7, params7);
 #else
@@ -185,7 +176,6 @@ int main(int argc, char **argv) {
     r3.Print();
     r5.Print();
     r7.Print();
-    printf("icp: %ld, %f / %f\n", e2tl.size(), Stat(e2tl).rms, Stat(e2rot).rms);
   }
 
   NPArray("x", xs);

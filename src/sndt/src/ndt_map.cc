@@ -30,11 +30,11 @@ void NDTMap::LoadPoints(const std::vector<Eigen::Vector2d> &points) {
   Initialize();
   std::vector<NDTCell *> update_cells;
   for (size_t i = 0; i < points.size(); ++i) {
-    Eigen::Vector2d point = points[i];
-    NDTCell *cell = GetCellAndAllocate(point);
+    NDTCell *cell = GetCellAndAllocate(points[i]);
     if (cell) {
-      cell->AddPoint(point);
+      cell->AddPoint(points[i]);
       update_cells.push_back(cell);
+      points_.push_back(points[i]);
     }
   }
   for (auto cell : update_cells) cell->ComputeGaussian();

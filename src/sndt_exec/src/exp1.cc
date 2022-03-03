@@ -14,6 +14,22 @@ using namespace std;
 using namespace Eigen;
 namespace po = boost::program_options;
 
+// HACK
+// #define USETR
+
+struct Res {
+  Res() : Tr(Affine2d::Identity()) {}
+  vector<double> it, iit, iiit, opt, ttl;
+  nav_msgs::Path path;
+  Affine2d Tr;
+  void Print() {
+    printf(
+        "%.2f & %.2f & %.2f & %.2f & %.2f\n",
+        Stat(it).mean, Stat(iit).mean, Stat(iiit).mean, Stat(opt).mean / 1000.,
+        Stat(ttl).mean / 1000.);
+  }
+};
+
 nav_msgs::Path InitFirstPose(const ros::Time &time) {
   nav_msgs::Path path;
   path.header.frame_id = "map";
@@ -46,10 +62,14 @@ void PrintResult(const nav_msgs::Path &est, const nav_msgs::Path &gt) {
          rpe.second.mean);
 }
 
-void PrintTime(const vector<double> &opts, const vector<double> &its) {
-  Stat o(opts), i(its);
-  printf("%.2f (%.2f) / %.2f (%.2f) / %.2f (%.2f)\n", o.min, i.min, o.max,
-         i.max, o.mean, i.mean);
+void Updates(const CommonParameters &params, Res &res, ros::Time tj, Affine2d T) {
+  res.it.push_back(params._iteration);
+  res.iit.push_back(params._ceres_iteration);
+  res.iiit.push_back(0);
+  res.opt.push_back(params._usedtime.optimize());
+  res.ttl.push_back(params._usedtime.total());
+  res.Tr = res.Tr * T;
+  res.path.poses.push_back(MakePoseStampedMsg(tj, Affine3dFromAffine2d(res.Tr)));
 }
 
 int main(int argc, char **argv) {
@@ -94,25 +114,11 @@ int main(int argc, char **argv) {
   cout << n << " -> " << ids.size() << endl;
 
   auto t0 = vpc[0].header.stamp;
-  nav_msgs::Path path5 = InitFirstPose(t0);
-  nav_msgs::Path path7 = InitFirstPose(t0);
-  Affine3d Tr5 = Affine3d::Identity();
-  Affine3d Tr7 = Affine3d::Identity();
-  UsedTime ut5, ut7;
-  vector<double> its5, its7;
-  vector<double> opt5, opt7;
-  vector<int> c5, c7;
-
-  // vector<double> zzz;
-  // for (size_t i = 0; i < ids.size() - 1; ++i) {
-  //   auto tgt = PCMsgTo2D(vpc[ids[i]], v);
-  //   zzz.push_back(tgt.size());
-  // }
-  // Stat(zzz).PrintResult();
-  // return 1;
+  Res r5, r7;
+  r5.path = InitFirstPose(t0);
+  r7.path = InitFirstPose(t0);
 
   tqdm bar;
-  // for (size_t i = 0; i < ids.size() - 1; ++i) {
   for (size_t i = 0; i < ids.size() - 1; ++i) {
     // if (i == 64) continue;
     bar.progress(i, ids.size());
@@ -126,71 +132,51 @@ int main(int argc, char **argv) {
     if (c != 0) {
       D2DNDTParameters params5;
       params5.cell_size = c;
-      params5.r_variance = params5.t_variance = 0;
       params5.d2 = d2;
       params5._usedtime.Start();
-      auto tgt5 = MakeNDTMap(datat, params5);
-      auto src5 = MakeNDTMap(datas, params5);
-      // auto T5 = D2DNDTMatch(tgt5, src5, params5);
+      auto tgt5 = MakeNDT(datat, params5);
+      auto src5 = MakeNDT(datas, params5);
+#ifdef USETR
+      auto T5 = D2DNDTMatch(tgt5, src5, params5);
+#else
       auto T5 = DMatch(tgt5, src5, params5);
-      c5.push_back(int(params5._converge));
-      opt5.push_back(params5._usedtime.optimize());
-      ut5 = ut5 + params5._usedtime;
-      Tr5 = Tr5 * Affine3dFromAffine2d(T5);
-      path5.poses.push_back(MakePoseStampedMsg(tj, Tr5));
-      its5.push_back(params5._ceres_iteration);
+#endif
+      Updates(params5, r5, tj, T5);
 
       D2DNDTParameters params7;
       params7.cell_size = c;
-      params7.r_variance = params7.t_variance = 0;
       params7.d2 = d2;
       params7._usedtime.Start();
-      auto tgt7 = MakeNDTMap(datat, params7);
-      auto src7 = MakeNDTMap(datas, params7);
-      // auto T7 = SNDTMatch2(tgt7, src7, params7);
+      auto tgt7 = MakeNDT(datat, params7);
+      auto src7 = MakeNDT(datas, params7);
+#ifdef USETR
+      auto T7 = SNDTMatch2(tgt7, src7, params7);
+#else
       auto T7 = SMatch(tgt7, src7, params7);
-      c7.push_back(int(params7._converge));
-      opt7.push_back(params7._usedtime.optimize());
-      ut7 = ut7 + params7._usedtime;
-      Tr7 = Tr7 * Affine3dFromAffine2d(T7);
-      path7.poses.push_back(MakePoseStampedMsg(tj, Tr7));
-      its7.push_back(params7._ceres_iteration);
+#endif
+      Updates(params7, r7, tj, T7);
     } else {
       Affine2d T5 = Affine2d::Identity();
-      int it5 = 0;
       for (double cs : {4., 2., 1.}) {
         D2DNDTParameters params5;
         params5.cell_size = cs;
-        params5.r_variance = params5.t_variance = 0;
         params5.d2 = d2;
         params5._usedtime.Start();
-        auto tgt5 = MakeNDTMap(datat, params5);
-        auto src5 = MakeNDTMap(datas, params5);
+        auto tgt5 = MakeNDT(datat, params5);
+        auto src5 = MakeNDT(datas, params5);
         T5 = D2DNDTMatch(tgt5, src5, params5, T5);
-        ut5 = ut5 + params5._usedtime;
-        it5 += params5._ceres_iteration;
       }
-      Tr5 = Tr5 * Affine3dFromAffine2d(T5);
-      path5.poses.push_back(MakePoseStampedMsg(tj, Tr5));
-      its5.push_back(it5);
 
       Affine2d T7 = Affine2d::Identity();
-      int it7 = 0;
       for (double cs : {4., 2., 1.}) {
         D2DNDTParameters params7;
         params7.cell_size = cs;
-        params7.r_variance = params7.t_variance = 0;
         params7.d2 = d2;
         params7._usedtime.Start();
         auto tgt7 = MakeNDTMap(datat, params7);
         auto src7 = MakeNDTMap(datas, params7);
         T7 = SNDTMatch2(tgt7, src7, params7, T7);
-        ut7 = ut7 + params7._usedtime;
-        it7 += params7._ceres_iteration;
       }
-      Tr7 = Tr7 * Affine3dFromAffine2d(T7);
-      path7.poses.push_back(MakePoseStampedMsg(tj, Tr7));
-      its7.push_back(it7);
     }
   }
   bar.finish();
@@ -202,19 +188,12 @@ int main(int argc, char **argv) {
   auto pubgt = nh.advertise<nav_msgs::Path>("pathg", 0, true);
 
   MakeGtLocal(gtpath, t0);
-  pub5.publish(path5);
-  pub7.publish(path7);
+  pub5.publish(r5.path);
+  pub7.publish(r7.path);
   pubgt.publish(gtpath);
-  PrintResult(path5, gtpath);
-  PrintResult(path7, gtpath);
-  PrintTime(opt5, its5);
-  PrintTime(opt7, its7);
-  // vector<double> SSS, SSSS;
-  // for (size_t i = 0; i < c7.size(); ++i) {
-  //   if (c7[i] == 1) SSS.push_back(its7[i]);
-  //   if (c7[i] == 4) SSSS.push_back(its7[i]);
-  // }
-  // Stat(SSS).PrintResult();
-  // Stat(SSSS).PrintResult();
+  PrintResult(r5.path, gtpath);
+  PrintResult(r7.path, gtpath);
+  r5.Print();
+  r7.Print();
   ros::spin();
 }

@@ -18,28 +18,41 @@ NDTCell::NDTCell() {
   tolerance_ = Eigen::NumTraits<double>::dummy_precision();
 }
 
+// XXX: should be better, e.g. refine ExcludeInfinite
 void NDTCell::ComputeGaussian() {
+  if (point_covs_.size() && point_covs_.size() != points_.size()) {
+    std::cerr << __FUNCTION__ << ": size of covariances is wrong\n";
+    std::exit(-1);
+  }
   n_ = points_.size();
   pmean_.setZero(), pcov_.setZero();
   std::vector<Eigen::Vector2d> pts;
   std::vector<Eigen::Matrix2d> covs;
-  ExcludeInfinite(points_, point_covs_, pts, covs);
+  if (point_covs_.size())
+    ExcludeInfinite(points_, point_covs_, pts, covs);
+  else
+    ExcludeInfinite(points_, pts);
+
   if (!pts.size()) {
     celltype_ = kNoPoints;
     return;
   }
+
   pmean_ = ComputeMean(pts);
   pcov_ = ComputeCov(pts, pmean_, covs);
   celltype_ = kRegular;
+
   if (pcov_.isZero()) {
     celltype_ = kInvalid;
     return;
   }
   ComputeEvalEvec(pcov_, pevals_, pevecs_);
+
   if (pevals_(0) <= tolerance_ || pevals_(1) <= tolerance_) {
     celltype_ = kInvalid;
     return;
   }
+
   if (pevals_(1) > rescale_ratio_ * pevals_(0)) {
     pevals_(0) = pevals_(1) / rescale_ratio_;
     pcov_ = pevecs_ * pevals_.asDiagonal() * pevecs_.transpose();
