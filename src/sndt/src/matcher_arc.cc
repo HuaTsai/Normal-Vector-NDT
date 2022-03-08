@@ -295,7 +295,6 @@ Eigen::Affine2d SNDTMatch(const SNDTMap &target_map,
       orj.AddCorrespondence(cellp->GetPointMean(), cellq->GetPointMean());
     }
     auto ids = orj.GetIndices();
-    // XXX: we should change in place...
     RetainIndices(ups, ids);
     RetainIndices(cps, ids);
     RetainIndices(unps, ids);

@@ -4,10 +4,10 @@
 #include <ros/ros.h>
 #include <rosbag/bag.h>
 #include <sndt/matcher.h>
+#include <sndt/matcher_pcl.h>
 #include <sndt/visuals.h>
 #include <sndt_exec/wrapper.h>
 #include <tqdm/tqdm.h>
-#include <sndt/matcher_pcl.h>
 
 #include <boost/program_options.hpp>
 
@@ -15,8 +15,6 @@ using namespace std;
 using namespace Eigen;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
-// HACK
-#define USETR
 
 struct Res {
   Res() : n(0) {}
@@ -36,7 +34,7 @@ vector<Vector2d> EllipseData() {
   double x = 10, y = 6, xc = 0, yc = 0;
   vector<Vector2d> ret;
   for (int i = 0; i < 360; ++i) {
-    double th = i * M_PI / 180.;
+    double th = Deg2Rad(i);
     ret.push_back(Vector2d(xc + x * cos(th), yc + y * sin(th)));
   }
   return ret;
@@ -67,13 +65,14 @@ void Updates(const Affine2d &Tf,
   res.rot_f.push_back(df(1));
   res.it.push_back(params._iteration);
   res.iit.push_back(params._ceres_iteration);
-  res.iiit.push_back(0);
+  res.iiit.push_back(params._search_iteration);
   res.opt.push_back(params._usedtime.optimize());
   res.ttl.push_back(params._usedtime.total());
   ++res.n;
 }
 
 int main(int argc, char **argv) {
+  bool tr;
   int samples;
   double cell_size, voxel, d2;
   po::options_description desc("Allowed options");
@@ -83,7 +82,8 @@ int main(int argc, char **argv) {
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("voxel,v", po::value<double>(&voxel)->default_value(0), "Downsample voxel")
       ("samples,s", po::value<int>(&samples)->default_value(100), "Transform Samples")
-      ("d2", po::value<double>(&d2)->required(), "d2");
+      ("d2", po::value<double>(&d2)->required(), "d2")
+      ("tr", po::value<bool>(&tr)->default_value(false)->implicit_value(true), "Trust Region");
   // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -101,7 +101,7 @@ int main(int argc, char **argv) {
 
   for (size_t i = 0; i < xs.size(); ++i) {
     auto affs = RandomTransformGenerator2D(xs[i] * rmax).Generate(samples);
-    vector<double> e2tl, e2rot;
+    vector<double> icptl, icprot, ndttl, ndtrot;
     Res r1, r3, r5, r7;
     for (auto aff : affs) {
       auto src = TransformPoints(tgt, aff);
@@ -116,19 +116,25 @@ int main(int argc, char **argv) {
       params1._usedtime.Start();
       auto tgt1 = MakePoints(datat, params1);
       auto src1 = MakePoints(datas, params1);
-#ifdef USETR
-      auto T1 = ICPMatch(tgt1, src1, params1);
-#else
-      auto T1 = IMatch(tgt1, src1, params1);
-#endif
+      Affine2d T1;
+      if (tr)
+        T1 = ICPMatch(tgt1, src1, params1);
+      else
+        T1 = IMatch(tgt1, src1, params1);
       Updates(T1, params1, aff, r1);
 
       // PCL-ICP
-      auto T2 = PCLNDT(tgt1, src1);
-      if (SuccessMatch(T2 * aff)) {
-        auto diff = TransNormRotDegAbsFromAffine2d(T2 * aff);
-        e2tl.push_back(diff(0));
-        e2rot.push_back(diff(1));
+      auto TICP = PCLICP(tgt1, src1);
+      if (SuccessMatch(TICP * aff)) {
+        auto diff = TransNormRotDegAbsFromAffine2d(TICP * aff);
+        icptl.push_back(diff(0)), icprot.push_back(diff(1));
+      }
+
+      // PCL-NDT
+      auto TNDT = PCLNDT(tgt1, src1);
+      if (SuccessMatch(TNDT * aff)) {
+        auto diff = TransNormRotDegAbsFromAffine2d(TNDT * aff);
+        ndttl.push_back(diff(0)), ndtrot.push_back(diff(1));
       }
 
       // Symmetric ICP Method
@@ -137,11 +143,11 @@ int main(int argc, char **argv) {
       params3._usedtime.Start();
       auto tgt3 = MakePoints(datat, params3);
       auto src3 = MakePoints(datas, params3);
-#ifdef USETR
-      auto T3 = SICPMatch(tgt3, src3, params3);
-#else
-      auto T3 = PMatch(tgt3, src3, params3);
-#endif
+      Affine2d T3;
+      if (tr)
+        T3 = SICPMatch(tgt3, src3, params3);
+      else
+        T3 = PMatch(tgt3, src3, params3);
       Updates(T3, params3, aff, r3);
 
       // D2D-NDT Method
@@ -153,11 +159,12 @@ int main(int argc, char **argv) {
       params5._usedtime.Start();
       auto tgt5 = MakeNDTMap(datat, params5);
       auto src5 = MakeNDTMap(datas, params5);
-#ifdef USETR
-      auto T5 = DMatch(tgt5, src5, params5);
-#else
-      auto T5 = D2DNDTMatch(tgt5, src5, params5);
-#endif
+      cout << "NDT" << endl;
+      Affine2d T5;
+      if (tr)
+        T5 = DMatch(tgt5, src5, params5);
+      else
+        T5 = D2DNDTMatch(tgt5, src5, params5);
       Updates(T5, params5, aff, r5);
 
       // Symmetric NDT Method
@@ -169,11 +176,12 @@ int main(int argc, char **argv) {
       params7._usedtime.Start();
       auto tgt7 = MakeNDTMap(datat, params7);
       auto src7 = MakeNDTMap(datas, params7);
-#ifdef USETR
-      auto T7 = SMatch(tgt7, src7, params7);
-#else
-      auto T7 = SNDTMatch2(tgt7, src7, params7);
-#endif
+      cout << "SNDT" << endl;
+      Affine2d T7;
+      if (tr)
+        T7 = SMatch(tgt7, src7, params7);
+      else
+        T7 = SNDTMatch2(tgt7, src7, params7);
       Updates(T7, params7, aff, r7);
     }
     printf("sr(%.4f): %d, %d, %d, %d\n", xs[i] * rmax, r1.n, r3.n, r5.n, r7.n);
@@ -185,7 +193,9 @@ int main(int argc, char **argv) {
     r3.Print();
     r5.Print();
     r7.Print();
-    printf("icp: %ld, %f / %f\n", e2tl.size(), Stat(e2tl).rms, Stat(e2rot).rms);
+    printf("icp: %ld, %f / %f, ndt: %ld, %f / %f\n", icptl.size(),
+           Stat(icptl).rms, Stat(icprot).rms, ndttl.size(), Stat(ndttl).rms,
+           Stat(ndtrot).rms);
   }
 
   NPArray("x", xs);

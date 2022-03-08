@@ -13,6 +13,7 @@
 #pragma once
 #include <bits/stdc++.h>
 #include <pcl/search/kdtree.h>
+#include <common/angle_utils.h>
 
 #include <Eigen/Dense>
 
@@ -233,8 +234,8 @@ class RandomTransformGenerator2D {
     std::vector<Eigen::Affine2d> ret;
     std::uniform_real_distribution<> urd(-M_PI, M_PI);
     // std::uniform_real_distribution<> urd2(-M_PI / 4, M_PI / 4);
-    std::uniform_real_distribution<> urd2(-10. * M_PI / 180.,
-                                          10. * M_PI / 180.);
+    double rad = Deg2Rad(10);
+    std::uniform_real_distribution<> urd2(-rad, rad);
     for (int i = 0; i < sizes; ++i) {
       double angle = urd(*dre_);
       double x = radius_ * cos(angle);
@@ -276,7 +277,7 @@ class RandomRotationGenerator {
  public:
   explicit RandomRotationGenerator(double angle_deg)
       : dre_(new std::default_random_engine()),
-        angle_rad_(angle_deg * M_PI / 180.) {}
+        angle_rad_(Deg2Rad(angle_deg)) {}
   std::vector<Eigen::Affine2d> Generate(int sizes) {
     std::vector<Eigen::Affine2d> ret;
     std::uniform_real_distribution<> urd(-angle_rad_, angle_rad_);

@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2022
  *
  */
+#include <common/angle_utils.h>
 #include <common/eigen_utils.h>
 #include <sndt/optimizer.h>
 
@@ -47,6 +48,8 @@ void LeastSquareOptimize::Optimize(CommonParameters &params) {
   options.minimizer_progress_to_stdout = params.verbose;
   options.linear_solver_type = params.solver;
   options.max_num_iterations = params.ceres_max_iterations;
+  // FIXME
+  // options.use_nonmonotonic_steps = true;
 
   options.update_state_every_iteration = params.inspect;
   if (params.inspect) {
@@ -75,6 +78,10 @@ void LeastSquareOptimize::Optimize(CommonParameters &params) {
   params._final_cost = summary.final_cost;
   ++params._iteration;
   params._ceres_iteration += summary.num_linear_solves;
+  for (const auto &sit : summary.iterations) {
+    // TODO: There are only 0 or 1
+    // params._search_iteration += sit.linear_solver_iterations;
+  }
   params._opt_time += summary.total_time_in_seconds * 1000.;
 
   if (params.save_costs) {
@@ -84,6 +91,7 @@ void LeastSquareOptimize::Optimize(CommonParameters &params) {
           rbids[i], false, &params._costs.back()[i].second, nullptr, nullptr);
   }
 
+  // FIXME
   cur_tf_ = Eigen::Translation2d(xyt_[0], xyt_[1]) *
             Eigen::Rotation2Dd(xyt_[2]) * cur_tf_;
 }
@@ -91,8 +99,7 @@ void LeastSquareOptimize::Optimize(CommonParameters &params) {
 void LeastSquareOptimize::CheckConverge(
     CommonParameters &params, const std::vector<Eigen::Affine2d> &tfs) {
   Eigen::Vector2d xy = Eigen::Vector2d(xyt_[0], xyt_[1]);
-  if (xy.norm() < params.threshold &&
-      xyt_[2] * 180. / M_PI < params.threshold_t) {
+  if (xy.norm() < params.threshold && Rad2Deg(xyt_[2]) < params.threshold_t) {
     params._converge = Converge::kThreshold;
     return;
   }
@@ -103,8 +110,7 @@ void LeastSquareOptimize::CheckConverge(
   for (auto tf : tfs) {
     Eigen::Vector2d diff =
         TransNormRotDegAbsFromAffine2d(tf.inverse() * cur_tf_);
-    if (diff(0) < params.threshold &&
-        diff(1) * M_PI / 180. < params.threshold_t) {
+    if (diff(0) < params.threshold && diff(1) < params.threshold_t) {
       params._converge = Converge::kBounce;
       return;
     }
@@ -156,6 +162,18 @@ void GeneralOptimize::Optimize(CommonParameters &params) {
   //        summary.gradient_evaluation_time_in_seconds * 1000. /
   //            summary.num_gradient_evaluations,
   //        summary.iterations.size());
+  // printf("There are %ld iterations: ", summary.iterations.size());
+  for (const auto &sit : summary.iterations) {
+    // printf("(%d, %d), ", sit.line_search_function_evaluations,
+    //        sit.line_search_iterations);
+    params._search_iteration += sit.line_search_iterations;
+  }
+  // printf("\nTotal: %d\n", params._search_iteration);
+  // std::cout << summary.cost_evaluation_time_in_seconds << ", ";
+  // std::cout << summary.gradient_evaluation_time_in_seconds << ", ";
+  // std::cout << summary.line_search_polynomial_minimization_time_in_seconds << " -> ";
+  // std::cout << summary.total_time_in_seconds << std::endl;
+
   params._ceres_iteration += summary.iterations.size();
   ++params._iteration;
   if (params.verbose) {
@@ -172,23 +190,18 @@ void GeneralOptimize::Optimize(CommonParameters &params) {
 void GeneralOptimize::CheckConverge(CommonParameters &params,
                                     const std::vector<Eigen::Affine2d> &tfs) {
   Eigen::Vector2d xy = Eigen::Vector2d(xyt_[0], xyt_[1]);
-  if (xy.norm() < params.threshold &&
-      xyt_[2] * 180. / M_PI < params.threshold_t) {
+  if (xy.norm() < params.threshold && Rad2Deg(xyt_[2]) < params.threshold_t) {
     params._converge = Converge::kThreshold;
-    // std::cout << std::endl;
     return;
   }
   if (params._iteration > params.max_iterations) {
     params._converge = Converge::kMaxIterations;
-    // std::cout << std::endl;
     return;
   }
   for (auto tf : tfs) {
     Eigen::Vector2d diff =
         TransNormRotDegAbsFromAffine2d(tf.inverse() * cur_tf_);
-    if (diff(0) < params.threshold &&
-        diff(1) * M_PI / 180. < params.threshold_t) {
-      // std::cout << std::endl;
+    if (diff(0) < params.threshold && diff(1) < params.threshold_t) {
       params._converge = Converge::kBounce;
       return;
     }

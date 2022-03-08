@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
     vector<pair<vector<Vector2d>, Affine2d>> datas{
         {srcc, Eigen::Affine2d::Identity()}};
 
-    CommonParameters *params;
+    CommonParameters *params = nullptr;
     Affine2d T;
     ICPParameters params1;
     Pt2plICPParameters params2;

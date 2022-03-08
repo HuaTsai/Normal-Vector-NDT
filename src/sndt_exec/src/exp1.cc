@@ -14,19 +14,14 @@ using namespace std;
 using namespace Eigen;
 namespace po = boost::program_options;
 
-// HACK
-// #define USETR
-
 struct Res {
   Res() : Tr(Affine2d::Identity()) {}
-  vector<double> it, iit, iiit, opt, ttl;
+  vector<double> it, iit, iiit, bud, nm, ndt, opt, oth, ttl;
   nav_msgs::Path path;
   Affine2d Tr;
   void Print() {
-    printf(
-        "%.2f & %.2f & %.2f & %.2f & %.2f\n",
-        Stat(it).mean, Stat(iit).mean, Stat(iiit).mean, Stat(opt).mean / 1000.,
-        Stat(ttl).mean / 1000.);
+    printf("%.2f & %.2f & %.2f & %.2f & %.2f\n", Stat(it).mean, Stat(iit).mean,
+           Stat(iiit).mean, Stat(opt).mean / 1000., Stat(ttl).mean / 1000.);
   }
 };
 
@@ -54,22 +49,39 @@ void PrintResult(const nav_msgs::Path &est, const nav_msgs::Path &gt) {
   te.set_evaltype(TrajectoryEvaluation::EvalType::kRelativeByLength);
   te.set_length(100);
   auto rpe = te.ComputeRMSError2D();
-  printf("ate: %.2f / %.2f\n", ate.first.rms, ate.second.rms);
-  printf("rpe: %.2f / %.2f\n", rpe.first.rms, rpe.second.rms);
+  printf("ate: %.2f & %.2f\n", ate.first.rms, ate.second.rms);
+  printf("rpe: %.2f & %.2f\n", rpe.first.rms, rpe.second.rms);
   printf("   tl: %.2f / %.2f / %.2f\n", rpe.first.min, rpe.first.max,
          rpe.first.mean);
   printf("  rot: %.2f / %.2f / %.2f\n", rpe.second.min, rpe.second.max,
          rpe.second.mean);
 }
 
-void Updates(const CommonParameters &params, Res &res, ros::Time tj, Affine2d T) {
+void Updates(const CommonParameters &params,
+             Res &res,
+             ros::Time tj,
+             Affine2d T) {
   res.it.push_back(params._iteration);
   res.iit.push_back(params._ceres_iteration);
-  res.iiit.push_back(0);
+  res.iiit.push_back(params._search_iteration);
+  res.bud.push_back(params._usedtime.build());
+  res.nm.push_back(params._usedtime.normal());
+  res.ndt.push_back(params._usedtime.ndt());
   res.opt.push_back(params._usedtime.optimize());
+  res.oth.push_back(params._usedtime.others());
   res.ttl.push_back(params._usedtime.total());
   res.Tr = res.Tr * T;
-  res.path.poses.push_back(MakePoseStampedMsg(tj, Affine3dFromAffine2d(res.Tr)));
+  res.path.poses.push_back(
+      MakePoseStampedMsg(tj, Affine3dFromAffine2d(res.Tr)));
+}
+
+void PrintTime(const Res &a, const Res &b) {
+  printf("ndt = [%.2f, %.2f, %.2f, %.2f, %.2f]\n", Stat(a.bud).mean / 1000.,
+         Stat(a.nm).mean / 1000., Stat(a.ndt).mean / 1000.,
+         Stat(a.opt).mean / 1000., Stat(a.oth).mean / 1000.);
+  printf("sndt = [%.2f, %.2f, %.2f, %.2f, %.2f]\n", Stat(b.bud).mean / 1000.,
+         Stat(b.nm).mean / 1000., Stat(b.ndt).mean / 1000.,
+         Stat(b.opt).mean / 1000., Stat(b.oth).mean / 1000.);
 }
 
 int main(int argc, char **argv) {
@@ -79,6 +91,7 @@ int main(int argc, char **argv) {
   Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
                   Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
+  bool tr;
   string d;
   double c, r, d2, v;
   po::options_description desc("Allowed options");
@@ -89,7 +102,8 @@ int main(int argc, char **argv) {
       ("v,v", po::value<double>(&v)->default_value(0), "Voxel")
       ("c,c", po::value<double>(&c)->default_value(1.5), "Cell Size")
       ("r,r", po::value<double>(&r)->required(), "Meters to Next Match")
-      ("d2", po::value<double>(&d2)->required(), "d2");
+      ("d2", po::value<double>(&d2)->required(), "d2")
+      ("tr", po::value<bool>(&tr)->default_value(false)->implicit_value(true), "Trust Region");
   // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -117,10 +131,10 @@ int main(int argc, char **argv) {
   Res r5, r7;
   r5.path = InitFirstPose(t0);
   r7.path = InitFirstPose(t0);
+  vector<double> e5t, e5r, e7t, e7r;
 
   tqdm bar;
   for (size_t i = 0; i < ids.size() - 1; ++i) {
-    // if (i == 64) continue;
     bar.progress(i, ids.size());
     auto tgt = PCMsgTo2D(vpc[ids[i]], v);
     auto src = PCMsgTo2D(vpc[ids[i + 1]], v);
@@ -131,29 +145,35 @@ int main(int argc, char **argv) {
 
     if (c != 0) {
       D2DNDTParameters params5;
+      params5.reject = true;
       params5.cell_size = c;
       params5.d2 = d2;
       params5._usedtime.Start();
       auto tgt5 = MakeNDT(datat, params5);
       auto src5 = MakeNDT(datas, params5);
-#ifdef USETR
-      auto T5 = D2DNDTMatch(tgt5, src5, params5);
-#else
-      auto T5 = DMatch(tgt5, src5, params5);
-#endif
+      Affine2d T5;
+      if (tr)
+        T5 = DMatch(tgt5, src5, params5);
+      else
+        T5 = D2DNDTMatch(tgt5, src5, params5);
+      e5t.push_back(TransNormRotDegAbsFromAffine2d(T5)(0));
+      e5r.push_back(TransNormRotDegAbsFromAffine2d(T5)(1));
       Updates(params5, r5, tj, T5);
 
       D2DNDTParameters params7;
+      params7.reject = true;
       params7.cell_size = c;
       params7.d2 = d2;
       params7._usedtime.Start();
       auto tgt7 = MakeNDT(datat, params7);
       auto src7 = MakeNDT(datas, params7);
-#ifdef USETR
-      auto T7 = SNDTMatch2(tgt7, src7, params7);
-#else
-      auto T7 = SMatch(tgt7, src7, params7);
-#endif
+      Affine2d T7;
+      if (tr)
+        T7 = SMatch(tgt7, src7, params7);
+      else
+        T7 = SNDTMatch2(tgt7, src7, params7);
+      e7t.push_back(TransNormRotDegAbsFromAffine2d(T7)(0));
+      e7r.push_back(TransNormRotDegAbsFromAffine2d(T7)(1));
       Updates(params7, r7, tj, T7);
     } else {
       Affine2d T5 = Affine2d::Identity();
@@ -180,6 +200,11 @@ int main(int argc, char **argv) {
     }
   }
   bar.finish();
+  Stat(e5t).PrintResult();
+  Stat(e5r).PrintResult();
+  Stat(e7t).PrintResult();
+  Stat(e7r).PrintResult();
+  PrintTime(r5, r7);
 
   ros::init(argc, argv, "exp1");
   ros::NodeHandle nh;

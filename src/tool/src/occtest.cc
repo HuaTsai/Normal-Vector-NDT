@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 #include <common/eigen_utils.h>
+#include <common/angle_utils.h>
 #include <nav_msgs/OccupancyGrid.h>
 #include <ros/ros.h>
 #include <tf2_eigen/tf2_eigen.h>
@@ -58,7 +59,7 @@ int main(int argc, char **argv) {
   Vector2d cen(1.5, 1.5);
   double cs = 2;
   double res = 0.1;
-  double skew = 40 * M_PI / 180.;
+  double skew = Deg2Rad(40);
   int n = (int)cs / res;
   double ares = cs / n;
   Vector2d bl = cen + Eigen::Rotation2Dd(skew) * Vector2d(-cs / 2, -cs / 2);

@@ -16,7 +16,7 @@ namespace po = boost::program_options;
 void XYT(string str, Affine2d aff) {
   printf("%s: %.6f, %.6f, %.6f\n", str.c_str(), aff.translation()(0),
          aff.translation()(1),
-         Eigen::Rotation2Dd(aff.rotation()).angle() * 180 / M_PI);
+         Rad2Deg(Eigen::Rotation2Dd(aff.rotation()).angle()));
 }
 
 int main(int argc, char **argv) {

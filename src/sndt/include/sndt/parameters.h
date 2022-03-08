@@ -28,7 +28,7 @@ struct CommonParameters {
     max_iterations = 100;
     ceres_max_iterations = 50;
     threshold = 0.0001;
-    threshold_t = 0.2;
+    threshold_t = 0.5;
     verbose = false;
     inspect = true;
     save_costs = false;
@@ -38,6 +38,7 @@ struct CommonParameters {
   void InitializeOutput() {
     _iteration = 0;
     _ceres_iteration = 0;
+    _search_iteration = 0;
     _initial_cost = 0;
     _final_cost = 0;
     _opt_time = 0;
@@ -49,7 +50,7 @@ struct CommonParameters {
   int max_iterations;
   int ceres_max_iterations;
   double threshold;
-  double threshold_t;
+  double threshold_t; /**< unit: degree */
   bool verbose;
   bool inspect;
   bool save_costs;
@@ -57,6 +58,7 @@ struct CommonParameters {
 
   int _iteration;
   int _ceres_iteration;
+  int _search_iteration;
   double _initial_cost;
   double _final_cost;
   double _opt_time; /**< optimize time in ms */

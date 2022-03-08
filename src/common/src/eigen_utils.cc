@@ -1,4 +1,5 @@
 #include <angles/angles.h>
+#include <common/angle_utils.h>
 #include <common/eigen_utils.h>
 #include <tf2_eigen/tf2_eigen.h>
 
@@ -47,7 +48,7 @@ Eigen::Vector3d XYTRadianFromAffine2d(const Eigen::Affine2d &aff) {
 
 Eigen::Vector3d XYTDegreeFromAffine2d(const Eigen::Affine2d &aff) {
   Eigen::Vector3d ret = XYTRadianFromAffine2d(aff);
-  ret(2) = ret(2) * 180. / M_PI;
+  ret(2) = Rad2Deg(ret(2));
   return ret;
 }
 
@@ -96,7 +97,7 @@ Eigen::Affine3d Conserve2DFromAffine3d(const Eigen::Affine3d &T) {
 Eigen::Vector2d TransNormRotDegAbsFromAffine2d(const Eigen::Affine2d &aff) {
   Eigen::Vector2d ret;
   ret(0) = aff.translation().norm();
-  ret(1) = abs(Eigen::Rotation2Dd(aff.rotation()).angle() * 180 / M_PI);
+  ret(1) = abs(Rad2Deg(Eigen::Rotation2Dd(aff.rotation()).angle()));
   return ret;
 }
 

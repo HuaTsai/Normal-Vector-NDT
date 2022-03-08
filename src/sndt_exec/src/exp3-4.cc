@@ -16,9 +16,6 @@ using namespace Eigen;
 using namespace visualization_msgs;
 namespace po = boost::program_options;
 
-// HACK
-// #define USETR
-
 struct Res {
   Res() : n(0) {}
   vector<double> tl_1, tl_f, rot_1, rot_f;
@@ -58,7 +55,7 @@ void Updates(const Affine2d &Tf,
   res.rot_f.push_back(df(1));
   res.it.push_back(params._iteration);
   res.iit.push_back(params._ceres_iteration);
-  res.iiit.push_back(0);
+  res.iiit.push_back(params._search_iteration);
   res.opt.push_back(params._usedtime.optimize());
   res.ttl.push_back(params._usedtime.total());
   ++res.n;
@@ -71,6 +68,7 @@ int main(int argc, char **argv) {
   Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
                   Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
+  bool tr;
   int samples;
   double cell_size, voxel, d2;
   po::options_description desc("Allowed options");
@@ -80,7 +78,8 @@ int main(int argc, char **argv) {
       ("cellsize,c", po::value<double>(&cell_size)->default_value(1.5), "Cell Size")
       ("voxel,v", po::value<double>(&voxel)->default_value(0), "Downsample voxel")
       ("samples,s", po::value<int>(&samples)->default_value(100), "Transform Samples")
-      ("d2", po::value<double>(&d2)->required(), "d2");
+      ("d2", po::value<double>(&d2)->required(), "d2")
+      ("tr", po::value<bool>(&tr)->default_value(false)->implicit_value(true), "Trust Region");
   // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -116,11 +115,11 @@ int main(int argc, char **argv) {
       params1._usedtime.Start();
       auto tgt1 = MakePoints(datat, params1);
       auto src1 = MakePoints(datas, params1);
-#ifdef USETR
-      auto T1 = ICPMatch(tgt1, src1, params1);
-#else
-      auto T1 = IMatch(tgt1, src1, params1);
-#endif
+      Affine2d T1;
+      if (tr)
+        T1 = ICPMatch(tgt1, src1, params1);
+      else
+        T1 = IMatch(tgt1, src1, params1);
       Updates(T1, params1, aff, r1);
 
       // Symmetric ICP Method
@@ -130,11 +129,11 @@ int main(int argc, char **argv) {
       params3._usedtime.Start();
       auto tgt3 = MakePoints(datat, params3);
       auto src3 = MakePoints(datas, params3);
-#ifdef USETR
-      auto T3 = SICPMatch(tgt3, src3, params3);
-#else
-      auto T3 = PMatch(tgt3, src3, params3);
-#endif
+      Affine2d T3;
+      if (tr)
+        T3 = SICPMatch(tgt3, src3, params3);
+      else
+        T3 = PMatch(tgt3, src3, params3);
       Updates(T3, params3, aff, r3);
 
       // D2D-NDT Method
@@ -145,11 +144,12 @@ int main(int argc, char **argv) {
       params5._usedtime.Start();
       auto tgt5 = MakeNDT(datat, params5);
       auto src5 = MakeNDT(datas, params5);
-#ifdef USETR
-      auto T5 = DMatch(tgt5, src5, params5);
-#else
-      auto T5 = D2DNDTMatch(tgt5, src5, params5);
-#endif
+      // cout << "NDT" << endl;
+      Affine2d T5;
+      if (tr)
+        T5 = DMatch(tgt5, src5, params5);
+      else
+        T5 = D2DNDTMatch(tgt5, src5, params5);
       Updates(T5, params5, aff, r5);
 
       // Symmetric NDT Method
@@ -160,11 +160,12 @@ int main(int argc, char **argv) {
       params7._usedtime.Start();
       auto tgt7 = MakeNDT(datat, params7);
       auto src7 = MakeNDT(datas, params7);
-#ifdef USETR
-      auto T7 = SMatch(tgt7, src7, params7);
-#else
-      auto T7 = SNDTMatch2(tgt7, src7, params7);
-#endif
+      // cout << "SNDT" << endl;
+      Affine2d T7;
+      if (tr)
+        T7 = SMatch(tgt7, src7, params7);
+      else
+        T7 = SNDTMatch2(tgt7, src7, params7);
       Updates(T7, params7, aff, r7);
     }
     printf("sr(%.4f): %d, %d, %d, %d\n", xs[i] * rmax, r1.n, r3.n, r5.n, r7.n);

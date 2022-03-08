@@ -1,4 +1,4 @@
-// NDT, SNDT decisions of d2
+// finds what works well and what works bad
 #include <bits/stdc++.h>
 #include <common/common.h>
 #include <metric/metric.h>
@@ -12,25 +12,6 @@ using namespace std;
 using namespace Eigen;
 namespace po = boost::program_options;
 
-double Dist(const nav_msgs::Path &gt, ros::Time t1, ros::Time t2) {
-  auto p1 = GetPose(gt.poses, t1);
-  auto p2 = GetPose(gt.poses, t2);
-  return Vector2d(p1.position.x - p2.position.x, p1.position.y - p2.position.y)
-      .norm();
-}
-
-Affine2d GetBenchMark(const nav_msgs::Path &gtpath,
-                      const ros::Time &t1,
-                      const ros::Time &t2) {
-  Affine3d To, Ti;
-  tf2::fromMsg(GetPose(gtpath.poses, t2), To);
-  tf2::fromMsg(GetPose(gtpath.poses, t1), Ti);
-  Affine3d Tgt3 = Conserve2DFromAffine3d(Ti.inverse() * To);
-  Affine2d ret = Translation2d(Tgt3.translation()(0), Tgt3.translation()(1)) *
-                 Rotation2Dd(Tgt3.rotation().block<2, 2>(0, 0));
-  return ret;
-}
-
 int main(int argc, char **argv) {
   Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
                   Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
@@ -39,7 +20,7 @@ int main(int argc, char **argv) {
                   Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
   string d;
-  double c, r, v;
+  double c, d2, v;
   po::options_description desc("Allowed options");
   // clang-format off
   desc.add_options()
@@ -47,7 +28,7 @@ int main(int argc, char **argv) {
       ("d,d", po::value<string>(&d)->required(), "Data (logxx)")
       ("v,v", po::value<double>(&v)->default_value(0), "Voxel")
       ("c,c", po::value<double>(&c)->default_value(1.5), "Cell Size")
-      ("r,r", po::value<double>(&r)->required(), "Meters to Next Match");
+      ("d2", po::value<double>(&d2)->required(), "d2");
   // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -63,66 +44,85 @@ int main(int argc, char **argv) {
   SerializationInput(JoinPath(GetDataPath(d), "lidar.ser"), vpc);
   int n = vpc.size() - 1;
 
-  cout << "  all n = " << n << endl;
   vector<int> ids{0};
   for (int i = 0, j = 1; i < n && j < n; ++j) {
     if (Dist(gtpath, vpc[i].header.stamp, vpc[j].header.stamp) < r) continue;
     ids.push_back(j);
     i = j;
   }
-  cout << "valid n = " << ids.size() << endl;
+  cout << n << " -> " << ids.size() << endl;
 
-  vector<pair<int, double>> res;
+
+  auto t0 = vpc[0].header.stamp;
+  Res r5, r7;
+  r5.path = InitFirstPose(t0);
+  r7.path = InitFirstPose(t0);
+  vector<double> e5t, e5r, e7t, e7r;
+
+  tqdm bar;
   for (size_t i = 0; i < ids.size() - 1; ++i) {
+    bar.progress(i, ids.size());
     auto tgt = PCMsgTo2D(vpc[ids[i]], v);
     auto src = PCMsgTo2D(vpc[ids[i + 1]], v);
-    // auto tj = vpc[ids[i + 1]].header.stamp;
-    auto Tgt = GetBenchMark(gtpath, vpc[ids[i]].header.stamp,
-                            vpc[ids[i + 1]].header.stamp);
+    auto tj = vpc[ids[i + 1]].header.stamp;
 
     vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, aff2}};
     vector<pair<vector<Vector2d>, Affine2d>> datas{{src, aff2}};
 
-    Stat *len = nullptr;
-    int bestid = 0;
-    double bestr = numeric_limits<double>::max(), bestt = 0;
-    for (int d2 : {0, 1, 2, 3, 4, 5, 6}) {
       D2DNDTParameters params5;
+      params5.reject = true;
       params5.cell_size = c;
-      params5.r_variance = params5.t_variance = 0;
-      params5.d2 = pow(10, -d2);
+      params5.d2 = d2;
       params5._usedtime.Start();
-      params5.max_iterations = 0;
-      params5.reject = false;
-      auto tgt5 = MakeNDTMap(datat, params5);
-      auto src5 = MakeNDTMap(datas, params5);
-      auto T5 = D2DNDTMatch(tgt5, src5, params5);
-      auto err5 = TransNormRotDegAbsFromAffine2d(Tgt.inverse() * T5);
-      if (err5(0) < bestr) bestid = d2, bestr = err5(0), bestt = err5(1);
-      
-      if (!len) {
-        vector<double> lens;
-        int x = 0;
-        for (auto corr : params5._corres[0]) {
-          Vector2d u = src5[corr.first]->GetPointMean() - tgt5[corr.second]->GetPointMean();
-          Matrix2d c = src5[corr.first]->GetPointCov() + tgt5[corr.second]->GetPointCov();
-          lens.push_back(u.dot(c.inverse() * u));
-          ++x;
-        }
-        len = new Stat(lens);
-      }
+      auto tgt5 = MakeNDT(datat, params5);
+      auto src5 = MakeNDT(datas, params5);
+      Affine2d T5;
+      if (tr)
+        T5 = DMatch(tgt5, src5, params5);
+      else
+        T5 = D2DNDTMatch(tgt5, src5, params5);
+      e5t.push_back(TransNormRotDegAbsFromAffine2d(T5)(0));
+      e5r.push_back(TransNormRotDegAbsFromAffine2d(T5)(1));
+      Updates(params5, r5, tj, T5);
+
+      D2DNDTParameters params7;
+      params7.reject = true;
+      params7.cell_size = c;
+      params7.d2 = d2;
+      params7._usedtime.Start();
+      auto tgt7 = MakeNDT(datat, params7);
+      auto src7 = MakeNDT(datas, params7);
+      Affine2d T7;
+      if (tr)
+        T7 = SMatch(tgt7, src7, params7);
+      else
+        T7 = SNDTMatch2(tgt7, src7, params7);
+      e7t.push_back(TransNormRotDegAbsFromAffine2d(T7)(0));
+      e7r.push_back(TransNormRotDegAbsFromAffine2d(T7)(1));
+      Updates(params7, r7, tj, T7);
     }
-    printf("%f: %.2f, %.2f -> %.2f ", pow(10, -bestid), bestr, bestt, len->mean + 3 * len->stdev);
-    res.push_back({bestid, len->mean});
-    len->PrintResult();
-    delete len;
   }
-  printf("x = np.array([");
-  for (auto r : res)
-    printf("%d, ", r.first);
-  printf("])\n");
-  printf("y = np.array([");
-  for (auto r : res)
-    printf("%f, ", r.second);
-  printf("])\n");
+  bar.finish();
+  Stat(e5t).PrintResult();
+  Stat(e5r).PrintResult();
+  Stat(e7t).PrintResult();
+  Stat(e7r).PrintResult();
+  PrintTime(r5, r7);
+
+  ros::init(argc, argv, "exp2");
+  ros::NodeHandle nh;
+  auto pub5 = nh.advertise<nav_msgs::Path>("path5", 0, true);
+  auto pub7 = nh.advertise<nav_msgs::Path>("path7", 0, true);
+  auto pubgt = nh.advertise<nav_msgs::Path>("pathg", 0, true);
+
+  MakeGtLocal(gtpath, t0);
+  pub5.publish(r5.path);
+  pub7.publish(r7.path);
+  pubgt.publish(gtpath);
+  PrintResult(r5.path, gtpath);
+  PrintResult(r7.path, gtpath);
+  r5.Print();
+  r7.Print();
+  ros::spin();
 }
+

@@ -138,7 +138,7 @@ std::pair<Stat, Stat> TrajectoryEvaluation::AbsoluteTrajectoryError() {
     tf2::fromMsg(gtsync_.poses[i].pose, Qi);
     Eigen::Affine3d Fi = Qi.inverse() * SPi;
     tlerr.push_back(Fi.translation().norm());
-    roterr.push_back(Eigen::AngleAxisd(Fi.rotation()).angle() * 180. / M_PI);
+    roterr.push_back(Rad2Deg(Eigen::AngleAxisd(Fi.rotation()).angle()));
   }
   return {Stat(tlerr), Stat(roterr)};
 }
@@ -155,7 +155,7 @@ TrajectoryEvaluation::RelativePoseErrorBySingle() {
     tf2::fromMsg(gtsync_.poses[i + 1].pose, Qj);
     Eigen::Affine3d Ei = (Qi.inverse() * Qj).inverse() * (Pi.inverse() * Pj);
     tlerr.push_back(Ei.translation().norm());
-    roterr.push_back(Eigen::AngleAxisd(Ei.rotation()).angle() * 180. / M_PI);
+    roterr.push_back(Rad2Deg(Eigen::AngleAxisd(Ei.rotation()).angle()));
   }
   return {Stat(tlerr), Stat(roterr)};
 }
@@ -186,7 +186,7 @@ TrajectoryEvaluation::RelativePoseErrorByLength() {
     tf2::fromMsg(gtsync_.poses[eid - 1].pose, Qj);
     Eigen::Affine3d Ei = (Qi.inverse() * Qj).inverse() * (Pi.inverse() * Pj);
     tlerr.push_back(Ei.translation().norm());
-    roterr.push_back(Eigen::AngleAxisd(Ei.rotation()).angle() * 180. / M_PI);
+    roterr.push_back(Rad2Deg(Eigen::AngleAxisd(Ei.rotation()).angle()));
 
     distsum -= dists[sid];
   }
