@@ -32,42 +32,6 @@ inline std::vector<Eigen::Vector2d> ExcludeNaNInf(
   return ret;
 }
 
-// TODO: document
-// inline void ExcludeInfinite(const std::vector<Eigen::Vector2d> &points,
-//                             std::vector<Eigen::Vector2d> &valid_points) {
-//   valid_points.clear();
-//   for (const auto &pt : points)
-//     if (pt.allFinite()) valid_points.push_back(pt);
-// }
-
-// inline void ExcludeInfinite(const std::vector<Eigen::Vector2d> &points,
-//                             const std::vector<Eigen::Matrix2d> &covariances,
-//                             std::vector<Eigen::Vector2d> &valid_points,
-//                             std::vector<Eigen::Matrix2d> &valid_covariances) {
-//   valid_points.clear();
-//   valid_covariances.clear();
-//   for (size_t i = 0; i < points.size(); ++i) {
-//     if (points[i].allFinite() && covariances[i].allFinite()) {
-//       valid_points.push_back(points[i]);
-//       valid_covariances.push_back(covariances[i]);
-//     }
-//   }
-// }
-
-// inline void ExcludeInfinite(const std::vector<Eigen::Vector2d> &points,
-//                             const std::vector<Eigen::Vector2d> &normals,
-//                             std::vector<Eigen::Vector2d> &valid_points,
-//                             std::vector<Eigen::Vector2d> &valid_normals) {
-//   valid_points.clear();
-//   valid_normals.clear();
-//   for (size_t i = 0; i < points.size(); ++i) {
-//     if (points[i].allFinite() && normals[i].allFinite()) {
-//       valid_points.push_back(points[i]);
-//       valid_normals.push_back(normals[i]);
-//     }
-//   }
-// }
-
 inline pcl::KdTreeFLANN<pcl::PointXY> MakeKDTree(
     const std::vector<Eigen::Vector2d> &points) {
   pcl::PointCloud<pcl::PointXY>::Ptr pc(new pcl::PointCloud<pcl::PointXY>);
