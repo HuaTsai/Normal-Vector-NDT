@@ -115,29 +115,6 @@ geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time,
   return MakePoseStampedMsg(time, Affine3dFromMatrix4f(mtx));
 }
 
-std::vector<Eigen::Vector2d> TransformPoints(
-    const std::vector<Eigen::Vector2d> &points, const Eigen::Affine2d &aff) {
-  std::vector<Eigen::Vector2d> ret(points.size());
-  std::transform(points.begin(), points.end(), ret.begin(),
-                 [&aff](auto p) { return aff * p; });
-  return ret;
-}
-
-void TransformPointsInPlace(std::vector<Eigen::Vector2d> &points,
-                            const Eigen::Affine2d &aff) {
-  std::transform(points.begin(), points.end(), points.begin(),
-                 [&aff](auto p) { return aff * p; });
-}
-
-std::vector<Eigen::Vector2d> TransformNormals(
-    const std::vector<Eigen::Vector2d> &normals, const Eigen::Affine2d &aff) {
-  std::vector<Eigen::Vector2d> ret(normals.size());
-  std::transform(normals.begin(), normals.end(), ret.begin(), [&aff](auto p) {
-    return Eigen::Vector2d(aff.rotation() * p);
-  });
-  return ret;
-}
-
 Mvn::Mvn(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covariance)
     : mean_(mean), covariance_(covariance) {}
 

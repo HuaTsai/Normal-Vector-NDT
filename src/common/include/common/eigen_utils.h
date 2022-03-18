@@ -46,14 +46,44 @@ geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time,
 geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time,
                                               const Eigen::Matrix4f &mtx);
 
-std::vector<Eigen::Vector2d> TransformPoints(
-    const std::vector<Eigen::Vector2d> &points, const Eigen::Affine2d &aff);
+class Mvn {
+ public:
+  explicit Mvn(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covariance);
+  double pdf(const Eigen::Vector2d &x) const;
 
-void TransformPointsInPlace(std::vector<Eigen::Vector2d> &points,
-                            const Eigen::Affine2d &aff);
+ private:
+  Eigen::Vector2d mean_;
+  Eigen::Matrix2d covariance_;
+};
 
-std::vector<Eigen::Vector2d> TransformNormals(
-    const std::vector<Eigen::Vector2d> &normals, const Eigen::Affine2d &aff);
+template <int D>
+inline std::vector<Eigen::Matrix<double, D, 1>> TransformPoints(
+    const std::vector<Eigen::Matrix<double, D, 1>> &points,
+    const Eigen::Transform<double, D, Eigen::TransformTraits::Affine> &aff) {
+  std::vector<Eigen::Matrix<double, D, 1>> ret(points.size());
+  std::transform(points.begin(), points.end(), ret.begin(),
+                 [&aff](auto p) { return aff * p; });
+  return ret;
+}
+
+template <int D>
+inline void TransformPointsInPlace(
+    std::vector<Eigen::Matrix<double, D, 1>> &points,
+    const Eigen::Transform<double, D, Eigen::TransformTraits::Affine> &aff) {
+  std::transform(points.begin(), points.end(), points.begin(),
+                 [&aff](auto p) { return aff * p; });
+}
+
+template <int D>
+inline std::vector<Eigen::Matrix<double, D, 1>> TransformNormals(
+    const std::vector<Eigen::Matrix<double, D, 1>> &normals,
+    const Eigen::Transform<double, D, Eigen::TransformTraits::Affine> &aff) {
+  std::vector<Eigen::Matrix<double, D, 1>> ret(normals.size());
+  std::transform(normals.begin(), normals.end(), ret.begin(), [&aff](auto p) {
+    return Eigen::Matrix<double, D, 1>(aff.rotation() * p);
+  });
+  return ret;
+}
 
 /**
  * @brief Compute eigenvalues and eigenvectors from covariance
@@ -67,6 +97,8 @@ std::vector<Eigen::Vector2d> TransformNormals(
  * significantly faster than the QR iterative algorithm.\n The eigenvalues are
  * sorted in increasing order.
  * @see Eigen::SelfAdjointEigenSolver and Catalogue of dense decompositions
+ * @note This is a template function, so we add inline to prevent include
+ * issue.
  */
 template <int D>
 inline void ComputeEvalEvec(const Eigen::Matrix<double, D, D> &covariance,
@@ -117,13 +149,3 @@ inline Eigen::Matrix<double, D, D> ComputeCov(
   Eigen::Matrix<double, D, D> ret = mp * mp.transpose() / (n - 1);
   return ret;
 }
-
-class Mvn {
- public:
-  explicit Mvn(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covariance);
-  double pdf(const Eigen::Vector2d &x) const;
-
- private:
-  Eigen::Vector2d mean_;
-  Eigen::Matrix2d covariance_;
-};
