@@ -78,10 +78,10 @@ void LeastSquareOptimize::Optimize(CommonParameters &params) {
   params._final_cost = summary.final_cost;
   ++params._iteration;
   params._ceres_iteration += summary.num_linear_solves;
-  for (const auto &sit : summary.iterations) {
+  // for (const auto &sit : summary.iterations) {
     // TODO: There are only 0 or 1
     // params._search_iteration += sit.linear_solver_iterations;
-  }
+  // }
   params._opt_time += summary.total_time_in_seconds * 1000.;
 
   if (params.save_costs) {

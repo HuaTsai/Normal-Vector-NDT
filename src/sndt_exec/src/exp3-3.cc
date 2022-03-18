@@ -18,6 +18,7 @@ namespace po = boost::program_options;
 
 struct Res {
   Res() : n(0) {}
+  vector<double> err;
   vector<double> tl_1, tl_f, rot_1, rot_f;
   vector<double> it, iit, iiit, opt, ttl;
   int n;
@@ -51,14 +52,28 @@ bool SuccessMatch(Affine2d aff) {
   return diff(0) < 0.2 && diff(1) < 3;
 }
 
+double err(const vector<Vector2d> &src,
+           const vector<Vector2d> &tgt,
+           const Affine2d &T1) {
+  auto src2 = TransformPoints(src, T1);
+  double ret = 0;
+  for (size_t i = 0; i < src2.size(); ++i) {
+    ret += (src2[i] - tgt[i]).norm();
+  }
+  return ret / src2.size();
+}
+
 void Updates(const Affine2d &Tf,
              const CommonParameters &params,
              const Affine2d &aff,
+             const vector<Vector2d> &src,
+             const vector<Vector2d> &tgt,
              Res &res) {
   if (!SuccessMatch(Tf * aff)) return;
   Affine2d T1 = params._sols[0].back();
   auto d1 = TransNormRotDegAbsFromAffine2d(T1 * aff);
   auto df = TransNormRotDegAbsFromAffine2d(Tf * aff);
+  res.err.push_back(err(src, tgt, T1));
   res.tl_1.push_back(d1(0));
   res.rot_1.push_back(d1(1));
   res.tl_f.push_back(df(0));
@@ -95,6 +110,7 @@ int main(int argc, char **argv) {
 
   auto tgt = EllipseData();
   vector<double> y1, y3, y5, y7;
+  vector<double> e1, e3, e5, e7;
   vector<double> xs(21);
   for (int i = 0; i < 21; ++i) xs[i] = pow(10, -2.0 + 0.1 * i);
   double rmax = 5;
@@ -121,7 +137,7 @@ int main(int argc, char **argv) {
         T1 = ICPMatch(tgt1, src1, params1);
       else
         T1 = IMatch(tgt1, src1, params1);
-      Updates(T1, params1, aff, r1);
+      Updates(T1, params1, aff, src, tgt, r1);
 
       // PCL-ICP
       auto TICP = PCLICP(tgt1, src1);
@@ -148,7 +164,7 @@ int main(int argc, char **argv) {
         T3 = SICPMatch(tgt3, src3, params3);
       else
         T3 = PMatch(tgt3, src3, params3);
-      Updates(T3, params3, aff, r3);
+      Updates(T3, params3, aff, src, tgt, r3);
 
       // D2D-NDT Method
       D2DNDTParameters params5;
@@ -159,13 +175,12 @@ int main(int argc, char **argv) {
       params5._usedtime.Start();
       auto tgt5 = MakeNDTMap(datat, params5);
       auto src5 = MakeNDTMap(datas, params5);
-      cout << "NDT" << endl;
       Affine2d T5;
       if (tr)
         T5 = DMatch(tgt5, src5, params5);
       else
         T5 = D2DNDTMatch(tgt5, src5, params5);
-      Updates(T5, params5, aff, r5);
+      Updates(T5, params5, aff, src, tgt, r5);
 
       // Symmetric NDT Method
       D2DNDTParameters params7;
@@ -176,19 +191,22 @@ int main(int argc, char **argv) {
       params7._usedtime.Start();
       auto tgt7 = MakeNDTMap(datat, params7);
       auto src7 = MakeNDTMap(datas, params7);
-      cout << "SNDT" << endl;
       Affine2d T7;
       if (tr)
         T7 = SMatch(tgt7, src7, params7);
       else
         T7 = SNDTMatch2(tgt7, src7, params7);
-      Updates(T7, params7, aff, r7);
+      Updates(T7, params7, aff, src, tgt, r7);
     }
     printf("sr(%.4f): %d, %d, %d, %d\n", xs[i] * rmax, r1.n, r3.n, r5.n, r7.n);
     y1.push_back(Stat(r1.tl_1).rms / rmax);
     y3.push_back(Stat(r3.tl_1).rms / rmax);
     y5.push_back(Stat(r5.tl_1).rms / rmax);
     y7.push_back(Stat(r7.tl_1).rms / rmax);
+    e1.push_back(Stat(r1.err).mean / rmax);
+    e3.push_back(Stat(r3.err).mean / rmax);
+    e5.push_back(Stat(r5.err).mean / rmax);
+    e7.push_back(Stat(r7.err).mean / rmax);
     r1.Print();
     r3.Print();
     r5.Print();
@@ -203,5 +221,11 @@ int main(int argc, char **argv) {
   NPArray("y3", y3);
   NPArray("y5", y5);
   NPArray("y7", y7);
+  printf("converge(x, y1, y3, y5, y7)\n");
+  NPArray("x", xs);
+  NPArray("y1", e1);
+  NPArray("y3", e3);
+  NPArray("y5", e5);
+  NPArray("y7", e7);
   printf("converge(x, y1, y3, y5, y7)\n");
 }

@@ -67,7 +67,6 @@ int main(int argc, char **argv) {
   Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
                   Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
-  int samples;
   double voxel;
   po::options_description desc("Allowed options");
   // clang-format off

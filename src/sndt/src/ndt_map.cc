@@ -153,22 +153,21 @@ std::string NDTMap::ToString() const {
 }
 
 void NDTMap::ShowCellDistri() const {
-  int noinit = 0, nopts = 0, valid = 0, rescale = 0, assign = 0, invalid = 0,
+  int noinit = 0, nopts = 0, valid = 0, rescale = 0, invalid = 0,
       one = 0, two = 0, gau = 0;
   for (auto cell : cells_) {
     if (cell->GetCellType() == NDTCell::kNoInit) ++noinit;
     if (cell->GetCellType() == NDTCell::kNoPoints) ++nopts;
     if (cell->GetCellType() == NDTCell::kRegular) ++valid;
     if (cell->GetCellType() == NDTCell::kRescale) ++rescale;
-    if (cell->GetCellType() == NDTCell::kAssign) ++assign;
     if (cell->GetCellType() == NDTCell::kInvalid) ++invalid;
     if (cell->GetN() == 1) ++one;
     if (cell->GetN() == 2) ++two;
     if (cell->HasGaussian()) ++gau;
   }
   ::printf("%ld cells: %d one, %d two, %d gau\n", cells_.size(), one, two, gau);
-  ::printf("nin: %d, npt: %d, reg: %d, res: %d, ass: %d, inv: %d\n\n", noinit,
-           nopts, valid, rescale, assign, invalid);
+  ::printf("nin: %d, npt: %d, reg: %d, res: %d, inv: %d\n\n", noinit,
+           nopts, valid, rescale, invalid);
 }
 
 std::vector<Eigen::Vector2d> NDTMap::GetPoints() const { return points_; }

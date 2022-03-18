@@ -43,7 +43,7 @@ void SNDTCell::ComputePGaussian() {
     return;
   }
   pmean_ = ComputeMean(pts);
-  pcov_ = ComputeCov(pts, pmean_, covs);
+  pcov_ = ComputeCov(pts, pmean_) + ComputeMean(covs);
   pcelltype_ = kRegular;
   if (pcov_.isZero()) {
     pcelltype_ = kInvalid;

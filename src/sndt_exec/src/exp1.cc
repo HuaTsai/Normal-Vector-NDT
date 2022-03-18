@@ -40,6 +40,12 @@ double Dist(const nav_msgs::Path &gt, ros::Time t1, ros::Time t2) {
       .norm();
 }
 
+void PrintData(string str, const vector<double> &data) {
+  printf("%s = np.array([", str.c_str());
+  for (auto d : data) printf("%.2f, ", d);
+  printf("])\n");
+}
+
 void PrintResult(const nav_msgs::Path &est, const nav_msgs::Path &gt) {
   TrajectoryEvaluation te;
   te.set_estpath(est);
@@ -55,6 +61,21 @@ void PrintResult(const nav_msgs::Path &est, const nav_msgs::Path &gt) {
          rpe.first.mean);
   printf("  rot: %.2f / %.2f / %.2f\n", rpe.second.min, rpe.second.max,
          rpe.second.mean);
+  // printf("tl = np.array([");
+  // for (auto d : rpe.first.data) printf("%.2f, ", d);
+  // printf("])\nrot = np.array([");
+  // for (auto d : rpe.second.data) printf("%.2f, ", d);
+  // printf("])\n");
+}
+
+Affine2d GetBenchMark(const nav_msgs::Path &gtpath, const ros::Time &t1, const ros::Time &t2) {
+  Affine3d To, Ti;
+  tf2::fromMsg(GetPose(gtpath.poses, t2), To);
+  tf2::fromMsg(GetPose(gtpath.poses, t1), Ti);
+  Affine3d Tgt3 = Conserve2DFromAffine3d(Ti.inverse() * To);
+  Affine2d ret = Translation2d(Tgt3.translation()(0), Tgt3.translation()(1)) *
+                 Rotation2Dd(Tgt3.rotation().block<2, 2>(0, 0));
+  return ret;
 }
 
 void Updates(const CommonParameters &params,
@@ -132,6 +153,7 @@ int main(int argc, char **argv) {
   r5.path = InitFirstPose(t0);
   r7.path = InitFirstPose(t0);
   vector<double> e5t, e5r, e7t, e7r;
+  MakeGtLocal(gtpath, t0);
 
   tqdm bar;
   for (size_t i = 0; i < ids.size() - 1; ++i) {
@@ -139,6 +161,7 @@ int main(int argc, char **argv) {
     auto tgt = PCMsgTo2D(vpc[ids[i]], v);
     auto src = PCMsgTo2D(vpc[ids[i + 1]], v);
     auto tj = vpc[ids[i + 1]].header.stamp;
+    auto ben = GetBenchMark(gtpath, vpc[ids[i]].header.stamp, vpc[ids[i + 1]].header.stamp).inverse();
 
     vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, aff2}};
     vector<pair<vector<Vector2d>, Affine2d>> datas{{src, aff2}};
@@ -156,8 +179,8 @@ int main(int argc, char **argv) {
         T5 = DMatch(tgt5, src5, params5);
       else
         T5 = D2DNDTMatch(tgt5, src5, params5);
-      e5t.push_back(TransNormRotDegAbsFromAffine2d(T5)(0));
-      e5r.push_back(TransNormRotDegAbsFromAffine2d(T5)(1));
+      e5t.push_back(TransNormRotDegAbsFromAffine2d(ben * T5)(0));
+      e5r.push_back(TransNormRotDegAbsFromAffine2d(ben * T5)(1));
       Updates(params5, r5, tj, T5);
 
       D2DNDTParameters params7;
@@ -172,8 +195,8 @@ int main(int argc, char **argv) {
         T7 = SMatch(tgt7, src7, params7);
       else
         T7 = SNDTMatch2(tgt7, src7, params7);
-      e7t.push_back(TransNormRotDegAbsFromAffine2d(T7)(0));
-      e7r.push_back(TransNormRotDegAbsFromAffine2d(T7)(1));
+      e7t.push_back(TransNormRotDegAbsFromAffine2d(ben * T7)(0));
+      e7r.push_back(TransNormRotDegAbsFromAffine2d(ben * T7)(1));
       Updates(params7, r7, tj, T7);
     } else {
       Affine2d T5 = Affine2d::Identity();
@@ -200,10 +223,10 @@ int main(int argc, char **argv) {
     }
   }
   bar.finish();
-  Stat(e5t).PrintResult();
-  Stat(e5r).PrintResult();
-  Stat(e7t).PrintResult();
-  Stat(e7r).PrintResult();
+  Stat(e5t).PrintResult();// PrintData("ndttl", e5t);
+  Stat(e5r).PrintResult();// PrintData("ndtrot", e5r);
+  Stat(e7t).PrintResult();// PrintData("sndttl", e7t);
+  Stat(e7r).PrintResult();// PrintData("sndtrot", e7r);
   PrintTime(r5, r7);
 
   ros::init(argc, argv, "exp1");
@@ -212,7 +235,6 @@ int main(int argc, char **argv) {
   auto pub7 = nh.advertise<nav_msgs::Path>("path7", 0, true);
   auto pubgt = nh.advertise<nav_msgs::Path>("pathg", 0, true);
 
-  MakeGtLocal(gtpath, t0);
   pub5.publish(r5.path);
   pub7.publish(r7.path);
   pubgt.publish(gtpath);

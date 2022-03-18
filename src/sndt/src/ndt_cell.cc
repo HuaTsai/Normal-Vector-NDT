@@ -39,7 +39,7 @@ void NDTCell::ComputeGaussian() {
   }
 
   pmean_ = ComputeMean(pts);
-  pcov_ = ComputeCov(pts, pmean_, covs);
+  pcov_ = ComputeCov(pts, pmean_) + ComputeMean(covs);
   celltype_ = kRegular;
 
   if (pcov_.isZero()) {

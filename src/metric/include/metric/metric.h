@@ -3,7 +3,7 @@
 #include <nav_msgs/Path.h>
 
 struct Stat {
-  explicit Stat(std::vector<double> data) {
+  explicit Stat(const std::vector<double> &vals) : data(vals) {
     if (data.empty()) {
       min = max = median = mean = stdev = rms = 0;
       return;
@@ -26,6 +26,7 @@ struct Stat {
         "min: %.2f, max: %.2f, med: %.2f, mean: %.2f, std: %.2f, rms: %.2f\n",
         min, max, median, mean, stdev, rms);
   }
+  std::vector<double> data;
   double min;
   double max;
   double median;

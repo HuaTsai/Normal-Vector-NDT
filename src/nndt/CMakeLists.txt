@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.0.2)
+project(nndt)
+
+set(CMAKE_CXX_FLAGS "-Wall --coverage")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_BUILD_TYPE Release)
+
+find_package(Ceres REQUIRED)
+
+find_package(catkin REQUIRED
+  COMPONENTS
+    roscpp
+    common
+)
+
+catkin_package()
+
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+)

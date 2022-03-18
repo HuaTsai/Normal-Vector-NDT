@@ -21,7 +21,6 @@ class NDTCell : public CellInterface {
     kNoPoints, /**< Covariance is not computed because of no points */
     kRegular,  /**< Covariance is computed well */
     kRescale,  /**< Covariance is rescaled */
-    kAssign,   /**< Covariance is assigned */
     kInvalid   /**< Covariance is invalid */
   };
 

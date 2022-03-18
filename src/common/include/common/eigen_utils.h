@@ -58,18 +58,65 @@ std::vector<Eigen::Vector2d> TransformNormals(
 /**
  * @brief Compute eigenvalues and eigenvectors from covariance
  *
+ * @tparam D Dimension, only 2 or 3 is allowed
  * @param[in] covariance Input covariance
  * @param[out] evals Output eigenvalues
  * @param[out] evecs Output eigenvectors
  * @details The function computeDirect() uses closed-form algorithm to perform
- * eigenvalue decomposition for a symmetric real matrix. This method is
- * significantly faster than the QR iterative algorithm. Besides, evals(0) will
- * be smaller than or equal to evals(1).
+ * eigenvalue decomposition for a symmetric real matrix.\n This method is
+ * significantly faster than the QR iterative algorithm.\n The eigenvalues are
+ * sorted in increasing order.
  * @see Eigen::SelfAdjointEigenSolver and Catalogue of dense decompositions
  */
-void ComputeEvalEvec(const Eigen::Matrix2d &covariance,
-                     Eigen::Vector2d &evals,
-                     Eigen::Matrix2d &evecs);
+template <int D>
+inline void ComputeEvalEvec(const Eigen::Matrix<double, D, D> &covariance,
+                            Eigen::Matrix<double, D, 1> &evals,
+                            Eigen::Matrix<double, D, D> &evecs) {
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix<double, D, D>> evd;
+  evd.computeDirect(covariance);
+  evals = evd.eigenvalues();
+  evecs = evd.eigenvectors();
+}
+
+/**
+ * @brief Mean of input data
+ *
+ * @tparam T VectorXd or MatrixXd
+ * @param data Input data
+ * @return Mean of input data
+ * @note This is a template function, so we add inline to prevent include
+ * issue.
+ */
+template <typename T>
+inline T ComputeMean(const std::vector<T> &data) {
+  if (!data.size()) return T::Zero();
+  T ret = T::Zero();
+  ret = std::accumulate(data.begin(), data.end(), ret);
+  ret /= data.size();
+  return ret;
+}
+
+/**
+ * @brief Covariance of input data
+ *
+ * @tparam D Dimension (2 or 3)
+ * @param data input data
+ * @param mean mean of input data
+ * @return Covariance of input data
+ * @note This is a template function, so we add inline to prevent include
+ * issue.
+ */
+template <int D>
+inline Eigen::Matrix<double, D, D> ComputeCov(
+    const std::vector<Eigen::Matrix<double, D, 1>> &data,
+    const Eigen::Matrix<double, D, 1> &mean) {
+  int n = data.size();
+  if (n == 1) return Eigen::Matrix<double, D, D>::Zero();
+  Eigen::MatrixXd mp(D, n);
+  for (int i = 0; i < n; ++i) mp.col(i) = data[i] - mean;
+  Eigen::Matrix<double, D, D> ret = mp * mp.transpose() / (n - 1);
+  return ret;
+}
 
 class Mvn {
  public:
