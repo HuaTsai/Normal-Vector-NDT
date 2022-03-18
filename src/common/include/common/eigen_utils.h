@@ -149,3 +149,26 @@ inline Eigen::Matrix<double, D, D> ComputeCov(
   Eigen::Matrix<double, D, D> ret = mp * mp.transpose() / (n - 1);
   return ret;
 }
+
+template <typename T>
+inline void ExcludeInfinite(const std::vector<T> &data,
+                            std::vector<T> &valid) {
+  valid.clear();
+  for (const auto &elem : data)
+    if (elem.allFinite()) valid.push_back(elem);
+}
+
+template <typename T, typename U>
+inline void ExcludeInfinite(const std::vector<T> &data1,
+                            const std::vector<U> &data2,
+                            std::vector<T> &valid1,
+                            std::vector<U> &valid2) {
+  valid1.clear();
+  valid2.clear();
+  for (size_t i = 0; i < data1.size(); ++i) {
+    if (data1[i].allFinite() && data2[i].allFinite()) {
+      valid1.push_back(data1[i]);
+      valid2.push_back(data2[i]);
+    }
+  }
+}
