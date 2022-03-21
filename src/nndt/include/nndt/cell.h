@@ -10,27 +10,28 @@ class Cell {
     kNoPoints, /**< Covariance is not computed because of no points */
     kRegular,  /**< Covariance is computed well */
     kRescale,  /**< Covariance is rescaled */
-    kInvalid   /**< Covariance is invalid */
+    kInvalid   /**< Covariance is invalid (degenerate, n <= 3) */
   };
 
   Cell();
 
-  void AddPoint(const Eigen::Vector2d &point);
+  void AddPoint(const Eigen::Vector3d &point);
 
-  void AddPointWithCovariance(const Eigen::Vector2d &point,
-                              const Eigen::Matrix2d &covariance);
+  void AddPointWithCovariance(const Eigen::Vector3d &point,
+                              const Eigen::Matrix3d &covariance);
 
   void ComputeGaussian();
 
+  bool Normal(Eigen::Vector3d &normal) const;
+
   int GetN() const { return n_; }
   bool GetHasGaussian() const { return hasgaussian_; }
-  double GetSkewRad() const { return skew_rad_; }
   double GetSize() const { return size_; }
   Eigen::Vector3d GetCenter() const { return center_; }
-  Eigen::Vector3d GetPointMean() const { return mean_; }
-  Eigen::Matrix3d GetPointCov() const { return cov_; }
-  Eigen::Vector3d GetPointEvals() const { return evals_; }
-  Eigen::Matrix3d GetPointEvecs() const { return evecs_; }
+  Eigen::Vector3d GetMean() const { return mean_; }
+  Eigen::Matrix3d GetCov() const { return cov_; }
+  Eigen::Vector3d GetEvals() const { return evals_; }
+  Eigen::Matrix3d GetEvecs() const { return evecs_; }
   std::vector<Eigen::Vector3d> GetPoints() const { return points_; }
   std::vector<Eigen::Matrix3d> GetPointCovs() const { return point_covs_; }
   CellType GetCellType() const { return celltype_; }
@@ -38,14 +39,13 @@ class Cell {
   double GetTolerance() const { return tolerance_; }
 
   void SetN(int n) { n_ = n; }
-  void SetPHasGaussian(bool hasgaussian) { hasgaussian_ = hasgaussian; }
-  void SetSkewRad(double skew_rad) { skew_rad_ = skew_rad; }
+  void SetHasGaussian(bool hasgaussian) { hasgaussian_ = hasgaussian; }
   void SetSize(double size) { size_ = size; }
   void SetCenter(const Eigen::Vector3d &center) { center_ = center; }
-  void SetPointMean(const Eigen::Vector3d &mean) { mean_ = mean; }
-  void SetPointCov(const Eigen::Matrix3d &cov) { cov_ = cov; }
-  void SetPointEvals(const Eigen::Vector3d &evals) { evals_ = evals; }
-  void SetPointEvecs(const Eigen::Matrix3d &evecs) { evecs_ = evecs; }
+  void SetMean(const Eigen::Vector3d &mean) { mean_ = mean; }
+  void SetCov(const Eigen::Matrix3d &cov) { cov_ = cov; }
+  void SetEvals(const Eigen::Vector3d &evals) { evals_ = evals; }
+  void SetEvecs(const Eigen::Matrix3d &evecs) { evecs_ = evecs; }
   void SetPoints(const std::vector<Eigen::Vector3d> &points) {
     points_ = points;
   }
@@ -59,7 +59,6 @@ class Cell {
  private:
   int n_;                                   /**< Number of points */
   bool hasgaussian_;                        /**< Whether cell has a gaussian */
-  double skew_rad_;                         /**< Tilted angle of the cell */
   double size_;                             /**< Cell size */
   Eigen::Vector3d center_;                  /**< Center of the cell */
   Eigen::Vector3d mean_;                    /**< Point mean */

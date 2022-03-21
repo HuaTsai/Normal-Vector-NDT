@@ -11,11 +11,43 @@ find_package(catkin REQUIRED
   COMPONENTS
     roscpp
     common
+    pcl_ros
 )
 
-catkin_package()
+catkin_package(
+  CATKIN_DEPENDS
+    common
+  INCLUDE_DIRS
+    include
+  LIBRARIES
+    ${PROJECT_NAME}
+)
 
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
+
+set(ALL_SRCS
+  src/cell.cc
+  src/nmap.cc
+  src/opt.cc
+  src/matcher.cc
+)
+
+set(ALLLIBS
+  ${catkin_LIBRARIES}
+  ${CERES_LIBRARIES}
+)
+
+add_library(${PROJECT_NAME} ${ALL_SRCS})
+
+target_link_libraries(${PROJECT_NAME} ${ALLLIBS})
+
+add_executable(nmap_test src/nmap_test.cc)
+add_executable(matcher_test src/matcher_test.cc)
+target_link_libraries(nmap_test ${PROJECT_NAME} gtest_main)
+target_link_libraries(matcher_test ${PROJECT_NAME} gtest_main pcl_visualization)
+enable_testing()
+include(GoogleTest)
+gtest_discover_tests(nmap_test matcher_test)
