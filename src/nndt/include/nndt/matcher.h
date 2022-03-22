@@ -1,5 +1,6 @@
 #pragma once
 #include <nndt/nmap.h>
+#include <nndt/timer.h>
 
 class NDTMatcher {
  public:
@@ -15,10 +16,13 @@ class NDTMatcher {
 
   int iteration() const { return iteration_; }
 
+  Timer timer() const { return timer_; }
+
  private:
   std::shared_ptr<NMap> smap;
   std::shared_ptr<NMap> tmap;
   MatchType type_;
+  Timer timer_;
   double cell_size_;
   double d2_;
   int iteration_;

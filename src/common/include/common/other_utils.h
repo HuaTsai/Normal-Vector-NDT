@@ -14,6 +14,7 @@ inline std::chrono::steady_clock::time_point GetTime() {
   return std::chrono::steady_clock::now();
 }
 
+/** Get time difference in microseconds */
 inline int GetDiffTime(std::chrono::steady_clock::time_point t1,
                        std::chrono::steady_clock::time_point t2) {
   return std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();

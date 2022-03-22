@@ -33,6 +33,7 @@ set(ALL_SRCS
   src/nmap.cc
   src/opt.cc
   src/matcher.cc
+  src/timer.cc
 )
 
 set(ALLLIBS
@@ -46,8 +47,12 @@ target_link_libraries(${PROJECT_NAME} ${ALLLIBS})
 
 add_executable(nmap_test src/nmap_test.cc)
 add_executable(matcher_test src/matcher_test.cc)
+add_executable(timer_test src/timer_test.cc)
 target_link_libraries(nmap_test ${PROJECT_NAME} gtest_main)
-target_link_libraries(matcher_test ${PROJECT_NAME} gtest_main pcl_visualization)
+target_link_libraries(matcher_test ${PROJECT_NAME} gtest_main)
+target_link_libraries(timer_test ${PROJECT_NAME} gtest_main)
 enable_testing()
 include(GoogleTest)
-gtest_discover_tests(nmap_test matcher_test)
+gtest_discover_tests(nmap_test)
+gtest_discover_tests(matcher_test)
+gtest_discover_tests(timer_test)

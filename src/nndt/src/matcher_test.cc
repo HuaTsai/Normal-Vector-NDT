@@ -5,6 +5,7 @@
 #include <pcl/filters/approximate_voxel_grid.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
+#include <pcl/registration/icp.h>
 #include <pcl/registration/ndt.h>
 
 using namespace std;
@@ -32,7 +33,10 @@ class BunnyTest : public ::testing::Test {
   vector<Vector3d> target;
 };
 
-TEST_F(BunnyTest, PCLICP) {}
+// PCL ICP result is bad
+TEST_F(BunnyTest, PCLICP) {
+  EXPECT_TRUE(true);
+}
 
 TEST_F(BunnyTest, PCLNDT) {
   PointCloudType::Ptr source_pcl2(new PointCloudType);
@@ -50,8 +54,8 @@ TEST_F(BunnyTest, PCLNDT) {
   Matrix4f guess = (Translation3f(1.79387, 0.720047, 0) *
                     AngleAxisf(0.6931, Vector3f::UnitZ()))
                        .matrix();
-  PointCloudType::Ptr out(new PointCloudType);
-  ndt.align(*out, guess);
+  PointCloudType out;
+  ndt.align(out, guess);
   auto res = ndt.getFinalTransformation();
   Vector3f tl = res.block<3, 1>(0, 3);
   double ang = Rad2Deg(AngleAxisf(res.block<3, 3>(0, 0)).angle());
@@ -73,6 +77,7 @@ TEST_F(BunnyTest, MyNDT) {
   double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
   cout << "tl: " << tl.transpose() << ", ang: " << ang
        << ", iter: " << m.iteration() << endl;
+  m.timer().Show();
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
@@ -90,6 +95,7 @@ TEST_F(BunnyTest, MyNNDT) {
   double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
   cout << "tl: " << tl.transpose() << ", ang: " << ang
        << ", iter: " << m.iteration() << endl;
+  m.timer().Show();
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
