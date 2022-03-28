@@ -14,7 +14,7 @@ vector<Vector3d> EllipseData() {
   return ret;
 }
 
-TEST(FakeData, Ellipse) {
+TEST(NMapTest, Ellipse) {
   auto data = EllipseData();
   NMap mp(1);
   mp.LoadPoints(data);

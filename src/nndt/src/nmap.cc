@@ -9,10 +9,14 @@ void NMap::LoadPoints(const std::vector<Eigen::Vector3d> &points) {
   ExcludeInfinite(points, valids);
   ComputeVoxelOffset(valids);
   for (const auto &pt : valids) cells_[GetIndexForPoint(pt)].AddPoint(pt);
+  for (auto &[idx, cell] : cells_) {
+    Eigen::Vector3d c = idx.cast<double>() + Eigen::Vector3d(0.5, 0.5, 0.5);
+    cell.SetCenter(min_voxel_ + c * cell_size_);
+  }
   std::vector<Eigen::Vector3d> means;
   for (auto &elem : cells_) {
     elem.second.ComputeGaussian();
-    means.push_back(elem.second.GetMean());
+    if (elem.second.GetHasGaussian()) means.push_back(elem.second.GetMean());
   }
   MakeKDTree(means);
 }
@@ -30,10 +34,14 @@ void NMap::LoadPointsWithCovariances(
   ComputeVoxelOffset(vpts);
   for (size_t i = 0; i < vpts.size(); ++i)
     cells_[GetIndexForPoint(vpts[i])].AddPointWithCovariance(vpts[i], vcovs[i]);
+  for (auto &[idx, cell] : cells_) {
+    Eigen::Vector3d c = idx.cast<double>() + Eigen::Vector3d(0.5, 0.5, 0.5);
+    cell.SetCenter(min_voxel_ + c * cell_size_);
+  }
   std::vector<Eigen::Vector3d> means;
   for (auto &elem : cells_) {
     elem.second.ComputeGaussian();
-    means.push_back(elem.second.GetMean());
+    if (elem.second.GetHasGaussian()) means.push_back(elem.second.GetMean());
   }
   MakeKDTree(means);
 }
@@ -55,6 +63,7 @@ std::vector<Cell> NMap::TransformCells(const Eigen::Affine3d &T,
       cell.SetCov(R * c.GetCov() * R.transpose());
       cell.SetEvals(c.GetEvals());
       cell.SetEvecs(R * c.GetEvecs());
+      cell.SetNormal(R * c.GetNormal());
     }
     if (include_data) {
       cell.SetPoints(TransformPoints(c.GetPoints(), T));
@@ -73,7 +82,8 @@ const Cell &NMap::SearchNearestCell(const Eigen::Vector3d &query) const {
   return SearchNearestCell(query, dummy);
 }
 
-const Cell &NMap::SearchNearestCell(const Eigen::Vector3d &query, Eigen::Vector3i &index) const {
+const Cell &NMap::SearchNearestCell(const Eigen::Vector3d &query,
+                                    Eigen::Vector3i &index) const {
   pcl::PointXYZ pt;
   pt.x = query(0), pt.y = query(1), pt.z = query(2);
   std::vector<int> idx{0};

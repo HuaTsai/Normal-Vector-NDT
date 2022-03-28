@@ -10,6 +10,7 @@ Cell::Cell()
       cov_(Eigen::Matrix3d::Zero()),
       evals_(Eigen::Vector3d::Zero()),
       evecs_(Eigen::Matrix3d::Zero()),
+      normal_(Eigen::Vector3d::Zero()),
       celltype_(kNoInit),
       rescale_ratio_(100.),
       tolerance_(Eigen::NumTraits<double>::dummy_precision()) {}
@@ -33,43 +34,54 @@ void Cell::ComputeGaussian() {
   else
     ExcludeInfinite(points_, pts);
 
+  // XXX: omit n <= 6
+  if (pts.size() <= 6) {
+    celltype_ = kNoPoints;
+    return;
+  }
+
   if (!pts.size()) {
     celltype_ = kNoPoints;
+    return;
+  } else if (pts.size() == 1) {
+    celltype_ = kPoint;
+    return;
+  } else if (pts.size() == 2) {
+    celltype_ = kLine;
     return;
   }
 
   mean_ = ComputeMean(pts);
   cov_ = ComputeCov(pts, mean_) + ComputeMean(covs);
-  celltype_ = kRegular;
   ComputeEvalEvec(cov_, evals_, evecs_);
 
-  // XXX: Do we need to do this or just to rescale it?
-  if (evals_(0) <= tolerance_ || evals_(1) <= tolerance_ ||
-      evals_(2) <= tolerance_) {
-    celltype_ = kInvalid;
+  if (evals_(1) <= tolerance_) {
+    celltype_ = kLine;
     return;
   }
 
+  if (evals_(0) <= tolerance_) {
+    celltype_ = kPlane;
+    return;
+  }
+
+  bool rescale = false;
+
   if (evals_(2) > rescale_ratio_ * evals_(0)) {
     evals_(0) = evals_(1) / rescale_ratio_;
-    celltype_ = kRescale;
+    rescale = true;
   }
 
   if (evals_(2) > rescale_ratio_ * evals_(1)) {
     evals_(1) = evals_(1) / rescale_ratio_;
-    celltype_ = kRescale;
+    rescale = true;
   }
 
-  if (celltype_ == kRescale)
+  if (rescale)
     cov_ = evecs_ * evals_.asDiagonal() * evecs_.transpose();
 
+  celltype_ = kRegular;
+  normal_ = evecs_.col(0);
+  if (mean_.dot(normal_) < 0) normal_ *= 1.;
   hasgaussian_ = true;
-}
-
-// TODO: Check whether it is okay.
-bool Cell::Normal(Eigen::Vector3d &normal) const {
-  if (celltype_ != kRegular) return false;
-  normal = evecs_.col(0);
-  if (mean_.dot(normal) < 0) normal *= -1.;
-  return true;
 }

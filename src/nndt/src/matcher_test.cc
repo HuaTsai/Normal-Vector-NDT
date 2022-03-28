@@ -34,9 +34,7 @@ class BunnyTest : public ::testing::Test {
 };
 
 // PCL ICP result is bad
-TEST_F(BunnyTest, PCLICP) {
-  EXPECT_TRUE(true);
-}
+TEST_F(BunnyTest, PCLICP) { EXPECT_TRUE(true); }
 
 TEST_F(BunnyTest, PCLNDT) {
   PointCloudType::Ptr source_pcl2(new PointCloudType);
@@ -59,15 +57,17 @@ TEST_F(BunnyTest, PCLNDT) {
   auto res = ndt.getFinalTransformation();
   Vector3f tl = res.block<3, 1>(0, 3);
   double ang = Rad2Deg(AngleAxisf(res.block<3, 3>(0, 0)).angle());
-  cout << "tl: " << tl.transpose() << ", ang: " << ang << endl;
+  cout << "errtl: " << (tl - Eigen::Vector3f(1, 1, 0)).norm()
+       << ", errrot: " << abs(ang - 10.)
+       << ", iter: " << ndt.getFinalNumIteration() << endl;
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
   EXPECT_NEAR(ang, 10, 0.5);
 }
 
-TEST_F(BunnyTest, MyNDT) {
-  NDTMatcher m(NDTMatcher::MatchType::kNDT, 1);
+TEST_F(BunnyTest, MyNDTLS) {
+  NDTMatcher m(NDTMatcher::MatchType::kNDTLS, 1);
   m.SetSource(source);
   m.SetTarget(target);
   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
@@ -75,8 +75,8 @@ TEST_F(BunnyTest, MyNDT) {
   auto res = m.Align(guess);
   Vector3d tl = res.translation();
   double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
-  cout << "tl: " << tl.transpose() << ", ang: " << ang
-       << ", iter: " << m.iteration() << endl;
+  cout << "errtl: " << (tl - Eigen::Vector3d(1, 1, 0)).norm()
+       << ", errrot: " << abs(ang - 10.) << ", iter: " << m.iteration() << endl;
   m.timer().Show();
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
@@ -84,8 +84,8 @@ TEST_F(BunnyTest, MyNDT) {
   EXPECT_NEAR(ang, 10, 0.5);
 }
 
-TEST_F(BunnyTest, MyNNDT) {
-  NDTMatcher m(NDTMatcher::MatchType::kNNDT, 1);
+TEST_F(BunnyTest, MyNNDTLS) {
+  NDTMatcher m(NDTMatcher::MatchType::kNNDTLS, 1);
   m.SetSource(source);
   m.SetTarget(target);
   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
@@ -93,8 +93,44 @@ TEST_F(BunnyTest, MyNNDT) {
   auto res = m.Align(guess);
   Vector3d tl = res.translation();
   double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
-  cout << "tl: " << tl.transpose() << ", ang: " << ang
-       << ", iter: " << m.iteration() << endl;
+  cout << "errtl: " << (tl - Eigen::Vector3d(1, 1, 0)).norm()
+       << ", errrot: " << abs(ang - 10.) << ", iter: " << m.iteration() << endl;
+  m.timer().Show();
+  EXPECT_NEAR(tl(0), 1, 0.05);
+  EXPECT_NEAR(tl(1), 1, 0.05);
+  EXPECT_NEAR(tl(2), 0, 0.05);
+  EXPECT_NEAR(ang, 10, 0.5);
+}
+
+TEST_F(BunnyTest, MyNDTTR) {
+  NDTMatcher m(NDTMatcher::MatchType::kNDTTR, 1);
+  m.SetSource(source);
+  m.SetTarget(target);
+  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
+                   AngleAxisd(0.6931, Vector3d::UnitZ());
+  auto res = m.Align(guess);
+  Vector3d tl = res.translation();
+  double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
+  cout << "errtl: " << (tl - Eigen::Vector3d(1, 1, 0)).norm()
+       << ", errrot: " << abs(ang - 10.) << ", iter: " << m.iteration() << endl;
+  m.timer().Show();
+  EXPECT_NEAR(tl(0), 1, 0.05);
+  EXPECT_NEAR(tl(1), 1, 0.05);
+  EXPECT_NEAR(tl(2), 0, 0.05);
+  EXPECT_NEAR(ang, 10, 0.5);
+}
+
+TEST_F(BunnyTest, MyNNDTTR) {
+  NDTMatcher m(NDTMatcher::MatchType::kNNDTTR, 1);
+  m.SetSource(source);
+  m.SetTarget(target);
+  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
+                   AngleAxisd(0.6931, Vector3d::UnitZ());
+  auto res = m.Align(guess);
+  Vector3d tl = res.translation();
+  double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
+  cout << "errtl: " << (tl - Eigen::Vector3d(1, 1, 0)).norm()
+       << ", errrot: " << abs(ang - 10.) << ", iter: " << m.iteration() << endl;
   m.timer().Show();
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);

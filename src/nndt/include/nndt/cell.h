@@ -8,9 +8,10 @@ class Cell {
   enum CellType {
     kNoInit,   /**< Covariance is not computed yet */
     kNoPoints, /**< Covariance is not computed because of no points */
-    kRegular,  /**< Covariance is computed well */
-    kRescale,  /**< Covariance is rescaled */
-    kInvalid   /**< Covariance is invalid (degenerate, n <= 3) */
+    kPoint,    /**< Covariance degenerates as a point */
+    kLine,     /**< Covariance degenerates as a line */
+    kPlane,    /**< Covariance degenerates as a plane */
+    kRegular   /**< Covariance is computed well */
   };
 
   Cell();
@@ -22,8 +23,6 @@ class Cell {
 
   void ComputeGaussian();
 
-  bool Normal(Eigen::Vector3d &normal) const;
-
   int GetN() const { return n_; }
   bool GetHasGaussian() const { return hasgaussian_; }
   double GetSize() const { return size_; }
@@ -32,6 +31,7 @@ class Cell {
   Eigen::Matrix3d GetCov() const { return cov_; }
   Eigen::Vector3d GetEvals() const { return evals_; }
   Eigen::Matrix3d GetEvecs() const { return evecs_; }
+  Eigen::Vector3d GetNormal() const { return normal_; }
   std::vector<Eigen::Vector3d> GetPoints() const { return points_; }
   std::vector<Eigen::Matrix3d> GetPointCovs() const { return point_covs_; }
   CellType GetCellType() const { return celltype_; }
@@ -46,6 +46,7 @@ class Cell {
   void SetCov(const Eigen::Matrix3d &cov) { cov_ = cov; }
   void SetEvals(const Eigen::Vector3d &evals) { evals_ = evals; }
   void SetEvecs(const Eigen::Matrix3d &evecs) { evecs_ = evecs; }
+  void SetNormal(const Eigen::Vector3d &normal) { normal_ = normal; }
   void SetPoints(const std::vector<Eigen::Vector3d> &points) {
     points_ = points;
   }
@@ -65,6 +66,7 @@ class Cell {
   Eigen::Matrix3d cov_;                     /**< Point covariance */
   Eigen::Vector3d evals_;                   /**< Point eigenvalues */
   Eigen::Matrix3d evecs_;                   /**< Point eigenvectors */
+  Eigen::Vector3d normal_;                  /**< Point Normal */
   std::vector<Eigen::Vector3d> points_;     /**< Points */
   std::vector<Eigen::Matrix3d> point_covs_; /**< Point covariances */
   CellType celltype_;                       /**< Cell type */

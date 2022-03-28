@@ -1,0 +1,68 @@
+#include <gtest/gtest.h>
+#include <nndt/cell.h>
+
+using namespace Eigen;
+using namespace std;
+using v = Vector3d;
+
+TEST(CellTest, Basic) {
+  Cell cell;
+  // Not Initialized
+  EXPECT_EQ(cell.GetCellType(), Cell::CellType::kNoInit);
+
+  // No Points
+  cell.ComputeGaussian();
+  EXPECT_EQ(cell.GetCellType(), Cell::CellType::kNoPoints);
+
+  // One Point: Point
+  cell.AddPoint(v(0, 0, 0));
+  cell.ComputeGaussian();
+  EXPECT_EQ(cell.GetCellType(), Cell::CellType::kPoint);
+
+  // Two Points: Line
+  cell.AddPoint(v(1, 1, 1));
+  cell.ComputeGaussian();
+  EXPECT_EQ(cell.GetCellType(), Cell::CellType::kLine);
+
+  // Three Points: Plane
+  cell.AddPoint(v(0, 1, 2));
+  cell.ComputeGaussian();
+  EXPECT_EQ(cell.GetCellType(), Cell::CellType::kPlane);
+}
+
+TEST(CellTest, Line) {
+  Cell cell;
+  // Three Points: Line
+  cell.SetPoints({v(0, 0, 0), v(1, 1, 1), v(2, 2, 2)});
+  cell.ComputeGaussian();
+  EXPECT_EQ(cell.GetCellType(), Cell::CellType::kLine);
+
+  // Three Points: Approximate Line
+  cell.SetPoints({v(0, 0, 0), v(1, 1, 1), v(2, 2, 1.9999999)});
+  cell.ComputeGaussian();
+  EXPECT_EQ(cell.GetCellType(), Cell::CellType::kLine);
+
+  // More Points: Line
+  cell.SetPoints({v(0, 0, 0), v(1, 1, 1), v(2, 2, 2), v(3, 3, 3), v(4, 4, 4)});
+  cell.ComputeGaussian();
+  EXPECT_EQ(cell.GetCellType(), Cell::CellType::kLine);
+}
+
+TEST(CellTest, Plane) {
+  Cell cell;
+  // Four Points: Plane
+  cell.SetPoints({v(0, 0, 0), v(1, 1, 0), v(3, 2, 0), v(9, 7, 0)});
+  cell.ComputeGaussian();
+  EXPECT_EQ(cell.GetCellType(), Cell::CellType::kPlane);
+
+  // Four Points: Approximate Plane
+  cell.SetPoints({v(0, 0, 0), v(1, 1, 0), v(3, 2, 0), v(9, 7, 0.000001)});
+  cell.ComputeGaussian();
+  EXPECT_EQ(cell.GetCellType(), Cell::CellType::kPlane);
+
+  // More Points: Plane
+  cell.SetPoints({v(0, 0, 0), v(1, 1, 0), v(2, 1, 0), v(10, 3, 0), v(2, -8, 0),
+                  v(2, -1, 0)});
+  cell.ComputeGaussian();
+  EXPECT_EQ(cell.GetCellType(), Cell::CellType::kPlane);
+}
