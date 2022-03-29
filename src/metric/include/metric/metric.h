@@ -1,6 +1,7 @@
 #pragma once
 #include <bits/stdc++.h>
 #include <nav_msgs/Path.h>
+#include <common/other_utils.h>
 
 struct Stat {
   explicit Stat(const std::vector<double> &vals) : data(vals) {
@@ -13,11 +14,8 @@ struct Stat {
     min = data.front();
     max = data.back();
     median = data[n / 2];
-    mean = std::accumulate(data.begin(), data.end(), 0.) / n;
+    std::tie(mean, stdev) = ComputeMeanAndStdev(data);
     double sum = 0;
-    for (auto d : data) sum += (d - mean) * (d - mean);
-    stdev = std::sqrt(sum / (n - 1));
-    sum = 0;
     for (auto d : data) sum += d * d;
     rms = std::sqrt(sum / n);
   }

@@ -55,7 +55,7 @@ void PrintTime(string str,
       "%s: nm: %.2f, ndt: %.2f, bud: %.2f, opt: %.2f, oth: %.2f, ttl: %.2f, "
       "iter: %.2f\n",
       str.c_str(), ut.normal() / den, ut.ndt() / den, ut.build() / den,
-      ut.optimize() / den, ut.others() / den, ut.total() / den, Average(its));
+      ut.optimize() / den, ut.others() / den, ut.total() / den, Stat(its).mean);
 }
 
 int main(int argc, char **argv) {

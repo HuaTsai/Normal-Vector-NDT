@@ -9,7 +9,7 @@ Timer::Timer() : state_(kInit), others_(0), total_(0) {
 }
 
 Timer &Timer::operator+=(const Timer &rhs) {
-  for (const auto &elem : rhs.data_) data_[elem.first] += elem.second;
+  for (const auto &[key, val] : rhs.data_) data_[key] += val;
   others_ += rhs.others();
   total_ += rhs.total();
   return *this;

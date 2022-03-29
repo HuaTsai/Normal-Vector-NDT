@@ -20,21 +20,13 @@ inline int GetDiffTime(std::chrono::steady_clock::time_point t1,
   return std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 }
 
-inline double Average(const std::vector<double> &coll) {
-  return std::accumulate(coll.begin(), coll.end(), 0.) / coll.size();
-}
-
-inline double ComputeMean(const std::vector<double> &coll) {
-  return std::accumulate(coll.begin(), coll.end(), 0.) / coll.size();
-}
-
 inline std::pair<double, double> ComputeMeanAndStdev(
     const std::vector<double> &coll) {
   if (coll.size() <= 1) {
     std::cerr << __FUNCTION__ << ": invalid container size " << coll.size();
     std::exit(-1);
   }
-  double mean = ComputeMean(coll);
+  double mean = std::accumulate(coll.begin(), coll.end(), 0.) / coll.size();
   double stdev = std::sqrt(accumulate(coll.begin(), coll.end(), 0.,
                                       [&mean](auto a, auto b) {
                                         return a + (b - mean) * (b - mean);

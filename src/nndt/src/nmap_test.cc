@@ -10,6 +10,7 @@ vector<Vector3d> EllipseData() {
   for (int i = 0; i < 360; ++i) {
     double th = Deg2Rad(i);
     ret.push_back(Vector3d(xc + x * cos(th), yc + y * sin(th), 0));
+    ret.push_back(Vector3d(xc + x * cos(th), yc + y * sin(th), 0.5));
   }
   return ret;
 }
@@ -19,7 +20,7 @@ TEST(NMapTest, Ellipse) {
   NMap mp(1);
   mp.LoadPoints(data);
   EXPECT_EQ((int)mp.size(), 62);
-  EXPECT_EQ(mp.at(Vector3i(1, 2, 0)).GetN(), 7);
+  EXPECT_EQ(mp.at(Vector3i(1, 2, 0)).GetN(), 14);
   Vector3i idx;
   mp.SearchNearestCell(Eigen::Vector3d(-8, -3, 0), idx);
   EXPECT_EQ(idx, Vector3i(1, 2, 0));

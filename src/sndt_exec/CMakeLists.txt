@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(sndt_exec)
 
-set(CMAKE_CXX_FLAGS "-Wall --coverage")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra --coverage")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Release)
 
@@ -9,6 +9,7 @@ find_package(catkin REQUIRED
   COMPONENTS
     roscpp
     sndt
+    nndt
     pcl_ros
     metric
 )

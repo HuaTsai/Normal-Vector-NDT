@@ -61,20 +61,20 @@ std::vector<int> ThresholdRejection(const std::vector<double> &vals,
 
 std::vector<int> StatisticRejection(const std::vector<double> &vals,
                                     double multiplier) {
-  auto ms = ComputeMeanAndStdev(vals);
+  auto [mean, stdev] = ComputeMeanAndStdev(vals);
   std::vector<int> ret;
   for (size_t i = 0; i < vals.size(); ++i)
-    if (vals[i] < ms.first + multiplier * ms.second) ret.push_back(i);
+    if (vals[i] < mean + multiplier * stdev) ret.push_back(i);
   return ret;
 }
 
 std::vector<int> BothRejection(const std::vector<double> &vals,
                                double multiplier,
                                double threshold) {
-  auto ms = ComputeMeanAndStdev(vals);
+  auto [mean, stdev] = ComputeMeanAndStdev(vals);
   std::vector<int> ret;
   for (size_t i = 0; i < vals.size(); ++i)
-    if (vals[i] < std::max(ms.first + multiplier * ms.second, threshold))
+    if (vals[i] < std::max(mean + multiplier * stdev, threshold))
       ret.push_back(i);
   return ret;
 }

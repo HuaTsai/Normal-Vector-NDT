@@ -101,6 +101,13 @@ Eigen::Vector2d TransNormRotDegAbsFromAffine2d(const Eigen::Affine2d &aff) {
   return ret;
 }
 
+Eigen::Vector2d TransNormRotDegAbsFromAffine3d(const Eigen::Affine3d &aff) {
+  Eigen::Vector2d ret;
+  ret(0) = aff.translation().norm();
+  ret(1) = abs(Rad2Deg(Eigen::AngleAxisd(aff.rotation()).angle()));
+  return ret;
+}
+
 geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time,
                                               const Eigen::Affine3d &aff) {
   geometry_msgs::PoseStamped ret;

@@ -72,26 +72,22 @@ std::vector<std::shared_ptr<NDTCell>> NDTMap::PseudoTransformCells(
     const Eigen::Affine2d &T, bool include_data) const {
   std::vector<std::shared_ptr<NDTCell>> ret;
   Eigen::Matrix2d R = T.rotation();
-  Eigen::Vector2d t = T.translation();
   double skew_rad = Eigen::Rotation2Dd(R).angle();
   for (auto it = begin(); it != end(); ++it) {
     auto cell = std::make_shared<NDTCell>();
     cell->SetN((*it)->GetN());
     cell->SetPHasGaussian((*it)->GetPHasGaussian());
     cell->SetSkewRad(skew_rad);
-    cell->SetCenter(R * (*it)->GetCenter() + t);
+    cell->SetCenter(T * (*it)->GetCenter());
     cell->SetSize((*it)->GetSize());
-    cell->SetPointMean(R * (*it)->GetPointMean() + t);
+    cell->SetPointMean(T * (*it)->GetPointMean());
     if ((*it)->GetPHasGaussian()) {
       cell->SetPointCov(R * (*it)->GetPointCov() * R.transpose());
       cell->SetPointEvals((*it)->GetPointEvals());
       cell->SetPointEvecs(R * (*it)->GetPointEvecs());
     }
     if (include_data) {
-      for (auto pt : (*it)->GetPoints()) {
-        if (pt.allFinite()) pt = R * pt + t;
-        cell->AddPoint(pt);
-      }
+      cell->SetPoints(TransformPoints((*it)->GetPoints(), T));
     }
     ret.push_back(cell);
   }

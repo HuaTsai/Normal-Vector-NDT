@@ -98,9 +98,9 @@ NDTMap MakeNDT(
     NDTParameters &params) {
   params._usedtime.ProcedureStart(UsedTime::Procedure::kNDT);
   std::vector<Eigen::Vector2d> points;
-  for (const auto &elem : data)
-    for (const auto &pt : elem.first)
-      points.push_back(elem.second * pt);
+  for (const auto &[pts, tf] : data)
+    for (const auto &pt : pts)
+      points.push_back(tf * pt);
   NDTMap ret(params.cell_size);
   ret.LoadPoints(points);
   params._usedtime.ProcedureFinish();
@@ -119,9 +119,7 @@ NDTMap MakeNDTMap(
   std::vector<Eigen::Vector2d> points;
   std::vector<Eigen::Matrix2d> point_covs;
 
-  for (const auto &elem : data) {
-    auto pts = elem.first;
-    auto T = elem.second;
+  for (const auto &[pts, T] : data) {
     for (const auto &pt : pts) {
       double r2 = pt.squaredNorm();
       double theta = atan2(pt(1), pt(0));
@@ -146,9 +144,7 @@ SNDTMap MakeSNDTMap(
   std::vector<Eigen::Vector2d> points;
   std::vector<Eigen::Matrix2d> point_covs;
 
-  for (const auto &elem : data) {
-    auto pts = elem.first;
-    auto T = elem.second;
+  for (const auto &[pts, T] : data) {
     for (const auto &pt : pts) {
       double r2 = pt.squaredNorm();
       double theta = atan2(pt(1), pt(0));
@@ -179,12 +175,9 @@ std::vector<Eigen::Vector2d> MakePoints(
         &data,
     CommonParameters &params) {
   std::vector<Eigen::Vector2d> ret;
-  for (const auto &elem : data) {
-    auto pts = elem.first;
-    auto aff = elem.second;
+  for (const auto &[pts, aff] : data)
     for (size_t i = 0; i < pts.size(); ++i)
       if (pts[i].allFinite()) ret.push_back(aff * pts[i]);
-  }
   return ret;
 }
 

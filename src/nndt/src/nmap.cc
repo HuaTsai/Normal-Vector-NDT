@@ -15,8 +15,9 @@ void NMap::LoadPoints(const std::vector<Eigen::Vector3d> &points) {
   }
   std::vector<Eigen::Vector3d> means;
   for (auto &elem : cells_) {
-    elem.second.ComputeGaussian();
-    if (elem.second.GetHasGaussian()) means.push_back(elem.second.GetMean());
+    auto &cell = elem.second;
+    cell.ComputeGaussian();
+    if (cell.GetHasGaussian()) means.push_back(cell.GetMean());
   }
   MakeKDTree(means);
 }
@@ -40,8 +41,9 @@ void NMap::LoadPointsWithCovariances(
   }
   std::vector<Eigen::Vector3d> means;
   for (auto &elem : cells_) {
-    elem.second.ComputeGaussian();
-    if (elem.second.GetHasGaussian()) means.push_back(elem.second.GetMean());
+    auto &cell = elem.second;
+    cell.ComputeGaussian();
+    if (cell.GetHasGaussian()) means.push_back(cell.GetMean());
   }
   MakeKDTree(means);
 }
@@ -52,7 +54,7 @@ std::vector<Cell> NMap::TransformCells(const Eigen::Affine3d &T,
   Eigen::Matrix3d R = T.rotation();
   Eigen::Vector3d t = T.translation();
   for (const auto &elem : cells_) {
-    const Cell &c = elem.second;
+    const auto &c = elem.second;
     Cell cell;
     cell.SetN(c.GetN());
     cell.SetHasGaussian(c.GetHasGaussian());
@@ -71,7 +73,6 @@ std::vector<Cell> NMap::TransformCells(const Eigen::Affine3d &T,
     }
     cell.SetCellType(c.GetCellType());
     cell.SetRescaleRatio(c.GetRescaleRatio());
-    cell.SetTolerance(c.GetTolerance());
     ret.push_back(cell);
   }
   return ret;

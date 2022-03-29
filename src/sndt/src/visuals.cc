@@ -468,64 +468,6 @@ MarkerArray MarkerArrayOfSNDTMap(
   return JoinMarkerArrays(vma);
 }
 
-MarkerArray MarkerArrayOfCorres(
-    const NDTMap &source_map,
-    const NDTMap &target_map,
-    const Eigen::Affine2d &aff,
-    const std::vector<std::pair<int, int>> &corres) {
-  std::vector<Marker> ms;
-  std::vector<MarkerArray> mas;
-  auto smap2 = source_map.PseudoTransformCells(aff, true);
-  for (auto corr : corres) {
-    auto scell = smap2[corr.first].get();
-    auto tcell = *(target_map.begin() + corr.second);
-    ms.push_back(MarkerOfBoundary(scell->GetCenter(), scell->GetSize(),
-                                  scell->GetSkewRad(), Color::kLime));
-    ms.push_back(MarkerOfEllipse(scell->GetPointMean(), scell->GetPointCov()));
-    ms.push_back(MarkerOfBoundary(tcell->GetCenter(), tcell->GetSize(),
-                                  tcell->GetSkewRad(), Color::kRed));
-    ms.push_back(MarkerOfEllipse(tcell->GetPointMean(), tcell->GetPointCov(),
-                                 Color::kRed));
-    ms.push_back(
-        MarkerOfLines({scell->GetCenter(), tcell->GetCenter()}, Color::kBlack));
-  }
-  return JoinMarkers(ms);
-}
-
-MarkerArray MarkerArrayOfCorrespondences(const SNDTCell *source_cell,
-                                         const SNDTCell *target_cell,
-                                         std::string text,
-                                         const Color &color) {
-  auto mas = MarkerArrayOfSNDTCell(source_cell);
-  auto mat = MarkerArrayOfSNDTCell2(target_cell);
-  auto mline =
-      MarkerOfLines({source_cell->GetPointMean(), target_cell->GetPointMean()},
-                    Color::kBlack);
-  Eigen::Vector2d middle =
-      (source_cell->GetPointMean() + target_cell->GetPointMean()) / 2;
-  auto mtext = MarkerOfText(text, middle, color);
-  return JoinMarkerArraysAndMarkers({mas, mat}, {mline, mtext});
-}
-
-MarkerArray MarkerArrayOfCorrespondences(
-    const SNDTMap &smap,
-    const SNDTMap &tmap,
-    const Eigen::Affine2d &aff,
-    const std::vector<std::pair<int, Eigen::Vector2d>> &corres) {
-  std::vector<Marker> ms;
-  std::vector<MarkerArray> mas;
-  auto smap2 = smap.PseudoTransformCells(aff, true);
-  for (auto corr : corres) {
-    auto scell = smap2[corr.first].get();
-    auto tcell = tmap.GetCellForPoint(corr.second);
-    mas.push_back(MarkerArrayOfSNDTCell(scell));
-    mas.push_back(MarkerArrayOfSNDTCell2(tcell));
-    ms.push_back(MarkerOfLines({scell->GetPointMean(), tcell->GetPointMean()},
-                               Color::kBlack));
-  }
-  return JoinMarkerArraysAndMarkers(mas, ms);
-}
-
 MarkerArray MarkerArrayOfSensor(const std::vector<Eigen::Affine2d> &affs) {
   MarkerArray ret;
   auto now = GetROSTime();

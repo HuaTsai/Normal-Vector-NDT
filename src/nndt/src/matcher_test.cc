@@ -43,6 +43,7 @@ TEST_F(BunnyTest, PCLNDT) {
   avg.setInputCloud(source_pcl);
   avg.filter(*source_pcl2);
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt;
+  auto t1 = GetTime();
   ndt.setTransformationEpsilon(0.01);
   ndt.setStepSize(0.1);
   ndt.setResolution(1.0);
@@ -54,12 +55,13 @@ TEST_F(BunnyTest, PCLNDT) {
                        .matrix();
   PointCloudType out;
   ndt.align(out, guess);
+  auto t2 = GetTime();
   auto res = ndt.getFinalTransformation();
   Vector3f tl = res.block<3, 1>(0, 3);
   double ang = Rad2Deg(AngleAxisf(res.block<3, 3>(0, 0)).angle());
-  cout << "errtl: " << (tl - Eigen::Vector3f(1, 1, 0)).norm()
-       << ", errrot: " << abs(ang - 10.)
-       << ", iter: " << ndt.getFinalNumIteration() << endl;
+  printf("etl: %.4f, erot: %.4f, iter: %d, ttl: %.2f\n",
+         (tl - Eigen::Vector3f(1, 1, 0)).norm(), abs(ang - 10.),
+         ndt.getFinalNumIteration(), GetDiffTime(t1, t2) / 1000.);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
@@ -75,9 +77,9 @@ TEST_F(BunnyTest, MyNDTLS) {
   auto res = m.Align(guess);
   Vector3d tl = res.translation();
   double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
-  cout << "errtl: " << (tl - Eigen::Vector3d(1, 1, 0)).norm()
-       << ", errrot: " << abs(ang - 10.) << ", iter: " << m.iteration() << endl;
-  m.timer().Show();
+  printf("etl: %.4f, erot: %.4f, iter: %d, opt: %.2f, ttl: %.2f\n",
+         (tl - Eigen::Vector3d(1, 1, 0)).norm(), abs(ang - 10.), m.iteration(),
+         m.timer().optimize() / 1000., m.timer().total() / 1000.);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
@@ -93,9 +95,9 @@ TEST_F(BunnyTest, MyNNDTLS) {
   auto res = m.Align(guess);
   Vector3d tl = res.translation();
   double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
-  cout << "errtl: " << (tl - Eigen::Vector3d(1, 1, 0)).norm()
-       << ", errrot: " << abs(ang - 10.) << ", iter: " << m.iteration() << endl;
-  m.timer().Show();
+  printf("etl: %.4f, erot: %.4f, iter: %d, opt: %.2f, ttl: %.2f\n",
+         (tl - Eigen::Vector3d(1, 1, 0)).norm(), abs(ang - 10.), m.iteration(),
+         m.timer().optimize() / 1000., m.timer().total() / 1000.);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
@@ -111,9 +113,9 @@ TEST_F(BunnyTest, MyNDTTR) {
   auto res = m.Align(guess);
   Vector3d tl = res.translation();
   double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
-  cout << "errtl: " << (tl - Eigen::Vector3d(1, 1, 0)).norm()
-       << ", errrot: " << abs(ang - 10.) << ", iter: " << m.iteration() << endl;
-  m.timer().Show();
+  printf("etl: %.4f, erot: %.4f, iter: %d, opt: %.2f, ttl: %.2f\n",
+         (tl - Eigen::Vector3d(1, 1, 0)).norm(), abs(ang - 10.), m.iteration(),
+         m.timer().optimize() / 1000., m.timer().total() / 1000.);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
@@ -129,9 +131,9 @@ TEST_F(BunnyTest, MyNNDTTR) {
   auto res = m.Align(guess);
   Vector3d tl = res.translation();
   double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
-  cout << "errtl: " << (tl - Eigen::Vector3d(1, 1, 0)).norm()
-       << ", errrot: " << abs(ang - 10.) << ", iter: " << m.iteration() << endl;
-  m.timer().Show();
+  printf("etl: %.4f, erot: %.4f, iter: %d, opt: %.2f, ttl: %.2f\n",
+         (tl - Eigen::Vector3d(1, 1, 0)).norm(), abs(ang - 10.), m.iteration(),
+         m.timer().optimize() / 1000., m.timer().total() / 1000.);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);

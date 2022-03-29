@@ -257,37 +257,11 @@ MarkerArray MarkerArrayOfSNDTMap(
     bool use_target_color = false);
 
 /**
- * @brief MarkerArray of correspondences
- *
- * @param source_cell Source cell
- * @param target_cell Target cell
- * @param text Text of the cost value
- * @param color Text color (default black)
- * @return MarkerArray of correspondences
- */
-MarkerArray MarkerArrayOfCorrespondences(const NDTCell *source_cell,
-                                         const NDTCell *target_cell,
-                                         std::string text,
-                                         const Color &color = Color::kBlack);
-
-MarkerArray MarkerArrayOfCorrespondences(
-    const SNDTMap &smap,
-    const SNDTMap &tmap,
-    const Eigen::Affine2d &aff,
-    const std::vector<std::pair<int, Eigen::Vector2d>> &corres);
-
-/**
  * @brief MarkerArray of the sensors
  *
  * @param affs Poses of the sensors
  * @return MarkerArray of the sensors
  */
 MarkerArray MarkerArrayOfSensor(const std::vector<Eigen::Affine2d> &affs);
-
-MarkerArray MarkerArrayOfCorres(
-    const NDTMap &source_map,
-    const NDTMap &target_map,
-    const Eigen::Affine2d &aff,
-    const std::vector<std::pair<int, int>> &corres);
 
 nav_msgs::OccupancyGrid OccupancyGridOfNDTMap(const SNDTMap &map);

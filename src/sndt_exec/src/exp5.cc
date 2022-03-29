@@ -14,6 +14,7 @@
 #include <sndt_exec/wrapper.h>
 
 #include <iostream>
+
 using namespace pcl;
 using namespace pcl::registration;
 using namespace std;
@@ -90,56 +91,56 @@ int main(int argc, char** argv) {
   ndt->setResolution(1.0);
   aligned = align(ndt, target_cloud, source_cloud);
 
-  cout << "--- 2D ---" << endl;
-  TO2D(target_cloud);
-  TO2D(source_cloud);
+  // cout << "--- 2D ---" << endl;
+  // TO2D(target_cloud);
+  // TO2D(source_cloud);
 
-  cout << "--- GICP ---" << endl;
-  GeneralizedIterativeClosestPoint<PointXYZ, PointXYZ>::Ptr gicp2(
-      new GeneralizedIterativeClosestPoint<PointXYZ, PointXYZ>());
-  aligned = align(gicp2, target_cloud, source_cloud);
+  // cout << "--- GICP ---" << endl;
+  // GeneralizedIterativeClosestPoint<PointXYZ, PointXYZ>::Ptr gicp2(
+  //     new GeneralizedIterativeClosestPoint<PointXYZ, PointXYZ>());
+  // aligned = align(gicp2, target_cloud, source_cloud);
 
-  cout << "--- ICP ---" << endl;
-  IterativeClosestPoint<PointXYZ, PointXYZ>::Ptr icp2(
-      new IterativeClosestPoint<PointXYZ, PointXYZ>());
-  aligned = align(icp2, target_cloud, source_cloud);
-
-  // Postpone: Need compute normal
-  // cout << "--- Point-to-Plane ICP ---" << endl;
-  // IterativeClosestPoint<PointXYZ, PointXYZ>::Ptr icp3(
+  // cout << "--- ICP ---" << endl;
+  // IterativeClosestPoint<PointXYZ, PointXYZ>::Ptr icp2(
   //     new IterativeClosestPoint<PointXYZ, PointXYZ>());
-  // TransformationEstimationPointToPlaneLLS<PointXYZ, PointXYZ>::Ptr trans_lls(
-  //     new TransformationEstimationPointToPlaneLLS<PointXYZ, PointXYZ>);
-  // icp3->setTransformationEstimation(trans_lls);
-  // aligned = align(icp3, target_cloud, source_cloud);
+  // aligned = align(icp2, target_cloud, source_cloud);
 
-  cout << "--- NDT ---" << endl;
-  NormalDistributionsTransform<PointXYZ, PointXYZ>::Ptr ndt2(
-      new NormalDistributionsTransform<PointXYZ, PointXYZ>());
-  ndt2->setResolution(1.0);
-  aligned = align(ndt2, target_cloud, source_cloud);
+  // // Postpone: Need compute normal
+  // // cout << "--- Point-to-Plane ICP ---" << endl;
+  // // IterativeClosestPoint<PointXYZ, PointXYZ>::Ptr icp3(
+  // //     new IterativeClosestPoint<PointXYZ, PointXYZ>());
+  // // TransformationEstimationPointToPlaneLLS<PointXYZ, PointXYZ>::Ptr trans_lls(
+  // //     new TransformationEstimationPointToPlaneLLS<PointXYZ, PointXYZ>);
+  // // icp3->setTransformationEstimation(trans_lls);
+  // // aligned = align(icp3, target_cloud, source_cloud);
 
-  // FIXME: NDT2D not work as we predict, need to know how it works
-  cout << "--- NDT2D ---" << endl;
-  NormalDistributionsTransform2D<PointXYZ, PointXYZ>::Ptr ndt2d(
-      new NormalDistributionsTransform2D<PointXYZ, PointXYZ>());
-  ndt2d->setGridExtent(Vector2f(50, 100));
-  aligned = align(ndt2d, target_cloud, source_cloud);
+  // cout << "--- NDT ---" << endl;
+  // NormalDistributionsTransform<PointXYZ, PointXYZ>::Ptr ndt2(
+  //     new NormalDistributionsTransform<PointXYZ, PointXYZ>());
+  // ndt2->setResolution(1.0);
+  // aligned = align(ndt2, target_cloud, source_cloud);
 
-  cout << "--- MY NDT ---" << endl;
-  D2DNDTParameters params5;
-  params5.reject = true;
-  params5.r_variance = params5.t_variance = 0;
-  params5.cell_size = 1;
-  params5.d2 = 0.05;
-  params5._usedtime.Start();
-  vector<pair<vector<Vector2d>, Affine2d>> datat{
-      {TOVV(target_cloud), Eigen::Affine2d::Identity()}};
-  vector<pair<vector<Vector2d>, Affine2d>> datas{
-      {TOVV(source_cloud), Eigen::Affine2d::Identity()}};
-  auto tgt5 = MakeNDTMap(datat, params5);
-  auto src5 = MakeNDTMap(datas, params5);
-  auto T5 = D2DNDTMatch(tgt5, src5, params5);
-  cout << params5._usedtime.total() / 1000. << endl;
-  cout << T5.matrix() << endl;
+  // // FIXME: NDT2D not work as we predict, need to know how it works
+  // cout << "--- NDT2D ---" << endl;
+  // NormalDistributionsTransform2D<PointXYZ, PointXYZ>::Ptr ndt2d(
+  //     new NormalDistributionsTransform2D<PointXYZ, PointXYZ>());
+  // ndt2d->setGridExtent(Vector2f(50, 100));
+  // aligned = align(ndt2d, target_cloud, source_cloud);
+
+  // cout << "--- MY NDT ---" << endl;
+  // D2DNDTParameters params5;
+  // params5.reject = true;
+  // params5.r_variance = params5.t_variance = 0;
+  // params5.cell_size = 1;
+  // params5.d2 = 0.05;
+  // params5._usedtime.Start();
+  // vector<pair<vector<Vector2d>, Affine2d>> datat{
+  //     {TOVV(target_cloud), Eigen::Affine2d::Identity()}};
+  // vector<pair<vector<Vector2d>, Affine2d>> datas{
+  //     {TOVV(source_cloud), Eigen::Affine2d::Identity()}};
+  // auto tgt5 = MakeNDTMap(datat, params5);
+  // auto src5 = MakeNDTMap(datas, params5);
+  // auto T5 = D2DNDTMatch(tgt5, src5, params5);
+  // cout << params5._usedtime.total() / 1000. << endl;
+  // cout << T5.matrix() << endl;
 }

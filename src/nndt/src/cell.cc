@@ -12,8 +12,7 @@ Cell::Cell()
       evecs_(Eigen::Matrix3d::Zero()),
       normal_(Eigen::Vector3d::Zero()),
       celltype_(kNoInit),
-      rescale_ratio_(100.),
-      tolerance_(Eigen::NumTraits<double>::dummy_precision()) {}
+      rescale_ratio_(100.) {}
 
 void Cell::AddPoint(const Eigen::Vector3d &point) { points_.push_back(point); }
 
@@ -34,20 +33,8 @@ void Cell::ComputeGaussian() {
   else
     ExcludeInfinite(points_, pts);
 
-  // XXX: omit n <= 6
-  if (pts.size() <= 6) {
-    celltype_ = kNoPoints;
-    return;
-  }
-
-  if (!pts.size()) {
-    celltype_ = kNoPoints;
-    return;
-  } else if (pts.size() == 1) {
-    celltype_ = kPoint;
-    return;
-  } else if (pts.size() == 2) {
-    celltype_ = kLine;
+  if (pts.size() < 6) {
+    celltype_ = kFewPoints;
     return;
   }
 
@@ -55,12 +42,13 @@ void Cell::ComputeGaussian() {
   cov_ = ComputeCov(pts, mean_) + ComputeMean(covs);
   ComputeEvalEvec(cov_, evals_, evecs_);
 
-  if (evals_(1) <= tolerance_) {
+  if (evals_(1) <= Eigen::NumTraits<double>::dummy_precision()) {
     celltype_ = kLine;
     return;
   }
 
-  if (evals_(0) <= tolerance_) {
+  // XXX: Not sure whether omit plane, but I think it should be fine.
+  if (evals_(0) <= Eigen::NumTraits<double>::dummy_precision()) {
     celltype_ = kPlane;
     return;
   }

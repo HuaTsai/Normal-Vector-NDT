@@ -5,13 +5,13 @@
 
 class Cell {
  public:
+  // FIXME: replace with not enough points
   enum CellType {
-    kNoInit,   /**< Covariance is not computed yet */
-    kNoPoints, /**< Covariance is not computed because of no points */
-    kPoint,    /**< Covariance degenerates as a point */
-    kLine,     /**< Covariance degenerates as a line */
-    kPlane,    /**< Covariance degenerates as a plane */
-    kRegular   /**< Covariance is computed well */
+    kNoInit,    /**< Covariance is not computed yet */
+    kFewPoints, /**< Covariance is not computed because of few points */
+    kLine,      /**< Covariance degenerates as a line */
+    kPlane,     /**< Covariance degenerates as a plane */
+    kRegular    /**< Covariance is computed well */
   };
 
   Cell();
@@ -36,7 +36,6 @@ class Cell {
   std::vector<Eigen::Matrix3d> GetPointCovs() const { return point_covs_; }
   CellType GetCellType() const { return celltype_; }
   double GetRescaleRatio() const { return rescale_ratio_; }
-  double GetTolerance() const { return tolerance_; }
 
   void SetN(int n) { n_ = n; }
   void SetHasGaussian(bool hasgaussian) { hasgaussian_ = hasgaussian; }
@@ -55,7 +54,6 @@ class Cell {
   }
   void SetCellType(CellType celltype) { celltype_ = celltype; }
   void SetRescaleRatio(double rescale_ratio) { rescale_ratio_ = rescale_ratio; }
-  void SetTolerance(double tolerance) { tolerance_ = tolerance; }
 
  private:
   int n_;                                   /**< Number of points */
@@ -71,5 +69,4 @@ class Cell {
   std::vector<Eigen::Matrix3d> point_covs_; /**< Point covariances */
   CellType celltype_;                       /**< Cell type */
   double rescale_ratio_;                    /**< Rescale ratio */
-  double tolerance_;                        /**< Comparison tolerance */
 };

@@ -40,6 +40,8 @@ Eigen::Affine3d Conserve2DFromAffine3d(const Eigen::Affine3d &T);
 
 Eigen::Vector2d TransNormRotDegAbsFromAffine2d(const Eigen::Affine2d &aff);
 
+Eigen::Vector2d TransNormRotDegAbsFromAffine3d(const Eigen::Affine3d &aff);
+
 geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time,
                                               const Eigen::Affine3d &aff);
 

@@ -5,6 +5,7 @@
 struct Vector3iComparator {
   inline bool operator()(const Eigen::Vector3i &a,
                          const Eigen::Vector3i &b) const {
+    // return std::tie(a(0), a(1), a(2)) < std::tie(b(0), b(1), b(2));
     if (a(0) != b(0))
       return a(0) < b(0);
     else if (a(1) != b(1))
