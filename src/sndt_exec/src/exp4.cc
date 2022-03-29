@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
     Tr1 = Tr1 * Affine3dFromAffine2d(T1);
     path1.poses.push_back(MakePoseStampedMsg(tj, Tr1));
     its1.push_back(params1._ceres_iteration);
-    
+
     D2DNDTParameters params2;
     params2.cell_size = c;
     params2.r_variance = params2.t_variance = 0;

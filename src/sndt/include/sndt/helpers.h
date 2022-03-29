@@ -12,9 +12,9 @@
  */
 #pragma once
 #include <bits/stdc++.h>
-#include <pcl/search/kdtree.h>
 #include <common/angle_utils.h>
 #include <common/eigen_utils.h>
+#include <pcl/search/kdtree.h>
 
 #include <Eigen/Dense>
 

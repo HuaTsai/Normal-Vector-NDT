@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 #include <common/common.h>
-#include <std_msgs/Int32.h>
+#include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
-#include <pcl_ros/point_cloud.h>
+#include <std_msgs/Int32.h>
 using namespace std;
 
 vector<sensor_msgs::PointCloud2> vpcs;
@@ -11,8 +11,7 @@ ros::Publisher pub;
 
 void cb(const std_msgs::Int32 &num) {
   int n = num.data;
-  if (n < 0 || n > (int)vpcs.size() - 1)
-    return;
+  if (n < 0 || n > (int)vpcs.size() - 1) return;
   pub.publish(vpcs[n]);
 }
 

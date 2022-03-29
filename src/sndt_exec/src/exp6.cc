@@ -5,8 +5,8 @@
 #include <nndt/matcher.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl_ros/point_cloud.h>
-#include <tqdm/tqdm.h>
 #include <sndt_exec/wrapper.h>
+#include <tqdm/tqdm.h>
 
 #include <boost/program_options.hpp>
 
@@ -157,13 +157,13 @@ int main(int argc, char **argv) {
     m1.SetSource(src);
     m1.SetTarget(tgt);
     auto res1 = m1.Align();
-// ADD
+    // ADD
     // auto res11 = m1.Align();
     // NDTMatcher m12(tr ? kNDTTR : kNDTLS, 1, ndtd2);
     // m12.SetSource(src);
     // m12.SetTarget(tgt);
     // auto res1 = m12.Align(res11);
-// ENDANDD
+    // ENDANDD
     auto err1 = TransNormRotDegAbsFromAffine3d(res1 * ben.inverse());
 
     r1.terr.push_back(err1(0));
@@ -180,13 +180,13 @@ int main(int argc, char **argv) {
     m2.SetTarget(tgt);
     auto res2 = m2.Align();
 
-// ADD
+    // ADD
     // auto res21 = m2.Align();
     // NDTMatcher m22(tr ? kNDTTR : kNDTLS, 1, ndtd2);
     // m22.SetSource(src);
     // m22.SetTarget(tgt);
     // auto res2 = m22.Align(res21);
-// ENDANDD
+    // ENDANDD
 
     auto err2 = TransNormRotDegAbsFromAffine3d(res2 * ben.inverse());
     r2.terr.push_back(err2(0));

@@ -12,14 +12,15 @@ class NDTMatcher {
 
   void SetSource(const std::vector<Eigen::Vector3d> &points);
 
-  Eigen::Affine3d Align(const Eigen::Affine3d &guess = Eigen::Affine3d::Identity());
+  Eigen::Affine3d Align(
+      const Eigen::Affine3d &guess = Eigen::Affine3d::Identity());
 
   int corres() const { return corres_; }
 
   int iteration() const { return iteration_; }
 
   Timer timer() const { return timer_; }
-  
+
   std::shared_ptr<NMap> smap() const { return smap_; }
 
   std::shared_ptr<NMap> tmap() const { return tmap_; }

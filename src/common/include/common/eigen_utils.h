@@ -153,8 +153,7 @@ inline Eigen::Matrix<double, D, D> ComputeCov(
 }
 
 template <typename T>
-inline void ExcludeInfinite(const std::vector<T> &data,
-                            std::vector<T> &valid) {
+inline void ExcludeInfinite(const std::vector<T> &data, std::vector<T> &valid) {
   valid.clear();
   for (const auto &elem : data)
     if (elem.allFinite()) valid.push_back(elem);

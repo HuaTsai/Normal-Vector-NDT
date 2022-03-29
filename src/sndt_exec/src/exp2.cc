@@ -17,7 +17,8 @@ int main(int argc, char **argv) {
   // Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
   //                 Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
   // aff3 = Conserve2DFromAffine3d(aff3);
-  // Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1)) *
+  // Affine2d aff2 = Translation2d(aff3.translation()(0), aff3.translation()(1))
+  // *
   //                 Rotation2Dd(aff3.rotation().block<2, 2>(0, 0));
 
   // string d;
@@ -52,7 +53,6 @@ int main(int argc, char **argv) {
   //   i = j;
   // }
   // cout << n << " -> " << ids.size() << endl;
-
 
   // auto t0 = vpc[0].header.stamp;
   // Res r5, r7;
@@ -126,4 +126,3 @@ int main(int argc, char **argv) {
   // r7.Print();
   // ros::spin();
 }
-

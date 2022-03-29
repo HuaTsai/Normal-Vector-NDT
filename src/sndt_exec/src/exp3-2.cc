@@ -51,43 +51,43 @@ int main(int argc, char **argv) {
   SerializationInput(JoinPath(GetDataPath(data), "lidar.ser"), vpc);
 
   // for (int n = 0; n < 2000; n += 25) {
-    auto tgt = PCMsgTo2D(vpc[n], voxel);
-    TransformPointsInPlace(tgt, aff2);
-    printf("n = %d, ", n);
+  auto tgt = PCMsgTo2D(vpc[n], voxel);
+  TransformPointsInPlace(tgt, aff2);
+  printf("n = %d, ", n);
 
-    for (double r : {1, 2, 4, 6, 8, 10, 12, 14, 16}) {
-      int cf = 0;
-      int samples = 100;
-      auto affs = RandomTransformGenerator2D(r).Generate(samples);
-      // vector<Affine2d> affs2{affs[25], affs[30], affs[35], affs[40], affs[45]};
-      // for (auto aff : affs2) {
-      for (auto aff : affs) {
-        auto src = TransformPoints(tgt, aff);
-        vector<pair<vector<Vector2d>, Affine2d>> datat{
-            {tgt, Eigen::Affine2d::Identity()}};
-        vector<pair<vector<Vector2d>, Affine2d>> datas{
-            {src, Eigen::Affine2d::Identity()}};
+  for (double r : {1, 2, 4, 6, 8, 10, 12, 14, 16}) {
+    int cf = 0;
+    int samples = 100;
+    auto affs = RandomTransformGenerator2D(r).Generate(samples);
+    // vector<Affine2d> affs2{affs[25], affs[30], affs[35], affs[40], affs[45]};
+    // for (auto aff : affs2) {
+    for (auto aff : affs) {
+      auto src = TransformPoints(tgt, aff);
+      vector<pair<vector<Vector2d>, Affine2d>> datat{
+          {tgt, Eigen::Affine2d::Identity()}};
+      vector<pair<vector<Vector2d>, Affine2d>> datas{
+          {src, Eigen::Affine2d::Identity()}};
 
-        D2DNDTParameters params5;
-        params5.r_variance = params5.t_variance = 0;
-        params5.cell_size = cell_size;
-        params5.d2 = d2;
-        params5.reject = false;
-        params5._usedtime.Start();
-        auto tgt5 = MakeNDTMap(datat, params5);
-        auto src5 = MakeNDTMap(datas, params5);
-        auto T5 = D2DNDTMatch(tgt5, src5, params5);
-        if (!(T5 * aff).isApprox(Eigen::Affine2d::Identity(), 1e-2)) {
-          ++cf;
-          // printf("f @ %.2f", r);
-          // isf = true;
-          // break;
-        }
+      D2DNDTParameters params5;
+      params5.r_variance = params5.t_variance = 0;
+      params5.cell_size = cell_size;
+      params5.d2 = d2;
+      params5.reject = false;
+      params5._usedtime.Start();
+      auto tgt5 = MakeNDTMap(datat, params5);
+      auto src5 = MakeNDTMap(datas, params5);
+      auto T5 = D2DNDTMatch(tgt5, src5, params5);
+      if (!(T5 * aff).isApprox(Eigen::Affine2d::Identity(), 1e-2)) {
+        ++cf;
+        // printf("f @ %.2f", r);
+        // isf = true;
+        // break;
       }
-      printf("r = %.2f, fail %d\n", r, cf);
-      // if (isf) break;
     }
-    printf("\n");
+    printf("r = %.2f, fail %d\n", r, cf);
+    // if (isf) break;
+  }
+  printf("\n");
   // }
 }
 

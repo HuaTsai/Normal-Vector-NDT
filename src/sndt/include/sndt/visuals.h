@@ -9,10 +9,10 @@
  *
  */
 #pragma once
+#include <nav_msgs/OccupancyGrid.h>
 #include <sndt/ndt_map.h>
 #include <sndt/sndt_map.h>
 #include <visualization_msgs/MarkerArray.h>
-#include <nav_msgs/OccupancyGrid.h>
 
 // Note: When include this header, Marker and MarkerArray become accessible.
 using visualization_msgs::Marker;

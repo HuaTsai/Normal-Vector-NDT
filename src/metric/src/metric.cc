@@ -143,8 +143,7 @@ std::pair<Stat, Stat> TrajectoryEvaluation::AbsoluteTrajectoryError() {
   return {Stat(tlerr), Stat(roterr)};
 }
 
-std::pair<Stat, Stat>
-TrajectoryEvaluation::RelativePoseErrorBySingle() {
+std::pair<Stat, Stat> TrajectoryEvaluation::RelativePoseErrorBySingle() {
   int n = estpath_.poses.size();
   std::vector<double> tlerr, roterr;
   for (int i = 0; i < n - 1; ++i) {
@@ -160,8 +159,7 @@ TrajectoryEvaluation::RelativePoseErrorBySingle() {
   return {Stat(tlerr), Stat(roterr)};
 }
 
-std::pair<Stat, Stat>
-TrajectoryEvaluation::RelativePoseErrorByLength() {
+std::pair<Stat, Stat> TrajectoryEvaluation::RelativePoseErrorByLength() {
   int n = estpath_.poses.size();
   std::vector<double> dists;
   for (int i = 0; i < n - 1; ++i) {

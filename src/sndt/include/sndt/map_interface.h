@@ -9,8 +9,8 @@
  *
  */
 #pragma once
-#include <sndt/helpers.h>
 #include <common/eigen_utils.h>
+#include <sndt/helpers.h>
 
 class MapInterface {
  public:

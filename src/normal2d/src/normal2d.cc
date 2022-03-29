@@ -44,7 +44,6 @@ inline Eigen::Matrix2d ComputeCovWithIndices(
   return ret;
 }
 
-
 std::vector<Eigen::Vector2d> ComputeNormals(
     const std::vector<Eigen::Vector2d> &pc, double radius) {
   std::vector<Eigen::Vector2d> ret(pc.size());

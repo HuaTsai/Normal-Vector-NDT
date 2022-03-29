@@ -48,7 +48,8 @@ int main(int argc, char **argv) {
   vector<double> r, t;
   cout << PCMsgTo2D(vpc[10], 0.3).size() << endl;
   for (size_t i = 0; i < vpc.size() - 1; ++i) {
-    auto aff = GetBenchMark(gtpath, vpc[i].header.stamp, vpc[i + 1].header.stamp);
+    auto aff =
+        GetBenchMark(gtpath, vpc[i].header.stamp, vpc[i + 1].header.stamp);
     r.push_back(TransNormRotDegAbsFromAffine2d(aff)(0));
     t.push_back(TransNormRotDegAbsFromAffine2d(aff)(1));
   }

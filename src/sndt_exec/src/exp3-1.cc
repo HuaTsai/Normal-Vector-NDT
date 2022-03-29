@@ -73,8 +73,10 @@ int main(int argc, char **argv) {
     vector<double> e1, e3, e5, e7;
     for (auto aff : affs) {
       auto src = TransformPoints(tgt, aff);
-      vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, Eigen::Affine2d::Identity()}};
-      vector<pair<vector<Vector2d>, Affine2d>> datas{{src, Eigen::Affine2d::Identity()}};
+      vector<pair<vector<Vector2d>, Affine2d>> datat{
+          {tgt, Eigen::Affine2d::Identity()}};
+      vector<pair<vector<Vector2d>, Affine2d>> datas{
+          {src, Eigen::Affine2d::Identity()}};
 
       // ICP Method
       // ICPParameters params1;
@@ -96,7 +98,7 @@ int main(int argc, char **argv) {
       auto T3 = SICPMatch(tgt3, src3, params3);
       if ((T3 * aff).isApprox(Eigen::Affine2d::Identity(), 1e-2))
         e3.push_back(
-          TransNormRotDegAbsFromAffine2d(params3._sols[0].back() * aff)(0));
+            TransNormRotDegAbsFromAffine2d(params3._sols[0].back() * aff)(0));
 
       // D2D-NDT Method
       // D2DNDTParameters params5;
@@ -128,7 +130,8 @@ int main(int argc, char **argv) {
       //   e7.push_back(
       //     TransNormRotDegAbsFromAffine2d(params7._sols[0].back() * aff)(0));
     }
-    printf("sr: %ld, %ld, %ld, %ld\n", e1.size(), e3.size(), e5.size(), e7.size());
+    printf("sr: %ld, %ld, %ld, %ld\n", e1.size(), e3.size(), e5.size(),
+           e7.size());
     // y1.push_back(Stat(e1).mean / rmax);
     y3.push_back(Stat(e3).mean / rmax);
     // y5.push_back(Stat(e5).mean / rmax);

@@ -166,8 +166,7 @@ Eigen::Affine2d D2DNDTMatch(const NDTMap &target_map,
     }
 
     OutlierRejectionMaker orj(ups.size());
-    if (params.reject)
-      orj.RangeRejection(ups, uqs, Rejection::kBoth, {1.5, 2});
+    if (params.reject) orj.RangeRejection(ups, uqs, Rejection::kBoth, {1.5, 2});
     auto ids = orj.indices();
     RetainIndices(ups, ids);
     RetainIndices(uqs, ids);
@@ -229,8 +228,7 @@ Eigen::Affine2d SNDTMatch2(const NDTMap &target_map,
     }
 
     OutlierRejectionMaker orj(ups.size());
-    if (params.reject)
-      orj.RangeRejection(ups, uqs, Rejection::kBoth, {1.5, 2});
+    if (params.reject) orj.RangeRejection(ups, uqs, Rejection::kBoth, {1.5, 2});
     auto ids = orj.indices();
     RetainIndices(ups, ids);
     RetainIndices(uqs, ids);
@@ -396,8 +394,7 @@ Eigen::Affine2d DMatch(const NDTMap &target_map,
     }
 
     OutlierRejectionMaker orj(ups.size());
-    if (params.reject)
-      orj.RangeRejection(ups, uqs, Rejection::kBoth, {1.5, 2});
+    if (params.reject) orj.RangeRejection(ups, uqs, Rejection::kBoth, {1.5, 2});
     auto ids = orj.indices();
     for (auto id : ids)
       opt.AddResidualBlock(
@@ -452,8 +449,7 @@ Eigen::Affine2d SMatch(const NDTMap &target_map,
     }
 
     OutlierRejectionMaker orj(ups.size());
-    if (params.reject)
-      orj.RangeRejection(ups, uqs, Rejection::kBoth, {1.5, 2});
+    if (params.reject) orj.RangeRejection(ups, uqs, Rejection::kBoth, {1.5, 2});
     auto ids = orj.indices();
     for (auto id : ids)
       opt.AddResidualBlock(SNDTCost::Create(ups[id], cps[id], nps[id], uqs[id],

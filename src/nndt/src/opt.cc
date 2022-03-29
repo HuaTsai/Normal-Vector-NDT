@@ -34,8 +34,8 @@ void Optimizer::Optimize() {
     ceres::Solve(options, *gproblem_, xyzxyzw_, &summary);
   } else if (type_ == kTR) {
     param_ = new ceres::ProductParameterization(
-      new ceres::IdentityParameterization(3),
-      new ceres::EigenQuaternionParameterization());
+        new ceres::IdentityParameterization(3),
+        new ceres::EigenQuaternionParameterization());
     problem_.SetParameterization(xyzxyzw_, param_);
     ceres::Solver::Options options;
     ceres::Solver::Summary summary;

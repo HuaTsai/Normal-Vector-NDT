@@ -65,8 +65,7 @@ void Cell::ComputeGaussian() {
     rescale = true;
   }
 
-  if (rescale)
-    cov_ = evecs_ * evals_.asDiagonal() * evecs_.transpose();
+  if (rescale) cov_ = evecs_ * evals_.asDiagonal() * evecs_.transpose();
 
   celltype_ = kRegular;
   normal_ = evecs_.col(0);

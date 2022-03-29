@@ -109,7 +109,8 @@ int main(int argc, char** argv) {
   // // cout << "--- Point-to-Plane ICP ---" << endl;
   // // IterativeClosestPoint<PointXYZ, PointXYZ>::Ptr icp3(
   // //     new IterativeClosestPoint<PointXYZ, PointXYZ>());
-  // // TransformationEstimationPointToPlaneLLS<PointXYZ, PointXYZ>::Ptr trans_lls(
+  // // TransformationEstimationPointToPlaneLLS<PointXYZ, PointXYZ>::Ptr
+  // trans_lls(
   // //     new TransformationEstimationPointToPlaneLLS<PointXYZ, PointXYZ>);
   // // icp3->setTransformationEstimation(trans_lls);
   // // aligned = align(icp3, target_cloud, source_cloud);

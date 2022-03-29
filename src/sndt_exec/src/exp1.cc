@@ -68,7 +68,9 @@ void PrintResult(const nav_msgs::Path &est, const nav_msgs::Path &gt) {
   // printf("])\n");
 }
 
-Affine2d GetBenchMark(const nav_msgs::Path &gtpath, const ros::Time &t1, const ros::Time &t2) {
+Affine2d GetBenchMark(const nav_msgs::Path &gtpath,
+                      const ros::Time &t1,
+                      const ros::Time &t2) {
   Affine3d To, Ti;
   tf2::fromMsg(GetPose(gtpath.poses, t2), To);
   tf2::fromMsg(GetPose(gtpath.poses, t1), Ti);
@@ -161,7 +163,9 @@ int main(int argc, char **argv) {
     auto tgt = PCMsgTo2D(vpc[ids[i]], v);
     auto src = PCMsgTo2D(vpc[ids[i + 1]], v);
     auto tj = vpc[ids[i + 1]].header.stamp;
-    auto ben = GetBenchMark(gtpath, vpc[ids[i]].header.stamp, vpc[ids[i + 1]].header.stamp).inverse();
+    auto ben = GetBenchMark(gtpath, vpc[ids[i]].header.stamp,
+                            vpc[ids[i + 1]].header.stamp)
+                   .inverse();
 
     vector<pair<vector<Vector2d>, Affine2d>> datat{{tgt, aff2}};
     vector<pair<vector<Vector2d>, Affine2d>> datas{{src, aff2}};
@@ -223,10 +227,10 @@ int main(int argc, char **argv) {
     }
   }
   bar.finish();
-  Stat(e5t).PrintResult();// PrintData("ndttl", e5t);
-  Stat(e5r).PrintResult();// PrintData("ndtrot", e5r);
-  Stat(e7t).PrintResult();// PrintData("sndttl", e7t);
-  Stat(e7r).PrintResult();// PrintData("sndtrot", e7r);
+  Stat(e5t).PrintResult();  // PrintData("ndttl", e5t);
+  Stat(e5r).PrintResult();  // PrintData("ndtrot", e5r);
+  Stat(e7t).PrintResult();  // PrintData("sndttl", e7t);
+  Stat(e7r).PrintResult();  // PrintData("sndtrot", e7r);
   PrintTime(r5, r7);
 
   ros::init(argc, argv, "exp1");

@@ -79,8 +79,8 @@ void LeastSquareOptimize::Optimize(CommonParameters &params) {
   ++params._iteration;
   params._ceres_iteration += summary.num_linear_solves;
   // for (const auto &sit : summary.iterations) {
-    // TODO: There are only 0 or 1
-    // params._search_iteration += sit.linear_solver_iterations;
+  // TODO: There are only 0 or 1
+  // params._search_iteration += sit.linear_solver_iterations;
   // }
   params._opt_time += summary.total_time_in_seconds * 1000.;
 
@@ -171,8 +171,8 @@ void GeneralOptimize::Optimize(CommonParameters &params) {
   // printf("\nTotal: %d\n", params._search_iteration);
   // std::cout << summary.cost_evaluation_time_in_seconds << ", ";
   // std::cout << summary.gradient_evaluation_time_in_seconds << ", ";
-  // std::cout << summary.line_search_polynomial_minimization_time_in_seconds << " -> ";
-  // std::cout << summary.total_time_in_seconds << std::endl;
+  // std::cout << summary.line_search_polynomial_minimization_time_in_seconds <<
+  // " -> "; std::cout << summary.total_time_in_seconds << std::endl;
 
   params._ceres_iteration += summary.iterations.size();
   ++params._iteration;

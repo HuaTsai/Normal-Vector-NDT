@@ -99,8 +99,7 @@ NDTMap MakeNDT(
   params._usedtime.ProcedureStart(UsedTime::Procedure::kNDT);
   std::vector<Eigen::Vector2d> points;
   for (const auto &[pts, tf] : data)
-    for (const auto &pt : pts)
-      points.push_back(tf * pt);
+    for (const auto &pt : pts) points.push_back(tf * pt);
   NDTMap ret(params.cell_size);
   ret.LoadPoints(points);
   params._usedtime.ProcedureFinish();

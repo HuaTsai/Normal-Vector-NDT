@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
   SerializationInput(JoinPath(GetDataPath("log35-1"), "lidar.ser"), vpc);
   auto tgt = PCMsgTo2D(vpc[725], voxel);
   TransformPointsInPlace(tgt, aff2);
-  
+
   ros::init(argc, argv, "exp3_5");
   ros::NodeHandle nh;
   ros::Publisher pub = nh.advertise<visualization_msgs::Marker>("src", 0, true);

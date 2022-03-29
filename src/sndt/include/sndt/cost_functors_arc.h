@@ -107,8 +107,7 @@ class D2DNDTMDCostFunctor {
                       const Eigen::Matrix2d &cq)
       : up_(up), cp_(cp), uq_(uq), cq_(cq) {}
   template <typename T>
-  bool operator()(const T *const xyt,
-                  T *e) const {
+  bool operator()(const T *const xyt, T *e) const {
     Eigen::Matrix<T, 2, 2> R = RotationMatrix2D(xyt[2]);
     Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
 

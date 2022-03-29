@@ -69,7 +69,8 @@ class NMap {
    * @param[out] index index of the result
    * @return Nearest Cell
    */
-  const Cell &SearchNearestCell(const Eigen::Vector3d &query, Eigen::Vector3i &index) const;
+  const Cell &SearchNearestCell(const Eigen::Vector3d &query,
+                                Eigen::Vector3i &index) const;
 
   /**
    * @brief Get the index by a given point

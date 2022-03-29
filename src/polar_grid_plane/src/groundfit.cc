@@ -52,13 +52,8 @@ struct PointXYZIRL {
 // Register custom point struct according to PCL
 POINT_CLOUD_REGISTER_POINT_STRUCT(
     scan_line_run::PointXYZIRL,
-    (float, x, x)(float, y, y)(float, z, z)(float,
-                                            intensity,
-                                            intensity)(uint16_t,
-                                                       ring,
-                                                       ring)(uint16_t,
-                                                             label,
-                                                             label))
+    (float, x, x)(float, y, y)(float, z, z)(float, intensity, intensity)(
+        uint16_t, ring, ring)(uint16_t, label, label))
 
 // using eigen lib
 #include <Eigen/Dense>
@@ -448,14 +443,17 @@ sensor_msgs::PointCloud2 GroundPlaneFit::velodyne_callback_(
 int main(int argc, char** argv) {
   std::string data, topic;
   po::options_description desc("Allowed options");
-  desc.add_options()
-      ("help,h", "Produce help message")
-      ("data,d", po::value<string>(&data)->required(), "Data (logxx)")
-      ("topic", po::value<string>(&topic)->default_value("nuscenes"), "Topic")
-      ("hori_seg", po::value<int>(&hori_seg)->default_value(15), "Horizontal Segments")
-      ("vert_seg", po::value<int>(&vert_seg)->default_value(20), "Vertical Segments")
-      ("vert_dist", po::value<double>(&vert_dist)->default_value(7.), "Vertical Distance")
-      ("num_iter", po::value<int>(&num_iter)->default_value(3), "Number of Iterations");
+  desc.add_options()("help,h", "Produce help message")(
+      "data,d", po::value<string>(&data)->required(), "Data (logxx)")(
+      "topic", po::value<string>(&topic)->default_value("nuscenes"), "Topic")(
+      "hori_seg", po::value<int>(&hori_seg)->default_value(15),
+      "Horizontal Segments")("vert_seg",
+                             po::value<int>(&vert_seg)->default_value(20),
+                             "Vertical Segments")(
+      "vert_dist", po::value<double>(&vert_dist)->default_value(7.),
+      "Vertical Distance")("num_iter",
+                           po::value<int>(&num_iter)->default_value(3),
+                           "Number of Iterations");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);

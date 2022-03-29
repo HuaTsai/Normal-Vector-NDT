@@ -1,7 +1,7 @@
 #pragma once
 #include <bits/stdc++.h>
-#include <nav_msgs/Path.h>
 #include <common/other_utils.h>
+#include <nav_msgs/Path.h>
 
 struct Stat {
   explicit Stat(const std::vector<double> &vals) : data(vals) {

@@ -49,13 +49,8 @@ struct PointXYZIRL {
 // Register custom point struct according to PCL
 POINT_CLOUD_REGISTER_POINT_STRUCT(
     scan_line_run::PointXYZIRL,
-    (float, x, x)(float, y, y)(float, z, z)(float,
-                                            intensity,
-                                            intensity)(uint16_t,
-                                                       ring,
-                                                       ring)(uint16_t,
-                                                             label,
-                                                             label))
+    (float, x, x)(float, y, y)(float, z, z)(float, intensity, intensity)(
+        uint16_t, ring, ring)(uint16_t, label, label))
 
 // using eigen lib
 #include <Eigen/Dense>
