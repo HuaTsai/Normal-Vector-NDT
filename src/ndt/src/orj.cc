@@ -1,6 +1,6 @@
 
 #include <common/other_utils.h>
-#include <nndt/orj.h>
+#include <ndt/orj.h>
 
 std::vector<int> ThresholdRejection(const std::vector<double> &vals,
                                     double threshold) {

@@ -19,8 +19,8 @@ InspectCallback::InspectCallback(CommonParameters &params,
                                  const Eigen::Affine2d &cur_tf)
     : needinit_(true), params_(params), x_(x), y_(y), t_(t), cur_tf_(cur_tf) {}
 
-ceres::CallbackReturnType InspectCallback::operator()(
-    const ceres::IterationSummary &summary) {
+ceres::CallbackReturnType InspectCallback::operator()([
+    [maybe_unused]] const ceres::IterationSummary &summary) {
   if (needinit_) {
     params_._sols.push_back({cur_tf_});
     needinit_ = false;

@@ -1,6 +1,6 @@
 #pragma once
-#include <nndt/nmap.h>
-#include <nndt/timer.h>
+#include <ndt/nmap.h>
+#include <ndt/timer.h>
 
 class NDTMatcher {
  public:

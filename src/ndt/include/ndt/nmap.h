@@ -1,17 +1,11 @@
 #pragma once
-#include <nndt/cell.h>
+#include <ndt/cell.h>
 #include <pcl/kdtree/kdtree_flann.h>
 
 struct Vector3iComparator {
   inline bool operator()(const Eigen::Vector3i &a,
                          const Eigen::Vector3i &b) const {
-    // return std::tie(a(0), a(1), a(2)) < std::tie(b(0), b(1), b(2));
-    if (a(0) != b(0))
-      return a(0) < b(0);
-    else if (a(1) != b(1))
-      return a(1) < b(1);
-    else
-      return a(2) < b(2);
+    return std::tie(a(0), a(1), a(2)) < std::tie(b(0), b(1), b(2));
   }
 };
 

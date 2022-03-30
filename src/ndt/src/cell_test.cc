@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <nndt/cell.h>
+#include <ndt/cell.h>
 
 using namespace Eigen;
 using namespace std;

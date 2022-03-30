@@ -9,7 +9,7 @@
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>
   <depend>sndt</depend>
-  <depend>nndt</depend>
+  <depend>ndt</depend>
   <depend>normal2d</depend>
   <depend>metric</depend>
 </package>

@@ -390,7 +390,7 @@ void Callback(const conti_radar::MeasurementConstPtr &f_input,
   pub_pc.publish(augpc);
 }
 
-void savecb(const std_msgs::Empty::ConstPtr &msg) {
+void savecb([[maybe_unused]] const std_msgs::Empty::ConstPtr &msg) {
   SerializationOutput(outpath, vepcs);
   ROS_INFO("Saving... Done");
   vepcs.clear();

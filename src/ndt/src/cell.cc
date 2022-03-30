@@ -1,5 +1,5 @@
 #include <common/eigen_utils.h>
-#include <nndt/cell.h>
+#include <ndt/cell.h>
 
 Cell::Cell()
     : n_(0),

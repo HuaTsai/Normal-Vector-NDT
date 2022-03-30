@@ -1,6 +1,6 @@
 #include <common/angle_utils.h>
 #include <gtest/gtest.h>
-#include <nndt/nmap.h>
+#include <ndt/nmap.h>
 using namespace std;
 using namespace Eigen;
 

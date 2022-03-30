@@ -5,7 +5,6 @@
 
 class Cell {
  public:
-  // FIXME: replace with not enough points
   enum CellType {
     kNoInit,    /**< Covariance is not computed yet */
     kFewPoints, /**< Covariance is not computed because of few points */

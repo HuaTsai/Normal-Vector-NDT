@@ -82,8 +82,8 @@ int main(int argc, char **argv) {
       // ICPParameters params1;
       // params1.reject = false;
       // params1._usedtime.Start();
-      // auto tgt1 = MakePoints(datat, params1);
-      // auto src1 = MakePoints(datas, params1);
+      // auto tgt1 = MakePoints(datat);
+      // auto src1 = MakePoints(datas);
       // auto T1 = ICPMatch(tgt1, src1, params1);
       // if ((T1 * aff).isApprox(Eigen::Affine2d::Identity(), 1e-2))
       //   e1.push_back(
@@ -93,8 +93,8 @@ int main(int argc, char **argv) {
       SICPParameters params3;
       params3.reject = true;
       params3._usedtime.Start();
-      auto tgt3 = MakePoints(datat, params3);
-      auto src3 = MakePoints(datas, params3);
+      auto tgt3 = MakePoints(datat);
+      auto src3 = MakePoints(datas);
       auto T3 = SICPMatch(tgt3, src3, params3);
       if ((T3 * aff).isApprox(Eigen::Affine2d::Identity(), 1e-2))
         e3.push_back(

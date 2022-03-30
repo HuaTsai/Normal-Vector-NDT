@@ -2,7 +2,7 @@
 #include <common/common.h>
 #include <metric/metric.h>
 #include <nav_msgs/Path.h>
-#include <nndt/matcher.h>
+#include <ndt/matcher.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
@@ -39,9 +39,9 @@ int main(int argc, char **argv) {
   PointCloudType::Ptr source_pcl = PointCloudType::Ptr(new PointCloudType);
   PointCloudType::Ptr target_pcl = PointCloudType::Ptr(new PointCloudType);
   pcl::io::loadPCDFile<pcl::PointXYZ>(
-      JoinPath(WSPATH, "src/nndt/data/bunny1.pcd"), *source_pcl);
+      JoinPath(WSPATH, "src/ndt/data/bunny1.pcd"), *source_pcl);
   pcl::io::loadPCDFile<pcl::PointXYZ>(
-      JoinPath(WSPATH, "src/nndt/data/bunny2.pcd"), *target_pcl);
+      JoinPath(WSPATH, "src/ndt/data/bunny2.pcd"), *target_pcl);
   vector<Vector3d> source;
   vector<Vector3d> target;
   for (const auto &pt : *source_pcl)

@@ -1,6 +1,7 @@
 #include <pcl/registration/icp.h>
 #include <pcl/registration/ndt.h>
 #include <sndt/matcher_pcl.h>
+#include <common/eigen_utils.h>
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr MakePointCloud2D(
     const std::vector<Eigen::Vector2d> &points) {
@@ -30,7 +31,7 @@ Eigen::Affine2d PCLICP(const std::vector<Eigen::Vector2d> &target_points,
   pcl::PointCloud<pcl::PointXYZ> out;
   icp.setInputSource(src);
   icp.setInputTarget(tgt);
-  icp.align(out);
+  icp.align(out, Affine3dFromAffine2d(guess_tf).matrix().cast<float>());
   Eigen::Matrix4d T4 = icp.getFinalTransformation().cast<double>();
   Eigen::Matrix3d T3 = Eigen::Matrix3d::Identity();
   T3.block<2, 2>(0, 0) = T4.block<2, 2>(0, 0);
@@ -51,7 +52,7 @@ Eigen::Affine2d PCLNDT(const std::vector<Eigen::Vector2d> &target_points,
   pcl::PointCloud<pcl::PointXYZ> out;
   ndt.setInputSource(src);
   ndt.setInputTarget(tgt);
-  ndt.align(out);
+  ndt.align(out, Affine3dFromAffine2d(guess_tf).matrix().cast<float>());
   Eigen::Matrix4d T4 = ndt.getFinalTransformation().cast<double>();
   Eigen::Matrix3d T3 = Eigen::Matrix3d::Identity();
   T3.block<2, 2>(0, 0) = T4.block<2, 2>(0, 0);

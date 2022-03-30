@@ -9,7 +9,7 @@ find_package(catkin REQUIRED
   COMPONENTS
     roscpp
     sndt
-    nndt
+    ndt
     pcl_ros
     metric
 )

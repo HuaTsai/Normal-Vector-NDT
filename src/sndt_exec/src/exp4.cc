@@ -38,8 +38,9 @@ void PrintResult(string str,
   te.set_evaltype(TrajectoryEvaluation::EvalType::kRelativeByLength);
   te.set_length(100);
   auto rpe = te.ComputeRMSError2D();
-  printf("len: %.2f, ate: %.2f / %.2f, rpe %.2f / %.2f\n", te.gtlength(),
-         ate.first.rms, ate.second.rms, rpe.first.rms, rpe.second.rms);
+  printf("%s, len: %.2f, ate: %.2f / %.2f, rpe %.2f / %.2f\n", str.c_str(),
+         te.gtlength(), ate.first.rms, ate.second.rms, rpe.first.rms,
+         rpe.second.rms);
   cout << " tl: ";
   rpe.first.PrintResult();
   cout << "rot: ";

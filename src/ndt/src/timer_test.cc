@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <nndt/timer.h>
+#include <ndt/timer.h>
 
 TEST(TimerTest, Basic) {
   Timer timer;

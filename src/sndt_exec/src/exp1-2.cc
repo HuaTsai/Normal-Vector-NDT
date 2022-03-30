@@ -143,8 +143,8 @@ int main(int argc, char **argv) {
     ICPParameters params1;
     params1.reject = true;
     params1._usedtime.Start();
-    auto tgt1 = MakePoints(datat, params1);
-    auto src1 = MakePoints(datas, params1);
+    auto tgt1 = MakePoints(datat);
+    auto src1 = MakePoints(datas);
     Affine2d T1;
     if (tr)
       T1 = ICPMatch(tgt1, src1, params1);
@@ -158,8 +158,8 @@ int main(int argc, char **argv) {
     SICPParameters params3;
     params3.reject = true;
     params3._usedtime.Start();
-    auto tgt3 = MakePoints(datat, params3);
-    auto src3 = MakePoints(datas, params3);
+    auto tgt3 = MakePoints(datat);
+    auto src3 = MakePoints(datas);
     Affine2d T3;
     if (tr)
       T3 = SICPMatch(tgt3, src3, params3);

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(nndt)
+project(ndt)
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra --coverage")
 set(CMAKE_CXX_STANDARD 17)
@@ -30,7 +30,9 @@ include_directories(
 
 set(ALL_SRCS
   src/cell.cc
+  src/cell2d.cc
   src/nmap.cc
+  src/nmap2d.cc
   src/opt.cc
   src/matcher.cc
   src/timer.cc

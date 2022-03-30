@@ -1,5 +1,5 @@
 #include <common/eigen_utils.h>
-#include <nndt/nmap.h>
+#include <ndt/nmap.h>
 
 NMap::NMap(double cell_size)
     : cell_size_(cell_size), min_voxel_(Eigen::Vector3d::Zero()) {}

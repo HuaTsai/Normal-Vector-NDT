@@ -1,5 +1,5 @@
 #include <common/other_utils.h>
-#include <nndt/timer.h>
+#include <ndt/timer.h>
 
 Timer::Timer() : state_(kInit), others_(0), total_(0) {
   data_[kNormal] = 0;

@@ -184,7 +184,7 @@ GroundPlaneFit::GroundPlaneFit() {
     @param g_ground_pc:global ground pointcloud ptr.
 
 */
-void GroundPlaneFit::estimate_plane(int num_iter) {
+void GroundPlaneFit::estimate_plane([[maybe_unused]] int num_iter) {
   // Create covarian matrix in single pass.
   Eigen::Matrix3f cov;
   Eigen::Vector4f pc_mean;

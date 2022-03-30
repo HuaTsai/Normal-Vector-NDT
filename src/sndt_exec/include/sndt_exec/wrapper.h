@@ -171,8 +171,7 @@ SNDTMap MakeSNDTMap(
 
 std::vector<Eigen::Vector2d> MakePoints(
     const std::vector<std::pair<std::vector<Eigen::Vector2d>, Eigen::Affine2d>>
-        &data,
-    CommonParameters &params) {
+        &data) {
   std::vector<Eigen::Vector2d> ret;
   for (const auto &[pts, aff] : data)
     for (size_t i = 0; i < pts.size(); ++i)

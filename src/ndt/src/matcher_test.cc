@@ -1,7 +1,7 @@
 #include <common/angle_utils.h>
 #include <common/other_utils.h>
 #include <gtest/gtest.h>
-#include <nndt/matcher.h>
+#include <ndt/matcher.h>
 #include <pcl/filters/approximate_voxel_grid.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
@@ -19,9 +19,9 @@ class BunnyTest : public ::testing::Test {
     source_pcl = PointCloudType::Ptr(new PointCloudType);
     target_pcl = PointCloudType::Ptr(new PointCloudType);
     pcl::io::loadPCDFile<pcl::PointXYZ>(
-        JoinPath(WSPATH, "src/nndt/data/bunny1.pcd"), *source_pcl);
+        JoinPath(WSPATH, "src/ndt/data/bunny1.pcd"), *source_pcl);
     pcl::io::loadPCDFile<pcl::PointXYZ>(
-        JoinPath(WSPATH, "src/nndt/data/bunny2.pcd"), *target_pcl);
+        JoinPath(WSPATH, "src/ndt/data/bunny2.pcd"), *target_pcl);
     for (const auto &pt : *source_pcl)
       source.push_back(Vector3d(pt.x, pt.y, pt.z));
     for (const auto &pt : *target_pcl)

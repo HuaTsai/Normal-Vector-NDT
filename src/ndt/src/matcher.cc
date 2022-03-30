@@ -1,7 +1,7 @@
-#include <nndt/costs.h>
-#include <nndt/matcher.h>
-#include <nndt/opt.h>
-#include <nndt/orj.h>
+#include <ndt/costs.h>
+#include <ndt/matcher.h>
+#include <ndt/opt.h>
+#include <ndt/orj.h>
 
 template <typename T>
 void RetainIndices(std::vector<T> &data, const std::vector<int> &ids) {

@@ -6,11 +6,10 @@
 class Cell2D {
  public:
   enum CellType {
-    kNoInit,   /**< Covariance is not computed yet */
-    kNoPoints, /**< Covariance is not computed because of no points */
-    kPoint,    /**< Covariance degenerates as a point */
-    kLine,     /**< Covariance degenerates as a line */
-    kRegular   /**< Covariance is computed well */
+    kNoInit,    /**< Covariance is not computed yet */
+    kFewPoints, /**< Covariance is not computed because of few points */
+    kLine,      /**< Covariance degenerates as a line */
+    kRegular    /**< Covariance is computed well */
   };
 
   Cell2D();

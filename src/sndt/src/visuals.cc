@@ -279,7 +279,7 @@ Marker MarkerOfPoints(const std::vector<Eigen::Vector2d> &points,
   ret.action = Marker::ADD;
   ret.scale.x = ret.scale.y = ret.scale.z = size;
   ret.pose = tf2::toMsg(Eigen::Affine3d::Identity());
-  ret.color = MakeColorRGBA(color);
+  ret.color = MakeColorRGBA(color, alpha);
   for (const auto &point : points) {
     geometry_msgs::Point pt;
     pt.x = point(0), pt.y = point(1), pt.z = 0;
@@ -326,7 +326,7 @@ Marker MarkerOfText(std::string text,
   ret.pose.position.z = 0;
   ret.pose.orientation.w = 1;
   ret.scale.z = 0.7;
-  ret.color = MakeColorRGBA(color);
+  ret.color = MakeColorRGBA(color, alpha);
   return ret;
 }
 
@@ -494,7 +494,8 @@ MarkerArray MarkerArrayOfSensor(const std::vector<Eigen::Affine2d> &affs) {
 }
 
 // TODO: Finish this complicated function
-nav_msgs::OccupancyGrid OccupancyGridOfNDTMap(const SNDTMap &map) {
+nav_msgs::OccupancyGrid OccupancyGridOfNDTMap([
+    [maybe_unused]] const SNDTMap &map) {
   nav_msgs::OccupancyGrid ret;
   ret.info.map_load_time = ros::Time(0);
   ret.info.width = ret.info.height;

@@ -3,7 +3,7 @@
 #include <common/eigen_utils.h>
 #include <common/other_utils.h>
 #include <gtest/gtest.h>
-#include <nndt/matcher.h>
+#include <ndt/matcher.h>
 #include <pcl/filters/approximate_voxel_grid.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
@@ -14,13 +14,13 @@ using namespace std;
 using namespace Eigen;
 using PointCloudType = pcl::PointCloud<pcl::PointXYZ>;
 
-int main(int argc, char **argv) {
+int main() {
   // PointCloudType::Ptr source_pcl = PointCloudType::Ptr(new PointCloudType);
   // PointCloudType::Ptr target_pcl = PointCloudType::Ptr(new PointCloudType);
   // pcl::io::loadPCDFile<pcl::PointXYZ>(
-  //     JoinPath(WSPATH, "src/nndt/data/bunny1.pcd"), *source_pcl);
+  //     JoinPath(WSPATH, "src/ndt/data/bunny1.pcd"), *source_pcl);
   // pcl::io::loadPCDFile<pcl::PointXYZ>(
-  //     JoinPath(WSPATH, "src/nndt/data/bunny2.pcd"), *target_pcl);
+  //     JoinPath(WSPATH, "src/ndt/data/bunny2.pcd"), *target_pcl);
   // vector<Vector3d> source;
   // vector<Vector3d> target;
   // for (const auto &pt : *source_pcl)

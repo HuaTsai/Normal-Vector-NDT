@@ -54,7 +54,7 @@ vector<Vector2d> TOVV(PointCloud<PointXYZ>::Ptr pc) {
   return ret;
 }
 
-int main(int argc, char** argv) {
+int main() {
   PointCloud<PointXYZ>::Ptr target_cloud(new PointCloud<PointXYZ>());
   PointCloud<PointXYZ>::Ptr source_cloud(new PointCloud<PointXYZ>());
   io::loadPCDFile(GetDataPath("Koide3/tgt.pcd"), *target_cloud);

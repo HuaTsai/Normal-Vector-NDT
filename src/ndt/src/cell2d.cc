@@ -1,5 +1,5 @@
 #include <common/eigen_utils.h>
-#include <nndt/cell2d.h>
+#include <ndt/cell2d.h>
 
 Cell2D::Cell2D()
     : n_(0),
@@ -12,8 +12,7 @@ Cell2D::Cell2D()
       evecs_(Eigen::Matrix2d::Zero()),
       normal_(Eigen::Vector2d::Zero()),
       celltype_(kNoInit),
-      rescale_ratio_(100.),
-      tolerance_(Eigen::NumTraits<double>::dummy_precision()) {}
+      rescale_ratio_(100.) {}
 
 void Cell2D::AddPoint(const Eigen::Vector2d &point) {
   points_.push_back(point);
@@ -36,20 +35,8 @@ void Cell2D::ComputeGaussian() {
   else
     ExcludeInfinite(points_, pts);
 
-  // XXX: omit n <= 4
-  if (pts.size() <= 4) {
-    celltype_ = kNoPoints;
-    return;
-  }
-
-  if (!pts.size()) {
-    celltype_ = kNoPoints;
-    return;
-  } else if (pts.size() == 1) {
-    celltype_ = kPoint;
-    return;
-  } else if (pts.size() == 2) {
-    celltype_ = kLine;
+  if (pts.size() < 4) {
+    celltype_ = kFewPoints;
     return;
   }
 
@@ -57,24 +44,16 @@ void Cell2D::ComputeGaussian() {
   cov_ = ComputeCov(pts, mean_) + ComputeMean(covs);
   ComputeEvalEvec(cov_, evals_, evecs_);
 
-  if (evals_(1) <= Eigen::NumTraits<double>::dummy_precision()) {
+  // XXX: Not sure whether omit line, but I think it should be fine.
+  if (evals_(0) <= Eigen::NumTraits<double>::dummy_precision()) {
     celltype_ = kLine;
     return;
   }
 
-  if (evals_(0) <= Eigen::NumTraits<double>::dummy_precision()) {
-    celltype_ = kPlane;
-    return;
-  }
-
-  bool rescale = false;
-
-  if (evals_(2) > rescale_ratio_ * evals_(0)) {
+  if (evals_(1) > rescale_ratio_ * evals_(0)) {
     evals_(0) = evals_(1) / rescale_ratio_;
-    rescale = true;
+    cov_ = evecs_ * evals_.asDiagonal() * evecs_.transpose();
   }
-
-  if (rescale) cov_ = evecs_ * evals_.asDiagonal() * evecs_.transpose();
 
   celltype_ = kRegular;
   normal_ = evecs_.col(0);
