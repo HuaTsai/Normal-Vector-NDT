@@ -24,4 +24,6 @@ TEST(NMapTest, Ellipse) {
   Vector3i idx;
   mp.SearchNearestCell(Eigen::Vector3d(-8, -3, 0), idx);
   EXPECT_EQ(idx, Vector3i(1, 2, 0));
+  auto cells = mp.SearchCellsInRadius(Eigen::Vector3d(-8, -3, 0), 2);
+  EXPECT_EQ((int)cells.size(), 5);
 }

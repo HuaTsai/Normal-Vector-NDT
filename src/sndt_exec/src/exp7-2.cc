@@ -1,10 +1,11 @@
-// Scene Test
+// Single Scene Test
 #include <common/common.h>
 #include <metric/metric.h>
 #include <nav_msgs/Path.h>
 #include <ndt/matcher.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl_ros/point_cloud.h>
+#include <sndt_exec/wrapper.h>
 #include <visualization_msgs/MarkerArray.h>
 
 #include <boost/program_options.hpp>
@@ -28,23 +29,6 @@ struct Res {
   vector<double> corr;
   Timer timer;
 };
-
-std::vector<Eigen::Vector3d> PCMsgTo3D(const sensor_msgs::PointCloud2 &msg,
-                                       double voxel) {
-  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::fromROSMsg(msg, *pc);
-  if (voxel != 0) {
-    pcl::VoxelGrid<pcl::PointXYZ> vg;
-    vg.setInputCloud(pc);
-    vg.setLeafSize(voxel, voxel, voxel);
-    vg.filter(*pc);
-  }
-  std::vector<Eigen::Vector3d> ret;
-  for (const auto &pt : *pc)
-    if (std::isfinite(pt.x) && std::isfinite(pt.y) && std::isfinite(pt.z))
-      ret.push_back(Eigen::Vector3d(pt.x, pt.y, pt.z));
-  return ret;
-}
 
 Affine3d BM(const nav_msgs::Path &gt,
             const ros::Time &t1,
@@ -104,7 +88,7 @@ int main(int argc, char **argv) {
   string d;
   bool tr;
   int n, f;
-  double ndtd2, nndtd2;
+  double ndtd2, nndtd2, cs;
   po::options_description desc("Allowed options");
   // clang-format off
   desc.add_options()
@@ -114,6 +98,7 @@ int main(int argc, char **argv) {
       ("f,f", po::value<int>(&f)->default_value(1), "F")
       ("ndtd2,a", po::value<double>(&ndtd2)->default_value(0.3), "ndtd2")
       ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.3), "nndtd2")
+      ("cs,c", po::value<double>(&cs)->default_value(1), "cell size")
       ("tr", po::value<bool>(&tr)->default_value(false)->implicit_value(true), "Trust Region");
   // clang-format on
   po::variables_map vm;
@@ -135,15 +120,11 @@ int main(int argc, char **argv) {
   auto src = PCMsgTo3D(vpc[n + f], 0);
   TransformPointsInPlace(tgt, aff3);
   TransformPointsInPlace(src, aff3);
-  auto ben = BM(gt, vpc[n].header.stamp, vpc[n + 1].header.stamp);
-  bent.push_back(TransNormRotDegAbsFromAffine3d(ben)(0));
-  benr.push_back(TransNormRotDegAbsFromAffine3d(ben)(1));
+  auto ben = BM(gt, vpc[n].header.stamp, vpc[n + f].header.stamp);
+  cout << "Bench Mark: " << TransNormRotDegAbsFromAffine3d(ben).transpose()
+       << endl;
 
-  double cs = 1;
-  cout << "NDT:" << endl;
-  NDTMatcher m1(
-      tr ? NDTMatcher::MatchType::kNDTTR : NDTMatcher::MatchType::kNDTLS, cs,
-      ndtd2);
+  NDTMatcher m1({tr ? kTR : kLS, kNDT, k1to1}, cs, ndtd2);
   m1.SetSource(src);
   m1.SetTarget(tgt);
   auto res1 = m1.Align();
@@ -154,10 +135,7 @@ int main(int argc, char **argv) {
   r1.timer += m1.timer();
   r1.its.push_back(m1.iteration());
 
-  cout << "NNDT:" << endl;
-  NDTMatcher m2(
-      tr ? NDTMatcher::MatchType::kNNDTTR : NDTMatcher::MatchType::kNNDTLS, cs,
-      nndtd2);
+  NDTMatcher m2({tr ? kTR : kLS, kNNDT, k1to1}, cs, nndtd2);
   m2.SetSource(src);
   m2.SetTarget(tgt);
   auto res2 = m2.Align();
@@ -180,6 +158,7 @@ int main(int argc, char **argv) {
   ros::Publisher pub4 = nh.advertise<Marker>("out2", 0, true);
   ros::Publisher pub5 = nh.advertise<Marker>("box1", 0, true);
   ros::Publisher pub6 = nh.advertise<Marker>("box2", 0, true);
+  ros::Publisher pub7 = nh.advertise<Marker>("box3", 0, true);
   pub1.publish(MP(src, false));
   pub2.publish(MP(tgt, true));
   auto out1 = TransformPoints(src, res1);
@@ -187,8 +166,13 @@ int main(int argc, char **argv) {
   pub3.publish(MP(out1, false));
   pub4.publish(MP(out2, false));
   pub5.publish(Boxes(m1.tmap(), true));
-  std::shared_ptr<NMap> mp22(new NMap(cs));
-  mp22->LoadPoints(out2);
-  pub6.publish(Boxes(mp22, false));
+
+  auto mp1 = std::make_shared<NMap>(cs);
+  mp1->LoadPoints(out1);
+  pub6.publish(Boxes(mp1, false));
+
+  auto mp2 = std::make_shared<NMap>(cs);
+  mp2->LoadPoints(out2);
+  pub7.publish(Boxes(mp2, false));
   ros::spin();
 }

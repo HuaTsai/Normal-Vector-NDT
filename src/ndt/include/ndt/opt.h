@@ -3,7 +3,9 @@
 
 class Optimizer {
  public:
-  enum OptType { kLS, kTR };
+  enum class OptType { kLS, kTR };
+
+  Optimizer() = delete;
 
   explicit Optimizer(OptType type);
 

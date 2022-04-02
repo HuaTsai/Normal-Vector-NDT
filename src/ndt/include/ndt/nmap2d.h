@@ -13,6 +13,8 @@ class NMap2D {
   using MapType = std::map<Eigen::Vector2i, Cell2D, Vector2iComparator>;
 
  public:
+  NMap2D() = delete;
+
   /**
    * @brief Construct a new NMap2D object
    *

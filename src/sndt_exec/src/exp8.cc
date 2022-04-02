@@ -28,7 +28,7 @@ int main() {
   // for (const auto &pt : *target_pcl)
   //   target.push_back(Vector3d(pt.x, pt.y, pt.z));
 
-  // NDTMatcher m1(NDTMatcher::MatchType::kNDTLS, 1);
+  // NDTMatcher m1({kLS, kNDT, k1to1}, 1);
   // m1.SetSource(source);
   // m1.SetTarget(target);
   // auto r1 = m1.Align(guess);
@@ -36,7 +36,7 @@ int main() {
   // cout << e1(0) << " / " << e1(1) << " / " << m1.iteration() << endl;
   // m1.timer().Show();
 
-  // NDTMatcher m2(NDTMatcher::MatchType::kNNDTLS, 1);
+  // NDTMatcher m2({kLS, kNNDT, k1to1}, 1);
   // m2.SetSource(source);
   // m2.SetTarget(target);
   // auto r2 = m2.Align(guess);

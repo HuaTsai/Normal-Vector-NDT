@@ -95,9 +95,25 @@ const Cell &NMap::SearchNearestCell(const Eigen::Vector3d &query,
     std::exit(1);
   }
   pcl::PointXYZ res = kdtree_.getInputCloud()->at(idx[0]);
-  Eigen::Vector3d mean(res.x, res.y, res.z);
-  index = GetIndexForPoint(mean);
+  index = GetIndexForPoint(Eigen::Vector3d(res.x, res.y, res.z));
   return cells_.at(index);
+}
+
+std::vector<std::reference_wrapper<const Cell>> NMap::SearchCellsInRadius(
+    const Eigen::Vector3d &query, double radius) const {
+  pcl::PointXYZ pt;
+  pt.x = query(0), pt.y = query(1), pt.z = query(2);
+  std::vector<int> idx;
+  std::vector<float> dist2;
+  kdtree_.radiusSearch(pt, radius, idx, dist2);
+  std::vector<std::reference_wrapper<const Cell>> ret;
+  for (auto id : idx) {
+    pcl::PointXYZ res = kdtree_.getInputCloud()->at(id);
+    Eigen::Vector3i index =
+        GetIndexForPoint(Eigen::Vector3d(res.x, res.y, res.z));
+    ret.push_back(cells_.at(index));
+  }
+  return ret;
 }
 
 Eigen::Vector3i NMap::GetIndexForPoint(const Eigen::Vector3d &point) const {

@@ -14,10 +14,6 @@ using namespace std;
 
 using namespace Eigen;
 namespace po = boost::program_options;
-NDTMatcher::MatchType kNDTLS = NDTMatcher::MatchType::kNDTLS;
-NDTMatcher::MatchType kNDTTR = NDTMatcher::MatchType::kNDTTR;
-NDTMatcher::MatchType kNNDTLS = NDTMatcher::MatchType::kNNDTLS;
-NDTMatcher::MatchType kNNDTTR = NDTMatcher::MatchType::kNNDTTR;
 
 nav_msgs::Path InitFirstPose(const ros::Time &time) {
   nav_msgs::Path path;
@@ -44,23 +40,6 @@ struct Res {
   nav_msgs::Path path;
   Affine3d Tr;
 };
-
-std::vector<Eigen::Vector3d> PCMsgTo3D(const sensor_msgs::PointCloud2 &msg,
-                                       double voxel) {
-  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::fromROSMsg(msg, *pc);
-  if (voxel != 0) {
-    pcl::VoxelGrid<pcl::PointXYZ> vg;
-    vg.setInputCloud(pc);
-    vg.setLeafSize(voxel, voxel, voxel);
-    vg.filter(*pc);
-  }
-  std::vector<Eigen::Vector3d> ret;
-  for (const auto &pt : *pc)
-    if (std::isfinite(pt.x) && std::isfinite(pt.y) && std::isfinite(pt.z))
-      ret.push_back(Eigen::Vector3d(pt.x, pt.y, pt.z));
-  return ret;
-}
 
 Affine3d BM(const nav_msgs::Path &gt,
             const ros::Time &t1,
@@ -142,7 +121,6 @@ int main(int argc, char **argv) {
   // for (size_t i = 0; i < vpc.size() - 1; ++i) {
   tqdm bar;
   for (int i = 0; i < n; i += f) {
-    // bar.progress(i, n);
     auto tgt = PCMsgTo3D(vpc[i], 0);
     auto src = PCMsgTo3D(vpc[i + f], 0);
     auto tj = vpc[i + f].header.stamp;
@@ -153,17 +131,10 @@ int main(int argc, char **argv) {
     benr.push_back(TransNormRotDegAbsFromAffine3d(ben)(1));
 
     // cout << "NDT" << endl;
-    NDTMatcher m1(tr ? kNDTTR : kNDTLS, cs, ndtd2);
+    NDTMatcher m1({tr ? kTR : kLS, kNDT, k1to1}, cs, ndtd2);
     m1.SetSource(src);
     m1.SetTarget(tgt);
     auto res1 = m1.Align();
-    // ADD
-    // auto res11 = m1.Align();
-    // NDTMatcher m12(tr ? kNDTTR : kNDTLS, 1, ndtd2);
-    // m12.SetSource(src);
-    // m12.SetTarget(tgt);
-    // auto res1 = m12.Align(res11);
-    // ENDANDD
     auto err1 = TransNormRotDegAbsFromAffine3d(res1 * ben.inverse());
 
     r1.terr.push_back(err1(0));
@@ -175,14 +146,14 @@ int main(int argc, char **argv) {
     r1.path.poses.push_back(MakePoseStampedMsg(tj, r1.Tr));
 
     // cout << "NNDT" << endl;
-    NDTMatcher m2(tr ? kNNDTTR : kNNDTLS, cs, nndtd2);
+    NDTMatcher m2({tr ? kTR : kLS, kNNDT, k1to1}, cs, nndtd2);
     m2.SetSource(src);
     m2.SetTarget(tgt);
     auto res2 = m2.Align();
 
     // ADD
     // auto res21 = m2.Align();
-    // NDTMatcher m22(tr ? kNDTTR : kNDTLS, 1, ndtd2);
+    // NDTMatcher m22({tr ? kTR : kLS, kNNDT, k1to1}, 1, ndtd2);
     // m22.SetSource(src);
     // m22.SetTarget(tgt);
     // auto res2 = m22.Align(res21);

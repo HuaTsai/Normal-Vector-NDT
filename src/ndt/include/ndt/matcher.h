@@ -4,9 +4,28 @@
 
 class NDTMatcher {
  public:
-  enum MatchType { kNDTLS, kNNDTLS, kNDTTR, kNNDTTR };
+  enum class Options {
+    kLineSearch,
+    kTrustRegion,
+    kNDT,
+    kNormalNDT,
+    k1to1,
+    k1ton,
+    kIterative
+  };
 
-  explicit NDTMatcher(MatchType type, double cell_size, double d2 = 0.05);
+  NDTMatcher() = delete;
+
+  // TODO: private constructor and make factory methods
+  explicit NDTMatcher(std::unordered_set<Options> options,
+                      double cell_size,
+                      double d2 = 0.05);
+
+  explicit NDTMatcher(std::unordered_set<Options> options,
+                      std::vector<double> cell_sizes,
+                      double d2 = 0.05);
+
+  bool HasOption(Options option);
 
   void SetTarget(const std::vector<Eigen::Vector3d> &points);
 
@@ -26,12 +45,27 @@ class NDTMatcher {
   std::shared_ptr<NMap> tmap() const { return tmap_; }
 
  private:
+  Eigen::Affine3d AlignImpl(
+      const Eigen::Affine3d &guess = Eigen::Affine3d::Identity());
+
+  std::unordered_set<Options> options_;
+  std::vector<Eigen::Vector3d> spts_;
+  std::vector<Eigen::Vector3d> tpts_;
   std::shared_ptr<NMap> smap_;
   std::shared_ptr<NMap> tmap_;
-  MatchType type_;
+  std::vector<double> cell_sizes_;
   Timer timer_;
   double cell_size_;
   double d2_;
   int iteration_;
   int corres_;
 };
+
+// XXX: Global variables in order for easy usage in applications
+constexpr NDTMatcher::Options kLS = NDTMatcher::Options::kLineSearch;
+constexpr NDTMatcher::Options kTR = NDTMatcher::Options::kTrustRegion;
+constexpr NDTMatcher::Options kNDT = NDTMatcher::Options::kNDT;
+constexpr NDTMatcher::Options kNNDT = NDTMatcher::Options::kNormalNDT;
+constexpr NDTMatcher::Options k1to1 = NDTMatcher::Options::k1to1;
+constexpr NDTMatcher::Options k1ton = NDTMatcher::Options::k1ton;
+constexpr NDTMatcher::Options kIterative = NDTMatcher::Options::kIterative;

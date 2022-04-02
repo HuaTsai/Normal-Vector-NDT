@@ -239,8 +239,25 @@ std::vector<Eigen::Vector2d> PCMsgTo2D(const sensor_msgs::PointCloud2 &msg,
 
   std::vector<Eigen::Vector2d> ret;
   for (const auto &pt : *pc)
-    if (std::isfinite(pt.x) && std::isfinite(pt.y) && std::isfinite(pt.z))
-      ret.push_back(Eigen::Vector2d(pt.x, pt.y));
+    if (pcl::isFinite(pt)) ret.push_back(Eigen::Vector2d(pt.x, pt.y));
+  return ret;
+}
+
+// Voxel: recompute mean in voxel
+std::vector<Eigen::Vector3d> PCMsgTo3D(const sensor_msgs::PointCloud2 &msg,
+                                       double voxel) {
+  pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::fromROSMsg(msg, *pc);
+  if (voxel != 0) {
+    pcl::VoxelGrid<pcl::PointXYZ> vg;
+    vg.setInputCloud(pc);
+    vg.setLeafSize(voxel, voxel, voxel);
+    vg.filter(*pc);
+  }
+
+  std::vector<Eigen::Vector3d> ret;
+  for (const auto &pt : *pc)
+    if (pcl::isFinite(pt)) ret.push_back(Eigen::Vector3d(pt.x, pt.y, pt.z));
   return ret;
 }
 

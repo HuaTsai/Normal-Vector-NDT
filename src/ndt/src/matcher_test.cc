@@ -15,7 +15,7 @@ using namespace std::chrono_literals;
 class BunnyTest : public ::testing::Test {
  protected:
   using PointCloudType = pcl::PointCloud<pcl::PointXYZ>;
-  virtual void SetUp() {
+  virtual void SetUp() override {
     source_pcl = PointCloudType::Ptr(new PointCloudType);
     target_pcl = PointCloudType::Ptr(new PointCloudType);
     pcl::io::loadPCDFile<pcl::PointXYZ>(
@@ -27,6 +27,21 @@ class BunnyTest : public ::testing::Test {
     for (const auto &pt : *target_pcl)
       target.push_back(Vector3d(pt.x, pt.y, pt.z));
   }
+
+  pair<Vector3d, double> Match(NDTMatcher &m,
+                               const Affine3d &guess = Affine3d::Identity()) {
+    m.SetSource(source);
+    m.SetTarget(target);
+    auto res = m.Align(guess);
+    Vector3d tl = res.translation();
+    double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
+    printf("etl: %.4f, erot: %.4f, iter: %d, opt: %.2f, ttl: %.2f\n",
+           (tl - Eigen::Vector3d(1, 1, 0)).norm(), abs(ang - 10.),
+           m.iteration(), m.timer().optimize() / 1000.,
+           m.timer().total() / 1000.);
+    return {tl, ang};
+  }
+
   PointCloudType::Ptr source_pcl;
   PointCloudType::Ptr target_pcl;
   vector<Vector3d> source;
@@ -69,17 +84,17 @@ TEST_F(BunnyTest, PCLNDT) {
 }
 
 TEST_F(BunnyTest, MyNDTLS) {
-  NDTMatcher m(NDTMatcher::MatchType::kNDTLS, 1);
-  m.SetSource(source);
-  m.SetTarget(target);
+  NDTMatcher m({kLS, kNDT, k1to1}, 1);
+  auto [tl, ang] = Match(m);
+  EXPECT_NEAR(tl(0), 1, 0.05);
+  EXPECT_NEAR(tl(1), 1, 0.05);
+  EXPECT_NEAR(tl(2), 0, 0.05);
+  EXPECT_NEAR(ang, 10, 0.5);
+
+  NDTMatcher m2({kLS, kNDT, k1to1}, 1);
   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
                    AngleAxisd(0.6931, Vector3d::UnitZ());
-  auto res = m.Align(guess);
-  Vector3d tl = res.translation();
-  double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
-  printf("etl: %.4f, erot: %.4f, iter: %d, opt: %.2f, ttl: %.2f\n",
-         (tl - Eigen::Vector3d(1, 1, 0)).norm(), abs(ang - 10.), m.iteration(),
-         m.timer().optimize() / 1000., m.timer().total() / 1000.);
+  tie(tl, ang) = Match(m2, guess);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
@@ -87,17 +102,17 @@ TEST_F(BunnyTest, MyNDTLS) {
 }
 
 TEST_F(BunnyTest, MyNNDTLS) {
-  NDTMatcher m(NDTMatcher::MatchType::kNNDTLS, 1);
-  m.SetSource(source);
-  m.SetTarget(target);
+  NDTMatcher m({kLS, kNNDT, k1to1}, 1);
+  auto [tl, ang] = Match(m);
+  EXPECT_NEAR(tl(0), 1, 0.05);
+  EXPECT_NEAR(tl(1), 1, 0.05);
+  EXPECT_NEAR(tl(2), 0, 0.05);
+  EXPECT_NEAR(ang, 10, 0.5);
+
+  NDTMatcher m2({kLS, kNNDT, k1to1}, 1);
   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
                    AngleAxisd(0.6931, Vector3d::UnitZ());
-  auto res = m.Align(guess);
-  Vector3d tl = res.translation();
-  double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
-  printf("etl: %.4f, erot: %.4f, iter: %d, opt: %.2f, ttl: %.2f\n",
-         (tl - Eigen::Vector3d(1, 1, 0)).norm(), abs(ang - 10.), m.iteration(),
-         m.timer().optimize() / 1000., m.timer().total() / 1000.);
+  tie(tl, ang) = Match(m2, guess);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
@@ -105,17 +120,10 @@ TEST_F(BunnyTest, MyNNDTLS) {
 }
 
 TEST_F(BunnyTest, MyNDTTR) {
-  NDTMatcher m(NDTMatcher::MatchType::kNDTTR, 1);
-  m.SetSource(source);
-  m.SetTarget(target);
+  NDTMatcher m({kTR, kNDT, k1to1}, 1);
   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
                    AngleAxisd(0.6931, Vector3d::UnitZ());
-  auto res = m.Align(guess);
-  Vector3d tl = res.translation();
-  double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
-  printf("etl: %.4f, erot: %.4f, iter: %d, opt: %.2f, ttl: %.2f\n",
-         (tl - Eigen::Vector3d(1, 1, 0)).norm(), abs(ang - 10.), m.iteration(),
-         m.timer().optimize() / 1000., m.timer().total() / 1000.);
+  auto [tl, ang] = Match(m, guess);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
@@ -123,17 +131,46 @@ TEST_F(BunnyTest, MyNDTTR) {
 }
 
 TEST_F(BunnyTest, MyNNDTTR) {
-  NDTMatcher m(NDTMatcher::MatchType::kNNDTTR, 1);
-  m.SetSource(source);
-  m.SetTarget(target);
+  NDTMatcher m({kTR, kNNDT, k1to1}, 1);
   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
                    AngleAxisd(0.6931, Vector3d::UnitZ());
-  auto res = m.Align(guess);
-  Vector3d tl = res.translation();
-  double ang = Rad2Deg(AngleAxisd(res.rotation()).angle());
-  printf("etl: %.4f, erot: %.4f, iter: %d, opt: %.2f, ttl: %.2f\n",
-         (tl - Eigen::Vector3d(1, 1, 0)).norm(), abs(ang - 10.), m.iteration(),
-         m.timer().optimize() / 1000., m.timer().total() / 1000.);
+  auto [tl, ang] = Match(m, guess);
+  EXPECT_NEAR(tl(0), 1, 0.05);
+  EXPECT_NEAR(tl(1), 1, 0.05);
+  EXPECT_NEAR(tl(2), 0, 0.05);
+  EXPECT_NEAR(ang, 10, 0.5);
+}
+
+TEST_F(BunnyTest, MyNDTIterative) {
+  NDTMatcher m({kLS, kNDT, k1to1, kIterative}, {0.5, 1, 2});
+  auto [tl, ang] = Match(m);
+  EXPECT_NEAR(tl(0), 1, 0.05);
+  EXPECT_NEAR(tl(1), 1, 0.05);
+  EXPECT_NEAR(tl(2), 0, 0.05);
+  EXPECT_NEAR(ang, 10, 0.5);
+
+  NDTMatcher m2({kLS, kNDT, k1to1, kIterative}, {0.5, 1, 2});
+  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
+                   AngleAxisd(0.6931, Vector3d::UnitZ());
+  tie(tl, ang) = Match(m2, guess);
+  EXPECT_NEAR(tl(0), 1, 0.05);
+  EXPECT_NEAR(tl(1), 1, 0.05);
+  EXPECT_NEAR(tl(2), 0, 0.05);
+  EXPECT_NEAR(ang, 10, 0.5);
+}
+
+TEST_F(BunnyTest, MyNNDTIterative) {
+  NDTMatcher m({kLS, kNNDT, k1to1, kIterative}, {0.5, 1, 2});
+  auto [tl, ang] = Match(m);
+  EXPECT_NEAR(tl(0), 1, 0.05);
+  EXPECT_NEAR(tl(1), 1, 0.05);
+  EXPECT_NEAR(tl(2), 0, 0.05);
+  EXPECT_NEAR(ang, 10, 0.5);
+
+  NDTMatcher m2({kLS, kNNDT, k1to1, kIterative}, {0.5, 1, 2});
+  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
+                   AngleAxisd(0.6931, Vector3d::UnitZ());
+  tie(tl, ang) = Match(m2, guess);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);

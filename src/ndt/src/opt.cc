@@ -27,12 +27,12 @@ void Optimizer::BuildProblem(ceres::FirstOrderFunction *func) {
 }
 
 void Optimizer::Optimize() {
-  if (type_ == kLS) {
+  if (type_ == OptType::kLS) {
     ceres::GradientProblemSolver::Options options;
     ceres::GradientProblemSolver::Summary summary;
     options.max_num_iterations = 50;
     ceres::Solve(options, *gproblem_, xyzxyzw_, &summary);
-  } else if (type_ == kTR) {
+  } else if (type_ == OptType::kTR) {
     param_ = new ceres::ProductParameterization(
         new ceres::IdentityParameterization(3),
         new ceres::EigenQuaternionParameterization());

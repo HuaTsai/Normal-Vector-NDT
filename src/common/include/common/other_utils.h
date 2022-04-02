@@ -23,8 +23,9 @@ inline int GetDiffTime(std::chrono::steady_clock::time_point t1,
 inline std::pair<double, double> ComputeMeanAndStdev(
     const std::vector<double> &coll) {
   if (coll.size() <= 1) {
-    std::cerr << __FUNCTION__ << ": invalid container size " << coll.size();
-    std::exit(-1);
+    std::cerr << __FUNCTION__ << ": invalid container size " << coll.size()
+              << ", return with zero standard deviation\n";
+    return {coll.size() ? coll[0] : 0., 0.};
   }
   double mean = std::accumulate(coll.begin(), coll.end(), 0.) / coll.size();
   double stdev = std::sqrt(accumulate(coll.begin(), coll.end(), 0.,

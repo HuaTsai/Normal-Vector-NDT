@@ -1,7 +1,7 @@
+#include <common/eigen_utils.h>
 #include <pcl/registration/icp.h>
 #include <pcl/registration/ndt.h>
 #include <sndt/matcher_pcl.h>
-#include <common/eigen_utils.h>
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr MakePointCloud2D(
     const std::vector<Eigen::Vector2d> &points) {
