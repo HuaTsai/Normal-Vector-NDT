@@ -5,7 +5,7 @@
 
 class Orj {
  public:
-  enum Rejection { kThreshold, kStatistic, kBoth };
+  enum class Rejection { kThreshold, kStatistic, kBoth };
   Orj() = delete;
 
   explicit Orj(int n) {

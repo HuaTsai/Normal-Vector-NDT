@@ -2,6 +2,7 @@
 #include <common/other_utils.h>
 #include <ndt/orj.h>
 
+namespace {
 std::vector<int> ThresholdRejection(const std::vector<double> &vals,
                                     double threshold) {
   std::vector<int> ret;
@@ -12,10 +13,13 @@ std::vector<int> ThresholdRejection(const std::vector<double> &vals,
 
 std::vector<int> StatisticRejection(const std::vector<double> &vals,
                                     double multiplier) {
-  auto [mean, stdev] = ComputeMeanAndStdev(vals);
+  int n = vals.size();
+  std::vector<std::reference_wrapper<const double>> v(vals.begin(), vals.end());
+  std::sort(v.begin(), v.end());
+  double threshold = v[n * 3 / 4];
   std::vector<int> ret;
   for (size_t i = 0; i < vals.size(); ++i)
-    if (vals[i] < mean + multiplier * stdev) ret.push_back(i);
+    if (vals[i] < threshold) ret.push_back(i);
   return ret;
 }
 
@@ -46,6 +50,7 @@ std::vector<int> CommonIndices(const std::vector<int> &a,
   }
   return ret;
 }
+}  // namespace
 
 void Orj::RangeRejection(const std::vector<Eigen::Vector3d> &ps,
                          const std::vector<Eigen::Vector3d> &qs,

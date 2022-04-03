@@ -1,6 +1,54 @@
 #include <common/other_utils.h>
 #include <sndt/outlier_reject.h>
 
+namespace {
+std::vector<int> ThresholdRejection(const std::vector<double> &vals,
+                                    double threshold) {
+  std::vector<int> ret;
+  for (size_t i = 0; i < vals.size(); ++i)
+    if (vals[i] < threshold) ret.push_back(i);
+  return ret;
+}
+
+std::vector<int> StatisticRejection(const std::vector<double> &vals,
+                                    double multiplier) {
+  auto [mean, stdev] = ComputeMeanAndStdev(vals);
+  std::vector<int> ret;
+  for (size_t i = 0; i < vals.size(); ++i)
+    if (vals[i] < mean + multiplier * stdev) ret.push_back(i);
+  return ret;
+}
+
+std::vector<int> BothRejection(const std::vector<double> &vals,
+                               double multiplier,
+                               double threshold) {
+  auto [mean, stdev] = ComputeMeanAndStdev(vals);
+  std::vector<int> ret;
+  for (size_t i = 0; i < vals.size(); ++i)
+    if (vals[i] < std::max(mean + multiplier * stdev, threshold))
+      ret.push_back(i);
+  return ret;
+}
+
+std::vector<int> CommonIndices(const std::vector<int> &a,
+                               const std::vector<int> &b) {
+  std::vector<int> ret;
+  size_t i = 0, j = 0;
+  while (i < a.size() && j < b.size()) {
+    if (a[i] == b[j]) {
+      ret.push_back(a[i]);
+      ++i;
+      ++j;
+    } else if (a[i] < b[j]) {
+      ++i;
+    } else {
+      ++j;
+    }
+  }
+  return ret;
+}
+}  // namespace
+
 RangeOutlierRejection::RangeOutlierRejection()
     : reject_(false), multiplier_(1.5) {}
 
@@ -47,52 +95,6 @@ std::vector<int> AngleOutlierRejection::GetIndices() {
     // if (angles_[i] < 30. * M_PI / 180.) ret.push_back(i);
   } else {
     for (int i = 0; i < n; ++i) ret.push_back(i);
-  }
-  return ret;
-}
-
-std::vector<int> ThresholdRejection(const std::vector<double> &vals,
-                                    double threshold) {
-  std::vector<int> ret;
-  for (size_t i = 0; i < vals.size(); ++i)
-    if (vals[i] < threshold) ret.push_back(i);
-  return ret;
-}
-
-std::vector<int> StatisticRejection(const std::vector<double> &vals,
-                                    double multiplier) {
-  auto [mean, stdev] = ComputeMeanAndStdev(vals);
-  std::vector<int> ret;
-  for (size_t i = 0; i < vals.size(); ++i)
-    if (vals[i] < mean + multiplier * stdev) ret.push_back(i);
-  return ret;
-}
-
-std::vector<int> BothRejection(const std::vector<double> &vals,
-                               double multiplier,
-                               double threshold) {
-  auto [mean, stdev] = ComputeMeanAndStdev(vals);
-  std::vector<int> ret;
-  for (size_t i = 0; i < vals.size(); ++i)
-    if (vals[i] < std::max(mean + multiplier * stdev, threshold))
-      ret.push_back(i);
-  return ret;
-}
-
-std::vector<int> CommonIndices(const std::vector<int> &a,
-                               const std::vector<int> &b) {
-  std::vector<int> ret;
-  size_t i = 0, j = 0;
-  while (i < a.size() && j < b.size()) {
-    if (a[i] == b[j]) {
-      ret.push_back(a[i]);
-      ++i;
-      ++j;
-    } else if (a[i] < b[j]) {
-      ++i;
-    } else {
-      ++j;
-    }
   }
   return ret;
 }
