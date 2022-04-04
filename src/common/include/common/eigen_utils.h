@@ -173,3 +173,32 @@ inline void ExcludeInfinite(const std::vector<T> &data1,
     }
   }
 }
+
+template <typename T>
+inline void ExcludeInfiniteInPlace(std::vector<T> &data) {
+  size_t n = 0;
+  for (size_t i = 0; i < data.size(); ++i) {
+    if (data[i].allFinite()) {
+      if (n != i) data[n] = data[i];
+      ++n;
+    }
+  }
+  data.resize(n);
+}
+
+template <typename T, typename U>
+inline void ExcludeInfiniteInPlace(std::vector<T> &data1,
+                                   std::vector<U> &data2) {
+  size_t n = 0;
+  for (size_t i = 0; i < data1.size(); ++i) {
+    if (data1[i].allFinite() && data2[i].allFinite()) {
+      if (n != i) {
+        data1[n] = data1[i];
+        data2[n] = data2[i];
+      }
+      ++n;
+    }
+  }
+  data1.resize(n);
+  data2.resize(n);
+}

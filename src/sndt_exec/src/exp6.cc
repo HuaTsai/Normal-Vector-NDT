@@ -36,6 +36,7 @@ struct Res {
   vector<double> terr;
   vector<double> rerr;
   vector<double> corr;
+  vector<double> opt;
   Timer timer;
   nav_msgs::Path path;
   Affine3d Tr;
@@ -85,7 +86,7 @@ int main(int argc, char **argv) {
   string d;
   bool tr;
   int f, n;
-  double cs, ndtd2, nndtd2;
+  double ndtd2, nndtd2;
   po::options_description desc("Allowed options");
   // clang-format off
   desc.add_options()
@@ -93,9 +94,8 @@ int main(int argc, char **argv) {
       ("d,d", po::value<string>(&d)->required(), "Data (logxx)")
       ("f,f", po::value<int>(&f)->required()->default_value(1), "Frames")
       ("n,n", po::value<int>(&n)->default_value(-1), "Frames")
-      ("ndtd2,a", po::value<double>(&ndtd2)->default_value(0.3), "d2 NDT")
-      ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.3), "d2 NNDT")
-      ("cs,c", po::value<double>(&cs)->default_value(1), "Cell Size")
+      ("ndtd2,a", po::value<double>(&ndtd2)->default_value(0.5), "d2 NDT")
+      ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.5), "d2 NNDT")
       ("tr,t", po::value<bool>(&tr)->default_value(false)->implicit_value(true), "Trust Region");
   // clang-format on
   po::variables_map vm;
@@ -111,6 +111,7 @@ int main(int argc, char **argv) {
   vector<sensor_msgs::PointCloud2> vpc;
   SerializationInput(JoinPath(GetDataPath(d), "lidar.ser"), vpc);
 
+  map<double, int, greater<>> mp1, mp2, mp3, mp4;
   auto t0 = vpc[0].header.stamp;
   GtLocal(gt, t0);
   Res r1, r2;
@@ -118,7 +119,6 @@ int main(int argc, char **argv) {
   r2.path = InitFirstPose(t0);
   std::vector<double> bent, benr;
   if (n == -1) n = vpc.size() - 1;
-  // for (size_t i = 0; i < vpc.size() - 1; ++i) {
   tqdm bar;
   for (int i = 0; i < n; i += f) {
     auto tgt = PCMsgTo3D(vpc[i], 0);
@@ -130,45 +130,49 @@ int main(int argc, char **argv) {
     bent.push_back(TransNormRotDegAbsFromAffine3d(ben)(0));
     benr.push_back(TransNormRotDegAbsFromAffine3d(ben)(1));
 
-    // cout << "NDT" << endl;
-    NDTMatcher m1({tr ? kTR : kLS, kNDT, k1to1}, cs, ndtd2);
+    NDTMatcher m1({tr ? kTR : kLS, kNDT, k1to1, kIterative, kPointCov}, {0.5, 1, 2},
+                  ndtd2);
     m1.SetSource(src);
     m1.SetTarget(tgt);
     auto res1 = m1.Align();
     auto err1 = TransNormRotDegAbsFromAffine3d(res1 * ben.inverse());
-
     r1.terr.push_back(err1(0));
     r1.rerr.push_back(err1(1));
     r1.corr.push_back(m1.corres());
     r1.timer += m1.timer();
+    r1.opt.push_back(m1.timer().optimize() / 1000.);
     r1.its.push_back(m1.iteration());
     r1.Tr = r1.Tr * res1;
     r1.path.poses.push_back(MakePoseStampedMsg(tj, r1.Tr));
+    mp1[err1(0)] = i;
+    mp2[err1(1)] = i;
 
-    // cout << "NNDT" << endl;
-    NDTMatcher m2({tr ? kTR : kLS, kNNDT, k1to1}, cs, nndtd2);
+    NDTMatcher m2({tr ? kTR : kLS, kNNDT, k1to1, kIterative, kPointCov}, {0.5, 1, 2},
+                  nndtd2);
     m2.SetSource(src);
     m2.SetTarget(tgt);
     auto res2 = m2.Align();
-
-    // ADD
-    // auto res21 = m2.Align();
-    // NDTMatcher m22({tr ? kTR : kLS, kNNDT, k1to1}, 1, ndtd2);
-    // m22.SetSource(src);
-    // m22.SetTarget(tgt);
-    // auto res2 = m22.Align(res21);
-    // ENDANDD
-
     auto err2 = TransNormRotDegAbsFromAffine3d(res2 * ben.inverse());
     r2.terr.push_back(err2(0));
     r2.rerr.push_back(err2(1));
     r2.corr.push_back(m2.corres());
     r2.timer += m2.timer();
+    r2.opt.push_back(m2.timer().optimize() / 1000.);
     r2.its.push_back(m2.iteration());
     r2.Tr = r2.Tr * res2;
     r2.path.poses.push_back(MakePoseStampedMsg(tj, r2.Tr));
+    mp3[err2(0)] = i;
+    mp4[err2(1)] = i;
   }
   bar.finish();
+  for (int i = 0; i < 5; ++i) {
+    auto [v1, id1] = *next(mp1.begin(), i);
+    auto [v2, id2] = *next(mp2.begin(), i);
+    auto [v3, id3] = *next(mp3.begin(), i);
+    auto [v4, id4] = *next(mp4.begin(), i);
+    printf("{%d, t %f}, {%d, r %f}, {%d, t %f}, {%d, r %f}\n", id1, v1, id2, v2,
+           id3, v3, id4, v4);
+  }
   // cout << "tgt: ";
   // Stat(bent).PrintResult();
   // cout << "rgt: ";
@@ -184,10 +188,10 @@ int main(int argc, char **argv) {
 
   // PNumpy(r1.terr, "t1");
   // PNumpy(r1.rerr, "r1");
+  // PNumpy(r1.opt, "opt1");
   // PNumpy(r2.terr, "t2");
   // PNumpy(r2.rerr, "r2");
-  // PNumpy(r1.its, "it1");
-  // PNumpy(r2.its, "it2");
+  // PNumpy(r2.opt, "opt2");
   // cout << "err(t1, r1, t2, r2)" << endl;
   PrintRes(r1.path, gt);
   PrintRes(r2.path, gt);

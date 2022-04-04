@@ -11,7 +11,8 @@ class NDTMatcher {
     kNormalNDT,
     k1to1,
     k1ton,
-    kIterative
+    kIterative,
+    kPointCov
   };
 
   NDTMatcher() = delete;
@@ -59,6 +60,7 @@ class NDTMatcher {
   double d2_;
   int iteration_;
   int corres_;
+  bool orj_;
 };
 
 // XXX: Global variables in order for easy usage in applications
@@ -69,3 +71,4 @@ constexpr NDTMatcher::Options kNNDT = NDTMatcher::Options::kNormalNDT;
 constexpr NDTMatcher::Options k1to1 = NDTMatcher::Options::k1to1;
 constexpr NDTMatcher::Options k1ton = NDTMatcher::Options::k1ton;
 constexpr NDTMatcher::Options kIterative = NDTMatcher::Options::kIterative;
+constexpr NDTMatcher::Options kPointCov = NDTMatcher::Options::kPointCov;

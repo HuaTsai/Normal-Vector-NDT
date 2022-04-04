@@ -51,3 +51,9 @@ set(ALL_SRCS
 add_library(${PROJECT_NAME} ${ALL_SRCS})
 
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+
+add_executable(eigen_utils_test src/eigen_utils_test.cc)
+target_link_libraries(eigen_utils_test ${PROJECT_NAME} gtest_main)
+enable_testing()
+include(GoogleTest)
+gtest_discover_tests(eigen_utils_test)

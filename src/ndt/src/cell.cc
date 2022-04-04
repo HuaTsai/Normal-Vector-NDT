@@ -26,20 +26,24 @@ void Cell::ComputeGaussian() {
   mean_.setZero();
   cov_.setZero();
   n_ = points_.size();
-  std::vector<Eigen::Vector3d> pts;
-  std::vector<Eigen::Matrix3d> covs;
   if (point_covs_.size())
-    ExcludeInfinite(points_, point_covs_, pts, covs);
+    ExcludeInfiniteInPlace(points_, point_covs_);
   else
-    ExcludeInfinite(points_, pts);
+    ExcludeInfiniteInPlace(points_);
 
-  if (pts.size() < 6) {
+  if (!point_covs_.size() && points_.size() < 6) {
     celltype_ = kFewPoints;
     return;
   }
 
-  mean_ = ComputeMean(pts);
-  cov_ = ComputeCov(pts, mean_) + ComputeMean(covs);
+  // XXX: The decision of few points
+  if (point_covs_.size() && points_.size() <= 1) {
+    celltype_ = kFewPoints;
+    return;
+  }
+
+  mean_ = ComputeMean(points_);
+  cov_ = ComputeCov(points_, mean_) + ComputeMean(point_covs_);
   ComputeEvalEvec(cov_, evals_, evecs_);
 
   if (evals_(1) <= Eigen::NumTraits<double>::dummy_precision()) {

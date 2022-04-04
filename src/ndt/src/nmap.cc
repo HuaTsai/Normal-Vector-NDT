@@ -22,6 +22,27 @@ void NMap::LoadPoints(const std::vector<Eigen::Vector3d> &points) {
   MakeKDTree(means);
 }
 
+void NMap::LoadPointsWithCovariances(const std::vector<Eigen::Vector3d> &points,
+                                     const Eigen::Matrix3d &point_cov) {
+  std::vector<Eigen::Vector3d> valids;
+  ExcludeInfinite(points, valids);
+  ComputeVoxelOffset(valids);
+  for (const auto &pt : valids) {
+    cells_[GetIndexForPoint(pt)].AddPointWithCovariance(pt, point_cov);
+  }
+  for (auto &[idx, cell] : cells_) {
+    Eigen::Vector3d c = idx.cast<double>() + Eigen::Vector3d(0.5, 0.5, 0.5);
+    cell.SetCenter(min_voxel_ + c * cell_size_);
+  }
+  std::vector<Eigen::Vector3d> means;
+  for (auto &elem : cells_) {
+    auto &cell = elem.second;
+    cell.ComputeGaussian();
+    if (cell.GetHasGaussian()) means.push_back(cell.GetMean());
+  }
+  MakeKDTree(means);
+}
+
 void NMap::LoadPointsWithCovariances(
     const std::vector<Eigen::Vector3d> &points,
     const std::vector<Eigen::Matrix3d> &point_covs) {
@@ -89,13 +110,8 @@ const Cell &NMap::SearchNearestCell(const Eigen::Vector3d &query,
   pt.x = query(0), pt.y = query(1), pt.z = query(2);
   std::vector<int> idx{0};
   std::vector<float> dist2{0};
-  int found = kdtree_.nearestKSearch(pt, 1, idx, dist2);
-  if (!found) {
-    std::cerr << __FUNCTION__ << ": Search Failed\n";
-    std::exit(1);
-  }
-  pcl::PointXYZ res = kdtree_.getInputCloud()->at(idx[0]);
-  index = GetIndexForPoint(Eigen::Vector3d(res.x, res.y, res.z));
+  kdtree_.nearestKSearch(pt, 1, idx, dist2);
+  index = GetIndexForPoint(kdtree_pts_[idx[0]]);
   return cells_.at(index);
 }
 
@@ -108,9 +124,7 @@ std::vector<std::reference_wrapper<const Cell>> NMap::SearchCellsInRadius(
   kdtree_.radiusSearch(pt, radius, idx, dist2);
   std::vector<std::reference_wrapper<const Cell>> ret;
   for (auto id : idx) {
-    pcl::PointXYZ res = kdtree_.getInputCloud()->at(id);
-    Eigen::Vector3i index =
-        GetIndexForPoint(Eigen::Vector3d(res.x, res.y, res.z));
+    Eigen::Vector3i index = GetIndexForPoint(kdtree_pts_[id]);
     ret.push_back(cells_.at(index));
   }
   return ret;
@@ -132,11 +146,13 @@ void NMap::ComputeVoxelOffset(const std::vector<Eigen::Vector3d> &points) {
 }
 
 void NMap::MakeKDTree(const std::vector<Eigen::Vector3d> &points) {
+  kdtree_pts_.clear();
   pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
   for (const auto &pt : points) {
     pcl::PointXYZ p;
     p.x = pt(0), p.y = pt(1), p.z = pt(2);
     pc->push_back(p);
+    kdtree_pts_.push_back(pt);
   }
   kdtree_.setInputCloud(pc);
 }

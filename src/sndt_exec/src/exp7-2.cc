@@ -17,16 +17,14 @@ using Marker = visualization_msgs::Marker;
 
 struct Res {
   void Show() {
-    printf(" its: %f / %f\n", Stat(its).mean, Stat(its).max);
-    printf(" err: %f / %f\n", Stat(terr).rms, Stat(rerr).rms);
-    printf("corr: %f\n", Stat(corr).mean);
-    double den = its.size() * 1000.;
+    printf(" its: %d\n", it);
+    printf(" err: %f / %f\n", terr, rerr);
+    printf("corr: %d\n", corr);
+    double den = 1000.;
     printf("time: %f / %f\n", timer.optimize() / den, timer.total() / den);
   }
-  vector<double> its;
-  vector<double> terr;
-  vector<double> rerr;
-  vector<double> corr;
+  int it, corr;
+  double terr, rerr;
   Timer timer;
 };
 
@@ -46,7 +44,7 @@ Marker MP(const vector<Vector3d> &points, bool red) {
   ret.id = 0;
   ret.type = Marker::SPHERE_LIST;
   ret.action = Marker::ADD;
-  ret.scale.x = ret.scale.y = ret.scale.z = 0.5;
+  ret.scale.x = ret.scale.y = ret.scale.z = 0.1;
   ret.pose = tf2::toMsg(Affine3d::Identity());
   ret.color.a = 1;
   ret.color.r = red ? 1 : 0;
@@ -71,6 +69,7 @@ visualization_msgs::Marker Boxes(std::shared_ptr<NMap> map, bool red) {
   ret.pose.orientation.w = 1;
   for (auto [idx, cell] : *map) {
     static_cast<void>(idx);
+    if (!cell.GetHasGaussian()) continue;
     auto cen = cell.GetCenter();
     geometry_msgs::Point c;
     c.x = cen(0), c.y = cen(1), c.z = cen(2);
@@ -88,7 +87,7 @@ int main(int argc, char **argv) {
   string d;
   bool tr;
   int n, f;
-  double ndtd2, nndtd2, cs;
+  double ndtd2, nndtd2;
   po::options_description desc("Allowed options");
   // clang-format off
   desc.add_options()
@@ -98,7 +97,6 @@ int main(int argc, char **argv) {
       ("f,f", po::value<int>(&f)->default_value(1), "F")
       ("ndtd2,a", po::value<double>(&ndtd2)->default_value(0.3), "ndtd2")
       ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.3), "nndtd2")
-      ("cs,c", po::value<double>(&cs)->default_value(1), "cell size")
       ("tr", po::value<bool>(&tr)->default_value(false)->implicit_value(true), "Trust Region");
   // clang-format on
   po::variables_map vm;
@@ -124,27 +122,24 @@ int main(int argc, char **argv) {
   cout << "Bench Mark: " << TransNormRotDegAbsFromAffine3d(ben).transpose()
        << endl;
 
-  NDTMatcher m1({tr ? kTR : kLS, kNDT, k1to1}, cs, ndtd2);
+  NDTMatcher m1({tr ? kTR : kLS, kNDT, k1to1, kIterative, kPointCov}, {0.5, 1, 2}, ndtd2);
   m1.SetSource(src);
   m1.SetTarget(tgt);
   auto res1 = m1.Align();
   auto err1 = TransNormRotDegAbsFromAffine3d(res1 * ben.inverse());
-  r1.terr.push_back(err1(0));
-  r1.rerr.push_back(err1(1));
-  r1.corr.push_back(m1.corres());
+  r1.terr = err1(0), r1.rerr = err1(1);
+  r1.corr = m1.corres(), r1.it = m1.iteration();
   r1.timer += m1.timer();
-  r1.its.push_back(m1.iteration());
 
-  NDTMatcher m2({tr ? kTR : kLS, kNNDT, k1to1}, cs, nndtd2);
+  NDTMatcher m2({tr ? kTR : kLS, kNNDT, k1to1, kIterative, kPointCov}, {0.5, 1, 2},
+                nndtd2);
   m2.SetSource(src);
   m2.SetTarget(tgt);
   auto res2 = m2.Align();
   auto err2 = TransNormRotDegAbsFromAffine3d(res2 * ben.inverse());
-  r2.terr.push_back(err2(0));
-  r2.rerr.push_back(err2(1));
-  r2.corr.push_back(m2.corres());
+  r2.terr = err2(0), r2.rerr = err2(1);
+  r2.corr = m2.corres(), r2.it = m2.iteration();
   r2.timer += m2.timer();
-  r2.its.push_back(m2.iteration());
 
   r1.Show();
   cout << "-------------" << endl;
@@ -168,11 +163,14 @@ int main(int argc, char **argv) {
   pub5.publish(Boxes(m1.tmap(), true));
 
   auto mp1 = std::make_shared<NMap>(cs);
-  mp1->LoadPoints(out1);
+  Eigen::Matrix3d pcov = Eigen::Matrix3d::Identity() * 0.0001;
+  // mp1->LoadPoints(out1);
+  mp1->LoadPointsWithCovariances(out1, pcov);
   pub6.publish(Boxes(mp1, false));
 
   auto mp2 = std::make_shared<NMap>(cs);
-  mp2->LoadPoints(out2);
+  // mp2->LoadPoints(out2);
+  mp2->LoadPointsWithCovariances(out2, pcov);
   pub7.publish(Boxes(mp2, false));
   ros::spin();
 }

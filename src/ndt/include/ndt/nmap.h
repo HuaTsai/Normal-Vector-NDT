@@ -44,6 +44,10 @@ class NMap {
    */
   void LoadPoints(const std::vector<Eigen::Vector3d> &points);
 
+  void LoadPointsWithCovariances(
+      const std::vector<Eigen::Vector3d> &points,
+      const Eigen::Matrix3d &point_cov);
+
   /**
    * @brief Load points and point covariances into the NDTMap
    *
@@ -123,6 +127,7 @@ class NMap {
 
   MapType cells_;
   pcl::KdTreeFLANN<pcl::PointXYZ> kdtree_;
+  std::vector<Eigen::Vector3d> kdtree_pts_;  /* Avoid precision loss issue */
   double cell_size_;
   Eigen::Vector3d min_voxel_;
 };

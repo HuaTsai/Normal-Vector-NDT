@@ -10,7 +10,8 @@ NDTMatcher::NDTMatcher(std::unordered_set<Options> options,
       cell_size_(cell_size),
       d2_(d2),
       iteration_(0),
-      corres_(0) {
+      corres_(0),
+      orj_(true) {
   if ((HasOption(Options::kLineSearch) && HasOption(Options::kTrustRegion)) ||
       (HasOption(Options::kNDT) && HasOption(Options::kNormalNDT)) ||
       (HasOption(Options::k1to1) && HasOption(Options::k1ton))) {
@@ -46,14 +47,21 @@ void NDTMatcher::SetSource(const std::vector<Eigen::Vector3d> &points) {
 }
 
 Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
+  Eigen::Matrix3d pcov = Eigen::Matrix3d::Identity() * 0.005; // the value here may be crucial!
   timer_.ProcedureStart(timer_.kNDT);
   tmap_ = std::make_shared<NMap>(cell_size_);
-  tmap_->LoadPoints(tpts_);
+  if (HasOption(Options::kPointCov))
+    tmap_->LoadPointsWithCovariances(tpts_, pcov);
+  else 
+    tmap_->LoadPoints(tpts_);
   timer_.ProcedureFinish();
 
   timer_.ProcedureStart(timer_.kNDT);
   smap_ = std::make_shared<NMap>(cell_size_);
-  smap_->LoadPoints(spts_);
+  if (HasOption(Options::kPointCov))
+    smap_->LoadPointsWithCovariances(spts_, pcov);
+  else 
+    smap_->LoadPoints(spts_);
   timer_.ProcedureFinish();
 
   auto cur_tf = guess;
@@ -106,11 +114,15 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
       }
     }
 
-    Orj orj(ups.size());
-    // orj.RangeRejection(ups, uqs, Orj::Rejection::kBoth, {1.5, 2});
-    // orj.RangeRejection(ups, uqs, Orj::Rejection::kStatistic, {1.5});
-    // orj.RangeRejection(ups, uqs, Orj::Rejection::kThreshold, {2});
-    orj.RetainIndices(ups, uqs, cps, cqs, nps, nqs);
+    if (orj_) {
+      Orj orj(ups.size());
+      orj.RangeRejection(ups, uqs, Orj::Rejection::kBoth, {1.5, cell_size_});
+      // orj.RangeRejection(ups, uqs, Orj::Rejection::kStatistic, {1.5});
+      // orj.RangeRejection(ups, uqs, Orj::Rejection::kThreshold, {2});
+      // orj.AngleRejection(nps, nqs, Orj::Rejection::kStatistic, {1.5});
+      orj.AngleRejection(nps, nqs, Orj::Rejection::kThreshold, {1});
+      orj.RetainIndices(ups, uqs, cps, cqs, nps, nqs);
+    }
 
     Optimizer opt(ls ? Optimizer::OptType::kLS : Optimizer::OptType::kTR);
     opt.set_cur_tf(cur_tf);
@@ -149,6 +161,11 @@ Eigen::Affine3d NDTMatcher::Align(const Eigen::Affine3d &guess) {
     std::sort(cell_sizes_.begin(), cell_sizes_.end(), std::greater<>());
     for (auto cell_size : cell_sizes_) {
       cell_size_ = cell_size;
+      // if (cell_size == 0.5 && HasOption(Options::kNormalNDT)) {
+      //   auto nh = options_.extract(Options::kNormalNDT);
+      //   nh.value() = Options::kNDT;
+      //   options_.insert(move(nh));
+      // }
       cur_tf = AlignImpl(cur_tf);
     }
   } else {
