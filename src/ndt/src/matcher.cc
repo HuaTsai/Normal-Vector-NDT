@@ -47,12 +47,13 @@ void NDTMatcher::SetSource(const std::vector<Eigen::Vector3d> &points) {
 }
 
 Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
-  Eigen::Matrix3d pcov = Eigen::Matrix3d::Identity() * 0.005; // the value here may be crucial!
+  Eigen::Matrix3d pcov =
+      Eigen::Matrix3d::Identity() * 0.005;  // the value here may be crucial!
   timer_.ProcedureStart(timer_.kNDT);
   tmap_ = std::make_shared<NMap>(cell_size_);
   if (HasOption(Options::kPointCov))
     tmap_->LoadPointsWithCovariances(tpts_, pcov);
-  else 
+  else
     tmap_->LoadPoints(tpts_);
   timer_.ProcedureFinish();
 
@@ -60,7 +61,7 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
   smap_ = std::make_shared<NMap>(cell_size_);
   if (HasOption(Options::kPointCov))
     smap_->LoadPointsWithCovariances(spts_, pcov);
-  else 
+  else
     smap_->LoadPoints(spts_);
   timer_.ProcedureFinish();
 

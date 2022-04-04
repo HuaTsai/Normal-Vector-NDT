@@ -122,7 +122,8 @@ int main(int argc, char **argv) {
   cout << "Bench Mark: " << TransNormRotDegAbsFromAffine3d(ben).transpose()
        << endl;
 
-  NDTMatcher m1({tr ? kTR : kLS, kNDT, k1to1, kIterative, kPointCov}, {0.5, 1, 2}, ndtd2);
+  NDTMatcher m1({tr ? kTR : kLS, kNDT, k1to1, kIterative, kPointCov},
+                {0.5, 1, 2}, ndtd2);
   m1.SetSource(src);
   m1.SetTarget(tgt);
   auto res1 = m1.Align();
@@ -131,8 +132,8 @@ int main(int argc, char **argv) {
   r1.corr = m1.corres(), r1.it = m1.iteration();
   r1.timer += m1.timer();
 
-  NDTMatcher m2({tr ? kTR : kLS, kNNDT, k1to1, kIterative, kPointCov}, {0.5, 1, 2},
-                nndtd2);
+  NDTMatcher m2({tr ? kTR : kLS, kNNDT, k1to1, kIterative, kPointCov},
+                {0.5, 1, 2}, nndtd2);
   m2.SetSource(src);
   m2.SetTarget(tgt);
   auto res2 = m2.Align();

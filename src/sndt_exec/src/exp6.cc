@@ -130,8 +130,8 @@ int main(int argc, char **argv) {
     bent.push_back(TransNormRotDegAbsFromAffine3d(ben)(0));
     benr.push_back(TransNormRotDegAbsFromAffine3d(ben)(1));
 
-    NDTMatcher m1({tr ? kTR : kLS, kNDT, k1to1, kIterative, kPointCov}, {0.5, 1, 2},
-                  ndtd2);
+    NDTMatcher m1({tr ? kTR : kLS, kNDT, k1to1, kIterative, kPointCov},
+                  {0.5, 1, 2}, ndtd2);
     m1.SetSource(src);
     m1.SetTarget(tgt);
     auto res1 = m1.Align();
@@ -147,8 +147,8 @@ int main(int argc, char **argv) {
     mp1[err1(0)] = i;
     mp2[err1(1)] = i;
 
-    NDTMatcher m2({tr ? kTR : kLS, kNNDT, k1to1, kIterative, kPointCov}, {0.5, 1, 2},
-                  nndtd2);
+    NDTMatcher m2({tr ? kTR : kLS, kNNDT, k1to1, kIterative, kPointCov},
+                  {0.5, 1, 2}, nndtd2);
     m2.SetSource(src);
     m2.SetTarget(tgt);
     auto res2 = m2.Align();
