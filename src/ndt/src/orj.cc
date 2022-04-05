@@ -11,18 +11,11 @@ std::vector<int> ThresholdRejection(const std::vector<double> &vals,
   return ret;
 }
 
-std::vector<int> StatisticRejection(const std::vector<double> &vals,
-                                    double multiplier) {
+std::vector<int> StatisticRejection(const std::vector<double> &vals) {
   int n = vals.size();
   std::vector<std::reference_wrapper<const double>> v(vals.begin(), vals.end());
   std::sort(v.begin(), v.end());
-  // BOX Plot outlier: median + 1.5 * IQR
-  // double threshold = v[n / 2] + multiplier * abs(vals[n * 3 / 4] - vals[n /
-  // 4]); double threshold = v[n * 3 / 4]; double threshold = v[n / 2];
   double threshold = v[n * 3 / 4];
-  printf("drop: %f, ", threshold);
-  // printf("remove: %f or %f\n", threshold,
-  //        v[n / 2] + multiplier * (vals[n * 3 / 4] - vals[n / 4]));
   std::vector<int> ret;
   for (size_t i = 0; i < vals.size(); ++i)
     if (vals[i] < threshold) ret.push_back(i);
@@ -30,13 +23,11 @@ std::vector<int> StatisticRejection(const std::vector<double> &vals,
 }
 
 std::vector<int> BothRejection(const std::vector<double> &vals,
-                               double multiplier,
                                double threshold) {
   int n = vals.size();
   std::vector<std::reference_wrapper<const double>> v(vals.begin(), vals.end());
   std::sort(v.begin(), v.end());
-  // double threshold2 = v[n * 3 / 4];
-  double threshold2 = v[n / 2];
+  double threshold2 = v[n * 3 / 4];
   std::vector<int> ret;
   for (size_t i = 0; i < vals.size(); ++i)
     if (vals[i] < std::max(threshold, threshold2)) ret.push_back(i);
@@ -72,9 +63,9 @@ void Orj::RangeRejection(const std::vector<Eigen::Vector3d> &ps,
   if (method == Rejection::kThreshold)
     indices = ThresholdRejection(vals, params[0]);
   else if (method == Rejection::kStatistic)
-    indices = StatisticRejection(vals, params[0]);
+    indices = StatisticRejection(vals);
   else if (method == Rejection::kBoth)
-    indices = BothRejection(vals, params[0], params[1]);
+    indices = BothRejection(vals, params[0]);
 
   indices_ = CommonIndices(indices_, indices);
 }
@@ -91,9 +82,9 @@ void Orj::AngleRejection(const std::vector<Eigen::Vector3d> &nps,
   if (method == Rejection::kThreshold)
     indices = ThresholdRejection(vals, params[0]);
   else if (method == Rejection::kStatistic)
-    indices = StatisticRejection(vals, params[0]);
+    indices = StatisticRejection(vals);
   else if (method == Rejection::kBoth)
-    indices = BothRejection(vals, params[0], params[1]);
+    indices = BothRejection(vals, params[0]);
 
   indices_ = CommonIndices(indices_, indices);
 }

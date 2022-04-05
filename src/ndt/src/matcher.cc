@@ -118,7 +118,7 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
 
     if (orj_) {
       Orj orj(ups.size());
-      orj.RangeRejection(ups, uqs, Orj::Rejection::kBoth, {1.5, cell_size_});
+      orj.RangeRejection(ups, uqs, Orj::Rejection::kBoth, {cell_size_});
       orj.AngleRejection(nps, nqs, Orj::Rejection::kThreshold, {1});
       orj.RetainIndices(ups, uqs, cps, cqs, nps, nqs);
     }
