@@ -35,8 +35,8 @@ std::vector<int> BothRejection(const std::vector<double> &vals,
   int n = vals.size();
   std::vector<std::reference_wrapper<const double>> v(vals.begin(), vals.end());
   std::sort(v.begin(), v.end());
-  double threshold2 = v[n * 3 / 4];
-  // double threshold2 = v[n / 2];
+  // double threshold2 = v[n * 3 / 4];
+  double threshold2 = v[n / 2];
   std::vector<int> ret;
   for (size_t i = 0; i < vals.size(); ++i)
     if (vals[i] < std::max(threshold, threshold2)) ret.push_back(i);

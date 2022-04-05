@@ -22,7 +22,7 @@ NDTCell::NDTCell() {
 void NDTCell::ComputeGaussian() {
   if (point_covs_.size() && point_covs_.size() != points_.size()) {
     std::cerr << __FUNCTION__ << ": size of covariances is wrong\n";
-    std::exit(-1);
+    std::exit(1);
   }
   n_ = points_.size();
   pmean_.setZero(), pcov_.setZero();

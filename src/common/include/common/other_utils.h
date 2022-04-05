@@ -8,7 +8,17 @@
 #define WSPATH "/home/ee904/Desktop/HuaTsai/NormalNDT/Research"
 #define PYTHONPATH "/home/ee904/venv/com/bin/python"
 
+std::pair<double, double> ComputeMeanAndStdev(const std::vector<double> &coll);
+
 std::string GetCurrentTimeAsString();
+
+std::string GetDataPath(std::string data);
+
+std::vector<std::string> GetBagsPath(std::string data);
+
+std::vector<int> LargestNIndices(const std::vector<double> &data, int n);
+
+/********** Inline Functions **********/
 
 inline std::chrono::steady_clock::time_point GetTime() {
   return std::chrono::steady_clock::now();
@@ -20,20 +30,13 @@ inline int GetDiffTime(std::chrono::steady_clock::time_point t1,
   return std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
 }
 
-inline std::pair<double, double> ComputeMeanAndStdev(
-    const std::vector<double> &coll) {
-  if (coll.size() <= 1) {
-    std::cerr << __FUNCTION__ << ": invalid container size " << coll.size()
-              << ", return with zero standard deviation\n";
-    return {coll.size() ? coll[0] : 0., 0.};
-  }
-  double mean = std::accumulate(coll.begin(), coll.end(), 0.) / coll.size();
-  double stdev = std::sqrt(accumulate(coll.begin(), coll.end(), 0.,
-                                      [&mean](auto a, auto b) {
-                                        return a + (b - mean) * (b - mean);
-                                      }) /
-                           (coll.size() - 1));
-  return {mean, stdev};
+/********** Template functions **********/
+template <typename T>
+void Print(const std::vector<T> &data, std::string str = "") {
+  if (str.size()) std::cout << str << ": ";
+  for (size_t i = 0; i < data.size(); ++i)
+    std::cout << data[i] << (i + 1 == data.size() ? "" : ", ");
+  std::cout << std::endl;
 }
 
 inline std::string JoinPath() { return ""; }
@@ -73,7 +76,3 @@ void SerializationOutput(const std::string &filepath, const T &msg) {
   ofs.write((char *)buffer.get(), size);
   ofs.close();
 }
-
-std::string GetDataPath(std::string data);
-
-std::vector<std::string> GetBagsPath(std::string data);

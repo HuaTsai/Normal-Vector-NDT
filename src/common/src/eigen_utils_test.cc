@@ -4,6 +4,14 @@
 using namespace std;
 using vec = Eigen::Vector2d;
 
+TEST(Affine3dFromXYZRPY, BiDirection) {
+  Eigen::Matrix<double, 6, 1> tf;
+  tf << 1, 2, 3, 0.1, 0.5, 0.3;
+  auto aff = Affine3dFromXYZRPY(tf);
+  auto res = XYZRPYFromAffine3d(aff);
+  for (int i = 0; i < 6; ++i) EXPECT_NEAR(res(i), tf(i), 1e-12);
+}
+
 TEST(ExcludeInfiniteInPlace, Basic) {
   double nan = std::numeric_limits<double>::quiet_NaN();
   vector<vec> a{vec(0, 0), vec(nan, nan), vec(2, 2)};

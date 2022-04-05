@@ -1,5 +1,20 @@
 #include <common/other_utils.h>
 
+std::pair<double, double> ComputeMeanAndStdev(const std::vector<double> &coll) {
+  if (coll.size() <= 1) {
+    std::cerr << __FUNCTION__ << ": invalid container size " << coll.size()
+              << ", return with zero standard deviation\n";
+    return {coll.size() ? coll[0] : 0., 0.};
+  }
+  double mean = std::accumulate(coll.begin(), coll.end(), 0.) / coll.size();
+  double stdev = std::sqrt(accumulate(coll.begin(), coll.end(), 0.,
+                                      [&mean](auto a, auto b) {
+                                        return a + (b - mean) * (b - mean);
+                                      }) /
+                           (coll.size() - 1));
+  return {mean, stdev};
+}
+
 std::string GetCurrentTimeAsString() {
   auto t = std::time(nullptr);
   auto tm = *std::localtime(&t);
@@ -52,6 +67,14 @@ std::vector<std::string> GetBagsPath(std::string data) {
             JoinPath(BPATH, "log62_1542193521798725_scene-1007.bag")};
   }
   std::cerr << "No specified data " << data << std::endl;
-  std::exit(-1);
+  std::exit(1);
   return {};
+}
+
+std::vector<int> LargestNIndices(const std::vector<double> &data, int n) {
+  std::multimap<double, int, std::greater<>> mp;
+  for (size_t i = 0; i < data.size(); ++i) mp.insert({data[i], i});
+  std::vector<int> ret;
+  for (int i = 0; i < n; ++i) ret.push_back(std::next(mp.begin(), i)->second);
+  return ret;
 }

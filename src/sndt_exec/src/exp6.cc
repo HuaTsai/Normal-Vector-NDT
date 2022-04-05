@@ -130,8 +130,11 @@ int main(int argc, char **argv) {
     bent.push_back(TransNormRotDegAbsFromAffine3d(ben)(0));
     benr.push_back(TransNormRotDegAbsFromAffine3d(ben)(1));
 
-    NDTMatcher m1({tr ? kTR : kLS, kNDT, k1to1, kIterative, kPointCov},
-                  {0.5, 1, 2}, ndtd2);
+    // auto op1 = {tr ? kTR : kLS, kNDT, k1to1, kIterative, kPointCov};
+    // NDTMatcher m1(op1, {0.5, 1, 2}, ndtd2);
+    auto op1 = {tr ? kTR : kLS, kNDT, k1to1, kPointCov};
+    NDTMatcher m1(op1, 0.5, ndtd2);
+    m1.set_intrinsic(0.005);
     m1.SetSource(src);
     m1.SetTarget(tgt);
     auto res1 = m1.Align();
@@ -144,11 +147,12 @@ int main(int argc, char **argv) {
     r1.its.push_back(m1.iteration());
     r1.Tr = r1.Tr * res1;
     r1.path.poses.push_back(MakePoseStampedMsg(tj, r1.Tr));
-    mp1[err1(0)] = i;
-    mp2[err1(1)] = i;
 
-    NDTMatcher m2({tr ? kTR : kLS, kNNDT, k1to1, kIterative, kPointCov},
-                  {0.5, 1, 2}, nndtd2);
+    // auto op2 = {tr ? kTR : kLS, kNNDT, k1to1, kIterative, kPointCov};
+    // NDTMatcher m2(op2, {0.5, 1, 2}, nndtd2);
+    auto op2 = {tr ? kTR : kLS, kNNDT, k1to1, kPointCov};
+    NDTMatcher m2(op2, 0.5, nndtd2);
+    m2.set_intrinsic(0.005);
     m2.SetSource(src);
     m2.SetTarget(tgt);
     auto res2 = m2.Align();
@@ -161,18 +165,29 @@ int main(int argc, char **argv) {
     r2.its.push_back(m2.iteration());
     r2.Tr = r2.Tr * res2;
     r2.path.poses.push_back(MakePoseStampedMsg(tj, r2.Tr));
-    mp3[err2(0)] = i;
-    mp4[err2(1)] = i;
   }
   bar.finish();
-  for (int i = 0; i < 5; ++i) {
-    auto [v1, id1] = *next(mp1.begin(), i);
-    auto [v2, id2] = *next(mp2.begin(), i);
-    auto [v3, id3] = *next(mp3.begin(), i);
-    auto [v4, id4] = *next(mp4.begin(), i);
-    printf("{%d, t %f}, {%d, r %f}, {%d, t %f}, {%d, r %f}\n", id1, v1, id2, v2,
-           id3, v3, id4, v4);
-  }
+  cout << *max_element(r1.terr.begin(), r1.terr.end()) << " -> ";
+  Print(LargestNIndices(r1.terr, 3), "t1");
+  cout << *max_element(r1.rerr.begin(), r1.rerr.end()) << " -> ";
+  Print(LargestNIndices(r1.rerr, 3), "r1");
+  cout << *max_element(r2.terr.begin(), r2.terr.end()) << " -> ";
+  Print(LargestNIndices(r2.terr, 3), "t2");
+  cout << *max_element(r2.rerr.begin(), r2.rerr.end()) << " -> ";
+  Print(LargestNIndices(r2.rerr, 3), "r2");
+
+  vector<double> w1(r1.opt.size());
+  transform(r2.opt.begin(), r2.opt.end(), r1.opt.begin(), w1.begin(),
+            std::minus<double>());
+  cout << *max_element(w1.begin(), w1.end()) << " -> ";
+  Print(LargestNIndices(w1, 5), "NDT Win");
+
+  vector<double> w2(r1.opt.size());
+  transform(r1.opt.begin(), r1.opt.end(), r2.opt.begin(), w2.begin(),
+            std::minus<double>());
+  cout << *max_element(w2.begin(), w2.end()) << " -> ";
+  Print(LargestNIndices(w2, 5), "NNDT Win");
+
   // cout << "tgt: ";
   // Stat(bent).PrintResult();
   // cout << "rgt: ";

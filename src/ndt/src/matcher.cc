@@ -9,6 +9,7 @@ NDTMatcher::NDTMatcher(std::unordered_set<Options> options,
     : options_(options),
       cell_size_(cell_size),
       d2_(d2),
+      intrinsic_(0.005),
       iteration_(0),
       corres_(0),
       orj_(true) {
@@ -47,8 +48,8 @@ void NDTMatcher::SetSource(const std::vector<Eigen::Vector3d> &points) {
 }
 
 Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
-  Eigen::Matrix3d pcov =
-      Eigen::Matrix3d::Identity() * 0.005;  // the value here may be crucial!
+  // the value here may be crucial!
+  Eigen::Matrix3d pcov = Eigen::Matrix3d::Identity() * intrinsic_;
   timer_.ProcedureStart(timer_.kNDT);
   tmap_ = std::make_shared<NMap>(cell_size_);
   if (HasOption(Options::kPointCov))
@@ -118,9 +119,6 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
     if (orj_) {
       Orj orj(ups.size());
       orj.RangeRejection(ups, uqs, Orj::Rejection::kBoth, {1.5, cell_size_});
-      // orj.RangeRejection(ups, uqs, Orj::Rejection::kStatistic, {1.5});
-      // orj.RangeRejection(ups, uqs, Orj::Rejection::kThreshold, {2});
-      // orj.AngleRejection(nps, nqs, Orj::Rejection::kStatistic, {1.5});
       orj.AngleRejection(nps, nqs, Orj::Rejection::kThreshold, {1});
       orj.RetainIndices(ups, uqs, cps, cqs, nps, nqs);
     }

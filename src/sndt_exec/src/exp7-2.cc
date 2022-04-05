@@ -95,8 +95,8 @@ int main(int argc, char **argv) {
       ("d,d", po::value<string>(&d)->required(), "Data (logxx)")
       ("n,n", po::value<int>(&n)->default_value(0), "N")
       ("f,f", po::value<int>(&f)->default_value(1), "F")
-      ("ndtd2,a", po::value<double>(&ndtd2)->default_value(0.3), "ndtd2")
-      ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.3), "nndtd2")
+      ("ndtd2,a", po::value<double>(&ndtd2)->default_value(0.5), "ndtd2")
+      ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.5), "nndtd2")
       ("tr", po::value<bool>(&tr)->default_value(false)->implicit_value(true), "Trust Region");
   // clang-format on
   po::variables_map vm;
@@ -122,8 +122,11 @@ int main(int argc, char **argv) {
   cout << "Bench Mark: " << TransNormRotDegAbsFromAffine3d(ben).transpose()
        << endl;
 
-  NDTMatcher m1({tr ? kTR : kLS, kNDT, k1to1, kIterative, kPointCov},
-                {0.5, 1, 2}, ndtd2);
+  // auto op1 = {tr ? kTR : kLS, kNDT, k1to1, kIterative, kPointCov};
+  // NDTMatcher m1(op1, {0.5, 1, 2}, ndtd2);
+  auto op1 = {tr ? kTR : kLS, kNDT, k1to1, kPointCov};
+  NDTMatcher m1(op1, 0.5, ndtd2);
+  m1.set_intrinsic(0.005);
   m1.SetSource(src);
   m1.SetTarget(tgt);
   auto res1 = m1.Align();
@@ -132,8 +135,11 @@ int main(int argc, char **argv) {
   r1.corr = m1.corres(), r1.it = m1.iteration();
   r1.timer += m1.timer();
 
-  NDTMatcher m2({tr ? kTR : kLS, kNNDT, k1to1, kIterative, kPointCov},
-                {0.5, 1, 2}, nndtd2);
+  // auto op2 = {tr ? kTR : kLS, kNNDT, k1to1, kIterative, kPointCov};
+  // NDTMatcher m2(op2, {0.5, 1, 2}, nndtd2);
+  auto op2 = {tr ? kTR : kLS, kNNDT, k1to1, kPointCov};
+  NDTMatcher m2(op2, 0.5, nndtd2);
+  m2.set_intrinsic(0.005);
   m2.SetSource(src);
   m2.SetTarget(tgt);
   auto res2 = m2.Align();
@@ -163,13 +169,13 @@ int main(int argc, char **argv) {
   pub4.publish(MP(out2, false));
   pub5.publish(Boxes(m1.tmap(), true));
 
-  auto mp1 = std::make_shared<NMap>(cs);
+  auto mp1 = std::make_shared<NMap>(0.5);
   Eigen::Matrix3d pcov = Eigen::Matrix3d::Identity() * 0.0001;
   // mp1->LoadPoints(out1);
   mp1->LoadPointsWithCovariances(out1, pcov);
   pub6.publish(Boxes(mp1, false));
 
-  auto mp2 = std::make_shared<NMap>(cs);
+  auto mp2 = std::make_shared<NMap>(0.5);
   // mp2->LoadPoints(out2);
   mp2->LoadPointsWithCovariances(out2, pcov);
   pub7.publish(Boxes(mp2, false));

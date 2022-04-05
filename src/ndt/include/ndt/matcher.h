@@ -45,6 +45,8 @@ class NDTMatcher {
 
   std::shared_ptr<NMap> tmap() const { return tmap_; }
 
+  void set_intrinsic(double intrinsic) { intrinsic_ = intrinsic; }
+
  private:
   Eigen::Affine3d AlignImpl(
       const Eigen::Affine3d &guess = Eigen::Affine3d::Identity());
@@ -58,6 +60,7 @@ class NDTMatcher {
   Timer timer_;
   double cell_size_;
   double d2_;
+  double intrinsic_;
   int iteration_;
   int corres_;
   bool orj_;
