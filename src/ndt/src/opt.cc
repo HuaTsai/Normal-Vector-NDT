@@ -50,12 +50,12 @@ void Optimizer::Optimize() {
 
 bool Optimizer::CheckConverge(const std::vector<Eigen::Affine3d> &tfs) {
   double tl = Eigen::Map<Eigen::Vector3d>(xyzxyzw_).norm();
-  double ang = Eigen::AngleAxisd(Eigen::Quaterniond(xyzxyzw_ + 3)).angle();
+  double ang = std::abs(Eigen::AngleAxisd(Eigen::Quaterniond(xyzxyzw_ + 3)).angle());
   if (tl < threshold_ && Rad2Deg(ang) < threshold_ang_) return true;
   for (auto tf : tfs) {
     Eigen::Affine3d d = tf.inverse() * cur_tf_;
     double dt = d.translation().norm();
-    double dr = Eigen::AngleAxisd(d.linear()).angle();
+    double dr = std::abs(Eigen::AngleAxisd(d.linear()).angle());
     if (dt < threshold_ && Rad2Deg(dr) < threshold_ang_) return true;
   }
   return false;
