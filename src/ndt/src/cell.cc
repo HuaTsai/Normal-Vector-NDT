@@ -73,6 +73,6 @@ void Cell::ComputeGaussian() {
 
   celltype_ = kRegular;
   normal_ = evecs_.col(0);
-  if (mean_.dot(normal_) < 0) normal_ *= 1.;
+  if (mean_.dot(normal_) < 0) normal_ *= -1.;
   hasgaussian_ = true;
 }

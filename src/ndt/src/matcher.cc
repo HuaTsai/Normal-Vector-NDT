@@ -11,8 +11,7 @@ NDTMatcher::NDTMatcher(std::unordered_set<Options> options,
       d2_(d2),
       intrinsic_(0.005),
       iteration_(0),
-      corres_(0),
-      orj_(true) {
+      corres_(0) {
   if ((HasOption(Options::kLineSearch) && HasOption(Options::kTrustRegion)) ||
       (HasOption(Options::kNDT) && HasOption(Options::kNormalNDT)) ||
       (HasOption(Options::k1to1) && HasOption(Options::k1ton))) {
@@ -116,7 +115,7 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
       }
     }
 
-    if (orj_) {
+    if (!HasOption(Options::kNoReject)) {
       Orj orj(ups.size());
       orj.RangeRejection(ups, uqs, Orj::Rejection::kBoth, {cell_size_});
       orj.AngleRejection(nps, nqs, Orj::Rejection::kThreshold, {1});
@@ -150,6 +149,7 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
     cur_tf = opt.cur_tf();
     tfs.push_back(cur_tf);
   }
+  tfs_.insert(tfs_.end(), tfs.begin(), tfs.end());
   return cur_tf;
 }
 
@@ -160,11 +160,6 @@ Eigen::Affine3d NDTMatcher::Align(const Eigen::Affine3d &guess) {
     std::sort(cell_sizes_.begin(), cell_sizes_.end(), std::greater<>());
     for (auto cell_size : cell_sizes_) {
       cell_size_ = cell_size;
-      // if (cell_size == 0.5 && HasOption(Options::kNormalNDT)) {
-      //   auto nh = options_.extract(Options::kNormalNDT);
-      //   nh.value() = Options::kNDT;
-      //   options_.insert(move(nh));
-      // }
       cur_tf = AlignImpl(cur_tf);
     }
   } else {

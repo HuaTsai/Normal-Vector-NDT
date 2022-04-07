@@ -11,6 +11,11 @@ Eigen::Affine3d Affine3dFromXYZRPY(const Eigen::Matrix<double, 6, 1> &xyzrpy) {
   return ret;
 }
 
+Eigen::Affine3d Affine3dFromXYZRPY(const std::vector<double> &xyzrpy) {
+  return Affine3dFromXYZRPY(
+      Eigen::Map<const Eigen::Matrix<double, 6, 1>>(xyzrpy.data()));
+}
+
 Eigen::Matrix<double, 6, 1> XYZRPYFromAffine3d(const Eigen::Affine3d &mtx) {
   Eigen::Matrix<double, 6, 1> ret;
   ret.head(3) = mtx.translation();

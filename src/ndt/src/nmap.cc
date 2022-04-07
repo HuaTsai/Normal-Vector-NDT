@@ -11,6 +11,7 @@ void NMap::LoadPoints(const std::vector<Eigen::Vector3d> &points) {
   for (const auto &pt : valids) cells_[GetIndexForPoint(pt)].AddPoint(pt);
   for (auto &[idx, cell] : cells_) {
     Eigen::Vector3d c = idx.cast<double>() + Eigen::Vector3d(0.5, 0.5, 0.5);
+    cell.SetSize(cell_size_);
     cell.SetCenter(min_voxel_ + c * cell_size_);
   }
   std::vector<Eigen::Vector3d> means;
@@ -32,6 +33,7 @@ void NMap::LoadPointsWithCovariances(const std::vector<Eigen::Vector3d> &points,
   }
   for (auto &[idx, cell] : cells_) {
     Eigen::Vector3d c = idx.cast<double>() + Eigen::Vector3d(0.5, 0.5, 0.5);
+    cell.SetSize(cell_size_);
     cell.SetCenter(min_voxel_ + c * cell_size_);
   }
   std::vector<Eigen::Vector3d> means;

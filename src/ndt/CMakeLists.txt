@@ -37,6 +37,7 @@ set(ALL_SRCS
   src/matcher.cc
   src/timer.cc
   src/orj.cc
+  src/visuals.cc
 )
 
 set(ALLLIBS

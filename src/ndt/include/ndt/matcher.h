@@ -12,7 +12,8 @@ class NDTMatcher {
     k1to1,
     k1ton,
     kIterative,
-    kPointCov
+    kPointCov,
+    kNoReject
   };
 
   NDTMatcher() = delete;
@@ -47,6 +48,8 @@ class NDTMatcher {
 
   void set_intrinsic(double intrinsic) { intrinsic_ = intrinsic; }
 
+  std::vector<Eigen::Affine3d> tfs() const { return tfs_; }
+
  private:
   Eigen::Affine3d AlignImpl(
       const Eigen::Affine3d &guess = Eigen::Affine3d::Identity());
@@ -54,6 +57,7 @@ class NDTMatcher {
   std::unordered_set<Options> options_;
   std::vector<Eigen::Vector3d> spts_;
   std::vector<Eigen::Vector3d> tpts_;
+  std::vector<Eigen::Affine3d> tfs_;
   std::shared_ptr<NMap> smap_;
   std::shared_ptr<NMap> tmap_;
   std::vector<double> cell_sizes_;
@@ -63,7 +67,6 @@ class NDTMatcher {
   double intrinsic_;
   int iteration_;
   int corres_;
-  bool orj_;
 };
 
 // XXX: Global variables in order for easy usage in applications
@@ -75,3 +78,4 @@ constexpr NDTMatcher::Options k1to1 = NDTMatcher::Options::k1to1;
 constexpr NDTMatcher::Options k1ton = NDTMatcher::Options::k1ton;
 constexpr NDTMatcher::Options kIterative = NDTMatcher::Options::kIterative;
 constexpr NDTMatcher::Options kPointCov = NDTMatcher::Options::kPointCov;
+constexpr NDTMatcher::Options kNoReject = NDTMatcher::Options::kNoReject;

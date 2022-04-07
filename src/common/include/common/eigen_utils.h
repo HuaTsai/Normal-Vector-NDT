@@ -7,6 +7,8 @@
 
 Eigen::Affine3d Affine3dFromXYZRPY(const Eigen::Matrix<double, 6, 1> &xyzrpy);
 
+Eigen::Affine3d Affine3dFromXYZRPY(const std::vector<double> &xyzrpy);
+
 Eigen::Matrix<double, 6, 1> XYZRPYFromAffine3d(const Eigen::Affine3d &mtx);
 
 Eigen::Affine3d Affine3dFromAffine2d(const Eigen::Affine2d &aff);
