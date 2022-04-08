@@ -1,31 +1,19 @@
 #pragma once
 #include <ndt/nmap.h>
+#include <ndt/options.h>
 #include <ndt/timer.h>
 
 class NDTMatcher {
  public:
-  enum class Options {
-    kLineSearch,
-    kTrustRegion,
-    kNDT,
-    kNormalNDT,
-    k1to1,
-    k1ton,
-    kIterative,
-    kPointCov,
-    kNoReject
-  };
-
   NDTMatcher() = delete;
 
-  // TODO: private constructor and make factory methods
-  explicit NDTMatcher(std::unordered_set<Options> options,
-                      double cell_size,
-                      double d2 = 0.05);
+  static NDTMatcher GetIter(std::unordered_set<Options> options,
+                            std::vector<double> cell_sizes,
+                            double d2 = 0.05);
 
-  explicit NDTMatcher(std::unordered_set<Options> options,
-                      std::vector<double> cell_sizes,
-                      double d2 = 0.05);
+  static NDTMatcher GetBasic(std::unordered_set<Options> options,
+                             double cell_sizes,
+                             double d2 = 0.05);
 
   bool HasOption(Options option);
 
@@ -51,6 +39,12 @@ class NDTMatcher {
   std::vector<Eigen::Affine3d> tfs() const { return tfs_; }
 
  private:
+  explicit NDTMatcher(std::unordered_set<Options> options,
+                      std::vector<double> cell_sizes,
+                      double cell_size,
+                      double d2,
+                      double intrinsic);
+
   Eigen::Affine3d AlignImpl(
       const Eigen::Affine3d &guess = Eigen::Affine3d::Identity());
 
@@ -68,14 +62,3 @@ class NDTMatcher {
   int iteration_;
   int corres_;
 };
-
-// XXX: Global variables in order for easy usage in applications
-constexpr NDTMatcher::Options kLS = NDTMatcher::Options::kLineSearch;
-constexpr NDTMatcher::Options kTR = NDTMatcher::Options::kTrustRegion;
-constexpr NDTMatcher::Options kNDT = NDTMatcher::Options::kNDT;
-constexpr NDTMatcher::Options kNNDT = NDTMatcher::Options::kNormalNDT;
-constexpr NDTMatcher::Options k1to1 = NDTMatcher::Options::k1to1;
-constexpr NDTMatcher::Options k1ton = NDTMatcher::Options::k1ton;
-constexpr NDTMatcher::Options kIterative = NDTMatcher::Options::kIterative;
-constexpr NDTMatcher::Options kPointCov = NDTMatcher::Options::kPointCov;
-constexpr NDTMatcher::Options kNoReject = NDTMatcher::Options::kNoReject;

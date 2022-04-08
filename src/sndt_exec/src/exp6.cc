@@ -84,7 +84,6 @@ int main(int argc, char **argv) {
   Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
                   Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
   string d;
-  bool tr;
   int f, n;
   double ndtd2, nndtd2;
   po::options_description desc("Allowed options");
@@ -95,8 +94,7 @@ int main(int argc, char **argv) {
       ("f,f", po::value<int>(&f)->required()->default_value(1), "Frames")
       ("n,n", po::value<int>(&n)->default_value(-1), "Frames")
       ("ndtd2,a", po::value<double>(&ndtd2)->default_value(0.5), "d2 NDT")
-      ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.5), "d2 NNDT")
-      ("tr,t", po::value<bool>(&tr)->default_value(false)->implicit_value(true), "Trust Region");
+      ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.5), "d2 NNDT");
   // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -130,10 +128,8 @@ int main(int argc, char **argv) {
     bent.push_back(TransNormRotDegAbsFromAffine3d(ben)(0));
     benr.push_back(TransNormRotDegAbsFromAffine3d(ben)(1));
 
-    // auto op1 = {tr ? kTR : kLS, kNDT, k1to1, kIterative, kPointCov};
-    // NDTMatcher m1(op1, {0.5, 1, 2}, ndtd2);
-    auto op1 = {tr ? kTR : kLS, kNDT, k1to1, kPointCov};
-    NDTMatcher m1(op1, 0.5, ndtd2);
+    auto op1 = {kLS, kNDT, k1to1, kPointCov};
+    auto m1 = NDTMatcher::GetBasic(op1, 0.5, ndtd2);
     m1.set_intrinsic(0.005);
     m1.SetSource(src);
     m1.SetTarget(tgt);
@@ -148,10 +144,8 @@ int main(int argc, char **argv) {
     r1.Tr = r1.Tr * res1;
     r1.path.poses.push_back(MakePoseStampedMsg(tj, r1.Tr));
 
-    // auto op2 = {tr ? kTR : kLS, kNNDT, k1to1, kIterative, kPointCov};
-    // NDTMatcher m2(op2, {0.5, 1, 2}, nndtd2);
-    auto op2 = {tr ? kTR : kLS, kNNDT, k1to1, kPointCov};
-    NDTMatcher m2(op2, 0.5, nndtd2);
+    auto op2 = {kLS, kNNDT, k1to1, kPointCov};
+    auto m2 = NDTMatcher::GetBasic(op2, 0.5, nndtd2);
     m2.set_intrinsic(0.005);
     m2.SetSource(src);
     m2.SetTarget(tgt);

@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
   auto src = TransformPoints(tgt, Affine3dFromXYZRPY({-0.3, 0, 1, 0, 0.2, 0}));
 
   auto op1 = {kLS, kNDT, k1to1, kNoReject};
-  NDTMatcher m1(op1, 0.5, 0.05);
+  auto m1 = NDTMatcher::GetBasic(op1, 0.5, 0.05);
   m1.SetSource(src);
   m1.SetTarget(tgt);
   auto res1 = m1.Align();
@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
   cout << m1.iteration() << ", " << m1.timer().optimize() << endl;
 
   auto op2 = {kLS, kNNDT, k1to1, kNoReject};
-  NDTMatcher m2(op2, 0.5, 0.05);
+  auto m2 = NDTMatcher::GetBasic(op2, 0.5, 0.05);
   m2.SetSource(src);
   m2.SetTarget(tgt);
   auto res2 = m2.Align();
@@ -85,11 +85,13 @@ int main(int argc, char **argv) {
   cout << m2.iteration() << ", " << m2.timer().optimize() << endl;
 
   vector<Vector3d> pts1, dirs1, pts2, dirs2;
-  for (auto [idx, cell] : *m1.tmap()) {
+  for (auto elem : *m1.tmap()) {
+    const Cell &cell = elem.second;
     pts1.push_back(cell.GetMean());
     dirs1.push_back(cell.GetNormal());
   }
-  for (auto [idx, cell] : *m1.smap()) {
+  for (auto elem : *m1.smap()) {
+    const Cell &cell = elem.second;
     pts2.push_back(cell.GetMean());
     dirs2.push_back(cell.GetNormal());
   }

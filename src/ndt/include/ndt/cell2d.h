@@ -5,7 +5,7 @@
 
 class Cell2D {
  public:
-  enum CellType {
+  enum class CellType {
     kNoInit,    /**< Covariance is not computed yet */
     kFewPoints, /**< Covariance is not computed because of few points */
     kLine,      /**< Covariance degenerates as a line */

@@ -11,6 +11,7 @@ std::vector<int> ThresholdRejection(const std::vector<double> &vals,
   return ret;
 }
 
+// TODO: add configurable parameter
 std::vector<int> StatisticRejection(const std::vector<double> &vals) {
   int n = vals.size();
   std::vector<std::reference_wrapper<const double>> v(vals.begin(), vals.end());
@@ -74,6 +75,43 @@ void Orj::AngleRejection(const std::vector<Eigen::Vector3d> &nps,
                          const std::vector<Eigen::Vector3d> &nqs,
                          Rejection method,
                          const std::vector<double> &params) {
+  std::vector<double> vals;
+  for (size_t i = 0; i < nps.size(); ++i)
+    vals.push_back(std::acos(nps[i].dot(nqs[i])));
+
+  std::vector<int> indices;
+  if (method == Rejection::kThreshold)
+    indices = ThresholdRejection(vals, params[0]);
+  else if (method == Rejection::kStatistic)
+    indices = StatisticRejection(vals);
+  else if (method == Rejection::kBoth)
+    indices = BothRejection(vals, params[0]);
+
+  indices_ = CommonIndices(indices_, indices);
+}
+
+void Orj2D::RangeRejection(const std::vector<Eigen::Vector2d> &ps,
+                           const std::vector<Eigen::Vector2d> &qs,
+                           Rejection method,
+                           const std::vector<double> &params) {
+  std::vector<double> vals;
+  for (size_t i = 0; i < ps.size(); ++i) vals.push_back((ps[i] - qs[i]).norm());
+
+  std::vector<int> indices;
+  if (method == Rejection::kThreshold)
+    indices = ThresholdRejection(vals, params[0]);
+  else if (method == Rejection::kStatistic)
+    indices = StatisticRejection(vals);
+  else if (method == Rejection::kBoth)
+    indices = BothRejection(vals, params[0]);
+
+  indices_ = CommonIndices(indices_, indices);
+}
+
+void Orj2D::AngleRejection(const std::vector<Eigen::Vector2d> &nps,
+                           const std::vector<Eigen::Vector2d> &nqs,
+                           Rejection method,
+                           const std::vector<double> &params) {
   std::vector<double> vals;
   for (size_t i = 0; i < nps.size(); ++i)
     vals.push_back(std::acos(nps[i].dot(nqs[i])));

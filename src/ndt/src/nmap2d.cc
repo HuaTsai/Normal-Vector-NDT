@@ -12,6 +12,29 @@ void NMap2D::LoadPoints(const std::vector<Eigen::Vector2d> &points) {
   for (auto &[idx, cell] : cells_) {
     Eigen::Vector2d c = idx.cast<double>() + Eigen::Vector2d(0.5, 0.5);
     cell.SetCenter(min_voxel_ + c * cell_size_);
+    cell.SetSize(cell_size_);
+  }
+  std::vector<Eigen::Vector2d> means;
+  for (auto &elem : cells_) {
+    auto &cell = elem.second;
+    cell.ComputeGaussian();
+    if (cell.GetHasGaussian()) means.push_back(cell.GetMean());
+  }
+  MakeKDTree(means);
+}
+
+void NMap2D::LoadPointsWithCovariances(
+    const std::vector<Eigen::Vector2d> &points,
+    const Eigen::Matrix2d &point_cov) {
+  std::vector<Eigen::Vector2d> valids;
+  ExcludeInfinite(points, valids);
+  ComputeVoxelOffset(valids);
+  for (const auto &pt : valids)
+    cells_[GetIndexForPoint(pt)].AddPointWithCovariance(pt, point_cov);
+  for (auto &[idx, cell] : cells_) {
+    Eigen::Vector2d c = idx.cast<double>() + Eigen::Vector2d(0.5, 0.5);
+    cell.SetCenter(min_voxel_ + c * cell_size_);
+    cell.SetSize(cell_size_);
   }
   std::vector<Eigen::Vector2d> means;
   for (auto &elem : cells_) {
@@ -38,6 +61,7 @@ void NMap2D::LoadPointsWithCovariances(
   for (auto &[idx, cell] : cells_) {
     Eigen::Vector2d c = idx.cast<double>() + Eigen::Vector2d(0.5, 0.5);
     cell.SetCenter(min_voxel_ + c * cell_size_);
+    cell.SetSize(cell_size_);
   }
   std::vector<Eigen::Vector2d> means;
   for (auto &elem : cells_) {
@@ -89,15 +113,24 @@ const Cell2D &NMap2D::SearchNearestCell(const Eigen::Vector2d &query,
   pt.x = query(0), pt.y = query(1), pt.z = 0.;
   std::vector<int> idx{0};
   std::vector<float> dist2{0};
-  int found = kdtree_.nearestKSearch(pt, 1, idx, dist2);
-  if (!found) {
-    std::cerr << __FUNCTION__ << ": Search Failed\n";
-    std::exit(1);
-  }
-  pcl::PointXYZ res = kdtree_.getInputCloud()->at(idx[0]);
-  Eigen::Vector2d mean(res.x, res.y);
-  index = GetIndexForPoint(mean);
+  kdtree_.nearestKSearch(pt, 1, idx, dist2);
+  index = GetIndexForPoint(kdtree_pts_[idx[0]]);
   return cells_.at(index);
+}
+
+std::vector<std::reference_wrapper<const Cell2D>> NMap2D::SearchCellsInRadius(
+    const Eigen::Vector2d &query, double radius) const {
+  pcl::PointXYZ pt;
+  pt.x = query(0), pt.y = query(1), pt.z = 0.;
+  std::vector<int> idx;
+  std::vector<float> dist2;
+  kdtree_.radiusSearch(pt, radius, idx, dist2);
+  std::vector<std::reference_wrapper<const Cell2D>> ret;
+  for (auto id : idx) {
+    Eigen::Vector2i index = GetIndexForPoint(kdtree_pts_[id]);
+    ret.push_back(cells_.at(index));
+  }
+  return ret;
 }
 
 Eigen::Vector2i NMap2D::GetIndexForPoint(const Eigen::Vector2d &point) const {
@@ -115,11 +148,13 @@ void NMap2D::ComputeVoxelOffset(const std::vector<Eigen::Vector2d> &points) {
 }
 
 void NMap2D::MakeKDTree(const std::vector<Eigen::Vector2d> &points) {
+  kdtree_pts_.clear();
   pcl::PointCloud<pcl::PointXYZ>::Ptr pc(new pcl::PointCloud<pcl::PointXYZ>);
   for (const auto &pt : points) {
     pcl::PointXYZ p;
     p.x = pt(0), p.y = pt(1), p.z = 0.;
     pc->push_back(p);
+    kdtree_pts_.push_back(pt);
   }
   kdtree_.setInputCloud(pc);
 }

@@ -11,7 +11,7 @@ Cell::Cell()
       evals_(Eigen::Vector3d::Zero()),
       evecs_(Eigen::Matrix3d::Zero()),
       normal_(Eigen::Vector3d::Zero()),
-      celltype_(kNoInit),
+      celltype_(CellType::kNoInit),
       rescale_ratio_(100.) {}
 
 void Cell::AddPoint(const Eigen::Vector3d &point) { points_.push_back(point); }
@@ -25,20 +25,20 @@ void Cell::AddPointWithCovariance(const Eigen::Vector3d &point,
 void Cell::ComputeGaussian() {
   mean_.setZero();
   cov_.setZero();
-  n_ = points_.size();
   if (point_covs_.size())
     ExcludeInfiniteInPlace(points_, point_covs_);
   else
     ExcludeInfiniteInPlace(points_);
+  n_ = points_.size();
 
+  // XXX: The decision of few points
   if (!point_covs_.size() && points_.size() < 6) {
-    celltype_ = kFewPoints;
+    celltype_ = CellType::kFewPoints;
     return;
   }
 
-  // XXX: The decision of few points
   if (point_covs_.size() && points_.size() <= 1) {
-    celltype_ = kFewPoints;
+    celltype_ = CellType::kFewPoints;
     return;
   }
 
@@ -47,13 +47,13 @@ void Cell::ComputeGaussian() {
   ComputeEvalEvec(cov_, evals_, evecs_);
 
   if (evals_(1) <= Eigen::NumTraits<double>::dummy_precision()) {
-    celltype_ = kLine;
+    celltype_ = CellType::kLine;
     return;
   }
 
   // XXX: Not sure whether omit plane, but I think it should be fine.
   if (evals_(0) <= Eigen::NumTraits<double>::dummy_precision()) {
-    celltype_ = kPlane;
+    celltype_ = CellType::kPlane;
     return;
   }
 
@@ -71,7 +71,7 @@ void Cell::ComputeGaussian() {
 
   if (rescale) cov_ = evecs_ * evals_.asDiagonal() * evecs_.transpose();
 
-  celltype_ = kRegular;
+  celltype_ = CellType::kRegular;
   normal_ = evecs_.col(0);
   if (mean_.dot(normal_) < 0) normal_ *= -1.;
   hasgaussian_ = true;

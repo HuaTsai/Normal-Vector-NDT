@@ -85,7 +85,6 @@ int main(int argc, char **argv) {
   Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
                   Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
   string d;
-  bool tr;
   int n, f;
   double ndtd2, nndtd2;
   po::options_description desc("Allowed options");
@@ -96,8 +95,7 @@ int main(int argc, char **argv) {
       ("n,n", po::value<int>(&n)->default_value(0), "N")
       ("f,f", po::value<int>(&f)->default_value(1), "F")
       ("ndtd2,a", po::value<double>(&ndtd2)->default_value(0.5), "ndtd2")
-      ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.5), "nndtd2")
-      ("tr", po::value<bool>(&tr)->default_value(false)->implicit_value(true), "Trust Region");
+      ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.5), "nndtd2");
   // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -122,10 +120,8 @@ int main(int argc, char **argv) {
   cout << "Bench Mark: " << TransNormRotDegAbsFromAffine3d(ben).transpose()
        << endl;
 
-  // auto op1 = {tr ? kTR : kLS, kNDT, k1to1, kIterative, kPointCov};
-  // NDTMatcher m1(op1, {0.5, 1, 2}, ndtd2);
-  auto op1 = {tr ? kTR : kLS, kNDT, k1to1, kPointCov};
-  NDTMatcher m1(op1, 0.5, ndtd2);
+  auto op1 = {kLS, kNDT, k1to1, kPointCov};
+  auto m1 = NDTMatcher::GetBasic(op1, 0.5, ndtd2);
   m1.set_intrinsic(0.005);
   m1.SetSource(src);
   m1.SetTarget(tgt);
@@ -135,10 +131,8 @@ int main(int argc, char **argv) {
   r1.corr = m1.corres(), r1.it = m1.iteration();
   r1.timer += m1.timer();
 
-  // auto op2 = {tr ? kTR : kLS, kNNDT, k1to1, kIterative, kPointCov};
-  // NDTMatcher m2(op2, {0.5, 1, 2}, nndtd2);
-  auto op2 = {tr ? kTR : kLS, kNNDT, k1to1, kPointCov};
-  NDTMatcher m2(op2, 0.5, nndtd2);
+  auto op2 = {kLS, kNNDT, k1to1, kPointCov};
+  auto m2 = NDTMatcher::GetBasic(op2, 0.5, nndtd2);
   m2.set_intrinsic(0.005);
   m2.SetSource(src);
   m2.SetTarget(tgt);

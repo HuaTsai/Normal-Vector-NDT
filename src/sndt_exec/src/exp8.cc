@@ -67,12 +67,12 @@ int main(int argc, char **argv) {
   pub1.publish(*source_pcl);
   pub2.publish(*target_pcl);
 
-  NDTMatcher m1({kLS, kNDT, k1to1}, 0.5);
+  auto m1 = NDTMatcher::GetBasic({kLS, kNDT, k1to1}, 0.5);
   m1.SetSource(src);
   m1.SetTarget(tgt);
   m1.Align();
 
-  NDTMatcher m2({kLS, kNNDT, k1to1}, 0.5);
+  auto m2 = NDTMatcher::GetBasic({kLS, kNNDT, k1to1}, 0.5);
   m2.SetSource(src);
   m2.SetTarget(tgt);
   m2.Align();

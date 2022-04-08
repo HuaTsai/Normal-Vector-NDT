@@ -77,7 +77,8 @@ int main(int argc, char **argv) {
 
   for (auto d2 : {0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1, 0.2, 0.3, 0.4,
                   0.5, 0.6, 0.7, 0.8, 0.9, 1.0}) {
-    NDTMatcher m({kLS, kNNDT, k1to1, kIterative}, {0.5, 1, 2}, d2);
+    auto op = {kLS, kNNDT, k1to1};
+    auto m = NDTMatcher::GetIter(op, {0.5, 1, 2}, d2);
     m.SetSource(src);
     m.SetTarget(tgt);
     auto res = m.Align();

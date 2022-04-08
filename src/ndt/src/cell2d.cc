@@ -11,7 +11,7 @@ Cell2D::Cell2D()
       evals_(Eigen::Vector2d::Zero()),
       evecs_(Eigen::Matrix2d::Zero()),
       normal_(Eigen::Vector2d::Zero()),
-      celltype_(kNoInit),
+      celltype_(CellType::kNoInit),
       rescale_ratio_(100.) {}
 
 void Cell2D::AddPoint(const Eigen::Vector2d &point) {
@@ -27,26 +27,30 @@ void Cell2D::AddPointWithCovariance(const Eigen::Vector2d &point,
 void Cell2D::ComputeGaussian() {
   mean_.setZero();
   cov_.setZero();
-  n_ = points_.size();
-  std::vector<Eigen::Vector2d> pts;
-  std::vector<Eigen::Matrix2d> covs;
   if (point_covs_.size())
-    ExcludeInfinite(points_, point_covs_, pts, covs);
+    ExcludeInfiniteInPlace(points_, point_covs_);
   else
-    ExcludeInfinite(points_, pts);
+    ExcludeInfiniteInPlace(points_);
+  n_ = points_.size();
 
-  if (pts.size() < 4) {
-    celltype_ = kFewPoints;
+  // XXX: The decision of few points
+  if (!point_covs_.size() && points_.size() < 4) {
+    celltype_ = CellType::kFewPoints;
     return;
   }
 
-  mean_ = ComputeMean(pts);
-  cov_ = ComputeCov(pts, mean_) + ComputeMean(covs);
+  if (point_covs_.size() && points_.size() <= 1) {
+    celltype_ = CellType::kFewPoints;
+    return;
+  }
+
+  mean_ = ComputeMean(points_);
+  cov_ = ComputeCov(points_, mean_) + ComputeMean(point_covs_);
   ComputeEvalEvec(cov_, evals_, evecs_);
 
   // XXX: Not sure whether omit line, but I think it should be fine.
   if (evals_(0) <= Eigen::NumTraits<double>::dummy_precision()) {
-    celltype_ = kLine;
+    celltype_ = CellType::kLine;
     return;
   }
 
@@ -55,8 +59,8 @@ void Cell2D::ComputeGaussian() {
     cov_ = evecs_ * evals_.asDiagonal() * evecs_.transpose();
   }
 
-  celltype_ = kRegular;
+  celltype_ = CellType::kRegular;
   normal_ = evecs_.col(0);
-  if (mean_.dot(normal_) < 0) normal_ *= 1.;
+  if (mean_.dot(normal_) < 0) normal_ *= -1.;
   hasgaussian_ = true;
 }
