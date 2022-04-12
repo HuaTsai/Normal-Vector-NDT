@@ -1,6 +1,8 @@
 #pragma once
 #include <ceres/ceres.h>
 #include <ndt/options.h>
+// FIXME
+#include <ndt/costs.h>
 
 class Optimizer {
  public:
@@ -11,6 +13,8 @@ class Optimizer {
   ~Optimizer();
 
   void BuildProblem(ceres::FirstOrderFunction *func);
+
+  void BuildProblem(CostObj *func);
 
   void Optimize();
 
@@ -30,8 +34,10 @@ class Optimizer {
   double xyt_[3];
   ceres::GradientProblem *problem_;
   ceres::LocalParameterization *param_;
+  CostObj *costobj_;
   Eigen::Affine3d cur_tf3_;
   Eigen::Affine2d cur_tf2_;
   double threshold_;
   double threshold_ang_;
+  Eigen::Vector2d tlang_;
 };

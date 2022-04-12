@@ -1,5 +1,6 @@
 #include <common/angle_utils.h>
 #include <common/eigen_utils.h>
+#include <lbfgs/LBFGSB.h>
 #include <ndt/opt.h>
 
 class Manifold2D {
@@ -24,7 +25,8 @@ Optimizer::Optimizer(Options type)
       cur_tf3_(Eigen::Affine3d::Identity()),
       cur_tf2_(Eigen::Affine2d::Identity()),
       threshold_(0.001),
-      threshold_ang_(0.01) {
+      threshold_ang_(0.01),
+      tlang_(Eigen::Vector2d::Zero()) {
   memset(xyzxyzw_, 0, sizeof(xyzxyzw_));
   memset(xyt_, 0, sizeof(xyt_));
   xyzxyzw_[6] = 1;
@@ -34,6 +36,8 @@ Optimizer::Optimizer(Options type)
     param_ = new ceres::ProductParameterization(
         new ceres::IdentityParameterization(3),
         new ceres::EigenQuaternionParameterization());
+  } else if (type_ == Options::kLBFGSPP) {
+    // nop
   } else {
     std::cerr << __FUNCTION__ << ": invalid type\n";
     std::exit(1);
@@ -48,41 +52,62 @@ void Optimizer::BuildProblem(ceres::FirstOrderFunction *func) {
   problem_ = new ceres::GradientProblem(func, param_);
 }
 
+void Optimizer::BuildProblem(CostObj *func) {
+  costobj_ = func;
+}
+
 void Optimizer::Optimize() {
   ceres::GradientProblemSolver::Options options;
   ceres::GradientProblemSolver::Summary summary;
   options.max_num_iterations = 50;
   if (type_ == Options::kOptimizer2D) {
     ceres::Solve(options, *problem_, xyt_, &summary);
-    cur_tf2_ = Eigen::Translation2d(xyt_[0], xyt_[1]) *
-               Eigen::Rotation2Dd(xyt_[2]) * cur_tf2_;
-  } else {
+    Eigen::Affine2d dtf =
+        Eigen::Translation2d(xyt_[0], xyt_[1]) * Eigen::Rotation2Dd(xyt_[2]);
+    cur_tf2_ = dtf * cur_tf2_;
+    tlang_ = TransNormRotDegAbsFromAffine2d(dtf);
+  } else if (type_ == Options::kOptimizer3D) {
     ceres::Solve(options, *problem_, xyzxyzw_, &summary);
     Eigen::Affine3d dtf;
     dtf.translation() = Eigen::Map<Eigen::Vector3d>(xyzxyzw_);
     dtf.linear() = Eigen::Map<Eigen::Quaterniond>(xyzxyzw_ + 3).matrix();
     cur_tf3_ = dtf * cur_tf3_;
+    tlang_ = TransNormRotDegAbsFromAffine3d(dtf);
+  } else if (type_ == Options::kLBFGSPP) {
+    LBFGSpp::LBFGSBParam<double> param;
+    LBFGSpp::LBFGSBSolver<double> solver(param);
+    Eigen::VectorXd x = Eigen::VectorXd::Zero(6);
+    Eigen::VectorXd lb = Eigen::VectorXd::Constant(6, -5);
+    Eigen::VectorXd ub = Eigen::VectorXd::Constant(6, 5);
+    double fx;
+    solver.minimize(*costobj_, x, fx, lb, ub);
+    Eigen::Affine3d aff = Eigen::Translation3d(x.head(3)) *
+                          Eigen::AngleAxisd(x(3), Eigen::Vector3d::UnitX()) *
+                          Eigen::AngleAxisd(x(4), Eigen::Vector3d::UnitY()) *
+                          Eigen::AngleAxisd(x(5), Eigen::Vector3d::UnitZ());
+    xyzxyzw_[0] = aff.translation()(0);
+    xyzxyzw_[1] = aff.translation()(1);
+    xyzxyzw_[2] = aff.translation()(2);
+    xyzxyzw_[3] = Eigen::Quaterniond(aff.rotation()).x();
+    xyzxyzw_[4] = Eigen::Quaterniond(aff.rotation()).y();
+    xyzxyzw_[5] = Eigen::Quaterniond(aff.rotation()).z();
+    xyzxyzw_[6] = Eigen::Quaterniond(aff.rotation()).w();
+    cur_tf3_ = aff * cur_tf3_;
+    tlang_ = TransNormRotDegAbsFromAffine3d(aff);
   }
 }
 
 bool Optimizer::CheckConverge(const std::vector<Eigen::Affine3d> &tfs) {
-  double tl = Eigen::Map<Eigen::Vector3d>(xyzxyzw_).norm();
-  double ang =
-      std::abs(Eigen::AngleAxisd(Eigen::Quaterniond(xyzxyzw_ + 3)).angle());
-  std::cout << "tl: " << tl << ", ang: " << ang << std::endl;
-  if (tl < threshold_ && Rad2Deg(ang) < threshold_ang_) return true;
+  if (tlang_(0) < threshold_ && tlang_(1) < threshold_ang_) return true;
   for (auto tf : tfs) {
     auto dtf = TransNormRotDegAbsFromAffine3d(tf.inverse() * cur_tf3_);
-    std::cout << " dtf: " << dtf.transpose() << std::endl;
     if (dtf(0) < threshold_ && dtf(1) < threshold_ang_) return true;
   }
   return false;
 }
 
 bool Optimizer::CheckConverge(const std::vector<Eigen::Affine2d> &tfs) {
-  double tl = Eigen::Map<Eigen::Vector2d>(xyt_).norm();
-  double ang = std::abs(xyt_[2]);
-  if (tl < threshold_ && Rad2Deg(ang) < threshold_ang_) return true;
+  if (tlang_(0) < threshold_ && tlang_(1) < threshold_ang_) return true;
   for (auto tf : tfs) {
     auto dtf = TransNormRotDegAbsFromAffine2d(tf.inverse() * cur_tf2_);
     if (dtf(0) < threshold_ && dtf(1) < threshold_ang_) return true;

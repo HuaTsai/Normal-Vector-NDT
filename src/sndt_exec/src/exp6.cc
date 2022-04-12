@@ -198,12 +198,12 @@ int main(int argc, char **argv) {
   pub7.publish(r2.path);
   pubgt.publish(gt);
 
-  PNumpy(r1.terr, "t1");
-  PNumpy(r1.rerr, "r1");
-  PNumpy(r1.opt, "opt1");
-  PNumpy(r2.terr, "t2");
-  PNumpy(r2.rerr, "r2");
-  PNumpy(r2.opt, "opt2");
+  // PNumpy(r1.terr, "t1");
+  // PNumpy(r1.rerr, "r1");
+  // PNumpy(r1.opt, "opt1");
+  // PNumpy(r2.terr, "t2");
+  // PNumpy(r2.rerr, "r2");
+  // PNumpy(r2.opt, "opt2");
   // PrintRes(r1.path, gt);
   // PrintRes(r2.path, gt);
   cout << "-------------" << endl;

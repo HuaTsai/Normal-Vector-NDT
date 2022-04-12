@@ -119,11 +119,17 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
       orj.RetainIndices(ups, uqs, cps, cqs, nps, nqs);
     }
 
-    Optimizer opt(Options::kOptimizer3D);
+    Options type = Options::kOptimizer3D;
+    if (HasOption(Options::kLBFGSPP))
+      type = Options::kLBFGSPP;
+    Optimizer opt(type);
     opt.set_cur_tf3(cur_tf);
     corres_ = ups.size();
     if (HasOption(Options::kNDT)) {
-      opt.BuildProblem(NDTCost::Create(ups, cps, uqs, cqs, d2_));
+      if (HasOption(Options::kLBFGSPP))
+        opt.BuildProblem(new CostObj(ups, cps, uqs, cqs, d2_));
+      else
+        opt.BuildProblem(NDTCost::Create(ups, cps, uqs, cqs, d2_));
     } else if (HasOption(Options::kNormalNDT)) {
       opt.BuildProblem(NNDTCost::Create(ups, cps, nps, uqs, cqs, nqs, d2_));
     }
@@ -134,9 +140,7 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
     timer_.ProcedureFinish();
 
     ++iteration_;
-    std::cout << iteration_ << std::endl;
     converge = opt.CheckConverge(tfs) || iteration_ == 100;
-    std::cout << std::endl;
     cur_tf = opt.cur_tf3();
     tfs.push_back(cur_tf);
   }

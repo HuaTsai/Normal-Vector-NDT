@@ -205,3 +205,102 @@ class NNDTCost2D {
   const std::vector<Eigen::Vector2d> nqs_;
   const double d2_;
 };
+
+class CostObj {
+ public:
+  CostObj(const std::vector<Eigen::Vector3d> &ups,
+              const std::vector<Eigen::Matrix3d> &cps,
+              const std::vector<Eigen::Vector3d> &uqs,
+              const std::vector<Eigen::Matrix3d> &cqs,
+              double d2)
+      : ups_(ups), cps_(cps), uqs_(uqs), cqs_(cqs), d2_(d2) {}
+
+  double operator()(const Eigen::VectorXd &x, Eigen::VectorXd &grad) {
+    double f = 0;
+    grad.setZero();
+    dc(x);
+    for (size_t i = 0; i < ups_.size(); ++i) {
+      dp(ups_[i], cps_[i]);
+      Eigen::Matrix3d B = (R_ * cps_[i] * R_.transpose() + cqs_[i]).inverse();
+      Eigen::Vector3d uij = R_ * ups_[i] + t_ - uqs_[i];
+      Eigen::Transpose<Eigen::Vector3d> uijT(uij);
+      double expval = std::exp(-0.5 * d2_ * uijT * B * uij);
+      f -= expval;
+      for (int a = 0; a < 6; ++a) {
+        const Eigen::Ref<Eigen::Vector3d> ja(J_.block<3, 1>(0, a));
+        const Eigen::Ref<Eigen::Matrix3d> Za(C_.block<3, 3>(0, 3 * a));
+        double qa = (2 * uijT * B * ja - uijT * B * Za * B * uij)(0);
+        grad(a) += 0.5 * d2_ * expval * qa;
+      }
+    }
+    return f;
+  }
+
+  void dp(const Eigen::Vector3d &mean, const Eigen::Matrix3d &cov) {
+    Eigen::Matrix<double, 8, 1> j = j_com_ * mean;
+    J_.col(0) = Eigen::Vector3d::UnitX();
+    J_.col(1) = Eigen::Vector3d::UnitY();
+    J_.col(2) = Eigen::Vector3d::UnitZ();
+    J_.col(3) = Eigen::Vector3d(0, j(0), j(1));
+    J_.col(4) = Eigen::Vector3d(j(2), j(3), j(4));
+    J_.col(5) = Eigen::Vector3d(j(5), j(6), j(7));
+
+    Eigen::Matrix<double, 9, 3> c = c_com_ * cov * R_.transpose();
+    // clang-format off
+    C_.setZero();
+    C_.block<3, 3>(0, 9) = c.block<3, 3>(0, 0) + c.block<3, 3>(0, 0).transpose();
+    C_.block<3, 3>(0, 12) = c.block<3, 3>(3, 0) + c.block<3, 3>(3, 0).transpose();
+    C_.block<3, 3>(0, 15) = c.block<3, 3>(6, 0) + c.block<3, 3>(6, 0).transpose();
+    // clang-format on
+  }
+
+  void dc(const Eigen::Matrix<double, 6, 1> &p) {
+    const auto cal = [](double angle, double &c, double &s) {
+      c = std::cos(angle), s = std::sin(angle);
+    };
+    double cx, cy, cz, sx, sy, sz;
+    cal(p(3), cx, sx);
+    cal(p(4), cy, sy);
+    cal(p(5), cz, sz);
+
+    // clang-format off
+    R_.row(0) = Eigen::Vector3d(cy * cz, -sz * cy, sy);
+    R_.row(1) = Eigen::Vector3d(sx * sy * cz + sz * cx, -sx * sy * sz + cx * cz, -sx * cy);
+    R_.row(2) = Eigen::Vector3d(sx * sz - sy * cx * cz, sx * cz + sy * sz * cx, cx * cy);
+    t_ = p.head(3);
+
+    j_com_.row(0) = Eigen::Vector3d(-sx * sz + sy * cx * cz, -sx * cz - sy * sz * cx, -cx * cy);
+    j_com_.row(1) = Eigen::Vector3d(sx * sy * cz + sz * cx, -sx * sy * sz + cx * cz, -sx * cy);
+    j_com_.row(2) = Eigen::Vector3d(-sy * cz, sy * sz, cy);
+    j_com_.row(3) = Eigen::Vector3d(sx * cy * cz, -sx * sz * cy, sx * sy);
+    j_com_.row(4) = Eigen::Vector3d(-cx * cy * cz, sz * cx * cy, -sy * cx);
+    j_com_.row(5) = Eigen::Vector3d(-sz * cy, -cy * cz, 0.);
+    j_com_.row(6) = Eigen::Vector3d(-sx * sy * sz + cx * cz, -sx * sy * cz - sz * cx, 0.);
+    j_com_.row(7) = Eigen::Vector3d(sx * cz + sy * sz * cx, -sx * sz + sy * cx * cz, 0.);
+
+    c_com_.row(0) = Eigen::Vector3d::Zero();
+    c_com_.row(1) = Eigen::Vector3d(-sx * sz + sy * cx * cz, -sx * cz - sy * sz * cx, -cx * cy);
+    c_com_.row(2) = Eigen::Vector3d(sx * sy * cz + sz * cx, -sx * sy * sz + cx * cz, -sx * cy);
+    c_com_.row(3) = Eigen::Vector3d(-sy * cz, sy * sz, cy);
+    c_com_.row(4) = Eigen::Vector3d(sx * cy * cz, -sx * sz * cy, sx * sy);
+    c_com_.row(5) = Eigen::Vector3d(-cx * cy * cz, sz * cx * cy, -sy * cx);
+    c_com_.row(6) = Eigen::Vector3d(-sz * cy, -cy * cz, 0.);
+    c_com_.row(7) = Eigen::Vector3d(-sx * sy * sz + cx * cz, -sx * sy * cz - sz * cx, 0.);
+    c_com_.row(8) = Eigen::Vector3d(sx * cz + sy * sz * cx, -sx * sz + sy * cx * cz, 0.);
+    // clang-format on
+  }
+
+ private:
+  const std::vector<Eigen::Vector3d> ups_;
+  const std::vector<Eigen::Matrix3d> cps_;
+  const std::vector<Eigen::Vector3d> uqs_;
+  const std::vector<Eigen::Matrix3d> cqs_;
+  const double d2_;
+
+  Eigen::Matrix<double, 8, 3> j_com_;
+  Eigen::Matrix<double, 9, 3> c_com_;
+  Eigen::Matrix<double, 3, 6> J_;
+  Eigen::Matrix<double, 3, 18> C_;
+  Eigen::Matrix3d R_;
+  Eigen::Vector3d t_;
+};
