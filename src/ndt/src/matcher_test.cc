@@ -84,14 +84,14 @@ TEST_F(BunnyTest, PCLNDT) {
 }
 
 TEST_F(BunnyTest, MyNDTLS) {
-  auto m = NDTMatcher::GetBasic({kLS, kNDT, k1to1}, 1);
+  auto m = NDTMatcher::GetBasic({kNDT, k1to1}, 1);
   auto [tl, ang] = Match(m);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
   EXPECT_NEAR(ang, 10, 0.5);
 
-  auto m2 = NDTMatcher::GetBasic({kLS, kNDT, k1to1}, 1);
+  auto m2 = NDTMatcher::GetBasic({kNDT, k1to1}, 1);
   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
                    AngleAxisd(0.6931, Vector3d::UnitZ());
   tie(tl, ang) = Match(m2, guess);
@@ -102,14 +102,14 @@ TEST_F(BunnyTest, MyNDTLS) {
 }
 
 TEST_F(BunnyTest, MyNNDTLS) {
-  auto m = NDTMatcher::GetBasic({kLS, kNNDT, k1to1}, 1);
+  auto m = NDTMatcher::GetBasic({kNNDT, k1to1}, 1);
   auto [tl, ang] = Match(m);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
   EXPECT_NEAR(ang, 10, 0.5);
 
-  auto m2 = NDTMatcher::GetBasic({kLS, kNNDT, k1to1}, 1);
+  auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1}, 1);
   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
                    AngleAxisd(0.6931, Vector3d::UnitZ());
   tie(tl, ang) = Match(m2, guess);
@@ -119,37 +119,15 @@ TEST_F(BunnyTest, MyNNDTLS) {
   EXPECT_NEAR(ang, 10, 0.5);
 }
 
-TEST_F(BunnyTest, MyNDTTR) {
-  auto m = NDTMatcher::GetBasic({kTR, kNDT, k1to1}, 1);
-  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
-                   AngleAxisd(0.6931, Vector3d::UnitZ());
-  auto [tl, ang] = Match(m, guess);
-  EXPECT_NEAR(tl(0), 1, 0.05);
-  EXPECT_NEAR(tl(1), 1, 0.05);
-  EXPECT_NEAR(tl(2), 0, 0.05);
-  EXPECT_NEAR(ang, 10, 0.5);
-}
-
-TEST_F(BunnyTest, MyNNDTTR) {
-  auto m = NDTMatcher::GetBasic({kTR, kNNDT, k1to1}, 1);
-  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
-                   AngleAxisd(0.6931, Vector3d::UnitZ());
-  auto [tl, ang] = Match(m, guess);
-  EXPECT_NEAR(tl(0), 1, 0.05);
-  EXPECT_NEAR(tl(1), 1, 0.05);
-  EXPECT_NEAR(tl(2), 0, 0.05);
-  EXPECT_NEAR(ang, 10, 0.5);
-}
-
 TEST_F(BunnyTest, MyNDTIterative) {
-  auto m = NDTMatcher::GetIter({kLS, kNDT, k1to1}, {0.5, 1, 2});
+  auto m = NDTMatcher::GetIter({kNDT, k1to1}, {0.5, 1, 2});
   auto [tl, ang] = Match(m);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
   EXPECT_NEAR(ang, 10, 0.5);
 
-  auto m2 = NDTMatcher::GetIter({kLS, kNDT, k1to1}, {0.5, 1, 2});
+  auto m2 = NDTMatcher::GetIter({kNDT, k1to1}, {0.5, 1, 2});
   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
                    AngleAxisd(0.6931, Vector3d::UnitZ());
   tie(tl, ang) = Match(m2, guess);
@@ -160,14 +138,14 @@ TEST_F(BunnyTest, MyNDTIterative) {
 }
 
 TEST_F(BunnyTest, MyNNDTIterative) {
-  auto m = NDTMatcher::GetIter({kLS, kNNDT, k1to1}, {0.5, 1, 2});
+  auto m = NDTMatcher::GetIter({kNNDT, k1to1}, {0.5, 1, 2});
   auto [tl, ang] = Match(m);
   EXPECT_NEAR(tl(0), 1, 0.05);
   EXPECT_NEAR(tl(1), 1, 0.05);
   EXPECT_NEAR(tl(2), 0, 0.05);
   EXPECT_NEAR(ang, 10, 0.5);
 
-  auto m2 = NDTMatcher::GetIter({kLS, kNNDT, k1to1}, {0.5, 1, 2});
+  auto m2 = NDTMatcher::GetIter({kNNDT, k1to1}, {0.5, 1, 2});
   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
                    AngleAxisd(0.6931, Vector3d::UnitZ());
   tie(tl, ang) = Match(m2, guess);

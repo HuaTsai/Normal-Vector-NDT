@@ -10,11 +10,6 @@ using namespace std;
 using namespace Eigen;
 using PointCloudType = pcl::PointCloud<pcl::PointXYZ>;
 
-constexpr auto kGreen = MarkerOptions::kGreen;
-constexpr auto kRed = MarkerOptions::kRed;
-constexpr auto kCell = MarkerOptions::kCell;
-constexpr auto kCov = MarkerOptions::kCov;
-
 vector<Vector3d> MakeFakeData() {
   vector<Vector3d> ret;
   for (double x = -3.8; x < 3.8; x += 0.05) {
@@ -68,7 +63,7 @@ int main(int argc, char **argv) {
   auto tgt = MakeFakeData();
   auto src = TransformPoints(tgt, Affine3dFromXYZRPY({-0.3, 0, 1, 0, 0.2, 0}));
 
-  auto op1 = {kLS, kNDT, k1to1, kNoReject};
+  auto op1 = {kNDT, k1to1, kNoReject};
   auto m1 = NDTMatcher::GetBasic(op1, 0.5, 0.05);
   m1.SetSource(src);
   m1.SetTarget(tgt);
@@ -76,7 +71,7 @@ int main(int argc, char **argv) {
   cout << XYZRPYFromAffine3d(res1).transpose() << endl;
   cout << m1.iteration() << ", " << m1.timer().optimize() << endl;
 
-  auto op2 = {kLS, kNNDT, k1to1, kNoReject};
+  auto op2 = {kNNDT, k1to1, kNoReject};
   auto m2 = NDTMatcher::GetBasic(op2, 0.5, 0.05);
   m2.SetSource(src);
   m2.SetTarget(tgt);

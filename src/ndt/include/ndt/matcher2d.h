@@ -7,14 +7,13 @@ class NDTMatcher2D {
  public:
   NDTMatcher2D() = delete;
 
-  // TODO: private constructor and make factory methods
-  explicit NDTMatcher2D(std::unordered_set<Options> options,
-                        double cell_size,
-                        double d2 = 0.05);
+  static NDTMatcher2D GetIter(std::unordered_set<Options> options,
+                              std::vector<double> cell_sizes,
+                              double d2 = 0.05);
 
-  explicit NDTMatcher2D(std::unordered_set<Options> options,
-                        std::vector<double> cell_sizes,
-                        double d2 = 0.05);
+  static NDTMatcher2D GetBasic(std::unordered_set<Options> options,
+                               double cell_size,
+                               double d2 = 0.05);
 
   bool HasOption(Options option);
 
@@ -40,6 +39,12 @@ class NDTMatcher2D {
   std::vector<Eigen::Affine2d> tfs() const { return tfs_; }
 
  private:
+  explicit NDTMatcher2D(std::unordered_set<Options> options,
+                        std::vector<double> cell_sizes,
+                        double cell_size,
+                        double d2,
+                        double intrinsic);
+
   Eigen::Affine2d AlignImpl(
       const Eigen::Affine2d &guess = Eigen::Affine2d::Identity());
 

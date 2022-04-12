@@ -3,17 +3,18 @@
 #include <metric/metric.h>
 #include <nav_msgs/Path.h>
 #include <ndt/matcher.h>
+#include <ndt/visuals.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl_ros/point_cloud.h>
 #include <sndt_exec/wrapper.h>
-#include <visualization_msgs/MarkerArray.h>
 
 #include <boost/program_options.hpp>
 
 using namespace std;
 using namespace Eigen;
+using visualization_msgs::Marker;
+using visualization_msgs::MarkerArray;
 namespace po = boost::program_options;
-using Marker = visualization_msgs::Marker;
 
 struct Res {
   void Show() {
@@ -35,26 +36,6 @@ Affine3d BM(const nav_msgs::Path &gt,
   tf2::fromMsg(GetPose(gt.poses, t2), To);
   tf2::fromMsg(GetPose(gt.poses, t1), Ti);
   return Ti.inverse() * To;
-}
-
-Marker MP(const vector<Vector3d> &points, bool red) {
-  Marker ret;
-  ret.header.frame_id = "map";
-  ret.header.stamp = ros::Time::now();
-  ret.id = 0;
-  ret.type = Marker::SPHERE_LIST;
-  ret.action = Marker::ADD;
-  ret.scale.x = ret.scale.y = ret.scale.z = 0.1;
-  ret.pose = tf2::toMsg(Affine3d::Identity());
-  ret.color.a = 1;
-  ret.color.r = red ? 1 : 0;
-  ret.color.g = red ? 0 : 1;
-  for (const auto &point : points) {
-    geometry_msgs::Point pt;
-    pt.x = point(0), pt.y = point(1), pt.z = point(2);
-    ret.points.push_back(pt);
-  }
-  return ret;
 }
 
 visualization_msgs::Marker Boxes(std::shared_ptr<NMap> map, bool red) {
@@ -94,8 +75,8 @@ int main(int argc, char **argv) {
       ("d,d", po::value<string>(&d)->required(), "Data (logxx)")
       ("n,n", po::value<int>(&n)->default_value(0), "N")
       ("f,f", po::value<int>(&f)->default_value(1), "F")
-      ("ndtd2,a", po::value<double>(&ndtd2)->default_value(0.5), "ndtd2")
-      ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.5), "nndtd2");
+      ("ndtd2,a", po::value<double>(&ndtd2)->default_value(0.05), "ndtd2")
+      ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.05), "nndtd2");
   // clang-format on
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -120,7 +101,7 @@ int main(int argc, char **argv) {
   cout << "Bench Mark: " << TransNormRotDegAbsFromAffine3d(ben).transpose()
        << endl;
 
-  auto op1 = {kLS, kNDT, k1to1, kPointCov};
+  auto op1 = {kNDT, k1to1, kPointCov};
   auto m1 = NDTMatcher::GetBasic(op1, 0.5, ndtd2);
   m1.set_intrinsic(0.005);
   m1.SetSource(src);
@@ -131,7 +112,7 @@ int main(int argc, char **argv) {
   r1.corr = m1.corres(), r1.it = m1.iteration();
   r1.timer += m1.timer();
 
-  auto op2 = {kLS, kNNDT, k1to1, kPointCov};
+  auto op2 = {kNNDT, k1to1, kPointCov};
   auto m2 = NDTMatcher::GetBasic(op2, 0.5, nndtd2);
   m2.set_intrinsic(0.005);
   m2.SetSource(src);
@@ -148,30 +129,29 @@ int main(int argc, char **argv) {
 
   ros::init(argc, argv, "exp7_2");
   ros::NodeHandle nh;
-  ros::Publisher pub1 = nh.advertise<Marker>("src", 0, true);
-  ros::Publisher pub2 = nh.advertise<Marker>("tgt", 0, true);
-  ros::Publisher pub3 = nh.advertise<Marker>("out1", 0, true);
-  ros::Publisher pub4 = nh.advertise<Marker>("out2", 0, true);
-  ros::Publisher pub5 = nh.advertise<Marker>("box1", 0, true);
-  ros::Publisher pub6 = nh.advertise<Marker>("box2", 0, true);
-  ros::Publisher pub7 = nh.advertise<Marker>("box3", 0, true);
-  pub1.publish(MP(src, false));
-  pub2.publish(MP(tgt, true));
-  auto out1 = TransformPoints(src, res1);
-  auto out2 = TransformPoints(src, res2);
-  pub3.publish(MP(out1, false));
-  pub4.publish(MP(out2, false));
-  pub5.publish(Boxes(m1.tmap(), true));
+  ros::Publisher pu1 = nh.advertise<Marker>("marker1", 0, true);
+  ros::Publisher pu2 = nh.advertise<Marker>("marker2", 0, true);
+  ros::Publisher pu3 = nh.advertise<Marker>("marker3", 0, true);
+  ros::Publisher pu4 = nh.advertise<Marker>("marker4", 0, true);
+  ros::Publisher pub1 = nh.advertise<MarkerArray>("markers1", 0, true);
+  ros::Publisher pub2 = nh.advertise<MarkerArray>("markers2", 0, true);
+  ros::Publisher pub3 = nh.advertise<MarkerArray>("markers3", 0, true);
 
-  auto mp1 = std::make_shared<NMap>(0.5);
-  Eigen::Matrix3d pcov = Eigen::Matrix3d::Identity() * 0.0001;
-  // mp1->LoadPoints(out1);
-  mp1->LoadPointsWithCovariances(out1, pcov);
-  pub6.publish(Boxes(mp1, false));
+  pu1.publish(MarkerOfPoints(tgt, true));
+  pu2.publish(MarkerOfPoints(src, false));
+  pu3.publish(MarkerOfPoints(TransformPoints(src, res1), false));
+  pu4.publish(MarkerOfPoints(TransformPoints(src, res2), false));
+  pub1.publish(MarkerOfNDT(m1.tmap(), {kRed, kCell, kCov}));
 
-  auto mp2 = std::make_shared<NMap>(0.5);
-  // mp2->LoadPoints(out2);
-  mp2->LoadPointsWithCovariances(out2, pcov);
-  pub7.publish(Boxes(mp2, false));
-  ros::spin();
+  int i;
+  cout << "Index: ";
+  while (cin >> i) {
+    if (i >= 0 && i < (int)m1.tfs().size()) {
+      pub2.publish(MarkerOfNDT(m1.smap(), {kGreen, kCell, kCov}, m1.tfs()[i]));
+    }
+    if (i >= 0 && i < (int)m2.tfs().size()) {
+      pub3.publish(MarkerOfNDT(m2.smap(), {kGreen, kCell, kCov}, m2.tfs()[i]));
+    }
+    cout << "Index: ";
+  }
 }

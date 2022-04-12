@@ -32,8 +32,7 @@ NDTMatcher::NDTMatcher(std::unordered_set<Options> options,
       intrinsic_(intrinsic),
       iteration_(0),
       corres_(0) {
-  if ((HasOption(Options::kLineSearch) && HasOption(Options::kTrustRegion)) ||
-      (HasOption(Options::kNDT) && HasOption(Options::kNormalNDT)) ||
+  if ((HasOption(Options::kNDT) && HasOption(Options::kNormalNDT)) ||
       (HasOption(Options::k1to1) && HasOption(Options::k1ton))) {
     std::cerr << __FUNCTION__ << ": invalid options\n";
     std::exit(1);
@@ -75,12 +74,6 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
   std::vector<Eigen::Affine3d> tfs;
   tfs.push_back(cur_tf);
 
-  bool ls = HasOption(Options::kLineSearch);
-  bool tr = HasOption(Options::kTrustRegion);
-  bool ndt = HasOption(Options::kNDT);
-  bool nndt = HasOption(Options::kNormalNDT);
-  bool to1 = HasOption(Options::k1to1);
-  bool ton = HasOption(Options::k1ton);
   while (!converge) {
     timer_.ProcedureStart(timer_.kBuild);
     auto next = smap_->TransformCells(cur_tf);
@@ -89,7 +82,7 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
     std::vector<Eigen::Vector3d> nps, nqs;
     for (const auto &cellp : next) {
       if (!cellp.GetHasGaussian()) continue;
-      if (to1) {
+      if (HasOption(Options::k1to1)) {
         auto cellq = tmap_->SearchNearestCell(cellp.GetMean());
         if (!cellq.GetHasGaussian()) continue;
         Eigen::Vector3d np = cellp.GetNormal();
@@ -101,7 +94,7 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
         cps.push_back(cellp.GetCov());
         uqs.push_back(cellq.GetMean());
         cqs.push_back(cellq.GetCov());
-      } else if (ton) {
+      } else if (HasOption(Options::k1ton)) {
         auto cellqs = tmap_->SearchCellsInRadius(cellp.GetMean(), cell_size_);
         for (auto c : cellqs) {
           const Cell &cellq = c.get();
@@ -126,21 +119,13 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
       orj.RetainIndices(ups, uqs, cps, cqs, nps, nqs);
     }
 
-    Optimizer opt(ls ? Options::kLineSearch : Options::kTrustRegion);
-    opt.set_cur_tf(cur_tf);
+    Optimizer opt(Options::kOptimizer3D);
+    opt.set_cur_tf3(cur_tf);
     corres_ = ups.size();
-    if (ls && ndt) {
+    if (HasOption(Options::kNDT)) {
       opt.BuildProblem(NDTCost::Create(ups, cps, uqs, cqs, d2_));
-    } else if (ls && nndt) {
+    } else if (HasOption(Options::kNormalNDT)) {
       opt.BuildProblem(NNDTCost::Create(ups, cps, nps, uqs, cqs, nqs, d2_));
-    } else if (tr && ndt) {
-      for (size_t i = 0; i < ups.size(); ++i)
-        opt.AddResidualBlock(
-            NDTCostTR::Create(ups[i], cps[i], uqs[i], cqs[i], d2_));
-    } else if (tr && nndt) {
-      for (size_t i = 0; i < ups.size(); ++i)
-        opt.AddResidualBlock(NNDTCostTR::Create(ups[i], cps[i], nps[i], uqs[i],
-                                                cqs[i], nqs[i], d2_));
     }
     timer_.ProcedureFinish();
 
@@ -149,8 +134,10 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
     timer_.ProcedureFinish();
 
     ++iteration_;
+    std::cout << iteration_ << std::endl;
     converge = opt.CheckConverge(tfs) || iteration_ == 100;
-    cur_tf = opt.cur_tf();
+    std::cout << std::endl;
+    cur_tf = opt.cur_tf3();
     tfs.push_back(cur_tf);
   }
   tfs_.insert(tfs_.end(), tfs.begin(), tfs.end());

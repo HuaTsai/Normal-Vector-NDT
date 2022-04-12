@@ -34,7 +34,7 @@ set(ALL_SRCS
   src/nmap.cc
   src/nmap2d.cc
   src/matcher.cc
-  # src/matcher2d.cc
+  src/matcher2d.cc
   src/opt.cc
   src/orj.cc
   src/timer.cc

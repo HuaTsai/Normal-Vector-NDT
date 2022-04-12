@@ -11,11 +11,6 @@ using namespace std;
 using namespace Eigen;
 using PointCloudType = pcl::PointCloud<pcl::PointXYZ>;
 
-constexpr auto kCell = MarkerOptions::kCell;
-constexpr auto kGreen = MarkerOptions::kGreen;
-constexpr auto kRed = MarkerOptions::kRed;
-constexpr auto kCov = MarkerOptions::kCov;
-
 visualization_msgs::Marker MText(std::string text,
                                  const Eigen::Vector3d &position) {
   visualization_msgs::Marker ret;
@@ -67,12 +62,12 @@ int main(int argc, char **argv) {
   pub1.publish(*source_pcl);
   pub2.publish(*target_pcl);
 
-  auto m1 = NDTMatcher::GetBasic({kLS, kNDT, k1to1}, 0.5);
+  auto m1 = NDTMatcher::GetBasic({kNDT, k1to1}, 0.5);
   m1.SetSource(src);
   m1.SetTarget(tgt);
   m1.Align();
 
-  auto m2 = NDTMatcher::GetBasic({kLS, kNNDT, k1to1}, 0.5);
+  auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1}, 0.5);
   m2.SetSource(src);
   m2.SetTarget(tgt);
   m2.Align();

@@ -76,9 +76,7 @@ class NNDTCost {
       Eigen::Matrix<T, 3, 3> cq = cqs_[i].cast<T>();
       Eigen::Matrix<T, 3, 1> nq = nqs_[i].cast<T>();
       Eigen::Matrix<T, 3, 1> m1 = up - uq;
-      // XXX: Which one?
       Eigen::Matrix<T, 3, 1> m2 = (np + nq).normalized();
-      // Eigen::Matrix<T, 3, 1> m2 = np + nq;
       Eigen::Matrix<T, 3, 3> c = cp + cq;
       e[0] += -ceres::exp(-d2_ * m1.dot(m2) * m1.dot(m2) / m2.dot(c * m2));
     }
@@ -107,105 +105,6 @@ class NNDTCost {
   const double d2_;
 };
 
-class NDTCostTR {
- public:
-  NDTCostTR(const Eigen::Vector3d &up,
-            const Eigen::Matrix3d &cp,
-            const Eigen::Vector3d &uq,
-            const Eigen::Matrix3d &cq,
-            double d2)
-      : up_(up), cp_(cp), uq_(uq), cq_(cq), d2_(d2) {}
-  template <typename T>
-  bool operator()(const T *const tlrot, T *e) const {
-    Eigen::Map<const Eigen::Matrix<T, 3, 1>> t(tlrot);
-    Eigen::Map<const Eigen::Quaternion<T>> q(tlrot + 3);
-    Eigen::Matrix<T, 3, 1> up = q * up_.cast<T>() + t;
-    Eigen::Matrix<T, 3, 3> cp = q * cp_.cast<T>() * q.conjugate();
-    Eigen::Matrix<T, 3, 1> uq = uq_.cast<T>();
-    Eigen::Matrix<T, 3, 3> cq = cq_.cast<T>();
-    Eigen::Matrix<T, 3, 1> m = up - uq;
-    Eigen::Matrix<T, 3, 3> c = cp + cq;
-    e[0] = T(1) - ceres::exp(-d2_ * m.dot(c.inverse() * m));
-    return true;
-  }
-
-  static ceres::CostFunction *Create(const Eigen::Vector3d &up,
-                                     const Eigen::Matrix3d &cp,
-                                     const Eigen::Vector3d &uq,
-                                     const Eigen::Matrix3d &cq,
-                                     double d2) {
-    return new ceres::AutoDiffCostFunction<NDTCostTR, 1, 7>(
-        new NDTCostTR(up, cp, uq, cq, d2));
-  }
-
- private:
-  const Eigen::Vector3d up_;
-  const Eigen::Matrix3d cp_;
-  const Eigen::Vector3d uq_;
-  const Eigen::Matrix3d cq_;
-  const double d2_;
-};
-
-class NNDTCostTR {
- public:
-  NNDTCostTR(const Eigen::Vector3d &up,
-             const Eigen::Matrix3d &cp,
-             const Eigen::Vector3d &np,
-             const Eigen::Vector3d &uq,
-             const Eigen::Matrix3d &cq,
-             const Eigen::Vector3d &nq,
-             double d2)
-      : up_(up), cp_(cp), np_(np), uq_(uq), cq_(cq), nq_(nq), d2_(d2) {}
-
-  template <typename T>
-  bool operator()(const T *const tlrot, T *e) const {
-    Eigen::Map<const Eigen::Matrix<T, 3, 1>> t(tlrot);
-    Eigen::Map<const Eigen::Quaternion<T>> q(tlrot + 3);
-    Eigen::Matrix<T, 3, 1> up = q * up_.cast<T>() + t;
-    Eigen::Matrix<T, 3, 1> unp = q * np_.cast<T>();
-    Eigen::Matrix<T, 3, 3> cp = q * cp_.cast<T>() * q.conjugate();
-    Eigen::Matrix<T, 3, 1> uq = uq_.cast<T>();
-    Eigen::Matrix<T, 3, 1> unq = nq_.cast<T>();
-    Eigen::Matrix<T, 3, 3> cq = cq_.cast<T>();
-    Eigen::Matrix<T, 3, 1> m1 = up - uq;
-    Eigen::Matrix<T, 3, 1> m2 = (unp + unq).normalized();
-    Eigen::Matrix<T, 3, 3> c1 = cp + cq;
-    e[0] = T(1) - ceres::exp(-d2_ * m1.dot(m2) * m1.dot(m2) / m2.dot(c1 * m2));
-    return true;
-  }
-
-  static ceres::CostFunction *Create(const Eigen::Vector3d &up,
-                                     const Eigen::Matrix3d &cp,
-                                     const Eigen::Vector3d &np,
-                                     const Eigen::Vector3d &uq,
-                                     const Eigen::Matrix3d &cq,
-                                     const Eigen::Vector3d &nq,
-                                     double d2) {
-    return new ceres::AutoDiffCostFunction<NNDTCostTR, 1, 7>(
-        new NNDTCostTR(up, cp, np, uq, cq, nq, d2));
-  }
-
- private:
-  const Eigen::Vector3d up_;
-  const Eigen::Matrix3d cp_;
-  const Eigen::Vector3d np_;
-  const Eigen::Vector3d uq_;
-  const Eigen::Matrix3d cq_;
-  const Eigen::Vector3d nq_;
-
-  const double d2_;
-};
-
-/**************** 2D Costs ****************/
-template <typename T>
-Eigen::Matrix<T, 2, 2> Rot2D(T yaw) {
-  T cos_yaw = ceres::cos(yaw);
-  T sin_yaw = ceres::sin(yaw);
-  Eigen::Matrix<T, 2, 2> ret;
-  ret << cos_yaw, -sin_yaw, sin_yaw, cos_yaw;
-  return ret;
-}
-
 class NDTCost2D {
  public:
   NDTCost2D(const std::vector<Eigen::Vector2d> &ups,
@@ -217,11 +116,11 @@ class NDTCost2D {
   template <typename T>
   bool operator()(const T *const xyt, T *e) const {
     e[0] = T(0);
-    Eigen::Matrix<T, 2, 2> R = Rot2D(xyt[2]);
+    Eigen::Rotation2D<T> R(xyt[2]);
     Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
     for (size_t i = 0; i < ups_.size(); ++i) {
       Eigen::Matrix<T, 2, 1> up = R * ups_[i].cast<T>() + t;
-      Eigen::Matrix<T, 2, 2> cp = R * cps_[i].cast<T>() * R.transpose();
+      Eigen::Matrix<T, 2, 2> cp = R * cps_[i].cast<T>() * R.inverse();
       Eigen::Matrix<T, 2, 1> uq = uqs_[i].cast<T>();
       Eigen::Matrix<T, 2, 2> cq = cqs_[i].cast<T>();
       Eigen::Matrix<T, 2, 1> m = up - uq;
@@ -268,11 +167,11 @@ class NNDTCost2D {
   template <typename T>
   bool operator()(const T *const xyt, T *e) const {
     e[0] = T(0);
-    Eigen::Matrix<T, 2, 2> R = Rot2D(xyt[2]);
+    Eigen::Rotation2D<T> R(xyt[2]);
     Eigen::Matrix<T, 2, 1> t(xyt[0], xyt[1]);
     for (size_t i = 0; i < ups_.size(); ++i) {
       Eigen::Matrix<T, 2, 1> up = R * ups_[i].cast<T>() + t;
-      Eigen::Matrix<T, 2, 2> cp = R * cps_[i].cast<T>() * R.conjugate();
+      Eigen::Matrix<T, 2, 2> cp = R * cps_[i].cast<T>() * R.inverse();
       Eigen::Matrix<T, 2, 1> np = R * nps_[i].cast<T>();
       Eigen::Matrix<T, 2, 1> uq = uqs_[i].cast<T>();
       Eigen::Matrix<T, 2, 2> cq = cqs_[i].cast<T>();

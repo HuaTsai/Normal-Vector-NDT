@@ -34,7 +34,7 @@ void Cell2D::ComputeGaussian() {
   n_ = points_.size();
 
   // XXX: The decision of few points
-  if (!point_covs_.size() && points_.size() < 4) {
+  if (!point_covs_.size() && points_.size() < 3) {
     celltype_ = CellType::kFewPoints;
     return;
   }

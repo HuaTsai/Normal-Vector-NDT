@@ -12,7 +12,7 @@ class NDTMatcher {
                             double d2 = 0.05);
 
   static NDTMatcher GetBasic(std::unordered_set<Options> options,
-                             double cell_sizes,
+                             double cell_size,
                              double d2 = 0.05);
 
   bool HasOption(Options option);

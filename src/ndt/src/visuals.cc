@@ -61,16 +61,15 @@ Marker InitMarker() {
 MarkerArray MarkerOfNDT(const NMap &map,
                         const std::unordered_set<MarkerOptions> &options,
                         const Eigen::Affine3d &T) {
-  bool kred = options.count(MarkerOptions::kRed);
-  bool kgreen = options.count(MarkerOptions::kGreen);
-  bool kcell = options.count(MarkerOptions::kCell);
-  bool kcov = options.count(MarkerOptions::kCov);
+  bool red = options.count(MarkerOptions::kRed);
+  bool green = options.count(MarkerOptions::kGreen);
 
   MarkerArray ret;
-  if (kcell) {
+  if (options.count(MarkerOptions::kCell)) {
     Marker cells = InitMarker();
     cells.type = Marker::CUBE_LIST;
     cells.scale.x = cells.scale.y = cells.scale.z = map.GetCellSize();
+    cells.pose = tf2::toMsg(T);
     for (const auto &elem : map) {
       const auto &cell = elem.second;
       if (!cell.GetHasGaussian()) continue;
@@ -79,20 +78,20 @@ MarkerArray MarkerOfNDT(const NMap &map,
       c.x = cen(0), c.y = cen(1), c.z = cen(2);
       cells.points.push_back(c);
       std_msgs::ColorRGBA cl;
-      cl.a = 0.2, cl.r = kred ? 1 : 0, cl.g = kgreen ? 1 : 0;
+      cl.a = 0.2, cl.r = red ? 1 : 0, cl.g = green ? 1 : 0;
       cells.colors.push_back(cl);
     }
     ret = Join({ret}, {cells});
   }
 
-  if (kcov) {
+  if (options.count(MarkerOptions::kCov)) {
     std::vector<Marker> covs;
     for (const auto &cell : map.TransformCells(T)) {
       if (!cell.GetHasGaussian()) continue;
       Marker cov = InitMarker();
       cov.type = Marker::SPHERE;
-      cov.color.a = 0.5;
-      cov.color.r = kred ? 1 : 0, cov.color.g = kgreen ? 1 : 0;
+      cov.color.a = 0.7;
+      cov.color.r = red ? 1 : 0, cov.color.g = green ? 1 : 0;
       Eigen::Vector3d evals;
       Eigen::Matrix3d evecs;
       ComputeEvalEvec(cell.GetCov(), evals, evecs);
@@ -118,11 +117,80 @@ MarkerArray MarkerOfNDT(const std::shared_ptr<NMap> &map,
   return MarkerOfNDT(*map, options, T);
 }
 
+MarkerArray MarkerOfNDT(
+    const NMap2D &map,
+    const std::unordered_set<MarkerOptions> &options,
+    const Eigen::Affine2d &T) {
+  bool red = options.count(MarkerOptions::kRed);
+  bool green = options.count(MarkerOptions::kGreen);
+
+  MarkerArray ret;
+  if (options.count(MarkerOptions::kCell)) {
+    Marker cells = InitMarker();
+    cells.type = Marker::CUBE_LIST;
+    cells.scale.x = cells.scale.y = map.GetCellSize();
+    cells.scale.z = 0.01;
+    Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
+    R.topLeftCorner(2, 2) = T.rotation().matrix();
+    Eigen::Quaterniond q(R);
+    cells.pose.position.x = T.translation()(0);
+    cells.pose.position.y = T.translation()(1);
+    cells.pose.orientation = tf2::toMsg(q);
+    for (const auto &elem : map) {
+      const auto &cell = elem.second;
+      if (!cell.GetHasGaussian()) continue;
+      auto cen = cell.GetCenter();
+      geometry_msgs::Point c;
+      c.x = cen(0), c.y = cen(1), c.z = 0.;
+      cells.points.push_back(c);
+      std_msgs::ColorRGBA cl;
+      cl.a = 0.2, cl.r = red ? 1 : 0, cl.g = green ? 1 : 0;
+      cells.colors.push_back(cl);
+    }
+    ret = Join({ret}, {cells});
+  }
+
+  if (options.count(MarkerOptions::kCov)) {
+    std::vector<Marker> covs;
+    for (const auto &cell : map.TransformCells(T)) {
+      if (!cell.GetHasGaussian()) continue;
+      Marker cov = InitMarker();
+      cov.type = Marker::SPHERE;
+      cov.color.a = 0.7;
+      cov.color.r = red ? 1 : 0, cov.color.g = green ? 1 : 0;
+      Eigen::Vector2d evals;
+      Eigen::Matrix2d evecs;
+      ComputeEvalEvec(cell.GetCov(), evals, evecs);
+      Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
+      R.topLeftCorner(2, 2) << evecs(0, 0), -evecs(1, 0), evecs(1, 0), evecs(0, 0);
+      Eigen::Quaterniond q(R);
+      cov.scale.x = 2 * sqrt(evals(0));  // +- 1σ
+      cov.scale.y = 2 * sqrt(evals(1));  // +- 1σ
+      cov.scale.z = 0.1;
+      cov.pose.position.x = cell.GetMean()(0);
+      cov.pose.position.y = cell.GetMean()(1);
+      cov.pose.position.z = cell.GetMean()(2);
+      cov.pose.orientation = tf2::toMsg(q);
+      covs.push_back(cov);
+    }
+    ret = Join({ret}, covs);
+  }
+
+  return ret;
+}
+
+MarkerArray MarkerOfNDT(
+    const std::shared_ptr<NMap2D> &map,
+    const std::unordered_set<MarkerOptions> &options,
+    const Eigen::Affine2d &T) {
+  return MarkerOfNDT(*map, options, T);
+}
+
 MarkerArray MarkerOfCell(const Cell &cell,
                          const std::unordered_set<MarkerOptions> &options,
                          const Eigen::Affine3d &T) {
-  bool kred = options.count(MarkerOptions::kRed);
-  bool kgreen = options.count(MarkerOptions::kGreen);
+  bool red = options.count(MarkerOptions::kRed);
+  bool green = options.count(MarkerOptions::kGreen);
 
   if (!cell.GetHasGaussian()) return MarkerArray();
 
@@ -132,12 +200,12 @@ MarkerArray MarkerOfCell(const Cell &cell,
   bd.pose.position.x = cell.GetCenter()(0);
   bd.pose.position.y = cell.GetCenter()(1);
   bd.pose.position.z = cell.GetCenter()(2);
-  bd.color.a = 0.2, bd.color.r = kred ? 1 : 0, bd.color.g = kgreen ? 1 : 0;
+  bd.color.a = 0.2, bd.color.r = red ? 1 : 0, bd.color.g = green ? 1 : 0;
 
   Marker cov = InitMarker();
   cov.type = Marker::SPHERE;
   cov.color.a = 0.5;
-  cov.color.r = kred ? 1 : 0, cov.color.g = kgreen ? 1 : 0;
+  cov.color.r = red ? 1 : 0, cov.color.g = green ? 1 : 0;
   Eigen::Vector3d evals;
   Eigen::Matrix3d evecs;
   ComputeEvalEvec(cell.GetCov(), evals, evecs);
@@ -157,7 +225,7 @@ Marker MarkerOfPoints(const std::vector<Eigen::Vector3d> &points, bool red) {
   Marker ret = InitMarker();
   ret.header.stamp = GetROSTime();
   ret.type = Marker::SPHERE_LIST;
-  ret.scale.x = ret.scale.y = ret.scale.z = 0.1;
+  ret.scale.x = ret.scale.y = ret.scale.z = 0.2;
   ret.color.a = 1, ret.color.r = red ? 1 : 0, ret.color.g = red ? 0 : 1;
   for (const auto &point : points) {
     geometry_msgs::Point pt;

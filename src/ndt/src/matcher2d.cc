@@ -3,29 +3,33 @@
 #include <ndt/opt.h>
 #include <ndt/orj.h>
 
-NDTMatcher2D::NDTMatcher2D(std::unordered_set<Options> options,
-                           double cell_size,
-                           double d2)
-    : options_(options),
-      cell_size_(cell_size),
-      d2_(d2),
-      intrinsic_(0.005),
-      iteration_(0),
-      corres_(0) {
-  if ((HasOption(Options::kNDT) && HasOption(Options::kNormalNDT)) ||
-      (HasOption(Options::k1to1) && HasOption(Options::k1ton))) {
+NDTMatcher2D NDTMatcher2D::GetIter(std::unordered_set<Options> options,
+                                   std::vector<double> cell_sizes,
+                                   double d2) {
+  options.insert(Options::kIterative);
+  return NDTMatcher2D(options, cell_sizes, 0, d2, 0.005);
+}
+
+NDTMatcher2D NDTMatcher2D::GetBasic(std::unordered_set<Options> options,
+                                    double cell_size,
+                                    double d2) {
+  if (options.count(Options::kIterative)) {
     std::cerr << __FUNCTION__ << ": invalid options\n";
     std::exit(1);
   }
+  return NDTMatcher2D(options, {}, cell_size, d2, 0.005);
 }
 
 NDTMatcher2D::NDTMatcher2D(std::unordered_set<Options> options,
                            std::vector<double> cell_sizes,
-                           double d2)
+                           double cell_size,
+                           double d2,
+                           double intrinsic)
     : options_(options),
       cell_sizes_(cell_sizes),
+      cell_size_(cell_size),
       d2_(d2),
-      intrinsic_(0.005),
+      intrinsic_(intrinsic),
       iteration_(0),
       corres_(0) {
   if ((HasOption(Options::kNDT) && HasOption(Options::kNormalNDT)) ||
@@ -49,7 +53,7 @@ Eigen::Affine2d NDTMatcher2D::AlignImpl(const Eigen::Affine2d &guess) {
   // the value here may be crucial!
   Eigen::Matrix2d pcov = Eigen::Matrix2d::Identity() * intrinsic_;
   timer_.ProcedureStart(timer_.kNDT);
-  tmap_ = std::make_shared<NMap>(cell_size_);
+  tmap_ = std::make_shared<NMap2D>(cell_size_);
   if (HasOption(Options::kPointCov))
     tmap_->LoadPointsWithCovariances(tpts_, pcov);
   else
@@ -57,7 +61,7 @@ Eigen::Affine2d NDTMatcher2D::AlignImpl(const Eigen::Affine2d &guess) {
   timer_.ProcedureFinish();
 
   timer_.ProcedureStart(timer_.kNDT);
-  smap_ = std::make_shared<NMap>(cell_size_);
+  smap_ = std::make_shared<NMap2D>(cell_size_);
   if (HasOption(Options::kPointCov))
     smap_->LoadPointsWithCovariances(spts_, pcov);
   else
@@ -70,10 +74,6 @@ Eigen::Affine2d NDTMatcher2D::AlignImpl(const Eigen::Affine2d &guess) {
   std::vector<Eigen::Affine2d> tfs;
   tfs.push_back(cur_tf);
 
-  bool ndt = HasOption(Options::kNDT);
-  bool nndt = HasOption(Options::kNormalNDT);
-  bool to1 = HasOption(Options::k1to1);
-  bool ton = HasOption(Options::k1ton);
   while (!converge) {
     timer_.ProcedureStart(timer_.kBuild);
     auto next = smap_->TransformCells(cur_tf);
@@ -82,7 +82,7 @@ Eigen::Affine2d NDTMatcher2D::AlignImpl(const Eigen::Affine2d &guess) {
     std::vector<Eigen::Vector2d> nps, nqs;
     for (const auto &cellp : next) {
       if (!cellp.GetHasGaussian()) continue;
-      if (to1) {
+      if (HasOption(Options::k1to1)) {
         auto cellq = tmap_->SearchNearestCell(cellp.GetMean());
         if (!cellq.GetHasGaussian()) continue;
         Eigen::Vector2d np = cellp.GetNormal();
@@ -94,10 +94,10 @@ Eigen::Affine2d NDTMatcher2D::AlignImpl(const Eigen::Affine2d &guess) {
         cps.push_back(cellp.GetCov());
         uqs.push_back(cellq.GetMean());
         cqs.push_back(cellq.GetCov());
-      } else if (ton) {
+      } else if (HasOption(Options::k1ton)) {
         auto cellqs = tmap_->SearchCellsInRadius(cellp.GetMean(), cell_size_);
         for (auto c : cellqs) {
-          const Cell &cellq = c.get();
+          const Cell2D &cellq = c.get();
           if (!cellq.GetHasGaussian()) continue;
           Eigen::Vector2d np = cellp.GetNormal();
           Eigen::Vector2d nq = cellq.GetNormal();
@@ -113,19 +113,19 @@ Eigen::Affine2d NDTMatcher2D::AlignImpl(const Eigen::Affine2d &guess) {
     }
 
     if (!HasOption(Options::kNoReject)) {
-      Orj orj(ups.size());
-      orj.RangeRejection(ups, uqs, Orj::Rejection::kBoth, {cell_size_});
-      orj.AngleRejection(nps, nqs, Orj::Rejection::kThreshold, {1});
+      Orj2D orj(ups.size());
+      orj.RangeRejection(ups, uqs, Rejection::kBoth, {cell_size_});
+      orj.AngleRejection(nps, nqs, Rejection::kThreshold, {1});
       orj.RetainIndices(ups, uqs, cps, cqs, nps, nqs);
     }
 
-    Optimizer opt(ls ? Options::kLineSearch : Options::kTrustRegion);
-    opt.set_cur_tf(cur_tf);
+    Optimizer opt(Options::kOptimizer2D);
+    opt.set_cur_tf2(cur_tf);
     corres_ = ups.size();
-    if (&ndt)
-      opt.BuildProblem(NDTCost::Create(ups, cps, uqs, cqs, d2_));
-    else if (nndt)
-      opt.BuildProblem(NNDTCost::Create(ups, cps, nps, uqs, cqs, nqs, d2_));
+    if (HasOption(Options::kNDT))
+      opt.BuildProblem(NDTCost2D::Create(ups, cps, uqs, cqs, d2_));
+    else if (HasOption(Options::kNormalNDT))
+      opt.BuildProblem(NNDTCost2D::Create(ups, cps, nps, uqs, cqs, nqs, d2_));
     timer_.ProcedureFinish();
 
     timer_.ProcedureStart(timer_.kOptimize);
@@ -134,7 +134,7 @@ Eigen::Affine2d NDTMatcher2D::AlignImpl(const Eigen::Affine2d &guess) {
 
     ++iteration_;
     converge = opt.CheckConverge(tfs) || iteration_ == 100;
-    cur_tf = opt.cur_tf();
+    cur_tf = opt.cur_tf2();
     tfs.push_back(cur_tf);
   }
   tfs_.insert(tfs_.end(), tfs.begin(), tfs.end());

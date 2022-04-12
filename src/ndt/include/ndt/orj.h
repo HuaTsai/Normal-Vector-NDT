@@ -43,7 +43,6 @@ class Orj {
 
 class Orj2D {
  public:
-  enum class Rejection { kThreshold, kStatistic, kBoth };
   Orj2D() = delete;
 
   explicit Orj2D(int n) {
