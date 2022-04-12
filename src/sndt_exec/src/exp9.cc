@@ -141,14 +141,14 @@ int main(int argc, char **argv) {
   Affine2d offset = Translation2d(x, y) * Rotation2Dd(Deg2Rad(t));
   auto source = TransformPoints(target, offset);
 
-  auto m1 = NDTMatcher2D::GetBasic({kNDT, k1to1, kNoReject, kPointCov},
-                                   0.5, 0.05);
+  auto m1 =
+      NDTMatcher2D::GetBasic({kNDT, k1to1, kNoReject, kPointCov}, 0.5, 0.05);
   m1.SetSource(source);
   m1.SetTarget(target);
   Match(m1, offset);
 
-  auto m2 = NDTMatcher2D::GetBasic({kNNDT, k1to1, kNoReject, kPointCov},
-                                   0.5, 0.05);
+  auto m2 =
+      NDTMatcher2D::GetBasic({kNNDT, k1to1, kNoReject, kPointCov}, 0.5, 0.05);
   m2.SetSource(source);
   m2.SetTarget(target);
   Match(m2, offset);

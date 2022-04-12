@@ -1,8 +1,7 @@
 #pragma once
 #include <ceres/ceres.h>
-#include <ndt/options.h>
-// FIXME
 #include <ndt/costs.h>
+#include <ndt/options.h>
 
 class Optimizer {
  public:

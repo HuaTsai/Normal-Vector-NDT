@@ -52,9 +52,7 @@ void Optimizer::BuildProblem(ceres::FirstOrderFunction *func) {
   problem_ = new ceres::GradientProblem(func, param_);
 }
 
-void Optimizer::BuildProblem(CostObj *func) {
-  costobj_ = func;
-}
+void Optimizer::BuildProblem(CostObj *func) { costobj_ = func; }
 
 void Optimizer::Optimize() {
   ceres::GradientProblemSolver::Options options;

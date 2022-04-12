@@ -120,8 +120,7 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
     }
 
     Options type = Options::kOptimizer3D;
-    if (HasOption(Options::kLBFGSPP))
-      type = Options::kLBFGSPP;
+    if (HasOption(Options::kLBFGSPP)) type = Options::kLBFGSPP;
     Optimizer opt(type);
     opt.set_cur_tf3(cur_tf);
     corres_ = ups.size();

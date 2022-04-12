@@ -209,10 +209,10 @@ class NNDTCost2D {
 class CostObj {
  public:
   CostObj(const std::vector<Eigen::Vector3d> &ups,
-              const std::vector<Eigen::Matrix3d> &cps,
-              const std::vector<Eigen::Vector3d> &uqs,
-              const std::vector<Eigen::Matrix3d> &cqs,
-              double d2)
+          const std::vector<Eigen::Matrix3d> &cps,
+          const std::vector<Eigen::Vector3d> &uqs,
+          const std::vector<Eigen::Matrix3d> &cqs,
+          double d2)
       : ups_(ups), cps_(cps), uqs_(uqs), cqs_(cqs), d2_(d2) {}
 
   double operator()(const Eigen::VectorXd &x, Eigen::VectorXd &grad) {

@@ -117,10 +117,9 @@ MarkerArray MarkerOfNDT(const std::shared_ptr<NMap> &map,
   return MarkerOfNDT(*map, options, T);
 }
 
-MarkerArray MarkerOfNDT(
-    const NMap2D &map,
-    const std::unordered_set<MarkerOptions> &options,
-    const Eigen::Affine2d &T) {
+MarkerArray MarkerOfNDT(const NMap2D &map,
+                        const std::unordered_set<MarkerOptions> &options,
+                        const Eigen::Affine2d &T) {
   bool red = options.count(MarkerOptions::kRed);
   bool green = options.count(MarkerOptions::kGreen);
 
@@ -162,7 +161,8 @@ MarkerArray MarkerOfNDT(
       Eigen::Matrix2d evecs;
       ComputeEvalEvec(cell.GetCov(), evals, evecs);
       Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
-      R.topLeftCorner(2, 2) << evecs(0, 0), -evecs(1, 0), evecs(1, 0), evecs(0, 0);
+      R.topLeftCorner(2, 2) << evecs(0, 0), -evecs(1, 0), evecs(1, 0),
+          evecs(0, 0);
       Eigen::Quaterniond q(R);
       cov.scale.x = 2 * sqrt(evals(0));  // +- 1σ
       cov.scale.y = 2 * sqrt(evals(1));  // +- 1σ
@@ -179,10 +179,9 @@ MarkerArray MarkerOfNDT(
   return ret;
 }
 
-MarkerArray MarkerOfNDT(
-    const std::shared_ptr<NMap2D> &map,
-    const std::unordered_set<MarkerOptions> &options,
-    const Eigen::Affine2d &T) {
+MarkerArray MarkerOfNDT(const std::shared_ptr<NMap2D> &map,
+                        const std::unordered_set<MarkerOptions> &options,
+                        const Eigen::Affine2d &T) {
   return MarkerOfNDT(*map, options, T);
 }
 
