@@ -23,6 +23,7 @@ Optimizer::Optimizer(Options type)
     : type_(type),
       problem_(nullptr),
       param_(nullptr),
+      costobj_(nullptr),
       cur_tf3_(Eigen::Affine3d::Identity()),
       cur_tf2_(Eigen::Affine2d::Identity()),
       threshold_(0.001),
@@ -79,7 +80,6 @@ void Optimizer::Optimize() {
     dtf.linear() = Eigen::Map<Eigen::Quaterniond>(xyzxyzw_ + 3).matrix();
     cur_tf3_ = dtf * cur_tf3_;
     tlang_ = TransNormRotDegAbsFromAffine3d(dtf);
-    std::cerr << tlang_.transpose() << std::endl;
   } else if (type_ == Options::kAnalytic) {
     ceres::Solve(options, *problem_, xyzrpy_, &summary);
     Eigen::Affine3d dtf = Eigen::Translation3d(xyzrpy_[0], xyzrpy_[1], xyzrpy_[2]) *
@@ -110,13 +110,11 @@ void Optimizer::Optimize() {
 }
 
 bool Optimizer::CheckConverge(const std::vector<Eigen::Affine3d> &tfs) {
-  std::cerr << "Checking" << std::endl;
   if (tlang_(0) < threshold_ && tlang_(1) < threshold_ang_) return true;
   for (auto tf : tfs) {
     auto dtf = TransNormRotDegAbsFromAffine3d(tf.inverse() * cur_tf3_);
     if (dtf(0) < threshold_ && dtf(1) < threshold_ang_) return true;
   }
-  std::cerr << "Not Converge" << std::endl;
   return false;
 }
 

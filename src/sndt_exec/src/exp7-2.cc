@@ -102,8 +102,7 @@ int main(int argc, char **argv) {
        << endl;
 
   cout << "NDT" << endl;
-  // auto op1 = {kNDT, k1to1, kPointCov, kLBFGSPP};
-  auto op1 = {kNDT, k1to1, kPointCov};
+  auto op1 = {kNDT, k1to1, kPointCov, kAnalytic};
   auto m1 = NDTMatcher::GetBasic(op1, 0.5, ndtd2);
   m1.set_intrinsic(0.005);
   m1.SetSource(src);

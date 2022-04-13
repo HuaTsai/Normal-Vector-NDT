@@ -75,7 +75,6 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
   tfs.push_back(cur_tf);
 
   while (!converge) {
-    std::cerr << iteration_ << std::endl;
     timer_.ProcedureStart(timer_.kBuild);
     auto next = smap_->TransformCells(cur_tf);
     std::vector<Eigen::Vector3d> ups, uqs;
@@ -150,11 +149,8 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
 
     ++iteration_;
     converge = opt.CheckConverge(tfs) || iteration_ == 100;
-    std::cerr << "Converge: " << converge << std::endl;
     cur_tf = opt.cur_tf3();
-    std::cerr << "Curtf: " << cur_tf.matrix() << std::endl;
     tfs.push_back(cur_tf);
-    std::cerr << "Push back" << std::endl;
   }
   tfs_.insert(tfs_.end(), tfs.begin(), tfs.end());
   return cur_tf;
