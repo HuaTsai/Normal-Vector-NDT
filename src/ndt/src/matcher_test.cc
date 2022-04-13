@@ -148,6 +148,16 @@ TEST_F(BunnyTest, MyNDTAnalytic) {
   MatchAndTest(m2, guess);
 }
 
+TEST_F(BunnyTest, MyNNDTAnalytic) {
+  auto m = NDTMatcher::GetBasic({kNNDT, k1to1, kAnalytic}, 1);
+  MatchAndTest(m);
+
+  auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1, kAnalytic}, 1);
+  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
+                   AngleAxisd(0.6931, Vector3d::UnitZ());
+  MatchAndTest(m2, guess);
+}
+
 TEST_F(BunnyTest, MyNDTIterative) {
   auto m = NDTMatcher::GetIter({kNDT, k1to1}, {0.5, 1, 2});
   MatchAndTest(m);

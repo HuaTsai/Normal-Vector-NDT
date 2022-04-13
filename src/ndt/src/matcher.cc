@@ -138,6 +138,8 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
     } else if (HasOption(Options::kNormalNDT)) {
       if (HasOption(Options::kLBFGSPP))
         opt.BuildProblem(new NNDTCostObj(ups, cps, nps, uqs, cqs, nqs, d2_));
+      else if (HasOption(Options::kAnalytic))
+        opt.BuildProblem(new NNDTCostN(ups, cps, nps, uqs, cqs, nqs, d2_));
       else
         opt.BuildProblem(NNDTCost::Create(ups, cps, nps, uqs, cqs, nqs, d2_));
     }

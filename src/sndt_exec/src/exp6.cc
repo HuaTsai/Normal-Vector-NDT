@@ -130,9 +130,8 @@ int main(int argc, char **argv) {
     bent.push_back(TransNormRotDegAbsFromAffine3d(ben)(0));
     benr.push_back(TransNormRotDegAbsFromAffine3d(ben)(1));
 
-    auto op1 = {kNDT, k1to1, kPointCov, kLBFGSPP};
+    auto op1 = {kNDT, k1to1, kPointCov, kAnalytic};
     auto m1 = NDTMatcher::GetBasic(op1, 0.5, ndtd2);
-    // auto m1 = NDTMatcher::GetIter(op1, {0.5, 1}, nndtd2);
     m1.set_intrinsic(0.005);
     m1.SetSource(src);
     m1.SetTarget(tgt);
@@ -147,9 +146,8 @@ int main(int argc, char **argv) {
     r1.Tr = r1.Tr * res1;
     r1.path.poses.push_back(MakePoseStampedMsg(tj, r1.Tr));
 
-    auto op2 = {kNNDT, k1to1, kPointCov, kLBFGSPP};
+    auto op2 = {kNNDT, k1to1, kPointCov, kAnalytic};
     auto m2 = NDTMatcher::GetBasic(op2, 0.5, nndtd2);
-    // auto m2 = NDTMatcher::GetIter(op2, {0.5, 1}, nndtd2);
     m2.set_intrinsic(0.005);
     m2.SetSource(src);
     m2.SetTarget(tgt);
