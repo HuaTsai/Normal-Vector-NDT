@@ -82,23 +82,23 @@ TEST_F(BunnyTest, PCLICP) {
   PCLMatchAndTest(m, guess);
 }
 
-TEST_F(BunnyTest, PCLNDT) {
-  pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>::Ptr m(
-      new pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>);
-  m->setResolution(1);
-  m->setTransformationEpsilon(0.01);
-  PCLMatchAndTest(m);
+// TEST_F(BunnyTest, PCLNDT) {
+//   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>::Ptr m(
+//       new pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>);
+//   m->setResolution(1);
+//   m->setTransformationEpsilon(0.01);
+//   PCLMatchAndTest(m);
 
-  pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>::Ptr m2(
-      new pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>);
-  m2->setResolution(1);
-  m2->setTransformationEpsilon(0.01);
-  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
-                   AngleAxisd(0.6931, Vector3d::UnitZ());
-  PCLMatchAndTest(m2, guess);
-}
+//   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>::Ptr m2(
+//       new pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>);
+//   m2->setResolution(1);
+//   m2->setTransformationEpsilon(0.01);
+//   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
+//                    AngleAxisd(0.6931, Vector3d::UnitZ());
+//   PCLMatchAndTest(m2, guess);
+// }
 
-TEST_F(BunnyTest, MyNDTLS) {
+TEST_F(BunnyTest, MyNDT) {
   auto m = NDTMatcher::GetBasic({kNDT, k1to1}, 1);
   MatchAndTest(m);
 
@@ -108,7 +108,17 @@ TEST_F(BunnyTest, MyNDTLS) {
   MatchAndTest(m2, guess);
 }
 
-TEST_F(BunnyTest, MyNDTLSLBFGSPP) {
+TEST_F(BunnyTest, MyNNDT) {
+  auto m = NDTMatcher::GetBasic({kNNDT, k1to1}, 1);
+  MatchAndTest(m);
+
+  auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1}, 1);
+  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
+                   AngleAxisd(0.6931, Vector3d::UnitZ());
+  MatchAndTest(m2, guess);
+}
+
+TEST_F(BunnyTest, MyNDTLBFGSPP) {
   auto m = NDTMatcher::GetBasic({kNDT, k1to1, kLBFGSPP}, 1);
   MatchAndTest(m);
 
@@ -118,15 +128,25 @@ TEST_F(BunnyTest, MyNDTLSLBFGSPP) {
   MatchAndTest(m2, guess);
 }
 
-TEST_F(BunnyTest, MyNNDTLS) {
-  auto m = NDTMatcher::GetBasic({kNNDT, k1to1}, 1);
+TEST_F(BunnyTest, MyNNDTLBFGSPP) {
+  auto m = NDTMatcher::GetBasic({kNNDT, k1to1, kLBFGSPP}, 1);
   MatchAndTest(m);
 
-  auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1}, 1);
+  auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1, kLBFGSPP}, 1);
   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
                    AngleAxisd(0.6931, Vector3d::UnitZ());
   MatchAndTest(m2, guess);
 }
+
+// TEST_F(BunnyTest, MyNDTAnalytic) {
+//   auto m = NDTMatcher::GetBasic({kNDT, k1to1, kAnalytic}, 1);
+//   MatchAndTest(m);
+
+//   auto m2 = NDTMatcher::GetBasic({kNDT, k1to1, kAnalytic}, 1);
+//   Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
+//                    AngleAxisd(0.6931, Vector3d::UnitZ());
+//   MatchAndTest(m2, guess);
+// }
 
 TEST_F(BunnyTest, MyNDTIterative) {
   auto m = NDTMatcher::GetIter({kNDT, k1to1}, {0.5, 1, 2});

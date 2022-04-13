@@ -10,7 +10,8 @@ enum class Options {
   kNoReject,
   kOptimizer2D,
   kOptimizer3D,
-  kLBFGSPP
+  kLBFGSPP,
+  kAnalytic
 };
 
 constexpr Options kNDT = Options::kNDT;
@@ -23,3 +24,4 @@ constexpr Options kNoReject = Options::kNoReject;
 constexpr Options kOptimizer2D = Options::kOptimizer2D;
 constexpr Options kOptimizer3D = Options::kOptimizer3D;
 constexpr Options kLBFGSPP = Options::kLBFGSPP;
+constexpr Options kAnalytic = Options::kAnalytic;

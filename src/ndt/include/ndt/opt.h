@@ -29,6 +29,7 @@ class Optimizer {
 
  private:
   Options type_;
+  double xyzrpy_[6];
   double xyzxyzw_[7];
   double xyt_[3];
   ceres::GradientProblem *problem_;

@@ -75,6 +75,7 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
   tfs.push_back(cur_tf);
 
   while (!converge) {
+    std::cerr << iteration_ << std::endl;
     timer_.ProcedureStart(timer_.kBuild);
     auto next = smap_->TransformCells(cur_tf);
     std::vector<Eigen::Vector3d> ups, uqs;
@@ -120,17 +121,26 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
     }
 
     Options type = Options::kOptimizer3D;
-    if (HasOption(Options::kLBFGSPP)) type = Options::kLBFGSPP;
+    if (HasOption(Options::kLBFGSPP))
+      type = Options::kLBFGSPP;
+    else if (HasOption(Options::kAnalytic))
+      type = Options::kAnalytic;
+
     Optimizer opt(type);
     opt.set_cur_tf3(cur_tf);
     corres_ = ups.size();
     if (HasOption(Options::kNDT)) {
       if (HasOption(Options::kLBFGSPP))
-        opt.BuildProblem(new CostObj(ups, cps, uqs, cqs, d2_));
+        opt.BuildProblem(new NDTCostObj(ups, cps, uqs, cqs, d2_));
+      else if (HasOption(Options::kAnalytic))
+        opt.BuildProblem(new NDTCostN(ups, cps, uqs, cqs, d2_));
       else
         opt.BuildProblem(NDTCost::Create(ups, cps, uqs, cqs, d2_));
     } else if (HasOption(Options::kNormalNDT)) {
-      opt.BuildProblem(NNDTCost::Create(ups, cps, nps, uqs, cqs, nqs, d2_));
+      if (HasOption(Options::kLBFGSPP))
+        opt.BuildProblem(new NNDTCostObj(ups, cps, nps, uqs, cqs, nqs, d2_));
+      else
+        opt.BuildProblem(NNDTCost::Create(ups, cps, nps, uqs, cqs, nqs, d2_));
     }
     timer_.ProcedureFinish();
 
@@ -140,8 +150,11 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
 
     ++iteration_;
     converge = opt.CheckConverge(tfs) || iteration_ == 100;
+    std::cerr << "Converge: " << converge << std::endl;
     cur_tf = opt.cur_tf3();
+    std::cerr << "Curtf: " << cur_tf.matrix() << std::endl;
     tfs.push_back(cur_tf);
+    std::cerr << "Push back" << std::endl;
   }
   tfs_.insert(tfs_.end(), tfs.begin(), tfs.end());
   return cur_tf;

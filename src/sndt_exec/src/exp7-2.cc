@@ -101,6 +101,8 @@ int main(int argc, char **argv) {
   cout << "Bench Mark: " << TransNormRotDegAbsFromAffine3d(ben).transpose()
        << endl;
 
+  cout << "NDT" << endl;
+  // auto op1 = {kNDT, k1to1, kPointCov, kLBFGSPP};
   auto op1 = {kNDT, k1to1, kPointCov};
   auto m1 = NDTMatcher::GetBasic(op1, 0.5, ndtd2);
   m1.set_intrinsic(0.005);
@@ -112,7 +114,8 @@ int main(int argc, char **argv) {
   r1.corr = m1.corres(), r1.it = m1.iteration();
   r1.timer += m1.timer();
 
-  auto op2 = {kNNDT, k1to1, kPointCov};
+  cout << "NNDT" << endl;
+  auto op2 = {kNNDT, k1to1, kPointCov, kLBFGSPP};
   auto m2 = NDTMatcher::GetBasic(op2, 0.5, nndtd2);
   m2.set_intrinsic(0.005);
   m2.SetSource(src);
