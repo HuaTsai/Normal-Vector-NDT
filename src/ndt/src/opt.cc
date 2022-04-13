@@ -82,10 +82,11 @@ void Optimizer::Optimize() {
     tlang_ = TransNormRotDegAbsFromAffine3d(dtf);
   } else if (type_ == Options::kAnalytic) {
     ceres::Solve(options, *problem_, xyzrpy_, &summary);
-    Eigen::Affine3d dtf = Eigen::Translation3d(xyzrpy_[0], xyzrpy_[1], xyzrpy_[2]) *
-                          Eigen::AngleAxisd(xyzrpy_[3], Eigen::Vector3d::UnitX()) *
-                          Eigen::AngleAxisd(xyzrpy_[4], Eigen::Vector3d::UnitY()) *
-                          Eigen::AngleAxisd(xyzrpy_[5], Eigen::Vector3d::UnitZ());
+    Eigen::Affine3d dtf =
+        Eigen::Translation3d(xyzrpy_[0], xyzrpy_[1], xyzrpy_[2]) *
+        Eigen::AngleAxisd(xyzrpy_[3], Eigen::Vector3d::UnitX()) *
+        Eigen::AngleAxisd(xyzrpy_[4], Eigen::Vector3d::UnitY()) *
+        Eigen::AngleAxisd(xyzrpy_[5], Eigen::Vector3d::UnitZ());
     cur_tf3_ = dtf * cur_tf3_;
     tlang_ = TransNormRotDegAbsFromAffine3d(dtf);
   } else if (type_ == Options::kLBFGSPP) {

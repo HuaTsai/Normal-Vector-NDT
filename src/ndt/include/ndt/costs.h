@@ -463,14 +463,12 @@ class NDTCostN final : public ceres::FirstOrderFunction {
       Eigen::Transpose<Eigen::Vector3d> upqT(upq);
       double expval = std::exp(-0.5 * d2_ * upqT * B * upq);
       f[0] -= expval;
-      // if (g) {
-        for (int a = 0; a < 6; ++a) {
-          const Eigen::Ref<Eigen::Vector3d> ja(jupq.block<3, 1>(0, a));
-          const Eigen::Ref<Eigen::Matrix3d> Za(jSpq.block<3, 3>(0, 3 * a));
-          double qa = (2 * upqT * B * ja - upqT * B * Za * B * upq)(0);
-          g[a] += 0.5 * d2_ * expval * qa;
-        }
-      // }
+      for (int a = 0; a < 6; ++a) {
+        const Eigen::Ref<Eigen::Vector3d> ja(jupq.block<3, 1>(0, a));
+        const Eigen::Ref<Eigen::Matrix3d> Za(jSpq.block<3, 3>(0, 3 * a));
+        double qa = (2 * upqT * B * ja - upqT * B * Za * B * upq)(0);
+        g[a] += 0.5 * d2_ * expval * qa;
+      }
     }
     return true;
   }
@@ -547,4 +545,4 @@ class NDTCostN final : public ceres::FirstOrderFunction {
   const double d2_;
 };
 
-// class NNDTCostN : public ceres::FirstOrderFunction {};
+class NNDTCostN final : public ceres::FirstOrderFunction {};
