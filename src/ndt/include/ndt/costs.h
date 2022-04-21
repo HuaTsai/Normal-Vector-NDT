@@ -706,7 +706,7 @@ class ICPCost final : public ceres::FirstOrderFunction {
       Eigen::Vector3d pq = R * ps_[i] + t - qs_[i];
       f[0] += pq.squaredNorm();
       Eigen::Matrix<double, 6, 1> gvec = jpq.transpose() * pq;
-      for (int i = 0; i < 6; ++i) g[i] += gvec(i);
+      for (int i = 0; i < 6; ++i) g[i] += 2 * gvec(i);
     }
     return true;
   }
