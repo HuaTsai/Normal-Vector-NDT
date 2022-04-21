@@ -186,8 +186,7 @@ MarkerArray MarkerOfNDT(const std::shared_ptr<NMap2D> &map,
 }
 
 MarkerArray MarkerOfCell(const Cell &cell,
-                         const std::unordered_set<MarkerOptions> &options,
-                         const Eigen::Affine3d &T) {
+                         const std::unordered_set<MarkerOptions> &options) {
   bool red = options.count(MarkerOptions::kRed);
   bool green = options.count(MarkerOptions::kGreen);
 

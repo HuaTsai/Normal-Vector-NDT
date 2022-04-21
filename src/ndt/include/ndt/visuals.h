@@ -25,9 +25,7 @@ visualization_msgs::MarkerArray MarkerOfNDT(
     const Eigen::Affine2d &T = Eigen::Affine2d::Identity());
 
 visualization_msgs::MarkerArray MarkerOfCell(
-    const Cell &cell,
-    const std::unordered_set<MarkerOptions> &options,
-    const Eigen::Affine2d &T = Eigen::Affine2d::Identity());
+    const Cell &cell, const std::unordered_set<MarkerOptions> &options);
 
 visualization_msgs::Marker MarkerOfPoints(
     const std::vector<Eigen::Vector3d> &points, bool red);

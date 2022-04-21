@@ -1,4 +1,4 @@
-// Bunny Visualization
+// Bunny Visualization (ICP)
 #include <common/common.h>
 #include <ndt/matcher.h>
 #include <ndt/visuals.h>
@@ -40,13 +40,14 @@ int main(int argc, char **argv) {
   vector<Vector3d> src, tgt;
   for (const auto &pt : *source_pcl) src.push_back(Vector3d(pt.x, pt.y, pt.z));
   for (const auto &pt : *target_pcl) tgt.push_back(Vector3d(pt.x, pt.y, pt.z));
+  cout << src.size() << endl;
 
   auto subtf =
       Affine3dFromXYZRPY({1, 1, 1, Deg2Rad(5), Deg2Rad(5), Deg2Rad(5)});
   pcl::transformPointCloud(*source_pcl, *source_pcl, subtf.cast<float>());
   TransformPointsInPlace(src, subtf);
 
-  ros::init(argc, argv, "exp8");
+  ros::init(argc, argv, "exp8_1");
   ros::NodeHandle nh;
   // clang-format off
   ros::Publisher pub1 = nh.advertise<sensor_msgs::PointCloud2>("rabbit1", 0, true);
@@ -62,18 +63,18 @@ int main(int argc, char **argv) {
   pub1.publish(*source_pcl);
   pub2.publish(*target_pcl);
 
-  auto m1 = NDTMatcher::GetBasic({kNDT, k1to1, kAnalytic}, 0.5);
+  auto m1 = ICPMatcher::GetBasic({});
   m1.SetSource(src);
   m1.SetTarget(tgt);
   auto res1 = m1.Align();
-  cout << "NDT: " << TransNormRotDegAbsFromAffine3d(res1 * subtf).transpose()
+  cout << "ICP: " << TransNormRotDegAbsFromAffine3d(res1 * subtf).transpose()
        << endl;
 
-  auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1, kAnalytic}, 0.5);
+  auto m2 = SICPMatcher::GetBasic({}, 1);
   m2.SetSource(src);
   m2.SetTarget(tgt);
   auto res2 = m2.Align();
-  cout << "NNDT: " << TransNormRotDegAbsFromAffine3d(res2 * subtf).transpose()
+  cout << "SICP: " << TransNormRotDegAbsFromAffine3d(res2 * subtf).transpose()
        << endl;
 
   printf("iter: %d, opt: %.2f, ttl: %.2f\n", m1.iteration(),
@@ -81,7 +82,6 @@ int main(int argc, char **argv) {
   printf("iter: %d, opt: %.2f, ttl: %.2f\n", m2.iteration(),
          m2.timer().optimize() / 1000., m2.timer().total() / 1000.);
 
-  pub5.publish(MarkerOfNDT(m1.tmap(), {kRed, kCov}));
   size_t idx;
   cout << "Index: ";
   while (cin >> idx) {
@@ -89,16 +89,14 @@ int main(int argc, char **argv) {
     if (idx < m1.tfs().size()) {
       pcl::transformPointCloud(*source_pcl, o1, m1.tfs()[idx].cast<float>());
       pub3.publish(o1);
-      pub6.publish(MarkerOfNDT(m1.smap(), {kGreen, kCov}, m1.tfs()[idx]));
-      pub8.publish(MText("NDT: " + to_string(idx), Eigen::Vector3d(4, -6, 0)));
+      pub8.publish(MText("ICP: " + to_string(idx), Eigen::Vector3d(4, -6, 0)));
     }
 
     if (idx < m2.tfs().size()) {
       pcl::transformPointCloud(*source_pcl, o2, m2.tfs()[idx].cast<float>());
       pub4.publish(o2);
-      pub7.publish(MarkerOfNDT(m2.smap(), {kGreen, kCov}, m2.tfs()[idx]));
-      pub9.publish(MText("Normal Vector + NDT: " + to_string(idx),
-                         Eigen::Vector3d(4, -6, 0)));
+      pub9.publish(
+          MText("Symmetric ICP: " + to_string(idx), Eigen::Vector3d(4, -6, 0)));
     }
     ros::spinOnce();
     cout << "Index: ";

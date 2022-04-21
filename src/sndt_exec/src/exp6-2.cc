@@ -1,14 +1,13 @@
-// PCL Results
+// 3D ICP
 #include <common/common.h>
 #include <metric/metric.h>
 #include <nav_msgs/Path.h>
 #include <ndt/matcher.h>
 #include <pcl/filters/voxel_grid.h>
-#include <pcl/registration/icp.h>
-#include <pcl/registration/ndt.h>
 #include <pcl_ros/point_cloud.h>
 #include <sndt_exec/wrapper.h>
 #include <tqdm/tqdm.h>
+
 #include <boost/program_options.hpp>
 
 using namespace std;
@@ -105,119 +104,67 @@ int main(int argc, char **argv) {
   nav_msgs::Path gt;
   SerializationInput(JoinPath(GetDataPath(d), "gt.ser"), gt);
   vector<sensor_msgs::PointCloud2> vpc;
-  SerializationInput(JoinPath(GetDataPath(d), "lidarall.ser"), vpc);
+  SerializationInput(JoinPath(GetDataPath(d), "lidar.ser"), vpc);
 
-  map<double, int, greater<>> mp1, mp2, mp3, mp4;
   auto t0 = vpc[0].header.stamp;
   GtLocal(gt, t0);
   Res r1, r2;
   r1.path = InitFirstPose(t0);
   r2.path = InitFirstPose(t0);
-  std::vector<double> bent, benr;
   if (n == -1) n = vpc.size() - 1;
-  tqdm bar;
   for (int i = 0; i < n; i += f) {
+    cerr << i << " ";
+    auto tgt = PCMsgTo3D(vpc[i], 0);
+    auto src = PCMsgTo3D(vpc[i + f], 0);
     auto tj = vpc[i + f].header.stamp;
+    TransformPointsInPlace(tgt, aff3);
+    TransformPointsInPlace(src, aff3);
     auto ben = BM(gt, vpc[i].header.stamp, vpc[i + f].header.stamp);
-    bent.push_back(TransNormRotDegAbsFromAffine3d(ben)(0));
-    benr.push_back(TransNormRotDegAbsFromAffine3d(ben)(1));
 
-    double voxel = 0;
-    pcl::PointCloud<pcl::PointXYZ>::Ptr src(new pcl::PointCloud<pcl::PointXYZ>);
-    for (auto pt : TransformPoints(PCMsgTo3D(vpc[i + f], voxel), aff3)) {
-      pcl::PointXYZ p;
-      p.x = pt(0), p.y = pt(1), p.z = pt(2);
-      src->push_back(p);
-    }
-
-    pcl::PointCloud<pcl::PointXYZ>::Ptr tgt(new pcl::PointCloud<pcl::PointXYZ>);
-    for (auto pt : TransformPoints(PCMsgTo3D(vpc[i], voxel), aff3)) {
-      pcl::PointXYZ p;
-      p.x = pt(0), p.y = pt(1), p.z = pt(2);
-      tgt->push_back(p);
-    }
-    pcl::PointCloud<pcl::PointXYZ> out;
-
-    pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> icp;
-    icp.setInputSource(src);
-    icp.setInputTarget(tgt);
-    auto t1 = GetTime();
-    // icp.align(out, ben.matrix().cast<float>());
-    icp.align(out);
-    auto t2 = GetTime();
-    auto res1 = Affine3d(icp.getFinalTransformation().cast<double>());
+    auto m1 = ICPMatcher::GetBasic({});
+    m1.SetSource(src);
+    m1.SetTarget(tgt);
+    auto res1 = m1.Align();
     auto err1 = TransNormRotDegAbsFromAffine3d(res1 * ben.inverse());
     r1.terr.push_back(err1(0));
     r1.rerr.push_back(err1(1));
-    r1.opt.push_back(GetDiffTime(t1, t2) / 1000.);
+    r1.corr.push_back(m1.corres());
+    r1.timer += m1.timer();
+    r1.opt.push_back(m1.timer().optimize() / 1000.);
+    r1.its.push_back(m1.iteration());
     r1.Tr = r1.Tr * res1;
     r1.path.poses.push_back(MakePoseStampedMsg(tj, r1.Tr));
 
-    pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt;
-    ndt.setInputSource(src);
-    ndt.setInputTarget(tgt);
-    ndt.setResolution(1);
-    auto t3 = GetTime();
-    // ndt.align(out, ben.matrix().cast<float>());
-    ndt.align(out);
-    auto t4 = GetTime();
-    auto res2 = Affine3d(ndt.getFinalTransformation().cast<double>());
+    auto m2 = SICPMatcher::GetBasic({}, 1);
+    m2.SetSource(src);
+    m2.SetTarget(tgt);
+    auto res2 = m2.Align();
     auto err2 = TransNormRotDegAbsFromAffine3d(res2 * ben.inverse());
     r2.terr.push_back(err2(0));
     r2.rerr.push_back(err2(1));
-    r2.opt.push_back(GetDiffTime(t3, t4) / 1000.);
+    r2.corr.push_back(m2.corres());
+    r2.timer += m2.timer();
+    r2.opt.push_back(m2.timer().optimize() / 1000.);
+    r2.its.push_back(m2.iteration());
     r2.Tr = r2.Tr * res2;
     r2.path.poses.push_back(MakePoseStampedMsg(tj, r2.Tr));
   }
-  bar.finish();
-  cout << *max_element(r1.terr.begin(), r1.terr.end()) << " -> ";
-  Print(LargestNIndices(r1.terr, 3), "t1");
-  cout << *max_element(r1.rerr.begin(), r1.rerr.end()) << " -> ";
-  Print(LargestNIndices(r1.rerr, 3), "r1");
-  cout << *max_element(r2.terr.begin(), r2.terr.end()) << " -> ";
-  Print(LargestNIndices(r2.terr, 3), "t2");
-  cout << *max_element(r2.rerr.begin(), r2.rerr.end()) << " -> ";
-  Print(LargestNIndices(r2.rerr, 3), "r2");
 
-  vector<double> w1(r1.opt.size());
-  transform(r2.opt.begin(), r2.opt.end(), r1.opt.begin(), w1.begin(),
-            std::minus<double>());
-  cout << *max_element(w1.begin(), w1.end()) << " -> ";
-  Print(LargestNIndices(w1, 5), "NDT Win");
-
-  vector<double> w2(r1.opt.size());
-  transform(r1.opt.begin(), r1.opt.end(), r2.opt.begin(), w2.begin(),
-            std::minus<double>());
-  cout << *max_element(w2.begin(), w2.end()) << " -> ";
-  Print(LargestNIndices(w2, 5), "NNDT Win");
-
-  // cout << "tgt: ";
-  // Stat(bent).PrintResult();
-  // cout << "rgt: ";
-  // Stat(benr).PrintResult();
-  ros::init(argc, argv, "exp6");
+  ros::init(argc, argv, "exp6_2");
   ros::NodeHandle nh;
-  auto pub5 = nh.advertise<nav_msgs::Path>("path5", 0, true);
-  auto pub7 = nh.advertise<nav_msgs::Path>("path7", 0, true);
+  auto pub1 = nh.advertise<nav_msgs::Path>("path1", 0, true);
+  auto pub3 = nh.advertise<nav_msgs::Path>("path3", 0, true);
   auto pubgt = nh.advertise<nav_msgs::Path>("pathg", 0, true);
-  pub5.publish(r1.path);
-  pub7.publish(r2.path);
+  pub1.publish(r1.path);
+  pub3.publish(r2.path);
   pubgt.publish(gt);
 
-  // PNumpy(r1.terr, "t1");
-  // PNumpy(r1.rerr, "r1");
-  // PNumpy(r1.opt, "opt1");
-  // PNumpy(r2.terr, "t2");
-  // PNumpy(r2.rerr, "r2");
-  // PNumpy(r2.opt, "opt2");
-  PrintRes(r1.path, gt);
-  PrintRes(r2.path, gt);
   cout << "-------------" << endl;
   r1.Show();
-  cout << "time average: " << Stat(r1.opt).mean << endl;
   cout << "-------------" << endl;
   r2.Show();
-  cout << "time average: " << Stat(r2.opt).mean << endl;
   cout << endl;
+  r1.timer.Show();
+  r2.timer.Show();
   ros::spin();
 }

@@ -26,10 +26,11 @@ class BunnyTest : public ::testing::Test {
       source.push_back(Vector3d(pt.x, pt.y, pt.z));
     for (const auto &pt : *target_pcl)
       target.push_back(Vector3d(pt.x, pt.y, pt.z));
+    sample_guess = Translation3d(1.79387, 0.720047, 0) *
+                   AngleAxisd(0.6931, Vector3d::UnitZ());
   }
 
-  void MatchAndTest(NDTMatcher &m,
-                    const Affine3d &guess = Affine3d::Identity()) {
+  void MatchAndTest(Matcher &m, const Affine3d &guess = Affine3d::Identity()) {
     m.SetSource(source);
     m.SetTarget(target);
     auto res = m.Align(guess);
@@ -70,6 +71,7 @@ class BunnyTest : public ::testing::Test {
   PointCloudType::Ptr target_pcl;
   vector<Vector3d> source;
   vector<Vector3d> target;
+  Affine3d sample_guess;
 };
 
 // PCL ICP result is bad: give easier (stupid) initial guess
@@ -82,98 +84,93 @@ TEST_F(BunnyTest, PCLICP) {
   PCLMatchAndTest(m, guess);
 }
 
+TEST_F(BunnyTest, MyICP) {
+  auto m = ICPMatcher::GetBasic({});
+  MatchAndTest(m);
+  auto m2 = ICPMatcher::GetBasic({});
+  MatchAndTest(m2, sample_guess);
+}
+
+TEST_F(BunnyTest, MySICP) {
+  auto m = SICPMatcher::GetBasic({}, 1);
+  MatchAndTest(m);
+  auto m2 = SICPMatcher::GetBasic({}, 1);
+  MatchAndTest(m2, sample_guess);
+}
+
+TEST_F(BunnyTest, MySICPOMP) {
+  auto m = SICPMatcher::GetBasic({kUseNormalOMP}, 1);
+  MatchAndTest(m);
+  auto m2 = SICPMatcher::GetBasic({kUseNormalOMP}, 1);
+  MatchAndTest(m2, sample_guess);
+}
+
 TEST_F(BunnyTest, PCLNDT) {
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>::Ptr m(
       new pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>);
   m->setResolution(1);
-  m->setTransformationEpsilon(0.01);
+  m->setTransformationEpsilon(0.001);
   PCLMatchAndTest(m);
 
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>::Ptr m2(
       new pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>);
   m2->setResolution(1);
-  m2->setTransformationEpsilon(0.01);
-  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
-                   AngleAxisd(0.6931, Vector3d::UnitZ());
-  PCLMatchAndTest(m2, guess);
+  m2->setTransformationEpsilon(0.001);
+  PCLMatchAndTest(m2, sample_guess);
 }
 
 TEST_F(BunnyTest, MyNDT) {
   auto m = NDTMatcher::GetBasic({kNDT, k1to1}, 1);
   MatchAndTest(m);
-
   auto m2 = NDTMatcher::GetBasic({kNDT, k1to1}, 1);
-  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
-                   AngleAxisd(0.6931, Vector3d::UnitZ());
-  MatchAndTest(m2, guess);
+  MatchAndTest(m2, sample_guess);
 }
 
 TEST_F(BunnyTest, MyNNDT) {
   auto m = NDTMatcher::GetBasic({kNNDT, k1to1}, 1);
   MatchAndTest(m);
-
   auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1}, 1);
-  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
-                   AngleAxisd(0.6931, Vector3d::UnitZ());
-  MatchAndTest(m2, guess);
+  MatchAndTest(m2, sample_guess);
 }
 
 TEST_F(BunnyTest, MyNDTLBFGSPP) {
   auto m = NDTMatcher::GetBasic({kNDT, k1to1, kLBFGSPP}, 1);
   MatchAndTest(m);
-
   auto m2 = NDTMatcher::GetBasic({kNDT, k1to1, kLBFGSPP}, 1);
-  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
-                   AngleAxisd(0.6931, Vector3d::UnitZ());
-  MatchAndTest(m2, guess);
+  MatchAndTest(m2, sample_guess);
 }
 
 TEST_F(BunnyTest, MyNNDTLBFGSPP) {
   auto m = NDTMatcher::GetBasic({kNNDT, k1to1, kLBFGSPP}, 1);
   MatchAndTest(m);
-
   auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1, kLBFGSPP}, 1);
-  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
-                   AngleAxisd(0.6931, Vector3d::UnitZ());
-  MatchAndTest(m2, guess);
+  MatchAndTest(m2, sample_guess);
 }
 
 TEST_F(BunnyTest, MyNDTAnalytic) {
   auto m = NDTMatcher::GetBasic({kNDT, k1to1, kAnalytic}, 1);
   MatchAndTest(m);
-
   auto m2 = NDTMatcher::GetBasic({kNDT, k1to1, kAnalytic}, 1);
-  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
-                   AngleAxisd(0.6931, Vector3d::UnitZ());
-  MatchAndTest(m2, guess);
+  MatchAndTest(m2, sample_guess);
 }
 
 TEST_F(BunnyTest, MyNNDTAnalytic) {
   auto m = NDTMatcher::GetBasic({kNNDT, k1to1, kAnalytic}, 1);
   MatchAndTest(m);
-
   auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1, kAnalytic}, 1);
-  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
-                   AngleAxisd(0.6931, Vector3d::UnitZ());
-  MatchAndTest(m2, guess);
+  MatchAndTest(m2, sample_guess);
 }
 
 TEST_F(BunnyTest, MyNDTIterative) {
   auto m = NDTMatcher::GetIter({kNDT, k1to1}, {0.5, 1, 2});
   MatchAndTest(m);
-
   auto m2 = NDTMatcher::GetIter({kNDT, k1to1}, {0.5, 1, 2});
-  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
-                   AngleAxisd(0.6931, Vector3d::UnitZ());
-  MatchAndTest(m2, guess);
+  MatchAndTest(m2, sample_guess);
 }
 
 TEST_F(BunnyTest, MyNNDTIterative) {
   auto m = NDTMatcher::GetIter({kNNDT, k1to1}, {0.5, 1, 2});
   MatchAndTest(m);
-
   auto m2 = NDTMatcher::GetIter({kNNDT, k1to1}, {0.5, 1, 2});
-  Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
-                   AngleAxisd(0.6931, Vector3d::UnitZ());
-  MatchAndTest(m2, guess);
+  MatchAndTest(m2, sample_guess);
 }

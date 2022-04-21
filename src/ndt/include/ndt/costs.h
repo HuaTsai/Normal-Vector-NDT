@@ -452,8 +452,8 @@ class NDTCostN final : public ceres::FirstOrderFunction {
     Eigen::Vector3d t;
     Eigen::Matrix<double, 8, 3> jcom;
     Eigen::Matrix<double, 9, 3> ccom;
-
     dc(p, R, t, jcom, ccom);
+
     for (size_t i = 0; i < ups_.size(); ++i) {
       Eigen::Matrix<double, 3, 6> jupq;
       Eigen::Matrix<double, 3, 18> jSpq;
@@ -570,8 +570,8 @@ class NNDTCostN final : public ceres::FirstOrderFunction {
     Eigen::Vector3d t;
     Eigen::Matrix<double, 8, 3> jcom;
     Eigen::Matrix<double, 9, 3> ccom;
-
     dc(p, R, t, jcom, ccom);
+
     for (size_t i = 0; i < ups_.size(); ++i) {
       Eigen::Matrix<double, 3, 6> jupq;
       Eigen::Matrix<double, 3, 18> jSpq;
@@ -679,4 +679,153 @@ class NNDTCostN final : public ceres::FirstOrderFunction {
   const std::vector<Eigen::Matrix3d> cqs_;
   const std::vector<Eigen::Vector3d> nqs_;
   const double d2_;
+};
+
+class ICPCost final : public ceres::FirstOrderFunction {
+ public:
+  ICPCost(const std::vector<Eigen::Vector3d> &ps,
+          const std::vector<Eigen::Vector3d> &qs)
+      : ps_(ps), qs_(qs) {}
+
+  bool Evaluate(const double *const p, double *f, double *g) const override {
+    f[0] = 0;
+    memset(g, 0, sizeof(double) * 6);
+
+    Eigen::Matrix3d R;
+    Eigen::Vector3d t;
+    Eigen::Matrix<double, 8, 3> jcom;
+    dc(p, R, t, jcom);
+
+    for (size_t i = 0; i < ps_.size(); ++i) {
+      Eigen::Matrix<double, 3, 6> jpq;
+      Eigen::Matrix<double, 8, 1> j = jcom * ps_[i];
+      jpq.block<3, 3>(0, 0) = Eigen::Matrix3d::Identity();
+      jpq.col(3) = Eigen::Vector3d(0, j(0), j(1));
+      jpq.col(4) = Eigen::Vector3d(j(2), j(3), j(4));
+      jpq.col(5) = Eigen::Vector3d(j(5), j(6), j(7));
+      Eigen::Vector3d pq = R * ps_[i] + t - qs_[i];
+      f[0] += pq.squaredNorm();
+      Eigen::Matrix<double, 6, 1> gvec = jpq.transpose() * pq;
+      for (int i = 0; i < 6; ++i) g[i] += gvec(i);
+    }
+    return true;
+  }
+
+  int NumParameters() const override { return 6; }
+
+  void dc(const double *const p,
+          Eigen::Matrix3d &R,
+          Eigen::Vector3d &t,
+          Eigen::Matrix<double, 8, 3> &jcom) const {
+    const auto cal = [](double angle, double &c, double &s) {
+      c = std::cos(angle), s = std::sin(angle);
+    };
+    double cx, cy, cz, sx, sy, sz;
+    cal(p[3], cx, sx);
+    cal(p[4], cy, sy);
+    cal(p[5], cz, sz);
+
+    // clang-format off
+    R.row(0) = Eigen::Vector3d(cy * cz, -sz * cy, sy);
+    R.row(1) = Eigen::Vector3d(sx * sy * cz + sz * cx, -sx * sy * sz + cx * cz, -sx * cy);
+    R.row(2) = Eigen::Vector3d(sx * sz - sy * cx * cz, sx * cz + sy * sz * cx, cx * cy);
+    t = Eigen::Vector3d(p[0], p[1], p[2]);
+
+    jcom.row(0) = Eigen::Vector3d(-sx * sz + sy * cx * cz, -sx * cz - sy * sz * cx, -cx * cy);
+    jcom.row(1) = Eigen::Vector3d(sx * sy * cz + sz * cx, -sx * sy * sz + cx * cz, -sx * cy);
+    jcom.row(2) = Eigen::Vector3d(-sy * cz, sy * sz, cy);
+    jcom.row(3) = Eigen::Vector3d(sx * cy * cz, -sx * sz * cy, sx * sy);
+    jcom.row(4) = Eigen::Vector3d(-cx * cy * cz, sz * cx * cy, -sy * cx);
+    jcom.row(5) = Eigen::Vector3d(-sz * cy, -cy * cz, 0.);
+    jcom.row(6) = Eigen::Vector3d(-sx * sy * sz + cx * cz, -sx * sy * cz - sz * cx, 0.);
+    jcom.row(7) = Eigen::Vector3d(sx * cz + sy * sz * cx, -sx * sz + sy * cx * cz, 0.);
+    // clang-format on
+  }
+
+ private:
+  const std::vector<Eigen::Vector3d> ps_;
+  const std::vector<Eigen::Vector3d> qs_;
+};
+
+class SICPCost final : public ceres::FirstOrderFunction {
+ public:
+  SICPCost(const std::vector<Eigen::Vector3d> &ps,
+           const std::vector<Eigen::Vector3d> &nps,
+           const std::vector<Eigen::Vector3d> &qs,
+           const std::vector<Eigen::Vector3d> &nqs)
+      : ps_(ps), nps_(nps), qs_(qs), nqs_(nqs) {}
+
+  bool Evaluate(const double *const p, double *f, double *g) const override {
+    f[0] = 0;
+    memset(g, 0, sizeof(double) * 6);
+
+    Eigen::Matrix3d R;
+    Eigen::Vector3d t;
+    Eigen::Matrix<double, 8, 3> jcom;
+    dc(p, R, t, jcom);
+
+    for (size_t i = 0; i < ps_.size(); ++i) {
+      Eigen::Matrix<double, 3, 6> jpq;
+      Eigen::Matrix<double, 8, 1> j = jcom * ps_[i];
+      jpq.block<3, 3>(0, 0) = Eigen::Matrix3d::Identity();
+      jpq.col(3) = Eigen::Vector3d(0, j(0), j(1));
+      jpq.col(4) = Eigen::Vector3d(j(2), j(3), j(4));
+      jpq.col(5) = Eigen::Vector3d(j(5), j(6), j(7));
+
+      Eigen::Matrix<double, 3, 6> jnpq;
+      Eigen::Matrix<double, 8, 1> n = jcom * nps_[i];
+      jnpq.block<3, 3>(0, 0) = Eigen::Matrix3d::Zero();
+      jnpq.col(3) = Eigen::Vector3d(0, n(0), n(1));
+      jnpq.col(4) = Eigen::Vector3d(n(2), n(3), n(4));
+      jnpq.col(5) = Eigen::Vector3d(n(5), n(6), n(7));
+
+      Eigen::Vector3d pq = R * ps_[i] + t - qs_[i];
+      Eigen::Vector3d npq = nps_[i] + nqs_[i];
+      f[0] += std::pow(pq.dot(npq), 2) / npq.squaredNorm();
+      for (int a = 0; a < 6; ++a) {
+        Eigen::Ref<Eigen::Vector3d> ja(jpq.block<3, 1>(0, a));
+        Eigen::Ref<Eigen::Vector3d> jna(jnpq.block<3, 1>(0, a));
+        double val = (ja.transpose() * npq + pq.transpose() * jna)(0);
+        g[a] += 2 * pq.dot(npq) * val / npq.squaredNorm();
+      }
+    }
+    return true;
+  }
+
+  int NumParameters() const override { return 6; }
+
+  void dc(const double *const p,
+          Eigen::Matrix3d &R,
+          Eigen::Vector3d &t,
+          Eigen::Matrix<double, 8, 3> &jcom) const {
+    const auto cal = [](double angle, double &c, double &s) {
+      c = std::cos(angle), s = std::sin(angle);
+    };
+    double cx, cy, cz, sx, sy, sz;
+    cal(p[3], cx, sx);
+    cal(p[4], cy, sy);
+    cal(p[5], cz, sz);
+
+    // clang-format off
+    R.row(0) = Eigen::Vector3d(cy * cz, -sz * cy, sy);
+    R.row(1) = Eigen::Vector3d(sx * sy * cz + sz * cx, -sx * sy * sz + cx * cz, -sx * cy);
+    R.row(2) = Eigen::Vector3d(sx * sz - sy * cx * cz, sx * cz + sy * sz * cx, cx * cy);
+    t = Eigen::Vector3d(p[0], p[1], p[2]);
+
+    jcom.row(0) = Eigen::Vector3d(-sx * sz + sy * cx * cz, -sx * cz - sy * sz * cx, -cx * cy);
+    jcom.row(1) = Eigen::Vector3d(sx * sy * cz + sz * cx, -sx * sy * sz + cx * cz, -sx * cy);
+    jcom.row(2) = Eigen::Vector3d(-sy * cz, sy * sz, cy);
+    jcom.row(3) = Eigen::Vector3d(sx * cy * cz, -sx * sz * cy, sx * sy);
+    jcom.row(4) = Eigen::Vector3d(-cx * cy * cz, sz * cx * cy, -sy * cx);
+    jcom.row(5) = Eigen::Vector3d(-sz * cy, -cy * cz, 0.);
+    jcom.row(6) = Eigen::Vector3d(-sx * sy * sz + cx * cz, -sx * sy * cz - sz * cx, 0.);
+    jcom.row(7) = Eigen::Vector3d(sx * cz + sy * sz * cx, -sx * sz + sy * cx * cz, 0.);
+    // clang-format on
+  }
+
+ private:
+  const std::vector<Eigen::Vector3d> ps_;
+  const std::vector<Eigen::Vector3d> nps_;
+  const std::vector<Eigen::Vector3d> qs_;
+  const std::vector<Eigen::Vector3d> nqs_;
 };

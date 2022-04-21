@@ -4,7 +4,7 @@ project(ndt)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra --coverage")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Release)
-
+# find_package(OpenMP REQUIRED) link OpenMP::OpenMP_CXX
 find_package(Ceres REQUIRED)
 
 find_package(catkin REQUIRED

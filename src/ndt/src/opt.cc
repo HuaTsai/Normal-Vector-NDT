@@ -65,6 +65,7 @@ void Optimizer::BuildProblem(CostObj *func) { costobj_ = func; }
 
 void Optimizer::Optimize() {
   ceres::GradientProblemSolver::Options options;
+  options.logging_type = ceres::SILENT;
   ceres::GradientProblemSolver::Summary summary;
   options.max_num_iterations = 50;
   if (type_ == Options::kOptimizer2D) {

@@ -95,6 +95,7 @@ int main(int argc, char **argv) {
   Res r1, r2;
   auto tgt = PCMsgTo3D(vpc[n], 0);
   auto src = PCMsgTo3D(vpc[n + f], 0);
+  cout << src.size() << " -> " << tgt.size() << endl;
   TransformPointsInPlace(tgt, aff3);
   TransformPointsInPlace(src, aff3);
   auto ben = BM(gt, vpc[n].header.stamp, vpc[n + f].header.stamp);
