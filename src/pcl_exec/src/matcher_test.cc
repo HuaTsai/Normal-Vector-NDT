@@ -5,6 +5,7 @@
 #include <pcl/point_types.h>
 #include <pcl/registration/icp.h>
 #include <pcl/registration/ndt.h>
+#include <pcl_exec/myd2dndt.h>
 
 using namespace std;
 using namespace Eigen;
@@ -94,6 +95,25 @@ class BunnyTest : public ::testing::Test {
   vector<Vector3d> source;
   vector<Vector3d> target;
 };
+
+TEST_F(BunnyTest, MyPCLD2D) {
+  pcl::NormalDistributionsTransformD2D<pcl::PointXYZ, pcl::PointXYZ>::Ptr m(
+      new pcl::NormalDistributionsTransformD2D<pcl::PointXYZ, pcl::PointXYZ>);
+  m->setResolution(1);
+  m->setTransformationEpsilon(0.001);
+  PCLMatchAndTest(m);
+
+  pcl::NormalDistributionsTransformD2D<pcl::PointXYZ, pcl::PointXYZ>::Ptr m2(
+      new pcl::NormalDistributionsTransformD2D<pcl::PointXYZ, pcl::PointXYZ>);
+  m2->setResolution(1);
+  m2->setTransformationEpsilon(0.0001);
+  // This guess fails
+  // Affine3d guess = Translation3d(1.79387, 0.720047, 0) *
+  //                  AngleAxisd(0.6931, Vector3d::UnitZ());
+  Affine3d guess =
+      Translation3d(0.5, 0.5, 0) * AngleAxisd(Deg2Rad(5), Vector3d::UnitZ());
+  PCLMatchAndTest(m2, guess);
+}
 
 // PCL ICP result is bad: give easier (stupid) initial guess
 TEST_F(BunnyTest, PCLICP) {

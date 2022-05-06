@@ -7,6 +7,7 @@
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/registration/icp.h>
 #include <pcl/registration/ndt.h>
+#include <pcl_exec/myd2dndt.h>
 #include <sensor_msgs/PointCloud2.h>
 
 #include <boost/program_options.hpp>
@@ -153,10 +154,11 @@ int main(int argc, char **argv) {
 
   auto t0 = vpc[0].header.stamp;
   GtLocal(gt, t0);
-  Res r1, r2, r3;
+  Res r1, r2, r3, r4;
   r1.path = InitFirstPose(t0);
   r2.path = InitFirstPose(t0);
   r3.path = InitFirstPose(t0);
+  r4.path = InitFirstPose(t0);
   std::vector<double> bent, benr;
   if (n == -1) n = vpc.size() - 1;
   for (int i = 0; i < n; i += f) {
@@ -197,20 +199,20 @@ int main(int argc, char **argv) {
     r1.Tr = r1.Tr * res1;
     r1.path.poses.push_back(MakePoseStampedMsg(tj, r1.Tr));
 
-    // pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt;
-    // ndt.setInputSource(src);
-    // ndt.setInputTarget(tgt);
-    // ndt.setResolution(1);
-    // auto t3 = GetTime();
-    // ndt.align(out);
-    // auto t4 = GetTime();
-    // auto res2 = Affine3d(ndt.getFinalTransformation().cast<double>());
-    // auto err2 = TransNormRotDegAbsFromAffine3d(res2 * ben.inverse());
-    // r2.terr.push_back(err2(0));
-    // r2.rerr.push_back(err2(1));
-    // r2.opt.push_back(GetDiffTime(t3, t4) / 1000.);
-    // r2.Tr = r2.Tr * res2;
-    // r2.path.poses.push_back(MakePoseStampedMsg(tj, r2.Tr));
+    pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt;
+    ndt.setInputSource(src);
+    ndt.setInputTarget(tgt);
+    ndt.setResolution(1);
+    auto t3 = GetTime();
+    ndt.align(out);
+    auto t4 = GetTime();
+    auto res2 = Affine3d(ndt.getFinalTransformation().cast<double>());
+    auto err2 = TransNormRotDegAbsFromAffine3d(res2 * ben.inverse());
+    r2.terr.push_back(err2(0));
+    r2.rerr.push_back(err2(1));
+    r2.opt.push_back(GetDiffTime(t3, t4) / 1000.);
+    r2.Tr = r2.Tr * res2;
+    r2.path.poses.push_back(MakePoseStampedMsg(tj, r2.Tr));
 
     pcl::IterativeClosestPointWithNormals<pcl::PointNormal, pcl::PointNormal>
         sicp;
@@ -227,6 +229,21 @@ int main(int argc, char **argv) {
     r3.opt.push_back(GetDiffTime(t5, t6) / 1000.);
     r3.Tr = r3.Tr * res3;
     r3.path.poses.push_back(MakePoseStampedMsg(tj, r3.Tr));
+
+    pcl::NormalDistributionsTransformD2D<pcl::PointXYZ, pcl::PointXYZ> d2d;
+    d2d.setInputSource(src);
+    d2d.setInputTarget(tgt);
+    d2d.setResolution(1);
+    auto t7 = GetTime();
+    d2d.align(out);
+    auto t8 = GetTime();
+    auto res4 = Affine3d(d2d.getFinalTransformation().cast<double>());
+    auto err4 = TransNormRotDegAbsFromAffine3d(res4 * ben.inverse());
+    r4.terr.push_back(err4(0));
+    r4.rerr.push_back(err4(1));
+    r4.opt.push_back(GetDiffTime(t7, t8) / 1000.);
+    r4.Tr = r4.Tr * res4;
+    r4.path.poses.push_back(MakePoseStampedMsg(tj, r4.Tr));
   }
 
   ros::init(argc, argv, "exp6");
@@ -247,6 +264,7 @@ int main(int argc, char **argv) {
   // PrintRes(r1.path, gt);
   // PrintRes(r2.path, gt);
   // PrintRes(r3.path, gt);
+  // PrintRes(r4.path, gt);
   cout << "-------------" << endl;
   r1.Show();
   cout << "time average: " << Stat(r1.opt).mean << endl;
@@ -256,6 +274,9 @@ int main(int argc, char **argv) {
   cout << "-------------" << endl;
   r3.Show();
   cout << "time average: " << Stat(r3.opt).mean << endl;
+  cout << "-------------" << endl;
+  r4.Show();
+  cout << "time average: " << Stat(r4.opt).mean << endl;
   cout << endl;
   ros::spin();
 }

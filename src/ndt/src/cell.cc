@@ -60,12 +60,12 @@ void Cell::ComputeGaussian() {
   bool rescale = false;
 
   if (evals_(2) > rescale_ratio_ * evals_(0)) {
-    evals_(0) = evals_(1) / rescale_ratio_;
+    evals_(0) = evals_(2) / rescale_ratio_;
     rescale = true;
   }
 
   if (evals_(2) > rescale_ratio_ * evals_(1)) {
-    evals_(1) = evals_(1) / rescale_ratio_;
+    evals_(1) = evals_(2) / rescale_ratio_;
     rescale = true;
   }
 

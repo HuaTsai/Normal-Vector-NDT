@@ -234,8 +234,8 @@ class NDTCostObj : public CostObj {
       double expval = std::exp(-0.5 * d2_ * uijT * B * uij);
       f -= expval;
       for (int a = 0; a < 6; ++a) {
-        const Eigen::Ref<Eigen::Vector3d> ja(J_.block<3, 1>(0, a));
-        const Eigen::Ref<Eigen::Matrix3d> Za(C_.block<3, 3>(0, 3 * a));
+        Eigen::Ref<Eigen::Vector3d> ja(J_.block<3, 1>(0, a));
+        Eigen::Ref<Eigen::Matrix3d> Za(C_.block<3, 3>(0, 3 * a));
         double qa = (2 * uijT * B * ja - uijT * B * Za * B * uij)(0);
         grad(a) += 0.5 * d2_ * expval * qa;
       }
@@ -346,9 +346,9 @@ class NNDTCostObj : public CostObj {
       f -= expval;
       double factor = 0.5 * d2_ * expval * std::pow(den, -2);
       for (int a = 0; a < 6; ++a) {
-        const Eigen::Ref<Eigen::Vector3d> jua(jupq_.block<3, 1>(0, a));
-        const Eigen::Ref<Eigen::Matrix3d> jSa(jSpq_.block<3, 3>(0, 3 * a));
-        const Eigen::Ref<Eigen::Vector3d> jna(jnpq_.block<3, 1>(0, a));
+        Eigen::Ref<Eigen::Vector3d> jua(jupq_.block<3, 1>(0, a));
+        Eigen::Ref<Eigen::Matrix3d> jSa(jSpq_.block<3, 3>(0, 3 * a));
+        Eigen::Ref<Eigen::Vector3d> jna(jnpq_.block<3, 1>(0, a));
         double dnum = 2 * (upqT * npq)(0) * (npqT * jua + upqT * jna)(0);
         double dden = (2 * npqT * Spq * jna + npqT * jSa * npq)(0);
         grad(a) += factor * (dnum * den - num * dden);
@@ -464,8 +464,8 @@ class NDTCostN final : public ceres::FirstOrderFunction {
       double expval = std::exp(-0.5 * d2_ * upqT * B * upq);
       f[0] -= expval;
       for (int a = 0; a < 6; ++a) {
-        const Eigen::Ref<Eigen::Vector3d> ja(jupq.block<3, 1>(0, a));
-        const Eigen::Ref<Eigen::Matrix3d> Za(jSpq.block<3, 3>(0, 3 * a));
+        Eigen::Ref<Eigen::Vector3d> ja(jupq.block<3, 1>(0, a));
+        Eigen::Ref<Eigen::Matrix3d> Za(jSpq.block<3, 3>(0, 3 * a));
         double qa = (2 * upqT * B * ja - upqT * B * Za * B * upq)(0);
         g[a] += 0.5 * d2_ * expval * qa;
       }
@@ -588,9 +588,9 @@ class NNDTCostN final : public ceres::FirstOrderFunction {
       f[0] -= expval;
       double factor = 0.5 * d2_ * expval * std::pow(den, -2);
       for (int a = 0; a < 6; ++a) {
-        const Eigen::Ref<Eigen::Vector3d> jua(jupq.block<3, 1>(0, a));
-        const Eigen::Ref<Eigen::Matrix3d> jSa(jSpq.block<3, 3>(0, 3 * a));
-        const Eigen::Ref<Eigen::Vector3d> jna(jnpq.block<3, 1>(0, a));
+        Eigen::Ref<Eigen::Vector3d> jua(jupq.block<3, 1>(0, a));
+        Eigen::Ref<Eigen::Matrix3d> jSa(jSpq.block<3, 3>(0, 3 * a));
+        Eigen::Ref<Eigen::Vector3d> jna(jnpq.block<3, 1>(0, a));
         double dnum = 2 * (upqT * npq)(0) * (npqT * jua + upqT * jna)(0);
         double dden = (2 * npqT * Spq * jna + npqT * jSa * npq)(0);
         g[a] += factor * (dnum * den - num * dden);

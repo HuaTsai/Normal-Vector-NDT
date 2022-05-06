@@ -4,12 +4,15 @@
 #include <pcl/common/point_tests.h>
 #include <pcl/filters/voxel_grid_covariance.h>
 
-#include <Eigen/Cholesky>
-#include <Eigen/Eigenvalues>
 #include <boost/mpl/size.hpp>
 
+#include <Eigen/Cholesky>
+#include <Eigen/Eigenvalues>
+
 template <typename PointT>
-void pcl::VoxelGridCovariance<PointT>::applyFilter(PointCloud& output) {
+void
+pcl::VoxelGridCovariance<PointT>::applyFilter(PointCloud& output)
+{
   voxel_centroids_leaf_indices_.clear();
   output.height = 1;
   output.is_dense = true;
@@ -32,7 +35,8 @@ void pcl::VoxelGridCovariance<PointT>::applyFilter(PointCloud& output) {
 
   int centroid_size = 4;
   for (const auto& point : *input_) {
-    if (!input_->is_dense && !isXYZFinite(point)) continue;
+    if (!input_->is_dense && !isXYZFinite(point))
+      continue;
 
     const Eigen::Vector4i ijk =
         Eigen::floor(point.getArray4fMap() * inverse_leaf_size_.array())
@@ -81,8 +85,10 @@ void pcl::VoxelGridCovariance<PointT>::applyFilter(PointCloud& output) {
       if (eigen_val(0) < -Eigen::NumTraits<double>::dummy_precision() ||
           eigen_val(1) < -Eigen::NumTraits<double>::dummy_precision() ||
           eigen_val(2) <= 0) {
-        PCL_WARN("Invalid eigen value! (%g, %g, %g)\n", eigen_val(0),
-                 eigen_val(1), eigen_val(2));
+        PCL_WARN("Invalid eigen value! (%g, %g, %g)\n",
+                 eigen_val(0),
+                 eigen_val(1),
+                 eigen_val(2));
         leaf.n = -1;
         continue;
       }
@@ -93,8 +99,7 @@ void pcl::VoxelGridCovariance<PointT>::applyFilter(PointCloud& output) {
         if (eigen_val(1) < min_covar_eigvalue) {
           eigen_val(1) = min_covar_eigvalue;
         }
-        leaf.cov_ =
-            leaf.evecs_ * eigen_val.asDiagonal() * leaf.evecs_.inverse();
+        leaf.cov_ = leaf.evecs_ * eigen_val.asDiagonal() * leaf.evecs_.inverse();
       }
       leaf.evals_ = eigen_val;
 

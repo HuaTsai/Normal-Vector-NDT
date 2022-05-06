@@ -46,13 +46,14 @@ namespace pcl {
 template <typename PointSource, typename PointTarget>
 MyNormalDistributionsTransform<PointSource,
                                PointTarget>::MyNormalDistributionsTransform()
-    : target_cells_(),
-      resolution_(1.0f),
-      step_size_(0.1),
-      outlier_ratio_(0.55),
-      gauss_d1_(),
-      gauss_d2_(),
-      trans_probability_() {
+: target_cells_()
+, resolution_(1.0f)
+, step_size_(0.1)
+, outlier_ratio_(0.55)
+, gauss_d1_()
+, gauss_d2_()
+, trans_probability_()
+{
   reg_name_ = "MyNormalDistributionsTransform";
 
   // Initializes the gaussian fitting parameters (eq. 6.8) [Magnusson 2009]
@@ -61,18 +62,18 @@ MyNormalDistributionsTransform<PointSource,
   const double gauss_d3 = -std::log(gauss_c2);
   gauss_d1_ = -std::log(gauss_c1 + gauss_c2) - gauss_d3;
   gauss_d2_ =
-      -2 *
-      std::log((-std::log(gauss_c1 * std::exp(-0.5) + gauss_c2) - gauss_d3) /
-               gauss_d1_);
+      -2 * std::log((-std::log(gauss_c1 * std::exp(-0.5) + gauss_c2) - gauss_d3) /
+                    gauss_d1_);
 
   transformation_epsilon_ = 0.1;
   max_iterations_ = 35;
 }
 
 template <typename PointSource, typename PointTarget>
-void MyNormalDistributionsTransform<PointSource, PointTarget>::
-    computeTransformation(PointCloudSource& output,
-                          const Eigen::Matrix4f& guess) {
+void
+MyNormalDistributionsTransform<PointSource, PointTarget>::computeTransformation(
+    PointCloudSource& output, const Eigen::Matrix4f& guess)
+{
   nr_iterations_ = 0;
   converged_ = false;
 
@@ -82,9 +83,8 @@ void MyNormalDistributionsTransform<PointSource, PointTarget>::
   const double gauss_d3 = -std::log(gauss_c2);
   gauss_d1_ = -std::log(gauss_c1 + gauss_c2) - gauss_d3;
   gauss_d2_ =
-      -2 *
-      std::log((-std::log(gauss_c1 * std::exp(-0.5) + gauss_c2) - gauss_d3) /
-               gauss_d1_);
+      -2 * std::log((-std::log(gauss_c1 * std::exp(-0.5) + gauss_c2) - gauss_d3) /
+                    gauss_d1_);
 
   if (guess != Eigen::Matrix4f::Identity()) {
     // Initialise final transformation to the guessed one
@@ -104,8 +104,7 @@ void MyNormalDistributionsTransform<PointSource, PointTarget>::
   // Convert initial guess matrix to 6 element transformation vector
   Eigen::Matrix<double, 6, 1> transform, score_gradient;
   Eigen::Vector3f init_translation = eig_transformation.translation();
-  Eigen::Vector3f init_rotation =
-      eig_transformation.rotation().eulerAngles(0, 1, 2);
+  Eigen::Vector3f init_rotation = eig_transformation.rotation().eulerAngles(0, 1, 2);
   transform << init_translation.cast<double>(), init_rotation.cast<double>();
 
   Eigen::Matrix<double, 6, 6> hessian;
@@ -136,9 +135,15 @@ void MyNormalDistributionsTransform<PointSource, PointTarget>::
     }
 
     delta /= delta_norm;
-    delta_norm = computeStepLengthMT(transform, delta, delta_norm, step_size_,
-                                     transformation_epsilon_ / 2, score,
-                                     score_gradient, hessian, output);
+    delta_norm = computeStepLengthMT(transform,
+                                     delta,
+                                     delta_norm,
+                                     step_size_,
+                                     transformation_epsilon_ / 2,
+                                     score,
+                                     score_gradient,
+                                     hessian,
+                                     output);
     delta *= delta_norm;
 
     // Convert delta into matrix form
@@ -158,15 +163,13 @@ void MyNormalDistributionsTransform<PointSource, PointTarget>::
     nr_iterations_++;
 
     if (nr_iterations_ >= max_iterations_ ||
-        ((transformation_epsilon_ > 0 &&
-          translation_sqr <= transformation_epsilon_) &&
+        ((transformation_epsilon_ > 0 && translation_sqr <= transformation_epsilon_) &&
          (transformation_rotation_epsilon_ > 0 &&
           cos_angle >= transformation_rotation_epsilon_)) ||
         ((transformation_epsilon_ <= 0) &&
          (transformation_rotation_epsilon_ > 0 &&
           cos_angle >= transformation_rotation_epsilon_)) ||
-        ((transformation_epsilon_ > 0 &&
-          translation_sqr <= transformation_epsilon_) &&
+        ((transformation_epsilon_ > 0 && translation_sqr <= transformation_epsilon_) &&
          (transformation_rotation_epsilon_ <= 0))) {
       converged_ = true;
     }
@@ -185,7 +188,8 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::computeDerivatives(
     Eigen::Matrix<double, 6, 6>& hessian,
     const PointCloudSource& trans_cloud,
     const Eigen::Matrix<double, 6, 1>& transform,
-    bool compute_hessian) {
+    bool compute_hessian)
+{
   score_gradient.setZero();
   hessian.setZero();
   double score = 0;
@@ -203,8 +207,7 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::computeDerivatives(
     // neighbor checking.
     std::vector<TargetGridLeafConstPtr> neighborhood;
     std::vector<float> distances;
-    target_cells_.radiusSearch(x_trans_pt, resolution_, neighborhood,
-                               distances);
+    target_cells_.radiusSearch(x_trans_pt, resolution_, neighborhood, distances);
 
     for (const auto& cell : neighborhood) {
       // Original Point
@@ -224,23 +227,25 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::computeDerivatives(
       // Update score, gradient and hessian, lines 19-21 in Algorithm 2,
       // according to Equations 6.10, 6.12 and 6.13, respectively [Magnusson
       // 2009]
-      score += updateDerivatives(score_gradient, hessian, x_trans, c_inv,
-                                 compute_hessian);
+      score +=
+          updateDerivatives(score_gradient, hessian, x_trans, c_inv, compute_hessian);
     }
   }
   return score;
 }
 
 template <typename PointSource, typename PointTarget>
-void MyNormalDistributionsTransform<PointSource, PointTarget>::
-    computeAngleDerivatives(const Eigen::Matrix<double, 6, 1>& transform,
-                            bool compute_hessian) {
+void
+MyNormalDistributionsTransform<PointSource, PointTarget>::computeAngleDerivatives(
+    const Eigen::Matrix<double, 6, 1>& transform, bool compute_hessian)
+{
   // Simplified math for near 0 angles
   const auto calculate_cos_sin = [](double angle, double& c, double& s) {
     if (std::abs(angle) < 10e-5) {
       c = 1.0;
       s = 0.0;
-    } else {
+    }
+    else {
       c = std::cos(angle);
       s = std::sin(angle);
     }
@@ -254,74 +259,72 @@ void MyNormalDistributionsTransform<PointSource, PointTarget>::
   // Precomputed angular gradient components. Letters correspond to
   // Equation 6.19 [Magnusson 2009]
   angular_jacobian_.setZero();
-  angular_jacobian_.row(0).noalias() =
-      Eigen::Vector4d((-sx * sz + cx * sy * cz), (-sx * cz - cx * sy * sz),
-                      (-cx * cy), 1.0);  // a
-  angular_jacobian_.row(1).noalias() =
-      Eigen::Vector4d((cx * sz + sx * sy * cz), (cx * cz - sx * sy * sz),
-                      (-sx * cy), 1.0);  // b
+  angular_jacobian_.row(0).noalias() = Eigen::Vector4d(
+      (-sx * sz + cx * sy * cz), (-sx * cz - cx * sy * sz), (-cx * cy), 1.0); // a
+  angular_jacobian_.row(1).noalias() = Eigen::Vector4d(
+      (cx * sz + sx * sy * cz), (cx * cz - sx * sy * sz), (-sx * cy), 1.0); // b
   angular_jacobian_.row(2).noalias() =
-      Eigen::Vector4d((-sy * cz), sy * sz, cy, 1.0);  // c
+      Eigen::Vector4d((-sy * cz), sy * sz, cy, 1.0); // c
   angular_jacobian_.row(3).noalias() =
-      Eigen::Vector4d(sx * cy * cz, (-sx * cy * sz), sx * sy, 1.0);  // d
+      Eigen::Vector4d(sx * cy * cz, (-sx * cy * sz), sx * sy, 1.0); // d
   angular_jacobian_.row(4).noalias() =
-      Eigen::Vector4d((-cx * cy * cz), cx * cy * sz, (-cx * sy), 1.0);  // e
+      Eigen::Vector4d((-cx * cy * cz), cx * cy * sz, (-cx * sy), 1.0); // e
   angular_jacobian_.row(5).noalias() =
-      Eigen::Vector4d((-cy * sz), (-cy * cz), 0, 1.0);  // f
-  angular_jacobian_.row(6).noalias() = Eigen::Vector4d(
-      (cx * cz - sx * sy * sz), (-cx * sz - sx * sy * cz), 0, 1.0);  // g
-  angular_jacobian_.row(7).noalias() = Eigen::Vector4d(
-      (sx * cz + cx * sy * sz), (cx * sy * cz - sx * sz), 0, 1.0);  // h
+      Eigen::Vector4d((-cy * sz), (-cy * cz), 0, 1.0); // f
+  angular_jacobian_.row(6).noalias() =
+      Eigen::Vector4d((cx * cz - sx * sy * sz), (-cx * sz - sx * sy * cz), 0, 1.0); // g
+  angular_jacobian_.row(7).noalias() =
+      Eigen::Vector4d((sx * cz + cx * sy * sz), (cx * sy * cz - sx * sz), 0, 1.0); // h
 
   if (compute_hessian) {
     // Precomputed angular hessian components. Letters correspond to
     // Equation 6.21 and numbers correspond to row index [Magnusson 2009]
     angular_hessian_.setZero();
-    angular_hessian_.row(0).noalias() =
-        Eigen::Vector4d((-cx * sz - sx * sy * cz), (-cx * cz + sx * sy * sz),
-                        sx * cy, 0.0f);  // a2
-    angular_hessian_.row(1).noalias() =
-        Eigen::Vector4d((-sx * sz + cx * sy * cz), (-cx * sy * sz - sx * cz),
-                        (-cx * cy), 0.0f);  // a3
+    angular_hessian_.row(0).noalias() = Eigen::Vector4d(
+        (-cx * sz - sx * sy * cz), (-cx * cz + sx * sy * sz), sx * cy, 0.0f); // a2
+    angular_hessian_.row(1).noalias() = Eigen::Vector4d(
+        (-sx * sz + cx * sy * cz), (-cx * sy * sz - sx * cz), (-cx * cy), 0.0f); // a3
 
-    angular_hessian_.row(2).noalias() = Eigen::Vector4d(
-        (cx * cy * cz), (-cx * cy * sz), (cx * sy), 0.0f);  // b2
-    angular_hessian_.row(3).noalias() = Eigen::Vector4d(
-        (sx * cy * cz), (-sx * cy * sz), (sx * sy), 0.0f);  // b3
+    angular_hessian_.row(2).noalias() =
+        Eigen::Vector4d((cx * cy * cz), (-cx * cy * sz), (cx * sy), 0.0f); // b2
+    angular_hessian_.row(3).noalias() =
+        Eigen::Vector4d((sx * cy * cz), (-sx * cy * sz), (sx * sy), 0.0f); // b3
 
     // The sign of 'sx * sz' in c2 is incorrect in the thesis, and is fixed
     // here.
     angular_hessian_.row(4).noalias() = Eigen::Vector4d(
-        (-sx * cz - cx * sy * sz), (sx * sz - cx * sy * cz), 0, 0.0f);  // c2
+        (-sx * cz - cx * sy * sz), (sx * sz - cx * sy * cz), 0, 0.0f); // c2
     angular_hessian_.row(5).noalias() = Eigen::Vector4d(
-        (cx * cz - sx * sy * sz), (-sx * sy * cz - cx * sz), 0, 0.0f);  // c3
+        (cx * cz - sx * sy * sz), (-sx * sy * cz - cx * sz), 0, 0.0f); // c3
 
     angular_hessian_.row(6).noalias() =
-        Eigen::Vector4d((-cy * cz), (cy * sz), (-sy), 0.0f);  // d1
-    angular_hessian_.row(7).noalias() = Eigen::Vector4d(
-        (-sx * sy * cz), (sx * sy * sz), (sx * cy), 0.0f);  // d2
-    angular_hessian_.row(8).noalias() = Eigen::Vector4d(
-        (cx * sy * cz), (-cx * sy * sz), (-cx * cy), 0.0f);  // d3
+        Eigen::Vector4d((-cy * cz), (cy * sz), (-sy), 0.0f); // d1
+    angular_hessian_.row(7).noalias() =
+        Eigen::Vector4d((-sx * sy * cz), (sx * sy * sz), (sx * cy), 0.0f); // d2
+    angular_hessian_.row(8).noalias() =
+        Eigen::Vector4d((cx * sy * cz), (-cx * sy * sz), (-cx * cy), 0.0f); // d3
 
     angular_hessian_.row(9).noalias() =
-        Eigen::Vector4d((sy * sz), (sy * cz), 0, 0.0f);  // e1
+        Eigen::Vector4d((sy * sz), (sy * cz), 0, 0.0f); // e1
     angular_hessian_.row(10).noalias() =
-        Eigen::Vector4d((-sx * cy * sz), (-sx * cy * cz), 0, 0.0f);  // e2
+        Eigen::Vector4d((-sx * cy * sz), (-sx * cy * cz), 0, 0.0f); // e2
     angular_hessian_.row(11).noalias() =
-        Eigen::Vector4d((cx * cy * sz), (cx * cy * cz), 0, 0.0f);  // e3
+        Eigen::Vector4d((cx * cy * sz), (cx * cy * cz), 0, 0.0f); // e3
 
     angular_hessian_.row(12).noalias() =
-        Eigen::Vector4d((-cy * cz), (cy * sz), 0, 0.0f);  // f1
+        Eigen::Vector4d((-cy * cz), (cy * sz), 0, 0.0f); // f1
     angular_hessian_.row(13).noalias() = Eigen::Vector4d(
-        (-cx * sz - sx * sy * cz), (-cx * cz + sx * sy * sz), 0, 0.0f);  // f2
+        (-cx * sz - sx * sy * cz), (-cx * cz + sx * sy * sz), 0, 0.0f); // f2
     angular_hessian_.row(14).noalias() = Eigen::Vector4d(
-        (-sx * sz + cx * sy * cz), (-cx * sy * sz - sx * cz), 0, 0.0f);  // f3
+        (-sx * sz + cx * sy * cz), (-cx * sy * sz - sx * cz), 0, 0.0f); // f3
   }
 }
 
 template <typename PointSource, typename PointTarget>
-void MyNormalDistributionsTransform<PointSource, PointTarget>::
-    computePointDerivatives(const Eigen::Vector3d& x, bool compute_hessian) {
+void
+MyNormalDistributionsTransform<PointSource, PointTarget>::computePointDerivatives(
+    const Eigen::Vector3d& x, bool compute_hessian)
+{
   // Calculate first derivative of Transformation Equation 6.17 w.r.t. transform
   // vector. Derivative w.r.t. ith element of transform vector corresponds to
   // column i, Equation 6.18 and 6.19 [Magnusson 2009]
@@ -341,12 +344,9 @@ void MyNormalDistributionsTransform<PointSource, PointTarget>::
         angular_hessian_ * Eigen::Vector4d(x[0], x[1], x[2], 0.0);
 
     // Vectors from Equation 6.21 [Magnusson 2009]
-    const Eigen::Vector3d a(0, point_angular_hessian[0],
-                            point_angular_hessian[1]);
-    const Eigen::Vector3d b(0, point_angular_hessian[2],
-                            point_angular_hessian[3]);
-    const Eigen::Vector3d c(0, point_angular_hessian[4],
-                            point_angular_hessian[5]);
+    const Eigen::Vector3d a(0, point_angular_hessian[0], point_angular_hessian[1]);
+    const Eigen::Vector3d b(0, point_angular_hessian[2], point_angular_hessian[3]);
+    const Eigen::Vector3d c(0, point_angular_hessian[4], point_angular_hessian[5]);
     const Eigen::Vector3d d = point_angular_hessian.block<3, 1>(6, 0);
     const Eigen::Vector3d e = point_angular_hessian.block<3, 1>(9, 0);
     const Eigen::Vector3d f = point_angular_hessian.block<3, 1>(12, 0);
@@ -374,7 +374,8 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::updateDerivatives(
     Eigen::Matrix<double, 6, 6>& hessian,
     const Eigen::Vector3d& x_trans,
     const Eigen::Matrix3d& c_inv,
-    bool compute_hessian) const {
+    bool compute_hessian) const
+{
   // e^(-d_2/2 * (x_k - mu_k)^T Sigma_k^-1 (x_k - mu_k)) Equation 6.9 [Magnusson
   // 2009]
   double e_x_cov_x = std::exp(-gauss_d2_ * x_trans.dot(c_inv * x_trans) / 2);
@@ -404,11 +405,10 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::updateDerivatives(
       for (Eigen::Index j = 0; j < hessian.cols(); j++) {
         // Update hessian, Equation 6.13 [Magnusson 2009]
         hessian(i, j) +=
-            e_x_cov_x *
-            (-gauss_d2_ * x_trans.dot(cov_dxd_pi) *
-                 x_trans.dot(c_inv * point_jacobian_.col(j)) +
-             x_trans.dot(c_inv * point_hessian_.block<3, 1>(3 * i, j)) +
-             point_jacobian_.col(j).dot(cov_dxd_pi));
+            e_x_cov_x * (-gauss_d2_ * x_trans.dot(cov_dxd_pi) *
+                             x_trans.dot(c_inv * point_jacobian_.col(j)) +
+                         x_trans.dot(c_inv * point_hessian_.block<3, 1>(3 * i, j)) +
+                         point_jacobian_.col(j).dot(cov_dxd_pi));
       }
     }
   }
@@ -417,8 +417,10 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::updateDerivatives(
 }
 
 template <typename PointSource, typename PointTarget>
-void MyNormalDistributionsTransform<PointSource, PointTarget>::computeHessian(
-    Eigen::Matrix<double, 6, 6>& hessian, const PointCloudSource& trans_cloud) {
+void
+MyNormalDistributionsTransform<PointSource, PointTarget>::computeHessian(
+    Eigen::Matrix<double, 6, 6>& hessian, const PointCloudSource& trans_cloud)
+{
   hessian.setZero();
 
   // Precompute Angular Derivatives unessisary because only used after regular
@@ -432,8 +434,7 @@ void MyNormalDistributionsTransform<PointSource, PointTarget>::computeHessian(
     // neighbor checking.
     std::vector<TargetGridLeafConstPtr> neighborhood;
     std::vector<float> distances;
-    target_cells_.radiusSearch(x_trans_pt, resolution_, neighborhood,
-                               distances);
+    target_cells_.radiusSearch(x_trans_pt, resolution_, neighborhood, distances);
 
     for (const auto& cell : neighborhood) {
       // Original Point
@@ -458,10 +459,12 @@ void MyNormalDistributionsTransform<PointSource, PointTarget>::computeHessian(
 }
 
 template <typename PointSource, typename PointTarget>
-void MyNormalDistributionsTransform<PointSource, PointTarget>::updateHessian(
+void
+MyNormalDistributionsTransform<PointSource, PointTarget>::updateHessian(
     Eigen::Matrix<double, 6, 6>& hessian,
     const Eigen::Vector3d& x_trans,
-    const Eigen::Matrix3d& c_inv) const {
+    const Eigen::Matrix3d& c_inv) const
+{
   // e^(-d_2/2 * (x_k - mu_k)^T Sigma_k^-1 (x_k - mu_k)) Equation 6.9 [Magnusson
   // 2009]
   double e_x_cov_x =
@@ -483,17 +486,17 @@ void MyNormalDistributionsTransform<PointSource, PointTarget>::updateHessian(
     for (Eigen::Index j = 0; j < hessian.cols(); j++) {
       // Update hessian, Equation 6.13 [Magnusson 2009]
       hessian(i, j) +=
-          e_x_cov_x *
-          (-gauss_d2_ * x_trans.dot(cov_dxd_pi) *
-               x_trans.dot(c_inv * point_jacobian_.col(j)) +
-           x_trans.dot(c_inv * point_hessian_.block<3, 1>(3 * i, j)) +
-           point_jacobian_.col(j).dot(cov_dxd_pi));
+          e_x_cov_x * (-gauss_d2_ * x_trans.dot(cov_dxd_pi) *
+                           x_trans.dot(c_inv * point_jacobian_.col(j)) +
+                       x_trans.dot(c_inv * point_hessian_.block<3, 1>(3 * i, j)) +
+                       point_jacobian_.col(j).dot(cov_dxd_pi));
     }
   }
 }
 
 template <typename PointSource, typename PointTarget>
-bool MyNormalDistributionsTransform<PointSource, PointTarget>::updateIntervalMT(
+bool
+MyNormalDistributionsTransform<PointSource, PointTarget>::updateIntervalMT(
     double& a_l,
     double& f_l,
     double& g_l,
@@ -502,7 +505,8 @@ bool MyNormalDistributionsTransform<PointSource, PointTarget>::updateIntervalMT(
     double& g_u,
     double a_t,
     double f_t,
-    double g_t) const {
+    double g_t) const
+{
   // Case U1 in Update Algorithm and Case a in Modified Update Algorithm [More,
   // Thuente 1994]
   if (f_t > f_l) {
@@ -546,7 +550,8 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::trialValueSelectionMT(
     double g_u,
     double a_t,
     double f_t,
-    double g_t) const {
+    double g_t) const
+{
   if (a_t == a_l && a_t == a_u) {
     return a_t;
   }
@@ -557,91 +562,93 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::trialValueSelectionMT(
 
   if (a_t == a_l) {
     condition = EndpointsCondition::Case4;
-  } else if (f_t > f_l) {
+  }
+  else if (f_t > f_l) {
     condition = EndpointsCondition::Case1;
-  } else if (g_t * g_l < 0) {
+  }
+  else if (g_t * g_l < 0) {
     condition = EndpointsCondition::Case2;
-  } else if (std::fabs(g_t) <= std::fabs(g_l)) {
+  }
+  else if (std::fabs(g_t) <= std::fabs(g_l)) {
     condition = EndpointsCondition::Case3;
-  } else {
+  }
+  else {
     condition = EndpointsCondition::Case4;
   }
 
   switch (condition) {
-    case EndpointsCondition::Case1: {
-      // Calculate the minimizer of the cubic that interpolates f_l, f_t, g_l
-      // and g_t Equation 2.4.52 [Sun, Yuan 2006]
-      const double z = 3 * (f_t - f_l) / (a_t - a_l) - g_t - g_l;
-      const double w = std::sqrt(z * z - g_t * g_l);
-      // Equation 2.4.56 [Sun, Yuan 2006]
-      const double a_c =
-          a_l + (a_t - a_l) * (w - g_l - z) / (g_t - g_l + 2 * w);
+  case EndpointsCondition::Case1: {
+    // Calculate the minimizer of the cubic that interpolates f_l, f_t, g_l
+    // and g_t Equation 2.4.52 [Sun, Yuan 2006]
+    const double z = 3 * (f_t - f_l) / (a_t - a_l) - g_t - g_l;
+    const double w = std::sqrt(z * z - g_t * g_l);
+    // Equation 2.4.56 [Sun, Yuan 2006]
+    const double a_c = a_l + (a_t - a_l) * (w - g_l - z) / (g_t - g_l + 2 * w);
 
-      // Calculate the minimizer of the quadratic that interpolates f_l, f_t and
-      // g_l Equation 2.4.2 [Sun, Yuan 2006]
-      const double a_q =
-          a_l - 0.5 * (a_l - a_t) * g_l / (g_l - (f_l - f_t) / (a_l - a_t));
+    // Calculate the minimizer of the quadratic that interpolates f_l, f_t and
+    // g_l Equation 2.4.2 [Sun, Yuan 2006]
+    const double a_q =
+        a_l - 0.5 * (a_l - a_t) * g_l / (g_l - (f_l - f_t) / (a_l - a_t));
 
-      if (std::fabs(a_c - a_l) < std::fabs(a_q - a_l)) {
-        return a_c;
-      }
-      return 0.5 * (a_q + a_c);
+    if (std::fabs(a_c - a_l) < std::fabs(a_q - a_l)) {
+      return a_c;
+    }
+    return 0.5 * (a_q + a_c);
+  }
+
+  case EndpointsCondition::Case2: {
+    // Calculate the minimizer of the cubic that interpolates f_l, f_t, g_l
+    // and g_t Equation 2.4.52 [Sun, Yuan 2006]
+    const double z = 3 * (f_t - f_l) / (a_t - a_l) - g_t - g_l;
+    const double w = std::sqrt(z * z - g_t * g_l);
+    // Equation 2.4.56 [Sun, Yuan 2006]
+    const double a_c = a_l + (a_t - a_l) * (w - g_l - z) / (g_t - g_l + 2 * w);
+
+    // Calculate the minimizer of the quadratic that interpolates f_l, g_l and
+    // g_t Equation 2.4.5 [Sun, Yuan 2006]
+    const double a_s = a_l - (a_l - a_t) / (g_l - g_t) * g_l;
+
+    if (std::fabs(a_c - a_t) >= std::fabs(a_s - a_t)) {
+      return a_c;
+    }
+    return a_s;
+  }
+
+  case EndpointsCondition::Case3: {
+    // Calculate the minimizer of the cubic that interpolates f_l, f_t, g_l
+    // and g_t Equation 2.4.52 [Sun, Yuan 2006]
+    const double z = 3 * (f_t - f_l) / (a_t - a_l) - g_t - g_l;
+    const double w = std::sqrt(z * z - g_t * g_l);
+    const double a_c = a_l + (a_t - a_l) * (w - g_l - z) / (g_t - g_l + 2 * w);
+
+    // Calculate the minimizer of the quadratic that interpolates g_l and g_t
+    // Equation 2.4.5 [Sun, Yuan 2006]
+    const double a_s = a_l - (a_l - a_t) / (g_l - g_t) * g_l;
+
+    double a_t_next;
+
+    if (std::fabs(a_c - a_t) < std::fabs(a_s - a_t)) {
+      a_t_next = a_c;
+    }
+    else {
+      a_t_next = a_s;
     }
 
-    case EndpointsCondition::Case2: {
-      // Calculate the minimizer of the cubic that interpolates f_l, f_t, g_l
-      // and g_t Equation 2.4.52 [Sun, Yuan 2006]
-      const double z = 3 * (f_t - f_l) / (a_t - a_l) - g_t - g_l;
-      const double w = std::sqrt(z * z - g_t * g_l);
-      // Equation 2.4.56 [Sun, Yuan 2006]
-      const double a_c =
-          a_l + (a_t - a_l) * (w - g_l - z) / (g_t - g_l + 2 * w);
-
-      // Calculate the minimizer of the quadratic that interpolates f_l, g_l and
-      // g_t Equation 2.4.5 [Sun, Yuan 2006]
-      const double a_s = a_l - (a_l - a_t) / (g_l - g_t) * g_l;
-
-      if (std::fabs(a_c - a_t) >= std::fabs(a_s - a_t)) {
-        return a_c;
-      }
-      return a_s;
+    if (a_t > a_l) {
+      return std::min(a_t + 0.66 * (a_u - a_t), a_t_next);
     }
+    return std::max(a_t + 0.66 * (a_u - a_t), a_t_next);
+  }
 
-    case EndpointsCondition::Case3: {
-      // Calculate the minimizer of the cubic that interpolates f_l, f_t, g_l
-      // and g_t Equation 2.4.52 [Sun, Yuan 2006]
-      const double z = 3 * (f_t - f_l) / (a_t - a_l) - g_t - g_l;
-      const double w = std::sqrt(z * z - g_t * g_l);
-      const double a_c =
-          a_l + (a_t - a_l) * (w - g_l - z) / (g_t - g_l + 2 * w);
-
-      // Calculate the minimizer of the quadratic that interpolates g_l and g_t
-      // Equation 2.4.5 [Sun, Yuan 2006]
-      const double a_s = a_l - (a_l - a_t) / (g_l - g_t) * g_l;
-
-      double a_t_next;
-
-      if (std::fabs(a_c - a_t) < std::fabs(a_s - a_t)) {
-        a_t_next = a_c;
-      } else {
-        a_t_next = a_s;
-      }
-
-      if (a_t > a_l) {
-        return std::min(a_t + 0.66 * (a_u - a_t), a_t_next);
-      }
-      return std::max(a_t + 0.66 * (a_u - a_t), a_t_next);
-    }
-
-    default:
-    case EndpointsCondition::Case4: {
-      // Calculate the minimizer of the cubic that interpolates f_u, f_t, g_u
-      // and g_t Equation 2.4.52 [Sun, Yuan 2006]
-      const double z = 3 * (f_t - f_u) / (a_t - a_u) - g_t - g_u;
-      const double w = std::sqrt(z * z - g_t * g_u);
-      // Equation 2.4.56 [Sun, Yuan 2006]
-      return a_u + (a_t - a_u) * (w - g_u - z) / (g_t - g_u + 2 * w);
-    }
+  default:
+  case EndpointsCondition::Case4: {
+    // Calculate the minimizer of the cubic that interpolates f_u, f_t, g_u
+    // and g_t Equation 2.4.52 [Sun, Yuan 2006]
+    const double z = 3 * (f_t - f_u) / (a_t - a_u) - g_t - g_u;
+    const double w = std::sqrt(z * z - g_t * g_u);
+    // Equation 2.4.56 [Sun, Yuan 2006]
+    return a_u + (a_t - a_u) * (w - g_u - z) / (g_t - g_u + 2 * w);
+  }
   }
 }
 
@@ -656,7 +663,8 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::computeStepLengthMT(
     double& score,
     Eigen::Matrix<double, 6, 1>& score_gradient,
     Eigen::Matrix<double, 6, 6>& hessian,
-    PointCloudSource& trans_cloud) {
+    PointCloudSource& trans_cloud)
+{
   // Set the value of phi(0), Equation 1.3 [More, Thuente 1994]
   const double phi_0 = -score;
   // Set the value of phi'(0), Equation 1.3 [More, Thuente 1994]
@@ -733,11 +741,10 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::computeStepLengthMT(
            d_phi_t <= -nu * d_phi_0 /*Curvature Condition*/)) {
     // Use auxiliary function if interval I is not closed
     if (open_interval) {
-      a_t = trialValueSelectionMT(a_l, f_l, g_l, a_u, f_u, g_u, a_t, psi_t,
-                                  d_psi_t);
-    } else {
-      a_t = trialValueSelectionMT(a_l, f_l, g_l, a_u, f_u, g_u, a_t, phi_t,
-                                  d_phi_t);
+      a_t = trialValueSelectionMT(a_l, f_l, g_l, a_u, f_u, g_u, a_t, psi_t, d_psi_t);
+    }
+    else {
+      a_t = trialValueSelectionMT(a_l, f_l, g_l, a_u, f_u, g_u, a_t, phi_t, d_phi_t);
     }
 
     a_t = std::min(a_t, step_max);
@@ -753,8 +760,7 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::computeStepLengthMT(
     transformPointCloud(*input_, trans_cloud, final_transformation_);
 
     // Updates score, gradient. Values stored to prevent wasted computation.
-    score =
-        computeDerivatives(score_gradient, hessian, trans_cloud, x_t, false);
+    score = computeDerivatives(score_gradient, hessian, trans_cloud, x_t, false);
 
     // Calculate phi(alpha_t+)
     phi_t = -score;
@@ -784,7 +790,8 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::computeStepLengthMT(
       // 1994]
       interval_converged =
           updateIntervalMT(a_l, f_l, g_l, a_u, f_u, g_u, a_t, psi_t, d_psi_t);
-    } else {
+    }
+    else {
       // Update interval end points using Modified Updating Algorithm [More,
       // Thuente 1994]
       interval_converged =
@@ -804,6 +811,6 @@ MyNormalDistributionsTransform<PointSource, PointTarget>::computeStepLengthMT(
   return a_t;
 }
 
-}  // namespace pcl
+} // namespace pcl
 
-#endif  // PCL_REGISTRATION_NDT_IMPL_H_
+#endif // PCL_REGISTRATION_NDT_IMPL_H_

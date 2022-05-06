@@ -174,3 +174,10 @@ TEST_F(BunnyTest, MyNNDTIterative) {
   auto m2 = NDTMatcher::GetIter({kNNDT, k1to1}, {0.5, 1, 2});
   MatchAndTest(m2, sample_guess);
 }
+
+TEST_F(BunnyTest, MyNNDTIterativeAnalytic) {
+  auto m = NDTMatcher::GetIter({kNNDT, k1to1, kAnalytic}, {0.5, 1, 2});
+  MatchAndTest(m);
+  auto m2 = NDTMatcher::GetIter({kNNDT, k1to1, kAnalytic}, {0.5, 1, 2});
+  MatchAndTest(m2, sample_guess);
+}
