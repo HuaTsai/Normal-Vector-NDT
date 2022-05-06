@@ -1,6 +1,5 @@
 #include <common/angle_utils.h>
 #include <common/eigen_utils.h>
-#include <lbfgs/LBFGSB.h>
 #include <ndt/opt.h>
 
 class Manifold2D {
@@ -39,8 +38,6 @@ Optimizer::Optimizer(Options type)
     param_ = new ceres::ProductParameterization(
         new ceres::IdentityParameterization(3),
         new ceres::EigenQuaternionParameterization());
-  } else if (type_ == Options::kLBFGSPP) {
-    // nop
   } else if (type_ == Options::kAnalytic) {
     // nop
   } else {
@@ -88,24 +85,6 @@ void Optimizer::Optimize() {
         Eigen::AngleAxisd(xyzrpy_[3], Eigen::Vector3d::UnitX()) *
         Eigen::AngleAxisd(xyzrpy_[4], Eigen::Vector3d::UnitY()) *
         Eigen::AngleAxisd(xyzrpy_[5], Eigen::Vector3d::UnitZ());
-    cur_tf3_ = dtf * cur_tf3_;
-    tlang_ = TransNormRotDegAbsFromAffine3d(dtf);
-  } else if (type_ == Options::kLBFGSPP) {
-    LBFGSpp::LBFGSBParam<double> param;
-    LBFGSpp::LBFGSBSolver<double> solver(param);
-    Eigen::VectorXd x = Eigen::VectorXd::Zero(6);
-    Eigen::VectorXd lb = Eigen::VectorXd::Zero(6);
-    Eigen::VectorXd ub = Eigen::VectorXd::Zero(6);
-    // HACK: Bound
-    double angle = Deg2Rad(45);
-    ub << 5, 5, 5, angle, angle, angle;
-    lb = -ub;
-    double fx;
-    solver.minimize(*costobj_, x, fx, lb, ub);
-    Eigen::Affine3d dtf = Eigen::Translation3d(x.head(3)) *
-                          Eigen::AngleAxisd(x(3), Eigen::Vector3d::UnitX()) *
-                          Eigen::AngleAxisd(x(4), Eigen::Vector3d::UnitY()) *
-                          Eigen::AngleAxisd(x(5), Eigen::Vector3d::UnitZ());
     cur_tf3_ = dtf * cur_tf3_;
     tlang_ = TransNormRotDegAbsFromAffine3d(dtf);
   }

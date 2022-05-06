@@ -133,20 +133,6 @@ TEST_F(BunnyTest, MyNNDT) {
   MatchAndTest(m2, sample_guess);
 }
 
-TEST_F(BunnyTest, MyNDTLBFGSPP) {
-  auto m = NDTMatcher::GetBasic({kNDT, k1to1, kLBFGSPP}, 1);
-  MatchAndTest(m);
-  auto m2 = NDTMatcher::GetBasic({kNDT, k1to1, kLBFGSPP}, 1);
-  MatchAndTest(m2, sample_guess);
-}
-
-TEST_F(BunnyTest, MyNNDTLBFGSPP) {
-  auto m = NDTMatcher::GetBasic({kNNDT, k1to1, kLBFGSPP}, 1);
-  MatchAndTest(m);
-  auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1, kLBFGSPP}, 1);
-  MatchAndTest(m2, sample_guess);
-}
-
 TEST_F(BunnyTest, MyNDTAnalytic) {
   auto m = NDTMatcher::GetBasic({kNDT, k1to1, kAnalytic}, 1);
   MatchAndTest(m);

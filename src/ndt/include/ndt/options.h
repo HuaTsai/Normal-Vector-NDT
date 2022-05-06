@@ -11,7 +11,6 @@ enum class Options {
   kNoReject,
   kOptimizer2D,
   kOptimizer3D,
-  kLBFGSPP,
   kAnalytic,
   kUseNormalOMP
 };
@@ -26,6 +25,5 @@ constexpr Options kPointCov = Options::kPointCov;
 constexpr Options kNoReject = Options::kNoReject;
 constexpr Options kOptimizer2D = Options::kOptimizer2D;
 constexpr Options kOptimizer3D = Options::kOptimizer3D;
-constexpr Options kLBFGSPP = Options::kLBFGSPP;
 constexpr Options kAnalytic = Options::kAnalytic;
 constexpr Options kUseNormalOMP = Options::kUseNormalOMP;

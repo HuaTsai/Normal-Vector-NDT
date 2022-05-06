@@ -112,25 +112,18 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
     }
 
     Options type = Options::kOptimizer3D;
-    if (HasOption(Options::kLBFGSPP))
-      type = Options::kLBFGSPP;
-    else if (HasOption(Options::kAnalytic))
-      type = Options::kAnalytic;
+    if (HasOption(Options::kAnalytic)) type = Options::kAnalytic;
 
     Optimizer opt(type);
     opt.set_cur_tf3(cur_tf);
     corres_ = ups.size();
     if (HasOption(Options::kNDT)) {
-      if (HasOption(Options::kLBFGSPP))
-        opt.BuildProblem(new NDTCostObj(ups, cps, uqs, cqs, d2_));
-      else if (HasOption(Options::kAnalytic))
+      if (HasOption(Options::kAnalytic))
         opt.BuildProblem(new NDTCostN(ups, cps, uqs, cqs, d2_));
       else
         opt.BuildProblem(NDTCost::Create(ups, cps, uqs, cqs, d2_));
     } else if (HasOption(Options::kNormalNDT)) {
-      if (HasOption(Options::kLBFGSPP))
-        opt.BuildProblem(new NNDTCostObj(ups, cps, nps, uqs, cqs, nqs, d2_));
-      else if (HasOption(Options::kAnalytic))
+      if (HasOption(Options::kAnalytic))
         opt.BuildProblem(new NNDTCostN(ups, cps, nps, uqs, cqs, nqs, d2_));
       else
         opt.BuildProblem(NNDTCost::Create(ups, cps, nps, uqs, cqs, nqs, d2_));

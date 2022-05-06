@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
   r1.timer += m1.timer();
 
   cout << "NNDT" << endl;
-  auto op2 = {kNNDT, k1to1, kPointCov, kLBFGSPP};
+  auto op2 = {kNNDT, k1to1, kPointCov, kAnalytic};
   auto m2 = NDTMatcher::GetBasic(op2, 0.5, nndtd2);
   m2.set_intrinsic(0.005);
   m2.SetSource(src);
