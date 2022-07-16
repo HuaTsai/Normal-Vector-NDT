@@ -3,7 +3,9 @@
 #include <metric/metric.h>
 #include <nav_msgs/Path.h>
 #include <ndt/matcher.h>
+#include <pcl/io/obj_io.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/io/ply_io.h>
 #include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
 #include <visualization_msgs/Marker.h>
@@ -40,14 +42,15 @@ int main(int argc, char **argv) {
   PointCloudType::Ptr target_pcl = PointCloudType::Ptr(new PointCloudType);
   pcl::io::loadPCDFile<pcl::PointXYZ>(
       JoinPath(WSPATH, "src/ndt/data/bunny1.pcd"), *source_pcl);
-  pcl::io::loadPCDFile<pcl::PointXYZ>(
-      JoinPath(WSPATH, "src/ndt/data/bunny2.pcd"), *target_pcl);
+  pcl::io::loadOBJFile<pcl::PointXYZ>(
+      JoinPath(WSPATH, "src/ndt/data/bunny.obj"), *target_pcl);
   vector<Vector3d> source;
   vector<Vector3d> target;
   for (const auto &pt : *source_pcl)
     source.push_back(Vector3d(pt.x, pt.y, pt.z));
   for (const auto &pt : *target_pcl)
-    target.push_back(Vector3d(pt.x, pt.y, pt.z));
+    target.push_back(10 * Vector3d(pt.x, pt.y, pt.z));
+  cout << source.size() << ", " << target.size() << endl;
 
   ros::init(argc, argv, "exp7");
   ros::NodeHandle nh;
@@ -57,7 +60,7 @@ int main(int argc, char **argv) {
   pub1.publish(MP(source, false));
   pub2.publish(MP(target, true));
 
-  auto m = NDTMatcher::GetBasic({kNDT, k1to1}, 1);
+  auto m = NDTMatcher::GetBasic({kNNDT, k1to1}, 1);
   m.SetSource(source);
   m.SetTarget(target);
   auto res = m.Align();

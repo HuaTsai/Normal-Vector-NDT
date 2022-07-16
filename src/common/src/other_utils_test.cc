@@ -9,3 +9,8 @@ TEST(LargestNIndices, Basic) {
   vector<int> expect{6, 0, 9, 5, 4};
   EXPECT_EQ(res, expect);
 }
+
+TEST(GetBagsPath, Basic) {
+  auto res = GetBagsPath(48);
+  EXPECT_EQ((int)res.size(), 34);
+}

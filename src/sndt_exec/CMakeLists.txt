@@ -12,6 +12,7 @@ find_package(catkin REQUIRED
     ndt
     pcl_ros
     metric
+    polar_grid_plane
 )
 
 catkin_package()

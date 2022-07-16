@@ -16,6 +16,10 @@ std::string GetDataPath(std::string data);
 
 std::vector<std::string> GetBagsPath(std::string data);
 
+std::vector<std::string> GetBagsPath(int lognum);
+
+std::string GetScenePath(int scenenum);
+
 std::vector<int> LargestNIndices(const std::vector<double> &data, int n);
 
 /********** Inline Functions **********/

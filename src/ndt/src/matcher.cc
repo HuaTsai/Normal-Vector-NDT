@@ -60,6 +60,21 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
     smap_->LoadPoints(spts_);
   timer_.ProcedureFinish();
 
+  for (const auto &cell : *smap_) {
+    Eigen::Vector3d tmp1;
+    Eigen::Matrix3d tmp2;
+    timer_.ProcedureStart(timer_.kNormal);
+    ComputeEvalEvec(cell.second.GetCov(), tmp1, tmp2);
+    timer_.ProcedureFinish();
+  }
+  for (const auto &cell : *tmap_) {
+    Eigen::Vector3d tmp1;
+    Eigen::Matrix3d tmp2;
+    timer_.ProcedureStart(timer_.kNormal);
+    ComputeEvalEvec(cell.second.GetCov(), tmp1, tmp2);
+    timer_.ProcedureFinish();
+  }
+
   auto cur_tf = guess;
   bool converge = false;
 
@@ -106,8 +121,9 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
 
     if (!HasOption(Options::kNoReject)) {
       Orj orj(ups.size());
-      orj.RangeRejection(ups, uqs, Rejection::kBoth, {cell_size_});
-      orj.AngleRejection(nps, nqs, Rejection::kThreshold, {1});
+      // orj.RangeRejection(ups, uqs, Rejection::kBoth, {cell_size_});
+      orj.RangeRejection(ups, uqs, Rejection::kThreshold, {cell_size_});
+      // orj.AngleRejection(nps, nqs, Rejection::kThreshold, {1});
       orj.RetainIndices(ups, uqs, cps, cqs, nps, nqs);
     }
 
@@ -200,7 +216,8 @@ Eigen::Affine3d ICPMatcher::Align(const Eigen::Affine3d &guess) {
 
     if (!HasOption(Options::kNoReject)) {
       Orj orj(ps.size());
-      orj.RangeRejection(ps, qs, Rejection::kBoth, {1.});
+      // orj.RangeRejection(ps, qs, Rejection::kBoth, {1.});
+      orj.RangeRejection(ps, qs, Rejection::kThreshold, {1.});
       orj.RetainIndices(ps, qs);
     }
 
@@ -312,7 +329,8 @@ Eigen::Affine3d SICPMatcher::Align(const Eigen::Affine3d &guess) {
 
     if (!HasOption(Options::kNoReject)) {
       Orj orj(ps.size());
-      orj.RangeRejection(ps, qs, Rejection::kBoth, {1.});
+      // orj.RangeRejection(ps, qs, Rejection::kBoth, {1.});
+      orj.RangeRejection(ps, qs, Rejection::kThreshold, {1.});
       orj.RetainIndices(ps, qs, nps, nqs);
     }
     Options type = Options::kAnalytic;

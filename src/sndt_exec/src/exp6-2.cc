@@ -112,8 +112,9 @@ int main(int argc, char **argv) {
   r1.path = InitFirstPose(t0);
   r2.path = InitFirstPose(t0);
   if (n == -1) n = vpc.size() - 1;
+  tqdm bar;
   for (int i = 0; i < n; i += f) {
-    cerr << i << " ";
+    bar.progress(i, n);
     auto tgt = PCMsgTo3D(vpc[i], 0);
     auto src = PCMsgTo3D(vpc[i + f], 0);
     auto tj = vpc[i + f].header.stamp;
@@ -135,7 +136,7 @@ int main(int argc, char **argv) {
     r1.Tr = r1.Tr * res1;
     r1.path.poses.push_back(MakePoseStampedMsg(tj, r1.Tr));
 
-    auto m2 = SICPMatcher::GetBasic({}, 1);
+    auto m2 = SICPMatcher::GetBasic({}, 0.5);
     m2.SetSource(src);
     m2.SetTarget(tgt);
     auto res2 = m2.Align();
@@ -149,6 +150,7 @@ int main(int argc, char **argv) {
     r2.Tr = r2.Tr * res2;
     r2.path.poses.push_back(MakePoseStampedMsg(tj, r2.Tr));
   }
+  bar.finish();
 
   ros::init(argc, argv, "exp6_2");
   ros::NodeHandle nh;
@@ -166,5 +168,12 @@ int main(int argc, char **argv) {
   cout << endl;
   r1.timer.Show();
   r2.timer.Show();
+
+  printf("%.2f, %.2f\n%.2f, %.2f\n",
+         (r1.timer.build() + r1.timer.optimize()) / 1000. / n,
+         r1.timer.total() / 1000. / n,
+         (r2.timer.build() + r2.timer.optimize()) / 1000. / n,
+         r2.timer.total() / 1000. / n);
+
   ros::spin();
 }

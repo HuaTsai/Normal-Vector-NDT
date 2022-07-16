@@ -3,6 +3,7 @@
 #include <ndt/matcher.h>
 #include <ndt/visuals.h>
 #include <pcl/common/transforms.h>
+#include <pcl/io/obj_io.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl_ros/point_cloud.h>
 #include <ros/ros.h>
@@ -31,16 +32,17 @@ visualization_msgs::Marker MText(std::string text,
 int main(int argc, char **argv) {
   PointCloudType::Ptr source_pcl = PointCloudType::Ptr(new PointCloudType);
   PointCloudType::Ptr target_pcl = PointCloudType::Ptr(new PointCloudType);
-  pcl::io::loadPCDFile<pcl::PointXYZ>(
-      JoinPath(WSPATH, "src/ndt/data/bunny2.pcd"), *source_pcl);
-  pcl::io::loadPCDFile<pcl::PointXYZ>(
-      JoinPath(WSPATH, "src/ndt/data/bunny2.pcd"), *target_pcl);
+  pcl::io::loadOBJFile<pcl::PointXYZ>(
+      JoinPath(WSPATH, "src/ndt/data/bunny.obj"), *source_pcl);
+  pcl::io::loadOBJFile<pcl::PointXYZ>(
+      JoinPath(WSPATH, "src/ndt/data/bunny.obj"), *target_pcl);
+  for (auto &pt : *source_pcl) pt.x *= 10., pt.y *= 10., pt.z *= 10.;
+  for (auto &pt : *target_pcl) pt.x *= 10., pt.y *= 10., pt.z *= 10.;
   source_pcl->header.frame_id = "map";
   target_pcl->header.frame_id = "map";
   vector<Vector3d> src, tgt;
   for (const auto &pt : *source_pcl) src.push_back(Vector3d(pt.x, pt.y, pt.z));
   for (const auto &pt : *target_pcl) tgt.push_back(Vector3d(pt.x, pt.y, pt.z));
-  cout << src.size() << endl;
 
   auto subtf =
       Affine3dFromXYZRPY({1, 1, 1, Deg2Rad(5), Deg2Rad(5), Deg2Rad(5)});
@@ -63,24 +65,41 @@ int main(int argc, char **argv) {
   pub1.publish(*source_pcl);
   pub2.publish(*target_pcl);
 
-  auto m1 = ICPMatcher::GetBasic({});
+  auto m1 = ICPMatcher::GetBasic({kNoReject});
   m1.SetSource(src);
   m1.SetTarget(tgt);
   auto res1 = m1.Align();
-  cout << "ICP: " << TransNormRotDegAbsFromAffine3d(res1 * subtf).transpose()
-       << endl;
+  // clang-format off
+  printf("ICP:\n  (%.20f, %e)\n  corr: %d, iter: %d, bud: %.2f, nm: %.2f, ndt: %.2f, opt: %.2f, oth: %.2f, ttl: %.2f\n",
+      TransNormRotDegAbsFromAffine3d(res1 * subtf)(0),
+      TransNormRotDegAbsFromAffine3d(res1 * subtf)(1),
+      m1.corres(),
+      m1.iteration(),
+      m1.timer().build() / 1000.,
+      m1.timer().normal() / 1000.,
+      m1.timer().ndt() / 1000.,
+      m1.timer().optimize() / 1000.,
+      m1.timer().others() / 1000.,
+      m1.timer().total() / 1000.);
+  // clang-format on
 
-  auto m2 = SICPMatcher::GetBasic({}, 1);
+  auto m2 = SICPMatcher::GetBasic({kNoReject}, 0.5);
   m2.SetSource(src);
   m2.SetTarget(tgt);
   auto res2 = m2.Align();
-  cout << "SICP: " << TransNormRotDegAbsFromAffine3d(res2 * subtf).transpose()
-       << endl;
-
-  printf("iter: %d, opt: %.2f, ttl: %.2f\n", m1.iteration(),
-         m1.timer().optimize() / 1000., m1.timer().total() / 1000.);
-  printf("iter: %d, opt: %.2f, ttl: %.2f\n", m2.iteration(),
-         m2.timer().optimize() / 1000., m2.timer().total() / 1000.);
+  // clang-format off
+  printf("SICP:\n  (%.20f, %e)\n  corr: %d, iter: %d, bud: %.2f, nm: %.2f, ndt: %.2f, opt: %.2f, oth: %.2f, ttl: %.2f\n",
+      TransNormRotDegAbsFromAffine3d(res2 * subtf)(0),
+      TransNormRotDegAbsFromAffine3d(res2 * subtf)(1),
+      m2.corres(),
+      m2.iteration(),
+      m2.timer().build() / 1000.,
+      m2.timer().normal() / 1000.,
+      m2.timer().ndt() / 1000.,
+      m2.timer().optimize() / 1000.,
+      m2.timer().others() / 1000.,
+      m2.timer().total() / 1000.);
+  // clang-format on
 
   size_t idx;
   cout << "Index: ";

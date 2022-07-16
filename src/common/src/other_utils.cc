@@ -1,5 +1,7 @@
 #include <common/other_utils.h>
 
+#include <boost/filesystem.hpp>
+
 std::pair<double, double> ComputeMeanAndStdev(const std::vector<double> &coll) {
   if (coll.size() <= 1) {
     std::cerr << __FUNCTION__ << ": invalid container size " << coll.size()
@@ -69,6 +71,35 @@ std::vector<std::string> GetBagsPath(std::string data) {
   std::cerr << "No specified data " << data << std::endl;
   std::exit(1);
   return {};
+}
+
+// Boost solution: can be replaced by filesystem in C++17
+std::vector<std::string> GetBagsPath(int lognum) {
+  std::vector<std::string> ret;
+  std::regex reg(".*log" + std::to_string(lognum) + "_.*\\.bag");
+  boost::filesystem::directory_iterator it(BPATH);
+  boost::filesystem::directory_iterator end;
+  while (it != end) {
+    if (is_regular_file(it->path()) &&
+        std::regex_match(it->path().string(), reg))
+      ret.push_back(it->path().string());
+    ++it;
+  }
+  std::sort(ret.begin(), ret.end());
+  return ret;
+}
+
+std::string GetScenePath(int scenenum) {
+  std::regex reg(".*-0?" + std::to_string(scenenum) + "\\.bag");
+  boost::filesystem::directory_iterator it(BPATH);
+  boost::filesystem::directory_iterator end;
+  while (it != end) {
+    if (is_regular_file(it->path()) &&
+        std::regex_match(it->path().string(), reg))
+      return it->path().string();
+    ++it;
+  }
+  return "";
 }
 
 std::vector<int> LargestNIndices(const std::vector<double> &data, int n) {

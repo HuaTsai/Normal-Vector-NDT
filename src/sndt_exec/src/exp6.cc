@@ -24,13 +24,17 @@ nav_msgs::Path InitFirstPose(const ros::Time &time) {
 }
 
 struct Res {
-  Res() : Tr(Affine3d::Identity()) {}
+  Res() : Tr(Affine3d::Identity()), sc(0) {}
   void Show() {
-    printf(" its: %f / %f\n", Stat(its).mean, Stat(its).max);
-    printf(" err: %f / %f\n", Stat(terr).rms, Stat(rerr).rms);
-    printf("corr: %f\n", Stat(corr).mean);
+    printf(" its: %.2f / %.2f\n", Stat(its).mean, Stat(its).max);
+    printf(" err: %.4f / %.4f\n", Stat(terr).rms, Stat(rerr).rms);
+    printf("corr: %.2f\n", Stat(corr).mean);
+    printf("  sr: %.2f\n", sc / double(its.size()) * 100.);
     double den = its.size() * 1000.;
-    printf("time: %f / %f\n", timer.optimize() / den, timer.total() / den);
+    printf("time: %.2f / %.2f\n", timer.optimize() / den, timer.total() / den);
+    printf("%.4f / %.4f & %.2f / %.2f & %.2f\n", Stat(terr).rms, Stat(rerr).rms,
+           timer.optimize() / den, timer.total() / den,
+           sc / double(its.size()) * 100.);
   }
   vector<double> its;
   vector<double> terr;
@@ -40,6 +44,7 @@ struct Res {
   Timer timer;
   nav_msgs::Path path;
   Affine3d Tr;
+  int sc;
 };
 
 Affine3d BM(const nav_msgs::Path &gt,
@@ -80,12 +85,35 @@ void PNumpy(vector<double> coll, string str) {
   cout << "]\n";
 }
 
+void RunMatch(const vector<Vector3d> &src,
+              const vector<Vector3d> &tgt,
+              ros::Time tj,
+              const Affine3d &ben,
+              NDTMatcher &m,
+              Res &r) {
+  m.set_intrinsic(0.00005);
+  m.SetSource(src);
+  m.SetTarget(tgt);
+  auto res = m.Align();
+  auto err = TransNormRotDegAbsFromAffine3d(res * ben.inverse());
+  r.terr.push_back(err(0));
+  r.rerr.push_back(err(1));
+  if (err(0) < 0.2 && err(1) < 3) ++r.sc;
+  r.corr.push_back(m.corres());
+  r.timer += m.timer();
+  r.opt.push_back(m.timer().optimize() / 1000.);
+  r.its.push_back(m.iteration());
+  r.Tr = r.Tr * res;
+  r.path.poses.push_back(MakePoseStampedMsg(tj, r.Tr));
+}
+
 int main(int argc, char **argv) {
   Affine3d aff3 = Translation3d(0.943713, 0.000000, 1.840230) *
                   Quaterniond(0.707796, -0.006492, 0.010646, -0.706307);
   string d;
   int f, n;
-  double ndtd2, nndtd2;
+  double ndtd2, nndtd2, cs;
+  bool orj;
   po::options_description desc("Allowed options");
   // clang-format off
   desc.add_options()
@@ -93,6 +121,8 @@ int main(int argc, char **argv) {
       ("d,d", po::value<string>(&d)->required(), "Data (logxx)")
       ("f,f", po::value<int>(&f)->required()->default_value(1), "Frames")
       ("n,n", po::value<int>(&n)->default_value(-1), "Frames")
+      ("c,c", po::value<double>(&cs)->default_value(-1), "Cell size")
+      ("o,o", po::value<bool>(&orj)->default_value(false)->implicit_value(true), "Reject")
       ("ndtd2,a", po::value<double>(&ndtd2)->default_value(0.05), "d2 NDT")
       ("nndtd2,b", po::value<double>(&nndtd2)->default_value(0.05), "d2 NNDT");
   // clang-format on
@@ -120,7 +150,7 @@ int main(int argc, char **argv) {
   if (n == -1) n = vpc.size() - 1;
   tqdm bar;
   for (int i = 0; i < n; i += f) {
-    cerr << i << " ";
+    bar.progress(i, n);
     auto tgt = PCMsgTo3D(vpc[i], 0);
     auto src = PCMsgTo3D(vpc[i + f], 0);
     auto tj = vpc[i + f].header.stamp;
@@ -130,59 +160,47 @@ int main(int argc, char **argv) {
     bent.push_back(TransNormRotDegAbsFromAffine3d(ben)(0));
     benr.push_back(TransNormRotDegAbsFromAffine3d(ben)(1));
 
-    auto op1 = {kNDT, k1to1, kPointCov, kAnalytic};
-    auto m1 = NDTMatcher::GetBasic(op1, 0.5, ndtd2);
-    m1.set_intrinsic(0.005);
-    m1.SetSource(src);
-    m1.SetTarget(tgt);
-    auto res1 = m1.Align();
-    auto err1 = TransNormRotDegAbsFromAffine3d(res1 * ben.inverse());
-    r1.terr.push_back(err1(0));
-    r1.rerr.push_back(err1(1));
-    r1.corr.push_back(m1.corres());
-    r1.timer += m1.timer();
-    r1.opt.push_back(m1.timer().optimize() / 1000.);
-    r1.its.push_back(m1.iteration());
-    r1.Tr = r1.Tr * res1;
-    r1.path.poses.push_back(MakePoseStampedMsg(tj, r1.Tr));
+    unordered_set<Options> op1 = {kNDT, k1to1, kPointCov, kAnalytic};
+    if (!orj) op1.insert(kNoReject);
+    if (cs == -1) {
+      auto m1 = NDTMatcher::GetIter(op1, {0.5, 1, 2, 3}, ndtd2);
+      RunMatch(src, tgt, tj, ben, m1, r1);
+    } else {
+      auto m1 = NDTMatcher::GetBasic(op1, cs, ndtd2);
+      RunMatch(src, tgt, tj, ben, m1, r1);
+    }
 
-    auto op2 = {kNNDT, k1to1, kPointCov, kAnalytic};
-    auto m2 = NDTMatcher::GetBasic(op2, 0.5, nndtd2);
-    m2.set_intrinsic(0.005);
-    m2.SetSource(src);
-    m2.SetTarget(tgt);
-    auto res2 = m2.Align();
-    auto err2 = TransNormRotDegAbsFromAffine3d(res2 * ben.inverse());
-    r2.terr.push_back(err2(0));
-    r2.rerr.push_back(err2(1));
-    r2.corr.push_back(m2.corres());
-    r2.timer += m2.timer();
-    r2.opt.push_back(m2.timer().optimize() / 1000.);
-    r2.its.push_back(m2.iteration());
-    r2.Tr = r2.Tr * res2;
-    r2.path.poses.push_back(MakePoseStampedMsg(tj, r2.Tr));
+    unordered_set<Options> op2 = {kNNDT, k1to1, kPointCov, kAnalytic};
+    if (!orj) op2.insert(kNoReject);
+    if (cs == -1) {
+      auto m2 = NDTMatcher::GetIter(op2, {0.5, 1, 2, 3}, nndtd2);
+      RunMatch(src, tgt, tj, ben, m2, r2);
+    } else {
+      auto m2 = NDTMatcher::GetBasic(op2, cs, nndtd2);
+      RunMatch(src, tgt, tj, ben, m2, r2);
+    }
   }
   bar.finish();
-  cout << *max_element(r1.terr.begin(), r1.terr.end()) << " -> ";
-  Print(LargestNIndices(r1.terr, 3), "t1");
-  cout << *max_element(r1.rerr.begin(), r1.rerr.end()) << " -> ";
-  Print(LargestNIndices(r1.rerr, 3), "r1");
-  cout << *max_element(r2.terr.begin(), r2.terr.end()) << " -> ";
-  Print(LargestNIndices(r2.terr, 3), "t2");
-  cout << *max_element(r2.rerr.begin(), r2.rerr.end()) << " -> ";
-  Print(LargestNIndices(r2.rerr, 3), "r2");
+  // cout << *max_element(r1.terr.begin(), r1.terr.end()) << " -> ";
+  // Print(LargestNIndices(r1.terr, 3), "t1");
+  // cout << *max_element(r1.rerr.begin(), r1.rerr.end()) << " -> ";
+  // Print(LargestNIndices(r1.rerr, 3), "r1");
+  // cout << *max_element(r2.terr.begin(), r2.terr.end()) << " -> ";
+  // Print(LargestNIndices(r2.terr, 3), "t2");
+  // cout << *max_element(r2.rerr.begin(), r2.rerr.end()) << " -> ";
+  // Print(LargestNIndices(r2.rerr, 3), "r2");
 
-  vector<double> w1(r1.opt.size());
-  transform(r2.opt.begin(), r2.opt.end(), r1.opt.begin(), w1.begin(),
-            std::minus<double>());
-  cout << *max_element(w1.begin(), w1.end()) << " -> ";
-  Print(LargestNIndices(w1, 5), "NDT Win");
+  // vector<double> w1(r1.opt.size());
+  // transform(r2.opt.begin(), r2.opt.end(), r1.opt.begin(), w1.begin(),
+  //           std::minus<double>());
+  // cout << *max_element(w1.begin(), w1.end()) << " -> ";
+  // Print(LargestNIndices(w1, 5), "NDT Win");
 
-  vector<double> w2(r1.opt.size());
-  transform(r1.opt.begin(), r1.opt.end(), r2.opt.begin(), w2.begin(),
-            std::minus<double>());
-  cout << *max_element(w2.begin(), w2.end()) << " -> ";
-  Print(LargestNIndices(w2, 5), "NNDT Win");
+  // vector<double> w2(r1.opt.size());
+  // transform(r1.opt.begin(), r1.opt.end(), r2.opt.begin(), w2.begin(),
+  //           std::minus<double>());
+  // cout << *max_element(w2.begin(), w2.end()) << " -> ";
+  // Print(LargestNIndices(w2, 5), "NNDT Win");
 
   // cout << "tgt: ";
   // Stat(bent).PrintResult();
@@ -212,5 +230,10 @@ int main(int argc, char **argv) {
   cout << endl;
   r1.timer.Show();
   r2.timer.Show();
+  printf("%.2f, %.2f\n%.2f, %.2f\n",
+         (r1.timer.build() + r1.timer.optimize()) / 1000. / n,
+         r1.timer.total() / 1000. / n,
+         (r2.timer.build() + r2.timer.optimize()) / 1000. / n,
+         r2.timer.total() / 1000. / n);
   ros::spin();
 }

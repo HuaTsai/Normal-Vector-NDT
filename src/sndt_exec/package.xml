@@ -12,4 +12,5 @@
   <depend>ndt</depend>
   <depend>normal2d</depend>
   <depend>metric</depend>
+  <depend>polar_grid_plane</depend>
 </package>

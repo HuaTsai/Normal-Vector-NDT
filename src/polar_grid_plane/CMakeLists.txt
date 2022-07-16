@@ -12,14 +12,22 @@ find_package(catkin REQUIRED
     common
 )
 
-catkin_package()
+catkin_package(
+  CATKIN_DEPENDS
+    common
+  INCLUDE_DIRS
+    include
+  LIBRARIES
+    ${PROJECT_NAME}
+)
 
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(groundfitnode src/groundfitnode.cc)
-target_link_libraries(groundfitnode ${catkin_LIBRARIES})
+add_library(${PROJECT_NAME} src/dummy.cc)
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 
-add_executable(groundfit src/groundfit.cc)
-target_link_libraries(groundfit ${catkin_LIBRARIES})
+# add_executable(groundfitnode src/groundfitnode.cc)
+# target_link_libraries(groundfitnode ${catkin_LIBRARIES})
