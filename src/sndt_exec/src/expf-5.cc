@@ -4,6 +4,7 @@
 #include <metric/metric.h>
 #include <nav_msgs/Path.h>
 #include <ndt/matcher.h>
+#include <pcl/common/transforms.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl_ros/point_cloud.h>
 #include <polar_grid_plane/groundfit.h>
@@ -11,7 +12,6 @@
 #include <sndt_exec/wrapper.h>
 #include <tf2_msgs/TFMessage.h>
 #include <tqdm/tqdm.h>
-#include <pcl/common/transforms.h>
 
 #include <boost/program_options.hpp>
 
@@ -95,11 +95,13 @@ int main(int argc, char **argv) {
       auto tgt = vpc[x];
       auto src = vpc[x + df];
 
-      unordered_set<Options> op1 = {kNDT, k1to1, kPointCov, kAnalytic, kNoReject};
+      unordered_set<Options> op1 = {kNDT, k1to1, kPointCov, kAnalytic,
+                                    kNoReject};
       auto m1 = NDTMatcher::GetBasic(op1, cs, d2);
       RunMatch(src, tgt, m1);
 
-      unordered_set<Options> op2 = {kNNDT, k1to1, kPointCov, kAnalytic, kNoReject};
+      unordered_set<Options> op2 = {kNNDT, k1to1, kPointCov, kAnalytic,
+                                    kNoReject};
       auto m2 = NDTMatcher::GetBasic(op2, cs, d2);
       RunMatch(src, tgt, m2);
 
@@ -136,7 +138,8 @@ int main(int argc, char **argv) {
     auto m1 = NDTMatcher::GetBasic(op1, cs, d2);
     RunMatch(src, tgt, m1);
 
-    unordered_set<Options> op2 = {kNNDT, k1to1, kPointCov, kAnalytic, kNoReject};
+    unordered_set<Options> op2 = {kNNDT, k1to1, kPointCov, kAnalytic,
+                                  kNoReject};
     auto m2 = NDTMatcher::GetBasic(op2, cs, d2);
     RunMatch(src, tgt, m2);
 
@@ -160,5 +163,4 @@ int main(int argc, char **argv) {
       cout << "Iter: ";
     }
   }
-
 }

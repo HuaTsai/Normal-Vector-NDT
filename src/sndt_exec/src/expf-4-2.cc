@@ -25,7 +25,8 @@ struct Res {
     printf(" its: %.2f / %.2f\n", Stat(its).mean, Stat(its).max);
     printf(" err: %.4f / %.4f\n", Stat(terr).rms, Stat(rerr).rms);
     printf("  sr: %.2f (%d / %d)\n", sc / double(n) * 100., sc, n);
-    printf("time: %.2f / %.2f / %.2f / %.2f / %.2f\n", Stat(nm).mean, Stat(ndt).mean, Stat(bud).mean, Stat(opt).mean, Stat(ttl).mean);
+    printf("time: %.2f / %.2f / %.2f / %.2f / %.2f\n", Stat(nm).mean,
+           Stat(ndt).mean, Stat(bud).mean, Stat(opt).mean, Stat(ttl).mean);
   }
   int n;
   vector<double> its;
