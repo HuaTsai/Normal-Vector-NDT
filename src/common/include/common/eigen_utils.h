@@ -25,16 +25,6 @@ geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time,
 geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time,
                                               const Eigen::Matrix4f &mtx);
 
-class Mvn {
- public:
-  explicit Mvn(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covariance);
-  double pdf(const Eigen::Vector2d &x) const;
-
- private:
-  Eigen::Vector2d mean_;
-  Eigen::Matrix2d covariance_;
-};
-
 template <int D>
 inline std::vector<Eigen::Matrix<double, D, 1>> TransformPoints(
     const std::vector<Eigen::Matrix<double, D, 1>> &points,

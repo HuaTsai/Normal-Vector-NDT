@@ -13,8 +13,6 @@ class Optimizer {
 
   void BuildProblem(ceres::FirstOrderFunction *func);
 
-  void BuildProblem(CostObj *func);
-
   void Optimize();
 
   bool CheckConverge(const std::vector<Eigen::Affine3d> &tfs);
@@ -34,7 +32,6 @@ class Optimizer {
   double xyt_[3];
   ceres::GradientProblem *problem_;
   ceres::LocalParameterization *param_;
-  CostObj *costobj_;
   Eigen::Affine3d cur_tf3_;
   Eigen::Affine2d cur_tf2_;
   double threshold_;

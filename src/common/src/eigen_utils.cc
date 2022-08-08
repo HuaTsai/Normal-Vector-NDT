@@ -73,12 +73,3 @@ geometry_msgs::PoseStamped MakePoseStampedMsg(const ros::Time &time,
                                               const Eigen::Matrix4f &mtx) {
   return MakePoseStampedMsg(time, Eigen::Affine3d(mtx.cast<double>()));
 }
-
-Mvn::Mvn(const Eigen::Vector2d &mean, const Eigen::Matrix2d &covariance)
-    : mean_(mean), covariance_(covariance) {}
-
-double Mvn::pdf(const Eigen::Vector2d &x) const {
-  double factor = 1 / (2 * M_PI * std::sqrt(covariance_.determinant()));
-  double sqrmd = (x - mean_).dot(covariance_.inverse() * (x - mean_));
-  return factor * std::exp(-0.5 * sqrmd);
-}

@@ -3,12 +3,5 @@
 build
 devel
 logs
-output
-CoverageReport
-src/rpg_te/results
-src/rpg_te/doc
-*.pyc
-*.info
-debug*
 docs/html
 docs/latex

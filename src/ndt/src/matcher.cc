@@ -154,6 +154,7 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
     converge = opt.CheckConverge(tfs) || iteration_ == 100;
     cur_tf = opt.cur_tf3();
     tfs.push_back(cur_tf);
+    if (HasOption(Options::kOneTime)) converge = true;
   }
   tfs_.insert(tfs_.end(), tfs.begin(), tfs.end());
   return cur_tf;
@@ -236,6 +237,7 @@ Eigen::Affine3d ICPMatcher::Align(const Eigen::Affine3d &guess) {
     converge = opt.CheckConverge(tfs) || iteration_ == 100;
     cur_tf = opt.cur_tf3();
     tfs.push_back(cur_tf);
+    if (HasOption(Options::kOneTime)) converge = true;
   }
   tfs_.insert(tfs_.end(), tfs.begin(), tfs.end());
 
@@ -348,6 +350,7 @@ Eigen::Affine3d SICPMatcher::Align(const Eigen::Affine3d &guess) {
     converge = opt.CheckConverge(tfs) || iteration_ == 100;
     cur_tf = opt.cur_tf3();
     tfs.push_back(cur_tf);
+    if (HasOption(Options::kOneTime)) converge = true;
   }
   tfs_.insert(tfs_.end(), tfs.begin(), tfs.end());
 

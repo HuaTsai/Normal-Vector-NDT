@@ -80,3 +80,33 @@ void SerializationOutput(const std::string &filepath, const T &msg) {
   ofs.write((char *)buffer.get(), size);
   ofs.close();
 }
+
+struct Stat {
+  explicit Stat(const std::vector<double> &vals) : data(vals) {
+    if (data.empty()) {
+      min = max = median = mean = stdev = rms = 0;
+      return;
+    }
+    int n = data.size();
+    std::sort(data.begin(), data.end());
+    min = data.front();
+    max = data.back();
+    median = data[n / 2];
+    std::tie(mean, stdev) = ComputeMeanAndStdev(data);
+    double sum = 0;
+    for (auto d : data) sum += d * d;
+    rms = std::sqrt(sum / n);
+  }
+  void PrintResult() {
+    std::printf(
+        "min: %.2f, max: %.2f, med: %.2f, mean: %.2f, std: %.2f, rms: %.2f\n",
+        min, max, median, mean, stdev, rms);
+  }
+  std::vector<double> data;
+  double min;
+  double max;
+  double median;
+  double mean;
+  double stdev;
+  double rms;
+};

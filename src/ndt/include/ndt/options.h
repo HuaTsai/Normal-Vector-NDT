@@ -12,7 +12,8 @@ enum class Options {
   kOptimizer2D,
   kOptimizer3D,
   kAnalytic,
-  kUseNormalOMP
+  kUseNormalOMP,
+  kOneTime
 };
 
 constexpr Options kNDT = Options::kNDT;
@@ -27,3 +28,4 @@ constexpr Options kOptimizer2D = Options::kOptimizer2D;
 constexpr Options kOptimizer3D = Options::kOptimizer3D;
 constexpr Options kAnalytic = Options::kAnalytic;
 constexpr Options kUseNormalOMP = Options::kUseNormalOMP;
+constexpr Options kOneTime = Options::kOneTime;

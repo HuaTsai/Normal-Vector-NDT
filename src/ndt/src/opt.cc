@@ -22,7 +22,6 @@ Optimizer::Optimizer(Options type)
     : type_(type),
       problem_(nullptr),
       param_(nullptr),
-      costobj_(nullptr),
       cur_tf3_(Eigen::Affine3d::Identity()),
       cur_tf2_(Eigen::Affine2d::Identity()),
       threshold_(0.001),
@@ -48,7 +47,6 @@ Optimizer::Optimizer(Options type)
 
 Optimizer::~Optimizer() {
   if (problem_) delete problem_;
-  if (costobj_) delete costobj_;
 }
 
 void Optimizer::BuildProblem(ceres::FirstOrderFunction *func) {
@@ -57,8 +55,6 @@ void Optimizer::BuildProblem(ceres::FirstOrderFunction *func) {
   else
     problem_ = new ceres::GradientProblem(func, param_);
 }
-
-void Optimizer::BuildProblem(CostObj *func) { costobj_ = func; }
 
 void Optimizer::Optimize() {
   ceres::GradientProblemSolver::Options options;

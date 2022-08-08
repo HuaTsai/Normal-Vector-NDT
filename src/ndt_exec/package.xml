@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>common</name>
+  <name>ndt_exec</name>
   <version>0.0.0</version>
-  <description>The common package</description>
+  <description>The ndt_exec package</description>
   <maintainer email="huatsai.eed07g@nctu.edu.tw">HuaTsai</maintainer>
   <license>MIT</license>
   <author email="huatsai.eed07g@nctu.edu.tw">HuaTsai</author>
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>
-  <depend>tf2_eigen</depend>
+  <depend>ndt</depend>
+  <depend>normal2d</depend>
+  <depend>metric</depend>
 </package>

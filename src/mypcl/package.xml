@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>common</name>
+  <name>mypcl</name>
   <version>0.0.0</version>
-  <description>The common package</description>
+  <description>The mypcl package</description>
   <maintainer email="huatsai.eed07g@nctu.edu.tw">HuaTsai</maintainer>
   <license>MIT</license>
   <author email="huatsai.eed07g@nctu.edu.tw">HuaTsai</author>
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>
-  <depend>tf2_eigen</depend>
+  <depend>common</depend>
+  <depend>metric</depend>
 </package>
