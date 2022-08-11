@@ -148,7 +148,7 @@ int main(int argc, char **argv) {
   Match(m1, offset);
 
   auto m2 =
-      NDTMatcher2D::GetBasic({kNNDT, k1to1, kNoReject, kPointCov}, 0.5, 0.05);
+      NDTMatcher2D::GetBasic({kNVNDT, k1to1, kNoReject, kPointCov}, 0.5, 0.05);
   m2.SetSource(source);
   m2.SetTarget(target);
   Match(m2, offset);

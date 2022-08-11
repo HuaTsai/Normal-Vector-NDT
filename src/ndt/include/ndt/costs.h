@@ -4,13 +4,13 @@
 
 #include <Eigen/Dense>
 
-class NDTCost {
+class D2DNDTCostAuto {
  public:
-  NDTCost(const std::vector<Eigen::Vector3d> &ups,
-          const std::vector<Eigen::Matrix3d> &cps,
-          const std::vector<Eigen::Vector3d> &uqs,
-          const std::vector<Eigen::Matrix3d> &cqs,
-          double d2)
+  D2DNDTCostAuto(const std::vector<Eigen::Vector3d> &ups,
+                 const std::vector<Eigen::Matrix3d> &cps,
+                 const std::vector<Eigen::Vector3d> &uqs,
+                 const std::vector<Eigen::Matrix3d> &cqs,
+                 double d2)
       : ups_(ups), cps_(cps), uqs_(uqs), cqs_(cqs), d2_(d2) {}
   template <typename T>
   bool operator()(const T *const tlrot, T *e) const {
@@ -35,8 +35,8 @@ class NDTCost {
       const std::vector<Eigen::Vector3d> &uqs,
       const std::vector<Eigen::Matrix3d> &cqs,
       double d2) {
-    return new ceres::AutoDiffFirstOrderFunction<NDTCost, 7>(
-        new NDTCost(ups, cps, uqs, cqs, d2));
+    return new ceres::AutoDiffFirstOrderFunction<D2DNDTCostAuto, 7>(
+        new D2DNDTCostAuto(ups, cps, uqs, cqs, d2));
   }
 
  private:
@@ -47,15 +47,15 @@ class NDTCost {
   const double d2_;
 };
 
-class NNDTCost {
+class NVNDTCostAuto {
  public:
-  NNDTCost(const std::vector<Eigen::Vector3d> &ups,
-           const std::vector<Eigen::Matrix3d> &cps,
-           const std::vector<Eigen::Vector3d> &nps,
-           const std::vector<Eigen::Vector3d> &uqs,
-           const std::vector<Eigen::Matrix3d> &cqs,
-           const std::vector<Eigen::Vector3d> &nqs,
-           double d2)
+  NVNDTCostAuto(const std::vector<Eigen::Vector3d> &ups,
+                const std::vector<Eigen::Matrix3d> &cps,
+                const std::vector<Eigen::Vector3d> &nps,
+                const std::vector<Eigen::Vector3d> &uqs,
+                const std::vector<Eigen::Matrix3d> &cqs,
+                const std::vector<Eigen::Vector3d> &nqs,
+                double d2)
       : ups_(ups),
         cps_(cps),
         nps_(nps),
@@ -91,8 +91,8 @@ class NNDTCost {
       const std::vector<Eigen::Matrix3d> &cqs,
       const std::vector<Eigen::Vector3d> &nqs,
       double d2) {
-    return new ceres::AutoDiffFirstOrderFunction<NNDTCost, 7>(
-        new NNDTCost(ups, cps, nps, uqs, cqs, nqs, d2));
+    return new ceres::AutoDiffFirstOrderFunction<NVNDTCostAuto, 7>(
+        new NVNDTCostAuto(ups, cps, nps, uqs, cqs, nqs, d2));
   }
 
  private:
@@ -105,13 +105,13 @@ class NNDTCost {
   const double d2_;
 };
 
-class NDTCost2D {
+class D2DNDTCostAuto2D {
  public:
-  NDTCost2D(const std::vector<Eigen::Vector2d> &ups,
-            const std::vector<Eigen::Matrix2d> &cps,
-            const std::vector<Eigen::Vector2d> &uqs,
-            const std::vector<Eigen::Matrix2d> &cqs,
-            double d2)
+  D2DNDTCostAuto2D(const std::vector<Eigen::Vector2d> &ups,
+                   const std::vector<Eigen::Matrix2d> &cps,
+                   const std::vector<Eigen::Vector2d> &uqs,
+                   const std::vector<Eigen::Matrix2d> &cqs,
+                   double d2)
       : ups_(ups), cps_(cps), uqs_(uqs), cqs_(cqs), d2_(d2) {}
   template <typename T>
   bool operator()(const T *const xyt, T *e) const {
@@ -136,8 +136,8 @@ class NDTCost2D {
       const std::vector<Eigen::Vector2d> &uqs,
       const std::vector<Eigen::Matrix2d> &cqs,
       double d2) {
-    return new ceres::AutoDiffFirstOrderFunction<NDTCost2D, 3>(
-        new NDTCost2D(ups, cps, uqs, cqs, d2));
+    return new ceres::AutoDiffFirstOrderFunction<D2DNDTCostAuto2D, 3>(
+        new D2DNDTCostAuto2D(ups, cps, uqs, cqs, d2));
   }
 
  private:
@@ -148,15 +148,15 @@ class NDTCost2D {
   const double d2_;
 };
 
-class NNDTCost2D {
+class NVNDTCostAuto2D {
  public:
-  NNDTCost2D(const std::vector<Eigen::Vector2d> &ups,
-             const std::vector<Eigen::Matrix2d> &cps,
-             const std::vector<Eigen::Vector2d> &nps,
-             const std::vector<Eigen::Vector2d> &uqs,
-             const std::vector<Eigen::Matrix2d> &cqs,
-             const std::vector<Eigen::Vector2d> &nqs,
-             double d2)
+  NVNDTCostAuto2D(const std::vector<Eigen::Vector2d> &ups,
+                  const std::vector<Eigen::Matrix2d> &cps,
+                  const std::vector<Eigen::Vector2d> &nps,
+                  const std::vector<Eigen::Vector2d> &uqs,
+                  const std::vector<Eigen::Matrix2d> &cqs,
+                  const std::vector<Eigen::Vector2d> &nqs,
+                  double d2)
       : ups_(ups),
         cps_(cps),
         nps_(nps),
@@ -192,8 +192,8 @@ class NNDTCost2D {
       const std::vector<Eigen::Matrix2d> &cqs,
       const std::vector<Eigen::Vector2d> &nqs,
       double d2) {
-    return new ceres::AutoDiffFirstOrderFunction<NNDTCost2D, 3>(
-        new NNDTCost2D(ups, cps, nps, uqs, cqs, nqs, d2));
+    return new ceres::AutoDiffFirstOrderFunction<NVNDTCostAuto2D, 3>(
+        new NVNDTCostAuto2D(ups, cps, nps, uqs, cqs, nqs, d2));
   }
 
  private:
@@ -232,13 +232,13 @@ inline Eigen::Matrix<double, 9, 3> DerivativeOfRotation(
 }
 }  // namespace
 
-class NDTCostN final : public ceres::FirstOrderFunction {
+class D2DNDTCost final : public ceres::FirstOrderFunction {
  public:
-  NDTCostN(const std::vector<Eigen::Vector3d> &ups,
-           const std::vector<Eigen::Matrix3d> &cps,
-           const std::vector<Eigen::Vector3d> &uqs,
-           const std::vector<Eigen::Matrix3d> &cqs,
-           double d2)
+  D2DNDTCost(const std::vector<Eigen::Vector3d> &ups,
+             const std::vector<Eigen::Matrix3d> &cps,
+             const std::vector<Eigen::Vector3d> &uqs,
+             const std::vector<Eigen::Matrix3d> &cqs,
+             double d2)
       : ups_(ups), cps_(cps), uqs_(uqs), cqs_(cqs), d2_(d2) {}
 
   bool Evaluate(const double *const p, double *f, double *g) const override {
@@ -312,9 +312,9 @@ class NDTCostN final : public ceres::FirstOrderFunction {
   const double d2_;
 };
 
-class NNDTCostN final : public ceres::FirstOrderFunction {
+class NVNDTCost final : public ceres::FirstOrderFunction {
  public:
-  NNDTCostN(const std::vector<Eigen::Vector3d> &ups,
+  NVNDTCost(const std::vector<Eigen::Vector3d> &ups,
             const std::vector<Eigen::Matrix3d> &cps,
             const std::vector<Eigen::Vector3d> &nps,
             const std::vector<Eigen::Vector3d> &uqs,

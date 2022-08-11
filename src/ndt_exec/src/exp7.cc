@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
   pub1.publish(MP(source, false));
   pub2.publish(MP(target, true));
 
-  auto m = NDTMatcher::GetBasic({kNNDT, k1to1}, 1);
+  auto m = NDTMatcher::GetBasic({kNVNDT, k1to1}, 1);
   m.SetSource(source);
   m.SetTarget(target);
   auto res = m.Align();

@@ -31,9 +31,9 @@ Optimizer::Optimizer(Options type)
   memset(xyzxyzw_, 0, sizeof(xyzxyzw_));
   memset(xyt_, 0, sizeof(xyt_));
   xyzxyzw_[6] = 1;
-  if (type_ == Options::kOptimizer2D) {
+  if (type_ == Options::k2D) {
     param_ = Manifold2D::Create();
-  } else if (type_ == Options::kOptimizer3D) {
+  } else if (type_ == Options::k3D) {
     param_ = new ceres::ProductParameterization(
         new ceres::IdentityParameterization(3),
         new ceres::EigenQuaternionParameterization());
@@ -61,13 +61,13 @@ void Optimizer::Optimize() {
   options.logging_type = ceres::SILENT;
   ceres::GradientProblemSolver::Summary summary;
   options.max_num_iterations = 50;
-  if (type_ == Options::kOptimizer2D) {
+  if (type_ == Options::k2D) {
     ceres::Solve(options, *problem_, xyt_, &summary);
     Eigen::Affine2d dtf =
         Eigen::Translation2d(xyt_[0], xyt_[1]) * Eigen::Rotation2Dd(xyt_[2]);
     cur_tf2_ = dtf * cur_tf2_;
     tlang_ = TransNormRotDegAbsFromAffine2d(dtf);
-  } else if (type_ == Options::kOptimizer3D) {
+  } else if (type_ == Options::k3D) {
     ceres::Solve(options, *problem_, xyzxyzw_, &summary);
     Eigen::Affine3d dtf;
     dtf.translation() = Eigen::Map<Eigen::Vector3d>(xyzxyzw_);

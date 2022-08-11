@@ -200,7 +200,7 @@ int main(int argc, char **argv) {
       RunMatch(src, tgt, ben, m1, r1);
     }
 
-    unordered_set<Options> op2 = {kNNDT, k1to1, kPointCov, kAnalytic};
+    unordered_set<Options> op2 = {kNVNDT, k1to1, kPointCov, kAnalytic};
     if (!orj) op2.insert(kNoReject);
     if (two) {
       // auto m2 = NDTMatcher::GetBasic(op2, cs, nndtd2);

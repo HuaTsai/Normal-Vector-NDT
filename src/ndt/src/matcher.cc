@@ -34,7 +34,7 @@ NDTMatcher::NDTMatcher(std::unordered_set<Options> options,
       cell_size_(cell_size),
       d2_(d2),
       intrinsic_(intrinsic) {
-  if ((HasOption(Options::kNDT) && HasOption(Options::kNormalNDT)) ||
+  if ((HasOption(Options::kNDT) && HasOption(Options::kNVNDT)) ||
       (HasOption(Options::k1to1) && HasOption(Options::k1ton))) {
     std::cerr << __FUNCTION__ << ": invalid options\n";
     std::exit(1);
@@ -127,7 +127,7 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
       orj.RetainIndices(ups, uqs, cps, cqs, nps, nqs);
     }
 
-    Options type = Options::kOptimizer3D;
+    Options type = Options::k3D;
     if (HasOption(Options::kAnalytic)) type = Options::kAnalytic;
 
     Optimizer opt(type);
@@ -135,14 +135,15 @@ Eigen::Affine3d NDTMatcher::AlignImpl(const Eigen::Affine3d &guess) {
     corres_ = ups.size();
     if (HasOption(Options::kNDT)) {
       if (HasOption(Options::kAnalytic))
-        opt.BuildProblem(new NDTCostN(ups, cps, uqs, cqs, d2_));
+        opt.BuildProblem(new D2DNDTCost(ups, cps, uqs, cqs, d2_));
       else
-        opt.BuildProblem(NDTCost::Create(ups, cps, uqs, cqs, d2_));
-    } else if (HasOption(Options::kNormalNDT)) {
+        opt.BuildProblem(D2DNDTCostAuto::Create(ups, cps, uqs, cqs, d2_));
+    } else if (HasOption(Options::kNVNDT)) {
       if (HasOption(Options::kAnalytic))
-        opt.BuildProblem(new NNDTCostN(ups, cps, nps, uqs, cqs, nqs, d2_));
+        opt.BuildProblem(new NVNDTCost(ups, cps, nps, uqs, cqs, nqs, d2_));
       else
-        opt.BuildProblem(NNDTCost::Create(ups, cps, nps, uqs, cqs, nqs, d2_));
+        opt.BuildProblem(
+            NVNDTCostAuto::Create(ups, cps, nps, uqs, cqs, nqs, d2_));
     }
     timer_.ProcedureFinish();
 

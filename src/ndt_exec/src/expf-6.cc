@@ -87,7 +87,7 @@ int main() {
     for (size_t j = 1; j < m1.tfs().size() - 1u; ++j)
       r1.back().push_back(Err(tgt, src, m1.tfs()[j]));
 
-    auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1, kAnalytic, kNoReject}, 0.5);
+    auto m2 = NDTMatcher::GetBasic({kNVNDT, k1to1, kAnalytic, kNoReject}, 0.5);
     m2.SetSource(src);
     m2.SetTarget(tgt);
     m2.Align();

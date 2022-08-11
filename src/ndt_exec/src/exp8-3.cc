@@ -70,7 +70,7 @@ int main() {
         if (err1(0) < 0.1 && err1(0) < 1) ++cnt1;
 
         auto m2 =
-            NDTMatcher::GetBasic({kNNDT, k1to1, kAnalytic, kNoReject}, 0.5);
+            NDTMatcher::GetBasic({kNVNDT, k1to1, kAnalytic, kNoReject}, 0.5);
         m2.SetSource(src);
         m2.SetTarget(tgt);
         auto res2 = m2.Align();

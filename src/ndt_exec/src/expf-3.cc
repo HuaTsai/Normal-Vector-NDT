@@ -88,7 +88,7 @@ int main() {
   auto res1 = m1.Align();
   Check(res1 * tf, m1.tfs(), src2, tgt);
 
-  auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1, kAnalytic, kNoReject}, cs);
+  auto m2 = NDTMatcher::GetBasic({kNVNDT, k1to1, kAnalytic, kNoReject}, cs);
   m2.SetSource(src2);
   m2.SetTarget(tgt);
   auto res2 = m2.Align();

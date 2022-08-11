@@ -128,9 +128,9 @@ TEST_F(BunnyTest, MyNDT) {
 }
 
 TEST_F(BunnyTest, MyNNDT) {
-  auto m = NDTMatcher::GetBasic({kNNDT, k1to1}, 1);
+  auto m = NDTMatcher::GetBasic({kNVNDT, k1to1}, 1);
   MatchAndTest(m);
-  auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1}, 1);
+  auto m2 = NDTMatcher::GetBasic({kNVNDT, k1to1}, 1);
   MatchAndTest(m2, sample_guess);
 }
 
@@ -142,9 +142,9 @@ TEST_F(BunnyTest, MyNDTAnalytic) {
 }
 
 TEST_F(BunnyTest, MyNNDTAnalytic) {
-  auto m = NDTMatcher::GetBasic({kNNDT, k1to1, kAnalytic}, 1);
+  auto m = NDTMatcher::GetBasic({kNVNDT, k1to1, kAnalytic}, 1);
   MatchAndTest(m);
-  auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1, kAnalytic}, 1);
+  auto m2 = NDTMatcher::GetBasic({kNVNDT, k1to1, kAnalytic}, 1);
   MatchAndTest(m2, sample_guess);
 }
 
@@ -156,16 +156,16 @@ TEST_F(BunnyTest, MyNDTIterative) {
 }
 
 TEST_F(BunnyTest, MyNNDTIterative) {
-  auto m = NDTMatcher::GetIter({kNNDT, k1to1}, {0.5, 1, 2});
+  auto m = NDTMatcher::GetIter({kNVNDT, k1to1}, {0.5, 1, 2});
   MatchAndTest(m);
-  auto m2 = NDTMatcher::GetIter({kNNDT, k1to1}, {0.5, 1, 2});
+  auto m2 = NDTMatcher::GetIter({kNVNDT, k1to1}, {0.5, 1, 2});
   MatchAndTest(m2, sample_guess);
 }
 
 TEST_F(BunnyTest, MyNNDTIterativeAnalytic) {
-  auto m = NDTMatcher::GetIter({kNNDT, k1to1, kAnalytic}, {0.5, 1, 2});
+  auto m = NDTMatcher::GetIter({kNVNDT, k1to1, kAnalytic}, {0.5, 1, 2});
   MatchAndTest(m);
-  auto m2 = NDTMatcher::GetIter({kNNDT, k1to1, kAnalytic}, {0.5, 1, 2});
+  auto m2 = NDTMatcher::GetIter({kNVNDT, k1to1, kAnalytic}, {0.5, 1, 2});
   MatchAndTest(m2, sample_guess);
 }
 
@@ -218,6 +218,6 @@ TEST_F(BunnyTest2, D2DNDT) {
 }
 
 TEST_F(BunnyTest2, NVNDT) {
-  auto m = NDTMatcher::GetBasic({kNNDT, k1to1, kAnalytic}, 1);
+  auto m = NDTMatcher::GetBasic({kNVNDT, k1to1, kAnalytic}, 1);
   MatchAndTest(m);
 }

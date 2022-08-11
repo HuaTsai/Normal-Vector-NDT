@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
   cout << XYZRPYFromAffine3d(res1).transpose() << endl;
   cout << m1.iteration() << ", " << m1.timer().optimize() << endl;
 
-  auto op2 = {kNNDT, k1to1, kNoReject};
+  auto op2 = {kNVNDT, k1to1, kNoReject};
   auto m2 = NDTMatcher::GetBasic(op2, 0.5, 0.05);
   m2.SetSource(src);
   m2.SetTarget(tgt);

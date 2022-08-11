@@ -99,7 +99,7 @@ int main(int argc, char **argv) {
       auto m1 = NDTMatcher::GetBasic(op1, cs, d2);
       RunMatch(src, tgt, m1);
 
-      unordered_set<Options> op2 = {kNNDT, k1to1, kPointCov, kAnalytic,
+      unordered_set<Options> op2 = {kNVNDT, k1to1, kPointCov, kAnalytic,
                                     kNoReject};
       auto m2 = NDTMatcher::GetBasic(op2, cs, d2);
       RunMatch(src, tgt, m2);
@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
     auto m1 = NDTMatcher::GetBasic(op1, cs, d2);
     RunMatch(src, tgt, m1);
 
-    unordered_set<Options> op2 = {kNNDT, k1to1, kPointCov, kAnalytic,
+    unordered_set<Options> op2 = {kNVNDT, k1to1, kPointCov, kAnalytic,
                                   kNoReject};
     auto m2 = NDTMatcher::GetBasic(op2, cs, d2);
     RunMatch(src, tgt, m2);

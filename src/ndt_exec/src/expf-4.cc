@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
         auto m1 = NDTMatcher::GetBasic(op1, cs, d2);
         RunMatch(src, tgt, gt, m1, r1);
 
-        unordered_set<Options> op2 = {kNNDT, k1to1, kPointCov, kAnalytic};
+        unordered_set<Options> op2 = {kNVNDT, k1to1, kPointCov, kAnalytic};
         if (!orj) op2.insert(kNoReject);
         auto m2 = NDTMatcher::GetBasic(op2, cs, d2);
         RunMatch(src, tgt, gt, m2, r2);

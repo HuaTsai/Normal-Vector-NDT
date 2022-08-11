@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
       m1.timer().total() / 1000.);
   // clang-format on
 
-  auto m2 = NDTMatcher::GetBasic({kNNDT, k1to1, kAnalytic, kNoReject}, cs);
+  auto m2 = NDTMatcher::GetBasic({kNVNDT, k1to1, kAnalytic, kNoReject}, cs);
   m2.SetSource(src);
   m2.SetTarget(tgt);
   auto res2 = m2.Align();

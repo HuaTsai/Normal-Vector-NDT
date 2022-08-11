@@ -32,7 +32,7 @@ NDTMatcher2D::NDTMatcher2D(std::unordered_set<Options> options,
       intrinsic_(intrinsic),
       iteration_(0),
       corres_(0) {
-  if ((HasOption(Options::kNDT) && HasOption(Options::kNormalNDT)) ||
+  if ((HasOption(Options::kNDT) && HasOption(Options::kNVNDT)) ||
       (HasOption(Options::k1to1) && HasOption(Options::k1ton))) {
     std::cerr << __FUNCTION__ << ": invalid options\n";
     std::exit(1);
@@ -119,13 +119,14 @@ Eigen::Affine2d NDTMatcher2D::AlignImpl(const Eigen::Affine2d &guess) {
       orj.RetainIndices(ups, uqs, cps, cqs, nps, nqs);
     }
 
-    Optimizer opt(Options::kOptimizer2D);
+    Optimizer opt(Options::k2D);
     opt.set_cur_tf2(cur_tf);
     corres_ = ups.size();
     if (HasOption(Options::kNDT))
-      opt.BuildProblem(NDTCost2D::Create(ups, cps, uqs, cqs, d2_));
-    else if (HasOption(Options::kNormalNDT))
-      opt.BuildProblem(NNDTCost2D::Create(ups, cps, nps, uqs, cqs, nqs, d2_));
+      opt.BuildProblem(D2DNDTCostAuto2D::Create(ups, cps, uqs, cqs, d2_));
+    else if (HasOption(Options::kNVNDT))
+      opt.BuildProblem(
+          NVNDTCostAuto2D::Create(ups, cps, nps, uqs, cqs, nqs, d2_));
     timer_.ProcedureFinish();
 
     timer_.ProcedureStart(timer_.kOptimize);

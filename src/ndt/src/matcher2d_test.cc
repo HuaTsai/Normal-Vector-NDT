@@ -42,7 +42,7 @@ TEST_F(SinWaveTest, NDT) {
 }
 
 TEST_F(SinWaveTest, NNDT) {
-  auto m = NDTMatcher2D::GetBasic({kNNDT, k1to1, kNoReject}, 0.5, 0.5);
+  auto m = NDTMatcher2D::GetBasic({kNVNDT, k1to1, kNoReject}, 0.5, 0.5);
   Affine2d offset = Translation2d(-1, -1) * Rotation2Dd(Deg2Rad(5));
   auto [tl, ang] = Match(m, offset);
   EXPECT_NEAR(tl(0), 1, 0.1);
